@@ -7,7 +7,9 @@ const MainContainer = styled.main`
     justify-content: center;
     height: 800px;
     align-items: center;
-    font-size: 64px;
+    div {
+        font-size: 64px;
+    }
 `;
 function Main() {
     return (

@@ -11,14 +11,15 @@ const Container = styled.section`
         font-size: 64px;
     }
 `;
-function Login() {
+
+function Category1() {
     return (
         <>
             <Header />
             <Container>
-                <div>Login페이지입니다.</div>
+                <div>카테고리1입니다</div>
             </Container>
         </>
     );
 }
-export default Login;
+export default Category1;

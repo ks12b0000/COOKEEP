@@ -1,16 +1,24 @@
 import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 
 const LogoContainer = styled.div`
-  flex-grow: 1;
-`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    div {
+        a {
+            font-size: 16px;
+        }
+    }
+`;
 function Logo() {
     return (
-        <LogoContainer> <div>이건뭐야</div>
-            <div>로고페이입니다.</div>
-        </LogoContainer>;
-    )
+        <LogoContainer>
+            <div>
+                <Link to="/">프로젝트이름</Link>
+            </div>
+        </LogoContainer>
+    );
 }
 export default Logo;
-
-
-
