@@ -9,6 +9,7 @@ const HeaderContainer = styled.header`
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 `;
 const Container = styled.div`
+    display: flex;
     width: 1200px;
     margin: 0 auto;
 `;
