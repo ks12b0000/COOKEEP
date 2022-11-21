@@ -1,14 +1,17 @@
 import Header from "../home/header/Header";
 import styled from "@emotion/styled";
+import CateItem from "./cateItem/CateItem";
+
 const Container = styled.section`
     width: 1200px;
     margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 1000px;
-    div {
-        font-size: 64px;
+`;
+const Category1Title = styled.div`
+    padding: 50px;
+    h1 {
+        font-size: 24px;
+        font-weight: 600;
     }
 `;
 
@@ -17,7 +20,10 @@ function Category1() {
         <>
             <Header />
             <Container>
-                <div>카테고리1입니다</div>
+                <Category1Title>
+                    <h1>카테고리 이름</h1>
+                    <CateItem />
+                </Category1Title>
             </Container>
         </>
     );

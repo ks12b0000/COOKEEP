@@ -37,11 +37,7 @@ const Menu = styled.li`
 `;
 function Nav() {
     const [menus, setMenus] = useState(NavDada);
-    const NavActiveStyle = ({ isActive }) => {
-        return {
-            color: isActive ? "#35C5F0" : "#2F3438"
-        };
-    };
+
     return (
         <NavList>
             <ul>
