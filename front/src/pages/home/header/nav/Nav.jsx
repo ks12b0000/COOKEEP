@@ -22,6 +22,7 @@ const Menu = styled.li`
         font-size: 16px !important;
         &.active {
             color: #35c5f0;
+            font-weight: 700;
             &:before {
                 content: "";
                 position: absolute;

@@ -1,12 +1,14 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { categoryList1 } from "../../../data/category1/categoryList1";
+import { Link } from "react-router-dom";
 
 const Ul = styled.ul`
-    margin-top: 30px;
+    margin: 20px 0 30px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
     li {
         margin-top: 20px;
         width: 23%;
@@ -46,16 +48,17 @@ function CateItem() {
             <Ul>
                 {items.map((item) => (
                     <li key={item.id}>
-                        <Thumbnail>
-                            <img src={item.img} alt="" />
-                        </Thumbnail>
-                        <TextBox>
-                            <span>{item.mainTitle}</span>
-                            <span>{item.subTitle}</span>
-                        </TextBox>
+                        <Link to="/category1/:name">
+                            <Thumbnail>
+                                <img src={item.img} alt="" />
+                            </Thumbnail>
+                            <TextBox>
+                                <span>{item.mainTitle}</span>
+                                <span>{item.subTitle}</span>
+                            </TextBox>
+                        </Link>
                     </li>
                 ))}
-                <li></li>
             </Ul>
         </>
     );
