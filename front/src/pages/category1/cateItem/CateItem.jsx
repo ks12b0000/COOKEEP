@@ -48,7 +48,7 @@ function CateItem() {
             <Ul>
                 {items.map((item) => (
                     <li key={item.id}>
-                        <Link to="/category1/:name">
+                        <Link to={`/category1/${item.id}`}>
                             <Thumbnail>
                                 <img src={item.img} alt="" />
                             </Thumbnail>
