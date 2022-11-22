@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 
 const LogoContainer = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     width: 300px;
     div {
         a {
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: 600;
         }
     }
 `;

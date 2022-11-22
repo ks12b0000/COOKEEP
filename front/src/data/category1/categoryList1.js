@@ -14,7 +14,12 @@ export const categoryList1 = [
     },
     { id: 4, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기4", img: "https://i.imgur.com/sI3e1AN.png" },
     { id: 5, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기5", img: "https://i.imgur.com/sI3e1AN.png" },
-    { id: 6, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기6", img: "https://i.imgur.com/sI3e1AN.png" },
+    {
+        id: 6,
+        mainTitle: "달달한 마카롱 만드는법",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },
     { id: 7, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기7", img: "https://i.imgur.com/sI3e1AN.png" },
     { id: 8, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" }
 ];

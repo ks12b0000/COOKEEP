@@ -23,8 +23,6 @@ const Container = styled.section`
 function Detail() {
     const { id } = useParams();
     const [data, setData] = useState(categoryList1.filter((v) => v.id === parseInt(id)));
-    console.log(data);
-    console.log(data);
     return (
         <>
             <Header />
