@@ -2,6 +2,7 @@ import Header from "../home/header/Header";
 import styled from "@emotion/styled";
 import CateItem from "./cateItem/CateItem";
 import Buttons from "../../components/buttons/Buttons";
+import { useDispatch, useSelector } from "react-redux";
 
 const Container = styled.section`
     width: 1200px;
@@ -20,6 +21,9 @@ const ButtonWrap = styled.div`
     justify-content: end;
 `;
 function Category1() {
+    const dispatch = useDispatch();
+    const stats = useSelector((state) => state);
+    console.log(stats);
     return (
         <>
             <Header />
