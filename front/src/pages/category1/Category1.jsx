@@ -22,8 +22,7 @@ const ButtonWrap = styled.div`
 `;
 function Category1() {
     const dispatch = useDispatch();
-    const stats = useSelector((state) => state);
-    console.log(stats);
+
     return (
         <>
             <Header />

@@ -10,7 +10,7 @@ const asyncList = createAsyncThunk("ListSlice/asyncList", async () => {
 export const ListSlice = createSlice({
     name: "list",
     initialState: {
-        item: [categoryList1],
+        item: categoryList1,
         status: "stop"
     },
     reducers: {},
@@ -28,4 +28,4 @@ export const ListSlice = createSlice({
     }
 });
 
-export const { set } = ListSlice.actions;
+export const { set, detail } = ListSlice.actions;

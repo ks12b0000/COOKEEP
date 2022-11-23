@@ -6,7 +6,7 @@ import MyPage from "./pages/myPage/MyPage";
 import SignUp from "./pages/signUp/SignUp";
 import Category1 from "./pages/category1/Category1";
 import Category2 from "./pages/category2/Category2";
-import Detail from "./pages/detail/Detail";
+import Detail from "./pages/category1/detail/Detail";
 
 function App() {
     return (

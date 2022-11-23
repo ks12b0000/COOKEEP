@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
-import { categoryList1 } from "../../../data/category1/categoryList1";
+
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Ul = styled.ul`
     margin: 20px 0 30px;
@@ -36,29 +36,36 @@ const TextBox = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     span {
+        width: 90%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
         font-size: 16px;
         font-weight: 500;
     }
 `;
 function CateItem() {
-    const [items, setItems] = useState(categoryList1);
+    const categoryItem = useSelector((state) => state.listReducer.item);
+
     return (
         <>
             <Ul>
-                {items.map((item) => (
-                    <li key={item.id}>
-                        <Link to={`/category1/${item.id}`}>
-                            <Thumbnail>
-                                <img src={item.img} alt="" />
-                            </Thumbnail>
-                            <TextBox>
-                                <span>{item.mainTitle}</span>
-                                <span>{item.subTitle}</span>
-                            </TextBox>
-                        </Link>
-                    </li>
-                ))}
+                {categoryItem.length > 0 &&
+                    categoryItem.map((category) => (
+                        <li key={category.id}>
+                            <Link to={`/category1/${category.id}`}>
+                                <Thumbnail>
+                                    <img src={category.img} alt="" />
+                                </Thumbnail>
+                                <TextBox>
+                                    <span>{category.mainTitle}</span>
+                                    <span>{category.subTitle}</span>
+                                </TextBox>
+                            </Link>
+                        </li>
+                    ))}
             </Ul>
         </>
     );

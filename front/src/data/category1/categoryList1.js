@@ -3,7 +3,7 @@ export const categoryList1 = [
     {
         id: 2,
         mainTitle: "매콤한 떡볶이 만드는법",
-        subTitle: "간단한 매콤한 떡볶이 만들기",
+        subTitle: "간단한 매콤한 떡볶이 만들기 가나다라마바사아자차카타파하",
         img: "https://img.freepik.com/free-photo/cheesy-tokbokki-korean-traditional-food-on-black-board-background-lunch-dish_1150-42993.jpg?w=2000"
     },
     {
