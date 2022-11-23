@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
+import teamproject.backend.user.dto.GetUsernameSameRes;
 import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
@@ -42,11 +43,12 @@ public class UserController {
      */
     @CrossOrigin
     @GetMapping("/user/duplicate")
-    public BaseResponse checkIdDuplicate(String username) {
+    public BaseResponse<GetUsernameSameRes> checkIdDuplicate(String username) {
 
-        userService.checkIdDuplicate(username);
+        boolean idDuplicate = userService.checkIdDuplicate(username);
 
-        return new BaseResponse("사용 가능한 아이디 입니다.");
+        GetUsernameSameRes res = new GetUsernameSameRes(idDuplicate);
+        return new BaseResponse<>("사용 가능한 아이디 입니다.", res);
     }
 
     /**
