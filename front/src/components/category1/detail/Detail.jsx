@@ -1,4 +1,4 @@
-import Header from "../../home/header/Header";
+import Header from "../../layout/header/Header";
 import { useState } from "react";
 import { categoryList1 } from "../../../data/category1/categoryList1";
 import { useParams } from "react-router-dom";
