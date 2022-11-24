@@ -26,7 +26,6 @@ public class UserController {
      * @param joinRequest
      * @return
      */
-    @CrossOrigin
     @PostMapping("/user/join")
     public BaseResponse join(@Validated(ValidationSequence.class) @RequestBody JoinRequest joinRequest) {
 
@@ -41,7 +40,6 @@ public class UserController {
      * @param username
      * @return
      */
-    @CrossOrigin
     @GetMapping("/user/duplicate")
     public BaseResponse<GetUsernameSameRes> checkIdDuplicate(String username) {
 
@@ -58,7 +56,6 @@ public class UserController {
      * @param response
      * @return loginResponse
      */
-    @CrossOrigin
     @PostMapping("/user/login")
     public BaseResponse<LoginResponse> login(@Validated(ValidationSequence.class) @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
