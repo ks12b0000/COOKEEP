@@ -104,4 +104,23 @@ public class UserServiceImpl implements UserService {
         return loginResponse;
     }
 
+    /**
+     * 로그아웃
+     * @param response
+     */
+    @Override
+    public void logout(HttpServletResponse response) {
+        // accessToken 삭제
+        Cookie accessCookie = new Cookie("accessToken", null);
+        accessCookie.setMaxAge(0);
+        accessCookie.setPath("/");
+        response.addCookie(accessCookie);
+
+        // refreshToken 삭제
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setPath("/");
+        response.addCookie(refreshCookie);
+    }
+
 }

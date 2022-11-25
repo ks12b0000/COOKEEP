@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
 import teamproject.backend.user.dto.GetUsernameSameRes;
@@ -23,6 +24,7 @@ public class UserController {
     /**
      * 회원가입
      * [POST] /user/join
+     *
      * @param joinRequest
      * @return
      */
@@ -37,6 +39,7 @@ public class UserController {
     /**
      * 아이디 중복체크
      * [GET] /user/duplicate?username=
+     *
      * @param username
      * @return
      */
@@ -52,6 +55,7 @@ public class UserController {
     /**
      * 로그인
      * [POST] /user/login
+     *
      * @param loginRequest
      * @param response
      * @return loginResponse
@@ -61,6 +65,20 @@ public class UserController {
 
         LoginResponse loginResponse = userService.login(loginRequest, response);
 
-        return new BaseResponse<>("로그인에 성공했습니다.",loginResponse);
+        return new BaseResponse<>("로그인에 성공했습니다.", loginResponse);
+    }
+
+    /**
+     * 로그아웃
+     * [GET] /user/logout
+     * @param response
+     * @return
+     */
+    @GetMapping("/user/logout")
+    public BaseResponse logout(HttpServletResponse response) {
+
+        userService.logout(response);
+
+        return new BaseResponse("로그아웃에 성공했습니다.");
     }
 }

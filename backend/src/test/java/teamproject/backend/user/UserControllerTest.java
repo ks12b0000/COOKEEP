@@ -18,6 +18,7 @@ import teamproject.backend.user.dto.LoginRequest;
 import javax.persistence.EntityManager;
 
 import static org.springframework.boot.test.context.SpringBootTest.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -121,5 +122,28 @@ public class UserControllerTest {
                 .andExpect(jsonPath("message").value("로그인에 성공했습니다."))
                 .andExpect(jsonPath("result.id").value(1))
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void logout_Test() throws Exception {
+        // given
+        before();
+        LoginRequest loginRequest = new LoginRequest("test1234", "test1234", true);
+        String content = new ObjectMapper().writeValueAsString(loginRequest);
+
+        // when
+        mvc.perform(post("/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+        );
+
+        // then
+        mvc.perform(get("/user/logout"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("code").value("1000"))
+                .andExpect(jsonPath("message").value("로그아웃에 성공했습니다."));
+
     }
 }
