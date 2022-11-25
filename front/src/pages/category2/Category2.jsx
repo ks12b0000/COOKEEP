@@ -1,4 +1,4 @@
-import Header from "../home/header/Header";
+import Header from "../../components/layout/header/Header";
 import styled from "@emotion/styled";
 const Container = styled.section`
     width: 1200px;

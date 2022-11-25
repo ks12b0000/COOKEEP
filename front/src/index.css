@@ -1,16 +1,10 @@
-body {
-  margin: 0;
-  font-family: 'Pretendard', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+
 *{
   margin:0;
   padding:0;
   font-size: 14px;
   font-weight: 500;
+  font-family: 'Pretendard';
 }
 img{
   vertical-align: middle;
@@ -22,4 +16,13 @@ ul,li,ol,dl,dt,dd{
 a{
   color:#222;
   text-decoration: none;
+}
+
+.ck-toolbar__items{
+  width: 100% !important;
+  height: 50px !important;
+
+}
+.ck-editor__editable_inline{
+  min-height: 400px;
 }

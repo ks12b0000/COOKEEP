@@ -15,13 +15,17 @@ const Menu = styled.li`
     flex-grow: 1;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
     a {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        line-height: 70px;
         font-size: 16px !important;
         &.active {
             color: #35c5f0;
+            font-weight: 700;
             &:before {
                 content: "";
                 position: absolute;
@@ -37,11 +41,7 @@ const Menu = styled.li`
 `;
 function Nav() {
     const [menus, setMenus] = useState(NavDada);
-    const NavActiveStyle = ({ isActive }) => {
-        return {
-            color: isActive ? "#35C5F0" : "#2F3438"
-        };
-    };
+
     return (
         <NavList>
             <ul>

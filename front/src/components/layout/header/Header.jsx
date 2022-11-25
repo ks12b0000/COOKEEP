@@ -16,6 +16,7 @@ const Container = styled.div`
 `;
 function Header() {
     return (
+
         <HeaderContainer>
             <Container>
                 <Logo />
@@ -23,6 +24,7 @@ function Header() {
                 <RightGnb />
             </Container>
         </HeaderContainer>
+
     );
 }
 

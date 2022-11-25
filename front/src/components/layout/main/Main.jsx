@@ -18,4 +18,5 @@ function Main() {
         </MainContainer>
     );
 }
+
 export default Main;
