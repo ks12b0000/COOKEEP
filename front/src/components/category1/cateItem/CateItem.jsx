@@ -2,13 +2,17 @@ import styled from "@emotion/styled";
 
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Pagination from "../pagination/Pagination";
+import {useState,useEffect} from "react";
+import axios from "axios";
 
 const Ul = styled.ul`
     margin: 20px 0 30px;
     display: flex;
+    gap:10px;
     flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: start;
+    min-height: 550px;
     li {
         margin-top: 20px;
         width: 23%;
@@ -48,12 +52,47 @@ const TextBox = styled.div`
 `;
 function CateItem() {
     const categoryItem = useSelector((state) => state.listReducer.item);
+    const [posts,setPosts] = useState(categoryItem);
+    const [loading,setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [showPost] = useState(8);
+    const [totalPost,setTotalPost] = useState(categoryItem.length);
+
+    // useEffect(() => {
+    //     const loadPost = async () => {
+    //         setLoading(true);
+    //         const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
+    //         setPosts(response.data);
+    //         setTotalPosts(response.data.length);
+    //         setLoading(false);
+    //     }
+    //     loadPost();
+    // },[]);
+    const LastIndex = currentPage * showPost;
+    const FirstIndex = LastIndex - showPost;
+    const currentPost = posts.slice(FirstIndex,LastIndex);
+    const paginate = (pageNum) => setCurrentPage(pageNum);
+    const prevPage = () => setCurrentPage(currentPage  - 1);
+    const nextPage = () => setCurrentPage( currentPage + 1);
+
+    const showPagination = () => {
+        return(
+           <Pagination
+              showPost={showPost}
+              totalPost ={totalPost}
+              currentPage ={currentPage}
+              paginate ={paginate}
+              prevPage ={prevPage}
+              nextPage ={nextPage}
+           />
+        )
+    }
 
     return (
         <>
             <Ul>
-                {categoryItem.length > 0 &&
-                    categoryItem.map((category) => (
+                {
+                    currentPost.map((category) => (
                         <li key={category.id}>
                             <Link to={`/category1/${category.id}`}>
                                 <Thumbnail>
@@ -67,6 +106,7 @@ function CateItem() {
                         </li>
                     ))}
             </Ul>
+            <div>{showPagination()}</div>
         </>
     );
 }

@@ -23,7 +23,6 @@ function App() {
                 <Route path="/category1/*" element={<CategoryRouter/>}></Route>
                 <Route path="/category2" element={<Category2 />}></Route>
                 {/*    상세페이지*/}
-
             </Routes>
         </>
     );

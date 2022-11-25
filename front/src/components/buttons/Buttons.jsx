@@ -6,7 +6,7 @@ const Button = styled.button`
     min-width: 100px;
     width: auto;
     padding: 10px;
-    height: 60px;
+    height: 45px;
     border: 1px solid #222222;
     background: #fff;
 
@@ -25,10 +25,10 @@ const Button = styled.button`
         font-family: "Pretendard";
     }
 `;
-function Buttons({ text }) {
+function Buttons({ text ,event}) {
     return (
         <>
-            <Button>
+            <Button onClick={event}>
                 <span>{text}</span>
             </Button>
         </>

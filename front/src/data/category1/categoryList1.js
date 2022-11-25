@@ -20,6 +20,95 @@ export const categoryList1 = [
         subTitle: "달달하고 뚱뚱한 마카롱 만들기",
         img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
     },
-    { id: 7, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기7", img: "https://i.imgur.com/sI3e1AN.png" },
-    { id: 8, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" }
+    { id: 7, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기7", img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" },
+    { id: 8, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" },
+    { id: 9, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" },
+    { id: 10, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" },
+    { id: 11, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" },
+    { id: 12, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" },
+    { id: 13, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" },
+    { id: 14, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" },
+    { id: 15, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" },
+    { id: 16, mainTitle: "닭가슴살 죽 닭죽 끓이는법", subTitle: "간단한 닭가슴살 요리 만들기8", img: "https://i.imgur.com/sI3e1AN.png" },
+    {
+        id: 17,
+        mainTitle: "달달한 마카롱 만드는법11",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    }, {
+        id: 18,
+        mainTitle: "달달한 마카롱 만드는법12",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },{
+        id: 19,
+        mainTitle: "달달한 마카롱 만드는법13",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },
+    {
+        id: 20,
+        mainTitle: "달달한 마카롱 만드는법11",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    }, {
+        id: 21,
+        mainTitle: "달달한 마카롱 만드는법12",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },{
+        id: 22,
+        mainTitle: "달달한 마카롱 만드는법13",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },
+    {
+        id: 23,
+        mainTitle: "달달한 마카롱 만드는법11",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    }, {
+        id: 24,
+        mainTitle: "달달한 마카롱 만드는법12",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },{
+        id: 25,
+        mainTitle: "달달한 마카롱 만드는법13",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },
+    {
+        id: 26,
+        mainTitle: "달달한 마카롱 만드는법11",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    }, {
+        id: 27,
+        mainTitle: "달달한 마카롱 만드는법12",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },{
+        id: 28,
+        mainTitle: "달달한 마카롱 만드는법13",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },
+    {
+        id: 29,
+        mainTitle: "달달한 마카롱 만드는법11",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    }, {
+        id: 30,
+        mainTitle: "달달한 마카롱 만드는법12",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },{
+        id: 31,
+        mainTitle: "달달한 마카롱 만드는법13",
+        subTitle: "달달하고 뚱뚱한 마카롱 만들기",
+        img: "https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large"
+    },
+
 ];

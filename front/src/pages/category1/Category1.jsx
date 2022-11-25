@@ -24,8 +24,10 @@ const ButtonWrap = styled.div`
     display: flex;
     justify-content: end;
 `;
+
+
 function Category1() {
-    const dispatch = useDispatch();
+
 
     return (
         <>
