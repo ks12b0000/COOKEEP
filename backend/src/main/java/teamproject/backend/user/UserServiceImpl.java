@@ -25,9 +25,7 @@ import static teamproject.backend.response.BaseExceptionStatus.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final JwtService jwtService;
-
     private final CookieService cookieService;
 
     /**
@@ -41,13 +39,10 @@ public class UserServiceImpl implements UserService {
         String username = joinRequest.getUsername();
         String email = joinRequest.getEmail();
         String password = joinRequest.getPassword();
-        String passwordCheck = joinRequest.getPasswordCheck();;
-
-        if (!password.equals(passwordCheck)) {
-            throw new BaseException(PASSWORD_CHECK); // password 값과 passwordCheck 값이 다르면 (비밀번호가 일치하지 않습니다.)
-        }
 
         password = SHA256.encrypt(password);
+
+        if (checkIdDuplicate(username)){}
 
         User user = new User(username, email, password);
         userRepository.save(user);
@@ -107,6 +102,25 @@ public class UserServiceImpl implements UserService {
         LoginResponse loginResponse = new LoginResponse(user.getId());
 
         return loginResponse;
+    }
+
+    /**
+     * 로그아웃
+     * @param response
+     */
+    @Override
+    public void logout(HttpServletResponse response) {
+        // accessToken 삭제
+        Cookie accessCookie = new Cookie("accessToken", null);
+        accessCookie.setMaxAge(0);
+        accessCookie.setPath("/");
+        response.addCookie(accessCookie);
+
+        // refreshToken 삭제
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setPath("/");
+        response.addCookie(refreshCookie);
     }
 
 }
