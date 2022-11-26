@@ -14,8 +14,15 @@ public enum BaseExceptionStatus {
 
     PASSWORD_CHECK(3004, "비밀번호가 일치하지 않습니다."),
 
-    //[4000 ~] Board 관련 에러코드
+    //[4000 ~] Board 관련 에러코드// 생성 관련 에러코드
+    SHORT_TITLE_LENGTH(4001, "글의 제목이 짧습니다."),
 
+    SHORT_TEXT_LENGTH(4002, "글의 내용이 짧습니다."),
+
+    //[4050 ~] 조회 관련 에러코드
+    NOT_EXIST_BOARD(4050,"존재하지 않는 글입니다."),
+
+    EXCEED_PAGE_NUMBER(4051, "페이지 번호를 초과했습니다."),
 
     // 쿠키, 토큰, 인증 관련 에러코드
     JWT_TOKEN_EXPIRE(5002, "JWT 토큰 만료되었습니다."),

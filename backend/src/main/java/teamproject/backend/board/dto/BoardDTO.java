@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Getter @Setter
 public class BoardDTO {
+    private Long board_id;
     private String title;
     private String category;
     private String text;

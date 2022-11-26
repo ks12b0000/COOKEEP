@@ -6,6 +6,7 @@ import teamproject.backend.board.dto.BoardDTO;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseException;
+import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.user.UserRepository;
 
@@ -23,9 +24,9 @@ public class BoardController {
     @CrossOrigin
     @PostMapping("/board/write")
     public BaseResponse board_write(BoardDTO boardDTO){
-        System.out.println(boardDTO.getCategory());
-        System.out.println(boardDTO.getTitle());
-        System.out.println(boardDTO.getText());
+        if(boardDTO.getTitle().length() < 5) throw new BaseException(BaseExceptionStatus.SHORT_TITLE_LENGTH);
+        if(boardDTO.getText().length() < 5) throw new BaseException(BaseExceptionStatus.SHORT_TEXT_LENGTH);
+
         //유저 검증
         /*Optional<User> user = userRepository.findById(user_id);
         if(user == null){
@@ -44,17 +45,19 @@ public class BoardController {
 
     @CrossOrigin
     @GetMapping("/board/list")
-    public List<BoardDTO> board_list(@RequestParam int page){
+    public BaseResponse<List<BoardDTO>> board_list(@RequestParam int page){
         //페이지 값 받아오기 -> 추후 검증 필요
-
+        int count = (int) boardService.getCount();
+        if(page * 8 > count) throw new BaseException(BaseExceptionStatus.EXCEED_PAGE_NUMBER);
         //페이지에 맞게 8개 데이터 뽑아오기
         List<BoardDTO> pages = boardService.getBoards(page);
-        return pages;
+        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
     @CrossOrigin
-    @GetMapping("/board/test")
-    public int test(@RequestParam int code){
-        return code;
+    @GetMapping("/board")
+    public BaseResponse<BoardDTO> search_board(@RequestParam Long id){
+        BoardDTO boardDTO = boardService.findById(id);
+        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", boardDTO);
     }
 }

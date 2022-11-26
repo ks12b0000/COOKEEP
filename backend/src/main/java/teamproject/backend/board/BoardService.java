@@ -9,7 +9,9 @@ import java.util.List;
 public interface BoardService {
     public Long save(Board board);
 
-    public Board findById(Long id);
+    public BoardDTO findById(Long id);
 
     public List<BoardDTO> getBoards(int page);
+
+    public long getCount();
 }

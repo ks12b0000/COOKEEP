@@ -24,9 +24,9 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public Board findById(Long id){
+    public BoardDTO findById(Long id){
         Optional<Board> board = boardRepository.findById(id);
-        return board.get();
+        return changeDTO(board.get());
     }
 
     @Override
@@ -43,13 +43,19 @@ public class BoardServiceImpl implements BoardService{
         return boardDTOs;
     }
 
+    @Override
+    public long getCount() {
+        return boardRepository.count();
+    }
+
     private BoardDTO changeDTO(Board board){
         BoardDTO boardDTO = new BoardDTO();
         boardDTO.setText(board.getText());
         boardDTO.setTitle(board.getTitle());
-        boardDTO.setCategory(boardDTO.getCategory());
+        boardDTO.setCategory(board.getCategory());
         boardDTO.setUser_name(board.getUser().getUsername());
         boardDTO.setCreate_date(board.getCreateDate());
+        boardDTO.setBoard_id(board.getBoard_id());
         return boardDTO;
     }
 }
