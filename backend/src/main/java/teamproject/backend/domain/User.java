@@ -4,14 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Entity
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -26,6 +28,9 @@ public class User {
     // 유저 비밀번호
     @Column(length = 100, nullable = false)
     private String password;
+
+    @OneToMany
+    private List<Board> board_list = new LinkedList<>();
 
     public User(String username, String email, String password) {
         this.username = username;

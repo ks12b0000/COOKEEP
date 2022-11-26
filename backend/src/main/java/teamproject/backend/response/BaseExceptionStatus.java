@@ -14,6 +14,9 @@ public enum BaseExceptionStatus {
 
     PASSWORD_CHECK(3004, "비밀번호가 일치하지 않습니다."),
 
+    //[4000 ~] Board 관련 에러코드
+
+
     // 쿠키, 토큰, 인증 관련 에러코드
     JWT_TOKEN_EXPIRE(5002, "JWT 토큰 만료되었습니다."),
     JWT_TOKEN_INVALID(5003,"잘못된 JWT 토큰입니다.");
