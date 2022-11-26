@@ -6,7 +6,7 @@ const Container = styled.div`
     display: flex;
     width: 1200px;
     height: 100%;
-    margin: 0 auto;
+    margin: 50px auto 0 auto;
 `;
 const Contents = styled.div`
     width: 100%;
