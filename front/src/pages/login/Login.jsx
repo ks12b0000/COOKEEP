@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
+import Header from "../../components/layout/header/Header";
+
 const LoginBackground = styled.div`
     width: 100vw;
     height: 100vh;
@@ -30,21 +32,26 @@ const LoginTitle = styled.div`
 
 const LoginInput = styled.input`
     width: 380px;
-    height: 50px;
+    height: 45px;
     border: none;
-    border-bottom: 1.5px solid #adadad;
+    border-bottom: 1.5px solid #cecece;
     margin-bottom: 20px;
+    outline: none;
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: #545454;
 
     ::placeholder {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 300;
         letter-spacing: 2px;
-        color: #a2a2a2;
+        color: #aaaaaa;
     }
 `;
 
 const LoginButton = styled.button`
-    width: 375px;
+    width: 380px;
     height: 55px;
     background-color: #35c5f0;
     border: none;
@@ -54,13 +61,13 @@ const LoginButton = styled.button`
     font-weight: 600;
     letter-spacing: 3px;
     margin-top: 10px;
+    cursor: pointer;
 `;
 
 const CheckBoxWrap = styled.div`
     display: flex;
     width: 375px;
-    margin: 20px 0 30px 0;
-    justify-content: right;
+    margin: 5px 0 30px 0;
 
     input {
         width: 19px;
@@ -71,7 +78,8 @@ const CheckBoxWrap = styled.div`
     div {
         font-size: 16px;
         margin-left: 10px;
-        color: #a2a2a2;
+        color: #909090;
+        font-weight: 400;
     }
 `;
 
@@ -81,6 +89,7 @@ const LinkWrap = styled.div`
     justify-content: space-between;
     width: 375px;
     font-weight: 300;
+    margin-top: 25px;
 `;
 
 const LinkStyled = styled(Link)`
@@ -111,6 +120,7 @@ const OtherLogin = styled.div`
         height: 50px;
         border-radius: 50%;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        cursor: pointer;
     }
 
     div {
@@ -123,35 +133,38 @@ const OtherLogin = styled.div`
 
 function Login() {
     return (
-        <LoginBackground>
-            <LoginWrap>
-                <LoginTitle>Welcome to our project !</LoginTitle>
-                <LoginInput type="email" placeholder="email" />
-                <LoginInput type="password" placeholder="password" />
-                <LoginButton>로그인</LoginButton>
-                <CheckBoxWrap>
-                    <input type="checkbox" />
-                    <div>자동 로그인</div>
-                </CheckBoxWrap>
-                <LinkWrap>
-                    <LinkStyled to={"/"}>아이디 찾기</LinkStyled>|<LinkStyled to={"/"}>비밀번호 찾기</LinkStyled>|<LinkStyled to={"/sign"}>회원가입</LinkStyled>
-                </LinkWrap>
-                <OtherLoginWrap>
-                    <OtherLogin>
-                        <img src="/image/naver.png" alt="naver-logo" />
-                        <div>네이버로 시작하기</div>
-                    </OtherLogin>
-                    <OtherLogin>
-                        <img src="/image/kakao.png" alt="kakao-logo" />
-                        <div>카카오로 시작하기</div>
-                    </OtherLogin>
-                    <OtherLogin>
-                        <img src="/image/google.png" alt="google-logo" />
-                        <div>구글로 시작하기</div>
-                    </OtherLogin>
-                </OtherLoginWrap>
-            </LoginWrap>
-        </LoginBackground>
+        <>
+            <Header />
+            <LoginBackground>
+                <LoginWrap>
+                    <LoginTitle>Welcome to our project !</LoginTitle>
+                    <LoginInput type="id" placeholder="id" />
+                    <LoginInput type="password" placeholder="password" />
+                    <CheckBoxWrap>
+                        <input type="checkbox" />
+                        <div>자동 로그인</div>
+                    </CheckBoxWrap>
+                    <LoginButton>로그인</LoginButton>
+                    <LinkWrap>
+                        <LinkStyled to={"/"}>아이디 찾기</LinkStyled>|<LinkStyled to={"/"}>비밀번호 찾기</LinkStyled>|<LinkStyled to={"/sign"}>회원가입</LinkStyled>
+                    </LinkWrap>
+                    <OtherLoginWrap>
+                        <OtherLogin>
+                            <img src="/image/naver.png" alt="naver-logo" />
+                            <div>네이버로 시작하기</div>
+                        </OtherLogin>
+                        <OtherLogin>
+                            <img src="/image/kakao.png" alt="kakao-logo" />
+                            <div>카카오로 시작하기</div>
+                        </OtherLogin>
+                        <OtherLogin>
+                            <img src="/image/google.png" alt="google-logo" />
+                            <div>구글로 시작하기</div>
+                        </OtherLogin>
+                    </OtherLoginWrap>
+                </LoginWrap>
+            </LoginBackground>
+        </>
     );
 }
 export default Login;
