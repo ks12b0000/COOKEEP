@@ -3,10 +3,9 @@ import styled from "@emotion/styled";
 import CateItem from "../../components/category1/cateItem/CateItem";
 import Buttons from "../../components/buttons/Buttons";
 import { useDispatch, useSelector } from "react-redux";
-import {Link, Routes,Route,} from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 import Detail from "../../components/category1/detail/Detail";
 import Writing from "../../components/category1/writing/Writing";
-
 
 const Container = styled.section`
     width: 1200px;
@@ -14,6 +13,7 @@ const Container = styled.section`
     height: 1000px;
 `;
 const Category1Title = styled.div`
+    margin-top: 70px;
     padding: 50px;
     h1 {
         font-size: 24px;
@@ -25,10 +25,7 @@ const ButtonWrap = styled.div`
     justify-content: end;
 `;
 
-
 function Category1() {
-
-
     return (
         <>
             <Routes>
@@ -40,7 +37,11 @@ function Category1() {
                     <h1>카테고리 이름</h1>
                     <CateItem />
                     <ButtonWrap>
-                        <div><Link to="/category1/writing"><Buttons text="글쓰기"  /></Link></div>
+                        <div>
+                            <Link to="/category1/writing">
+                                <Buttons text="글쓰기" />
+                            </Link>
+                        </div>
                     </ButtonWrap>
                 </Category1Title>
             </Container>

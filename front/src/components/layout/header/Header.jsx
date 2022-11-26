@@ -7,6 +7,11 @@ const HeaderContainer = styled.header`
     width: 100%;
     height: 70px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-color: white;
 `;
 const Container = styled.div`
     display: flex;
@@ -16,7 +21,6 @@ const Container = styled.div`
 `;
 function Header() {
     return (
-
         <HeaderContainer>
             <Container>
                 <Logo />
@@ -24,7 +28,6 @@ function Header() {
                 <RightGnb />
             </Container>
         </HeaderContainer>
-
     );
 }
 
