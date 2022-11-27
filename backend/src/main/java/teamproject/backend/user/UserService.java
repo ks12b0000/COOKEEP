@@ -14,4 +14,6 @@ public interface UserService {
     public boolean checkIdDuplicate(String username);
 
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response);
+
+    public void logout(HttpServletResponse response);
 }

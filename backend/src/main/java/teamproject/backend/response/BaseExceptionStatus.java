@@ -28,7 +28,10 @@ public enum BaseExceptionStatus {
 
     // 쿠키, 토큰, 인증 관련 에러코드
     JWT_TOKEN_EXPIRE(5002, "JWT 토큰 만료되었습니다."),
-    JWT_TOKEN_INVALID(5003,"잘못된 JWT 토큰입니다.");
+    JWT_TOKEN_INVALID(5003,"잘못된 JWT 토큰입니다."),
+    UNAUTHORIZED_USER_ACCESS(5004, "인증되지 않은 유저의 접근입니다."),
+    DO_NOT_LOGIN_USER(5005, "로그인이 필요한 요청입니다.");
+
     private final int code;
     private final String message;
 
