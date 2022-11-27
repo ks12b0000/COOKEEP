@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+//@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class UserControllerTest {
 
     @Autowired
