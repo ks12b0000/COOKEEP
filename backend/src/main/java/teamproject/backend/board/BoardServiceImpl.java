@@ -6,7 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.BoardReadResponse;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.domain.Board;
+import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
+import teamproject.backend.foodCategory.FoodCategoryRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
@@ -21,6 +23,7 @@ public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final FoodCategoryRepository foodCategoryRepository;
 
     @Override
     @Transactional
@@ -29,8 +32,11 @@ public class BoardServiceImpl implements BoardService{
         Optional<User> user = userRepository.findById(boardWriteRequest.getUser_id());
         if(user.isEmpty()) throw new BaseException(BaseExceptionStatus.SERVER_INTERNAL_ERROR); // 추후에 4001로 변경
 
+        //음식 카테고리 찾기
+        FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(boardWriteRequest.getCategory());
+
         //글 생성
-        Board board = new Board(boardWriteRequest, user.get());
+        Board board = new Board(foodCategory, boardWriteRequest, user.get());
 
         //글 저장
         boardRepository.save(board);
@@ -51,8 +57,11 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<BoardReadResponse> getBoards(String category, int page) {
+        //음식 카테고리 찾기
+        FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(category);
+
         //카테고리에 맞는 글 찾기
-        List<Board> searchBoardList = boardRepository.findByCategory(category);
+        List<Board> searchBoardList = boardRepository.findByCategory(foodCategory);
 
         //페이지에 맞게 index 구하기
         int searchBoardCnt = searchBoardList.size();
@@ -67,11 +76,6 @@ public class BoardServiceImpl implements BoardService{
 
         //페이지 리턴
         return pageBoardList;
-    }
-
-    private void checkPage(int allCnt, int curPage){
-        if(curPage < 1) throw new BaseException(BaseExceptionStatus.LESS_PAGE_NUMBER);
-        if(allCnt < (curPage - 1) * 8) throw new BaseException(BaseExceptionStatus.OVER_PAGE_NUMBER);
     }
 
     private int getStartIndex(int allCnt, int curPage){

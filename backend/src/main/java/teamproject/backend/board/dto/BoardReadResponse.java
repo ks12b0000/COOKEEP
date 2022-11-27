@@ -20,7 +20,7 @@ public class BoardReadResponse {
 
     public BoardReadResponse(Board board){
         this.board_id = board.getBoard_id();
-        this.category = board.getCategory();
+        this.category = board.getFoodCategory().getCategoryName();
         this.title = board.getTitle();
         this.text = board.getText();
         this.user_name = board.getUser().getUsername();
