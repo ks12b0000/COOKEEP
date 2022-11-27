@@ -12,4 +12,5 @@ public interface BoardService {
 
     public List<BoardReadResponse> getBoards(String category, int page);
 
+    public void delete(Long user_id, Long board_id);
 }

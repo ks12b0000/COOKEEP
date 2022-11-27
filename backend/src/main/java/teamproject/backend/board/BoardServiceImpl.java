@@ -78,6 +78,22 @@ public class BoardServiceImpl implements BoardService{
         return pageBoardList;
     }
 
+    @Override
+    @Transactional
+    public void delete(Long user_id, Long board_id) {
+        //글 찾기
+        Optional<Board> board = boardRepository.findById(board_id);
+        if(board.isEmpty()) throw new BaseException(BaseExceptionStatus.NOT_EXIST_BOARD);
+
+        //유저가 맞는지 확인
+        if(board.get().getUser().getId() != user_id) throw new BaseException(BaseExceptionStatus.SERVER_INTERNAL_ERROR);// 추후 변경
+
+        //글 삭제
+        boardRepository.delete(board.get());
+    }
+
+
+
     private int getStartIndex(int allCnt, int curPage){
         if(curPage < 1) return 0;
         if(allCnt < (curPage - 1) * 8) return (allCnt % 8) * 8;
