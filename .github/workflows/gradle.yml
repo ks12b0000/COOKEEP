@@ -14,6 +14,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./backend
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
@@ -21,12 +23,12 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: file directory
-      run: cd ./backend
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+      working-directory: ${{ env.working-directory }}
     - name: Build with Gradle
       run: ./gradlew build
+      working-directory: ${{ env.working-directory }}
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1 # 수정해야함
       with:
