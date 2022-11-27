@@ -22,7 +22,9 @@ public enum BaseExceptionStatus {
     //[4050 ~] 조회 관련 에러코드
     NOT_EXIST_BOARD(4050,"존재하지 않는 글입니다."),
 
-    EXCEED_PAGE_NUMBER(4051, "페이지 번호를 초과했습니다."),
+    OVER_PAGE_NUMBER(4051, "페이지 번호 초과"),
+
+    LESS_PAGE_NUMBER(4052, "페이지 번호 부족"),
 
     // 쿠키, 토큰, 인증 관련 에러코드
     JWT_TOKEN_EXPIRE(5002, "JWT 토큰 만료되었습니다."),

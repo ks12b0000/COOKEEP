@@ -2,7 +2,7 @@ package teamproject.backend.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamproject.backend.board.dto.BoardDTO;
+import teamproject.backend.board.dto.BoardWriteRequest;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -35,10 +35,10 @@ public class Board{
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    public Board(BoardDTO boardDTO, User user) {
-        this.category = boardDTO.getCategory();
-        this.title = boardDTO.getTitle();
-        this.text = boardDTO.getText();
+    public Board(BoardWriteRequest boardWriteRequest, User user) {
+        this.category = boardWriteRequest.getCategory();
+        this.title = boardWriteRequest.getTitle();
+        this.text = boardWriteRequest.getText();
         this.user = user;
         this.createDate = new Date(System.currentTimeMillis());
     }
