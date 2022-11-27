@@ -1,11 +1,13 @@
 package teamproject.backend.board.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamproject.backend.domain.Board;
 
 import java.util.Date;
 
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardReadResponse {
