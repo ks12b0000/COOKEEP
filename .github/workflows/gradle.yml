@@ -46,8 +46,6 @@ jobs:
     needs: build  # build 후에 실행되도록 정의
     name: Deploy
     runs-on: [ self-hosted, label-go ] # AWS ./configure에서 사용할 label명
-    env:
-      working-directory: ./backend
     steps:
       # 3000 -> 80 포트로 수행하도록 지정
       - name: Docker run
@@ -55,4 +53,3 @@ jobs:
           docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
           docker stop spring-cicd && docker rm spring-cicd && docker rmi ks12b0000/spring-cicd:latest
           docker run -d -p 8080:8080 --name spring-cicd --restart always ks12b0000/spring-cicd:latest
-        working-directory: ${{ env.working-directory }}
