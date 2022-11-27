@@ -34,13 +34,13 @@ public class UserControllerTest {
     @Autowired
     private UserServiceImpl userService;
 
-    @Autowired
-    private EntityManager entityManager;
+//    @Autowired
+//    private EntityManager entityManager;
 
-    @BeforeEach
-    public void init() {
-        entityManager.createNativeQuery("ALTER TABLE user AUTO_INCREMENT = 1").executeUpdate(); // mySQL
-    }
+//    @BeforeEach
+//    public void init() {
+//        entityManager.createNativeQuery("ALTER TABLE user AUTO_INCREMENT = 1").executeUpdate(); // mySQL
+//    }
 
     @Test
     public void before() throws Exception {
