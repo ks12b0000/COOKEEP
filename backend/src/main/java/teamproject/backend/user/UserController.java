@@ -43,7 +43,7 @@ public class UserController {
      * @param username
      * @return
      */
-    @GetMapping("/duplicateTest")
+    @GetMapping("/duplicate")
     public BaseResponse<GetUsernameSameRes> checkIdDuplicate(String username) {
 
         boolean idDuplicate = userService.checkIdDuplicate(username);
