@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -13,7 +15,7 @@ public class FoodCategory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long category_id;
 
-    @Column(name = "category_Name")
+    @Column
     private String categoryName;
 
     public FoodCategory(String categoryName) {
