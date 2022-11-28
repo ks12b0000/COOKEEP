@@ -20,8 +20,12 @@ public class Board{
     private User user;
 
     //글 카테고리
-    @Column
-    private String category;
+    //@Column(nullable = false)
+    //private String category;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private FoodCategory category;
 
     //글 제목
     @Column(length = 50, nullable = false)
@@ -36,7 +40,7 @@ public class Board{
     private Date createDate;
 
     public Board(FoodCategory foodCategory, BoardWriteRequest boardWriteRequest, User user) {
-        this.category = foodCategory.getCategoryName();
+        this.category = foodCategory;
         this.title = boardWriteRequest.getTitle();
         this.text = boardWriteRequest.getText();
         this.user = user;
