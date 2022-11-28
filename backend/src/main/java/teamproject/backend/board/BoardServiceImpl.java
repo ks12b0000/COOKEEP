@@ -60,9 +60,10 @@ public class BoardServiceImpl implements BoardService{
     public List<BoardReadResponse> getBoards(String category, int page) {
         //음식 카테고리 찾기
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(category);
+        if(foodCategory == null) throw new BaseException(BaseExceptionStatus.NOT_EXIST_CATEGORY);
 
         //카테고리에 맞는 글 찾기
-        List<Board> searchBoardList = boardRepository.findByCategory(foodCategory);
+        List<Board> searchBoardList = boardRepository.findByCategory(foodCategory.getCategoryName());
 
         //페이지에 맞게 index 구하기
         int searchBoardCnt = searchBoardList.size();

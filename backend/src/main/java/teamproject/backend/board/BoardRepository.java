@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    List<Board> findByCategory(FoodCategory foodCategory);
+    List<Board> findByCategory(String category);
 }
