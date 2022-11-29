@@ -1,15 +1,17 @@
 import styled from "@emotion/styled";
-
+import Axios from "../../../http/http";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../pagination/Pagination";
-import {useState,useEffect} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { categoryList1 } from "../../../data/category1/categoryList1";
+import categoryHttp from "../../../http/categoryHttp";
 
 const Ul = styled.ul`
     margin: 20px 0 30px;
     display: flex;
-    gap:10px;
+    gap: 10px;
     flex-wrap: wrap;
     justify-content: start;
     min-height: 550px;
@@ -51,60 +53,39 @@ const TextBox = styled.div`
     }
 `;
 function CateItem() {
-    const categoryItem = useSelector((state) => state.listReducer.item);
-    const [posts,setPosts] = useState(categoryItem);
-    const [loading,setLoading] = useState(false);
+    const [posts, setPosts] = useState(categoryList1);
+    const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showPost] = useState(8);
-    const [totalPost,setTotalPost] = useState(categoryItem.length);
+    const [showPost] = useState(2);
+    const [totalPost, setTotalPost] = useState(posts.length);
 
-    // useEffect(() => {
-    //     const loadPost = async () => {
-    //         setLoading(true);
-    //         const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
-    //         setPosts(response.data);
-    //         setTotalPosts(response.data.length);
-    //         setLoading(false);
-    //     }
-    //     loadPost();
-    // },[]);
     const LastIndex = currentPage * showPost;
     const FirstIndex = LastIndex - showPost;
-    const currentPost = posts.slice(FirstIndex,LastIndex);
+    const currentPost = posts.slice(FirstIndex, LastIndex);
     const paginate = (pageNum) => setCurrentPage(pageNum);
-    const prevPage = () => setCurrentPage(currentPage  - 1);
-    const nextPage = () => setCurrentPage( currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+    const nextPage = () => setCurrentPage(currentPage + 1);
 
     const showPagination = () => {
-        return(
-           <Pagination
-              showPost={showPost}
-              totalPost ={totalPost}
-              currentPage ={currentPage}
-              paginate ={paginate}
-              prevPage ={prevPage}
-              nextPage ={nextPage}
-           />
-        )
-    }
+        return <Pagination showPost={showPost} totalPost={totalPost} currentPage={currentPage} paginate={paginate} prevPage={prevPage} nextPage={nextPage} />;
+    };
 
     return (
         <>
             <Ul>
-                {
-                    currentPost.map((category) => (
-                        <li key={category.id}>
-                            <Link to={`/category1/${category.id}`}>
-                                <Thumbnail>
-                                    <img src={category.img} alt="" />
-                                </Thumbnail>
-                                <TextBox>
-                                    <span>{category.mainTitle}</span>
-                                    <span>{category.subTitle}</span>
-                                </TextBox>
-                            </Link>
-                        </li>
-                    ))}
+                {currentPost.map((category, idx) => (
+                    <li key={idx + 1}>
+                        <Link to={`/category1/${category.board_id}`}>
+                            <Thumbnail>
+                                <img src={category.img} alt="" />
+                            </Thumbnail>
+                            <TextBox>
+                                <span>{category.mainTitle}</span>
+                                <span>{category.subTitle}</span>
+                            </TextBox>
+                        </Link>
+                    </li>
+                ))}
             </Ul>
             <div>{showPagination()}</div>
         </>

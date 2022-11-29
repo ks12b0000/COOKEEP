@@ -3,6 +3,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Buttons from "../../../buttons/Buttons";
 import {useNavigate} from "react-router";
 import styled from "@emotion/styled";
+import Axios from "../../../../http/http";
+import {useState,useEffect} from "react";
 
 
 const InputBox =styled.fieldset`
@@ -75,17 +77,35 @@ const ButtonsWrap = styled.div`
 function WritingForm(){
 
     const navigate =useNavigate();
+    const [category,setCategory] = useState("");
+    const [title,setTitle] = useState("");
+    const [text,setText] = useState(``);
+    const [userId,setUserId] = useState(5);
+
+
+    const submit = () =>{
+        let data = {
+            category:category,
+            title:title,
+            text:text,
+            user_id:userId
+        }
+        Axios.post('auth/board/write',data);
+
+    }
     return(
         <>
             <InputBox>
                 <label htmlFor="">카테고리</label>
-                <select name="" id="">
-                    <option value="">*</option>
+                <select name="" id="" onChange={(e) => setCategory(e.currentTarget.value)}>
+                    <option value="카테고리1" >카테고리1</option>
+                    <option value="카테고리2" > 카테고리2</option>
                 </select>
+
             </InputBox>
             <InputBox>
                 <label htmlFor="">제목</label>
-                <input type="text" placeholder="제목을 입력해주세요"/>
+                <input type="text" placeholder="제목을 입력해주세요" onChange={(e) => setTitle(e.currentTarget.value) }/>
             </InputBox>
             <Upload>
                 <label htmlFor="">썸네일</label>
@@ -97,14 +117,19 @@ function WritingForm(){
                 <Ckedit>
                     <CKEditor
                         editor={ ClassicEditor }
-                        data="데이터들어가는곳"
+                        data=""
                         onReady={ editor => {
                             // You can store the "editor" and use when it is needed.
                             console.log( 'Editor is ready to use!', editor );
                         } }
+                        config={{
+
+                            placeholder: "글을 입력해보세요!",
+                        }}
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
-                            console.log( { event, editor, data } );
+                            setText(data.replace((/<[^>]*>?/g),""));
+
                         } }
                         onBlur={ ( event, editor ) => {
                             console.log( 'Blur.', editor );
@@ -117,8 +142,10 @@ function WritingForm(){
             </InputBox>
             <ButtonsWrap>
                 <Buttons text="취소" event={() => navigate(-1)} />
-                <Buttons text="등록"/>
+                <Buttons text="등록" event={submit} />
             </ButtonsWrap>
+
+
         </>
     )
 }
