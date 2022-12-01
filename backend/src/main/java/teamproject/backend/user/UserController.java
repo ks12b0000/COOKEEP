@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
     private final UserService userService;
+    private final KakaoUserService kakaoUserService;
 
     /**
      * 회원가입
@@ -67,6 +68,23 @@ public class UserController {
 
         return new BaseResponse<>("로그인에 성공했습니다.", loginResponse);
     }
+
+    /**
+     * 카카오 로그인
+     * [GET] /user/login/kakao?code=
+     *
+     * @param code
+     * @param response
+     * @return
+     */
+    @GetMapping("/login/kakao")
+    public BaseResponse<LoginResponse> kakaoLogin(@RequestParam String code, HttpServletResponse response){
+
+        LoginResponse loginResponse = kakaoUserService.login(code, response);
+
+        return new BaseResponse<>("카카오 로그인에 성공했습니다.", loginResponse);
+    }
+
 
     /**
      * 로그아웃
