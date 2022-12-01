@@ -9,6 +9,7 @@ import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
+import teamproject.backend.user.dto.SocialUserInfo;
 import teamproject.backend.utils.CookieService;
 import teamproject.backend.utils.JwtService;
 import teamproject.backend.utils.SHA256;
@@ -22,7 +23,7 @@ import static teamproject.backend.response.BaseExceptionStatus.*;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, SocialUserService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -48,6 +49,34 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return user.getId();
+    }
+
+    // 소셜 로그인 유저의 회원가입
+    @Override
+    @Transactional
+    public SocialUserInfo joinBySocial(String username, String email){
+
+        User user = new User(username, email, username);
+
+        userRepository.save(user);
+
+        SocialUserInfo userInfo = new SocialUserInfo(user.getId(), user.getUsername(), user.getEmail());
+
+        return userInfo;
+    }
+
+    // 회원가입된 유저인지 확인
+    @Override
+    public Long checkUserHasJoin(String username){
+
+        User user = userRepository.findByUsername(username);
+
+        if(user == null){
+            return -1L; // 회원가입 안됨
+        }
+        else {
+            return user.getId(); // 회원가입 됨.
+        }
     }
 
     /**
