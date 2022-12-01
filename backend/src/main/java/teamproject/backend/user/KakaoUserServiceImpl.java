@@ -122,6 +122,8 @@ public class KakaoUserServiceImpl implements KakaoUserService {
             bw.write(sb.toString());
             bw.flush();
 
+            log.info("KAKAO_API_KEY = {}", KAKAO_API_KEY);
+
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             log.info("responseCode : {}" , responseCode);
