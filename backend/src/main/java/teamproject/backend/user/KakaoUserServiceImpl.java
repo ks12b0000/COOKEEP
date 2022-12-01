@@ -52,10 +52,6 @@ public class KakaoUserServiceImpl implements KakaoUserService {
         protected String getAccessToken() {
             return accessToken;
         }
-
-        protected String getRefreshToken() {
-            return refreshToken;
-        }
     }
 
     private class KaKaoUser{
@@ -80,14 +76,8 @@ public class KakaoUserServiceImpl implements KakaoUserService {
     public LoginResponse login(String code, HttpServletResponse response) {
         this.redirectionUrl  = frontHost + "/callback/kakao";
 
-        log.info("frontHost ={} ", frontHost);
-        log.info("redirectionUrl ={} ", redirectionUrl);
-
         // 인가코드로 카카오의 토큰(access, refresh) 발급받기
         Token token = getTokens(code);
-
-        log.info("token.getAccessToken() ={} ", token.getAccessToken());
-        log.info("redirectionUrl ={} ", redirectionUrl);
 
         // user 조회
         SocialUserInfo userInfo = getUser(token.getAccessToken());
@@ -122,14 +112,13 @@ public class KakaoUserServiceImpl implements KakaoUserService {
             bw.write(sb.toString());
             bw.flush();
 
-            log.info("KAKAO_API_KEY = {}", KAKAO_API_KEY);
-
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
-            log.info("responseCode : {}" , responseCode);
-            log.info(conn.getResponseMessage());
 
-            // 200 아닐경우 예외처리 필요
+            // 200 아닐경우 예외처리
+            if(responseCode != HttpStatus.OK.value()){
+                throw new BaseException(KAKAO_GET_USER_INFO_FAIL);
+            }
 
             //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -139,7 +128,6 @@ public class KakaoUserServiceImpl implements KakaoUserService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            log.info("result ={} " + result);
 
             //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
@@ -167,9 +155,9 @@ public class KakaoUserServiceImpl implements KakaoUserService {
         KaKaoUser kakaoUser = getUserInfo(accessToken);
 
         Long userId = userService.checkUserHasJoin(kakaoUser.getUsername());
+
         // 해당하는 사용자가 없으면 자동으로 회원가입 진행
         if(userId == -1L){
-            log.info("회원가입이 되지 않은 유저의 카카오 로그인 발생. 회원가입 진행: idx={}", kakaoUser.getUsername());
             return userService.joinBySocial(kakaoUser.getUsername(), kakaoUser.getEmail());
         }
 
@@ -187,11 +175,8 @@ public class KakaoUserServiceImpl implements KakaoUserService {
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
             conn.setDoOutput(true); // 서버로부터 받아오는 값이 있다면 ture
 
-            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
-
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
-            log.trace("responseCode : {}" , responseCode);
 
             // 200 아닐경우 예외처리 필요
             if(responseCode != HttpStatus.OK.value()){
@@ -206,7 +191,6 @@ public class KakaoUserServiceImpl implements KakaoUserService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            log.trace("response body : {}", result);
 
             //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
@@ -214,13 +198,7 @@ public class KakaoUserServiceImpl implements KakaoUserService {
 
             // 응답바디에서 사용자 정보 꺼내오기
             String username = element.getAsJsonObject().get("id").toString();
-            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
-            String email = "";
-            if(hasEmail){
-                email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-            } else {
-                new BaseException(KAKAO_LOGIN_FAIL_EMAIL);
-            }
+            String email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
 
             KaKaoUser kaKaoUser = new KaKaoUser(username, email);
 
@@ -228,11 +206,9 @@ public class KakaoUserServiceImpl implements KakaoUserService {
 
             return kaKaoUser;
         } catch (BaseException e){
-            log.error("카카오 로그인 중 예상치못한 에러: {}", e.getMessage());
             throw e;
         } catch (IOException e) {
             e.printStackTrace();
-            log.error("카카오 로그인 중 예상치못한 에러: {}", KAKAO_GET_USER_INFO_FAIL.getMessage());
             throw new BaseException(KAKAO_GET_USER_INFO_FAIL);
         }
     }
