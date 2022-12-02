@@ -42,11 +42,8 @@ function SignUp() {
     //아이디 중복체크 실행 함수
     const onCheckUserName = (e)=>{
         e.preventDefault();
-        axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/duplicate?username=`, {
-            username : UserName,
-        })
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/duplicate?username=${UserName}`)
         .then((res)=>{
-            console.log(res.data.result.isDuplicate);
             if(!res.data.result.isDuplicate){
                 setCheckUserName(true)
                 alert(res.data.message)
@@ -54,6 +51,7 @@ function SignUp() {
         })
         .catch((err)=>{
             console.log(err);
+            alert(err.response.data.message)
         })
     }
 
