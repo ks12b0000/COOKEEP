@@ -18,7 +18,7 @@ public class User {
     private Long id;
 
     // 유저 아이디
-    @Column(length = 13, nullable = false, unique = true)
+    @Column(length = 50, nullable = false, unique = true)
     private String username;
 
     // 유저 이메일

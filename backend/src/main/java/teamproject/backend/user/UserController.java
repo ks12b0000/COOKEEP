@@ -21,6 +21,7 @@ public class UserController {
 
     private final UserService userService;
     private final KakaoUserService kakaoUserService;
+    private final NaverUserService naverUserService;
 
     /**
      * 회원가입
@@ -85,6 +86,22 @@ public class UserController {
         return new BaseResponse<>("카카오 로그인에 성공했습니다.", loginResponse);
     }
 
+    /**
+     * 네이버 로그인
+     * [GET] /user/login/naver?code=&state=
+     *
+     * @param code
+     * @param state
+     * @param response
+     * @return
+     */
+    @GetMapping("/login/naver")
+    public BaseResponse<LoginResponse> naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
+
+        LoginResponse loginResponse = naverUserService.login(code, state, response);
+
+        return new BaseResponse<>("네이버 로그인에 성공했습니다.", loginResponse);
+    }
 
     /**
      * 로그아웃

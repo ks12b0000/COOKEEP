@@ -22,5 +22,6 @@ spring:
         default_batch_fetch_size: 100
 
 KAKAO_API_KEY: ${KAKAO_API_KEY}
-
+NAVER_API_ID: ${NAVER_API_ID}
+NAVER_API_SECRET: ${NAVER_API_SECRET}
 
