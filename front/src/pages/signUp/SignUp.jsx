@@ -10,6 +10,7 @@ function SignUp() {
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
     const [CheckPassword, setCheckPassword] = useState("");
+    const [CheckUserName, setCheckUserName] = useState(false);
 
     //회원가입 실행 함수
     const onSignUp = async(e) => {
@@ -18,8 +19,10 @@ function SignUp() {
         if (!(UserName && Email && Password && CheckPassword)) {
             return alert("모든 값을 입력해주세요");
         } else if (Password != CheckPassword) {
-            return alert("비밀번호와 비밀번호 확인 값이 일치하지 않습니다.");
-        } else {
+            return alert("비밀번호와 비밀번호 확인 값이 일치하지 않습니다");
+        } else if(!CheckUserName){
+            return alert("닉네임 중복검사를 진행해 주세요")
+        }else {
             await axios
                 api.post(`${process.env.REACT_APP_API_BASE_URL}/user/join`, {
                     username: UserName,
@@ -35,6 +38,24 @@ function SignUp() {
                 });
         }
     };
+
+    //아이디 중복체크 실행 함수
+    const onCheckUserName = (e)=>{
+        e.preventDefault();
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/duplicate?username=`, {
+            username : UserName,
+        })
+        .then((res)=>{
+            console.log(res.data.result.isDuplicate);
+            if(!res.data.result.isDuplicate){
+                setCheckUserName(true)
+                alert(res.data.message)
+            }
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    }
 
     return (
         <>
@@ -53,7 +74,7 @@ function SignUp() {
                                 setUserName(e.currentTarget.value);
                             }}
                         />
-                        <IdButton>중복확인</IdButton>
+                        <IdButton onClick={(e)=>onCheckUserName(e)}>중복확인</IdButton>
                     </IdWrap>
                     {/* 이메일 입력 */}
                     <SignName>이메일</SignName>
