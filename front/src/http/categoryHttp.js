@@ -10,9 +10,9 @@ class CategoryHttp extends Http {
             }
         }
     };
-    writingCategory = async (data) => {
+    submitWritingForm = async (params) => {
         try {
-            const { data } = await this.axios.post("url", data);
+            const { data } = await this.axios.post("auth/board/write", params);
             return data;
         } catch (err) {
             throw err;

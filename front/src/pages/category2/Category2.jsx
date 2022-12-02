@@ -30,7 +30,6 @@ function Category2() {
             }
         })();
     }, []);
-    console.log(Category);
 
     return (
         <>

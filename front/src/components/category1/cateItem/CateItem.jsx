@@ -52,11 +52,31 @@ const TextBox = styled.div`
         font-weight: 500;
     }
 `;
+
+// const SelectBox = styled.div`
+//     position: relative;
+//     width: 100%;
+//     select {
+//         padding: 10px 15px;
+//         border: 1px solid #ccc;
+//         position: absolute;
+//         right: 0;
+//         top: -25px;
+//         border-radius: 5px;
+//         width: 150px;
+//         -webkit-appearance: none;
+//         background: url("https://i.imgur.com/e60gpgR.png") 88%/12px no-repeat;
+//         cursor: pointer;
+//         &:focus {
+//             outline: none;
+//         }
+//     }
+// `;
 function CateItem() {
     const [posts, setPosts] = useState(categoryList1);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showPost] = useState(2);
+    const [showPost, setShowPost] = useState(8);
     const [totalPost, setTotalPost] = useState(posts.length);
 
     const LastIndex = currentPage * showPost;
@@ -69,9 +89,19 @@ function CateItem() {
     const showPagination = () => {
         return <Pagination showPost={showPost} totalPost={totalPost} currentPage={currentPage} paginate={paginate} prevPage={prevPage} nextPage={nextPage} />;
     };
+    // const FilterPosts = (e) => {
+    //     setShowPost(parseInt(e.target.value));
+    // };
 
     return (
         <>
+            {/*<SelectBox>*/}
+            {/*    <select onChange={FilterPosts} defaultValue="8">*/}
+            {/*        <option value="4">4개씩보기</option>*/}
+            {/*        <option value="8">8개씩 보기</option>*/}
+            {/*        <option value="100">100개씩 보기</option>*/}
+            {/*    </select>*/}
+            {/*</SelectBox>*/}
             <Ul>
                 {currentPost.map((category, idx) => (
                     <li key={idx + 1}>
