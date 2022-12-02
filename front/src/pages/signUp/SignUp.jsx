@@ -1,5 +1,115 @@
+import { useState } from "react";
+import axios from "axios";
+import api from "../../api/axios";
 import Header from "../../components/layout/header/Header";
 import styled from "@emotion/styled";
+
+
+function SignUp() {
+    const [UserName, setUserName] = useState("");
+    const [Email, setEmail] = useState("");
+    const [Password, setPassword] = useState("");
+    const [CheckPassword, setCheckPassword] = useState("");
+    const [CheckUserName, setCheckUserName] = useState(false);
+
+    //회원가입 실행 함수
+    const onSignUp = async(e) => {
+        e.preventDefault();
+
+        if (!(UserName && Email && Password && CheckPassword)) {
+            return alert("모든 값을 입력해주세요");
+        } else if (Password != CheckPassword) {
+            return alert("비밀번호와 비밀번호 확인 값이 일치하지 않습니다");
+        } else if(!CheckUserName){
+            return alert("닉네임 중복검사를 진행해 주세요")
+        }else {
+            await axios
+                api.post(`${process.env.REACT_APP_API_BASE_URL}/user/join`, {
+                    username: UserName,
+                    email: Email,
+                    password: Password
+                })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    alert(err.response.data.message);
+                });
+        }
+    };
+
+    //아이디 중복체크 실행 함수
+    const onCheckUserName = (e)=>{
+        e.preventDefault();
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/duplicate?username=${UserName}`)
+        .then((res)=>{
+            if(!res.data.result.isDuplicate){
+                setCheckUserName(true)
+                alert(res.data.message)
+            }
+        })
+        .catch((err)=>{
+            console.log(err);
+            alert(err.response.data.message)
+        })
+    }
+
+    return (
+        <>
+            <Header />
+            <SignBackground>
+                <SignWrap>
+                    <SignTitle>회원가입</SignTitle>
+                    {/* 아이디 입력 */}
+                    <SignName>아이디</SignName>
+                    <IdWrap>
+                        <SignInput
+                            value={UserName}
+                            type="id"
+                            placeholder="아이디를 입력하세요"
+                            onChange={(e) => {
+                                setUserName(e.currentTarget.value);
+                            }}
+                        />
+                        <IdButton onClick={(e)=>onCheckUserName(e)}>중복확인</IdButton>
+                    </IdWrap>
+                    {/* 이메일 입력 */}
+                    <SignName>이메일</SignName>
+                    <SignInput
+                        value={Email}
+                        type="email"
+                        placeholder="이메일을 입력하세요"
+                        onChange={(e) => {
+                            setEmail(e.currentTarget.value);
+                        }}
+                    />
+                    {/* 비밀번호 입력 */}
+                    <SignName>비밀번호</SignName>
+                    <SignInput
+                        value={Password}
+                        type="password"
+                        placeholder="비밀번호를 입력하세요"
+                        onChange={(e) => {
+                            setPassword(e.currentTarget.value);
+                        }}
+                    />
+                    {/* 비밀번호확인 입력 */}
+                    <SignName>비밀번호 확인</SignName>
+                    <SignInput
+                        value={CheckPassword}
+                        type="password"
+                        placeholder="비밀번호 확인을 입력하세요"
+                        onChange={(e) => {
+                            setCheckPassword(e.currentTarget.value);
+                        }}
+                    />
+                    <SignButton onClick={(e) => onSignUp(e)}>가입하기</SignButton>
+                </SignWrap>
+            </SignBackground>
+        </>
+    );
+}
 
 const SignBackground = styled.div`
     width: 100vw;
@@ -97,28 +207,4 @@ const SignButton = styled.button`
     cursor: pointer;
 `;
 
-function SignUp() {
-    return (
-        <>
-            <Header />
-            <SignBackground>
-                <SignWrap>
-                    <SignTitle>회원가입</SignTitle>
-                    <SignName>아이디</SignName>
-                    <IdWrap>
-                        <SignInput type="id" placeholder="아이디를 입력하세요" />
-                        <IdButton>중복확인</IdButton>
-                    </IdWrap>
-                    <SignName>이메일</SignName>
-                    <SignInput type="email" placeholder="이메일을 입력하세요" />
-                    <SignName>비밀번호</SignName>
-                    <SignInput type="password" placeholder="비밀번호를 입력하세요" />
-                    <SignName>비밀번호 확인</SignName>
-                    <SignInput type="password" placeholder="비밀번호 확인을 입력하세요" />
-                    <SignButton>가입하기</SignButton>
-                </SignWrap>
-            </SignBackground>
-        </>
-    );
-}
 export default SignUp;

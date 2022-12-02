@@ -1,7 +1,100 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import api from "../../api/axios";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
 
 import Header from "../../components/layout/header/Header";
+
+function Login() {
+
+    const navigate = useNavigate();
+
+    const [UserName, setUserName] = useState("");
+    const [Password, setPassword] = useState("");
+    const [AutoLogin, setAutoLogin] = useState(false)
+
+
+    const onLogin = async (e) => {
+        e.preventDefault();
+        console.log(process.env);
+
+        if(!(UserName&&Password)){
+            alert('모든 값을 채워주세요.')
+        }else{
+            try{
+                await axios
+                api.post(`${process.env.REACT_APP_API_BASE_URL}/user/login`, {
+                    username: UserName,
+                    password: Password,
+                    autoLogin: AutoLogin,
+                })
+                .then((res)=>{
+                    console.log(res);
+                })
+            } catch(err){
+                console.log(err);
+            }
+        }
+
+        setUserName('');
+        setPassword('');
+        setAutoLogin(false)
+        
+    }
+
+    return (
+        <>
+            <Header />
+            <LoginBackground>
+                <LoginWrap>
+                    <LoginTitle>Welcome to our project !</LoginTitle>
+                    <LoginInput 
+                        value={UserName} 
+                        type="id" 
+                        placeholder="id" 
+                        onChange={(e) => setUserName(e.currentTarget.value)} 
+                    />
+                    <LoginInput 
+                        value={Password} 
+                        type="password" 
+                        placeholder="password" 
+                        onChange={(e) => setPassword(e.currentTarget.value)} 
+                    />
+                    <CheckBoxWrap>
+                        <input 
+                            value={AutoLogin}
+                            type="checkbox" 
+                            onChange={(e) => setAutoLogin(e.currentTarget.checked)}
+                            checked={AutoLogin}
+                        />
+                        <div>자동 로그인</div>
+                    </CheckBoxWrap>
+                    <LoginButton
+                        onClick={(e)=>onLogin(e)}
+                    >로그인</LoginButton>
+                    <LinkWrap>
+                        <LinkStyled to={"/"}>아이디 찾기</LinkStyled>|<LinkStyled to={"/"}>비밀번호 찾기</LinkStyled>|<LinkStyled to={"/sign"}>회원가입</LinkStyled>
+                    </LinkWrap>
+                    <OtherLoginWrap>
+                        <OtherLogin>
+                            <img src="/image/naver.png" alt="naver-logo" />
+                            <div>네이버로 시작하기</div>
+                        </OtherLogin>
+                        <OtherLogin>
+                            <img src="/image/kakao.png" alt="kakao-logo" />
+                            <div>카카오로 시작하기</div>
+                        </OtherLogin>
+                        <OtherLogin>
+                            <img src="/image/google.png" alt="google-logo" />
+                            <div>구글로 시작하기</div>
+                        </OtherLogin>
+                    </OtherLoginWrap>
+                </LoginWrap>
+            </LoginBackground>
+        </>
+    );
+}
 
 const LoginBackground = styled.div`
     width: 100vw;
@@ -131,40 +224,4 @@ const OtherLogin = styled.div`
     }
 `;
 
-function Login() {
-    return (
-        <>
-            <Header />
-            <LoginBackground>
-                <LoginWrap>
-                    <LoginTitle>Welcome to our project !</LoginTitle>
-                    <LoginInput type="id" placeholder="id" />
-                    <LoginInput type="password" placeholder="password" />
-                    <CheckBoxWrap>
-                        <input type="checkbox" />
-                        <div>자동 로그인</div>
-                    </CheckBoxWrap>
-                    <LoginButton>로그인</LoginButton>
-                    <LinkWrap>
-                        <LinkStyled to={"/"}>아이디 찾기</LinkStyled>|<LinkStyled to={"/"}>비밀번호 찾기</LinkStyled>|<LinkStyled to={"/sign"}>회원가입</LinkStyled>
-                    </LinkWrap>
-                    <OtherLoginWrap>
-                        <OtherLogin>
-                            <img src="/image/naver.png" alt="naver-logo" />
-                            <div>네이버로 시작하기</div>
-                        </OtherLogin>
-                        <OtherLogin>
-                            <img src="/image/kakao.png" alt="kakao-logo" />
-                            <div>카카오로 시작하기</div>
-                        </OtherLogin>
-                        <OtherLogin>
-                            <img src="/image/google.png" alt="google-logo" />
-                            <div>구글로 시작하기</div>
-                        </OtherLogin>
-                    </OtherLoginWrap>
-                </LoginWrap>
-            </LoginBackground>
-        </>
-    );
-}
 export default Login;
