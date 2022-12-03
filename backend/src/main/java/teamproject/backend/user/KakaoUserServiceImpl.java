@@ -42,11 +42,9 @@ public class KakaoUserServiceImpl implements KakaoUserService {
     private class Token{
 
         private String accessToken;
-        private String refreshToken;
 
-        protected Token(String access, String refresh){
+        protected Token(String access){
             this.accessToken = access;
-            this.refreshToken = refresh;
         }
 
         protected String getAccessToken() {
@@ -76,7 +74,7 @@ public class KakaoUserServiceImpl implements KakaoUserService {
     public LoginResponse login(String code, HttpServletResponse response) {
         this.redirectionUrl  = frontHost + "/callback/kakao";
 
-        // 인가코드로 카카오의 토큰(access, refresh) 발급받기
+        // 인가코드로 카카오의 토큰(access) 발급받기
         Token token = getTokens(code);
 
         // user 조회
@@ -86,13 +84,13 @@ public class KakaoUserServiceImpl implements KakaoUserService {
         String accessToken = jwtService.createAccessToken(userInfo.getUsername());
 
         // 쿠키 발급
-        Cookie accessCookie = cookieService.createAccessCookie(accessToken, true);
+        Cookie accessCookie = cookieService.createAccessCookie(accessToken, false);
         response.addCookie(accessCookie);
 
         return new LoginResponse(userInfo.getId());
     }
 
-    // 카카오의 access토큰과 refresh토큰 받기
+    // 카카오의 access토큰 받기
     private Token getTokens(String code){
         try{
             URL url = new URL(tokenHost);
@@ -135,9 +133,8 @@ public class KakaoUserServiceImpl implements KakaoUserService {
 
             // 응답 바디에서 토큰값 읽어오기
             String accessToken = element.getAsJsonObject().get("access_token").getAsString();
-            String refreshToken = element.getAsJsonObject().get("refresh_token").getAsString();
 
-            Token token = new Token(accessToken, refreshToken);
+            Token token = new Token(accessToken);
 
             br.close();
             bw.close();
@@ -195,8 +192,6 @@ public class KakaoUserServiceImpl implements KakaoUserService {
             //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
-            log.info("element = {}",element);
-            log.info("result = {}",result);
 
             // 응답바디에서 사용자 정보 꺼내오기
             String username = element.getAsJsonObject().get("id").toString();

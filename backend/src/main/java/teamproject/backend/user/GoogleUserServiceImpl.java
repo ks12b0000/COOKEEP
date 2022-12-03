@@ -26,19 +26,19 @@ import static teamproject.backend.response.BaseExceptionStatus.*;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-public class NaverUserServiceImpl implements NaverUserService {
+public class GoogleUserServiceImpl implements GoogleUserService {
 
     private final JwtService jwtService;
     private final CookieService cookieService;
     private final SocialUserService userService;
 
     private String frontHost = "http://localhost:3000";
-    private final String tokenHost = "https://nid.naver.com/oauth2.0/token";
-    private final String userInfoHost = "https://openapi.naver.com/v1/nid/me";
-    @Value("${NAVER_API_ID}")
-    private String NAVER_API_ID;
-    @Value("${NAVER_API_SECRET}")
-    private String NAVER_API_SECRET;
+    private final String tokenHost = "https://oauth2.googleapis.com/token";
+    private final String userInfoHost = "https://www.googleapis.com/oauth2/v1/userinfo";
+    @Value("${GOOGLE_API_ID}")
+    private String GOOGLE_API_ID;
+    @Value("${GOOGLE_API_SECRET}")
+    private String GOOGLE_API_SECRET;
     private String redirectionUrl;
 
     private class Token{
@@ -54,12 +54,12 @@ public class NaverUserServiceImpl implements NaverUserService {
         }
     }
 
-    private class NaverUser {
+    private class GoogleUser {
 
         private String username; // 아이디
         private String email;
 
-        protected NaverUser(String username, String email){
+        protected GoogleUser(String username, String email){
             this.username = username;
             this.email = email;
         }
@@ -73,11 +73,11 @@ public class NaverUserServiceImpl implements NaverUserService {
         }
     }
     @Override
-    public LoginResponse login(String code, String state, HttpServletResponse response) {
-        this.redirectionUrl  = frontHost + "/callback/naver";
+    public LoginResponse login(String code, HttpServletResponse response) {
+        this.redirectionUrl  = frontHost + "/callback/google";
 
         // 인가코드로 네이버의 토큰(access) 발급받기
-        Token token = getTokens(code, state);
+        Token token = getTokens(code);
 
         // user 조회
         SocialUserInfo userInfo = getUser(token.getAccessToken());
@@ -92,8 +92,8 @@ public class NaverUserServiceImpl implements NaverUserService {
         return new LoginResponse(userInfo.getId());
     }
 
-    // 네이버의 access토큰 받기
-    private Token getTokens(String code, String state){
+    // 구글의 access토큰 받기
+    private Token getTokens(String code){
         try{
             URL url = new URL(tokenHost);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -105,11 +105,11 @@ public class NaverUserServiceImpl implements NaverUserService {
             //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
-            sb.append("grant_type=authorization_code");
-            sb.append("&client_id="+NAVER_API_ID);
-            sb.append("&client_secret="+NAVER_API_SECRET);
+            sb.append("client_id="+ GOOGLE_API_ID);
+            sb.append("&client_secret="+ GOOGLE_API_SECRET);
             sb.append("&code=" + code);
-            sb.append("&state=" + state);
+            sb.append("&redirect_uri="+ redirectionUrl);
+            sb.append("&grant_type=authorization_code");
             bw.write(sb.toString());
             bw.flush();
 
@@ -118,7 +118,7 @@ public class NaverUserServiceImpl implements NaverUserService {
 
             // 200 아닐경우 예외처리
             if(responseCode != HttpStatus.OK.value()){
-                throw new BaseException(NAVER_GET_USER_INFO_FAIL);
+                throw new BaseException(GOOGLE_GET_USER_INFO_FAIL);
             }
 
             //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
@@ -145,27 +145,27 @@ public class NaverUserServiceImpl implements NaverUserService {
             return token;
         }catch (IOException e) {
             e.printStackTrace();
-            throw new BaseException(NAVER_GET_TOKEN_FAIL);
+            throw new BaseException(GOOGLE_GET_TOKEN_FAIL);
         }
     }
 
-    // 네이버로부터 user 조회
+    // 구글로부터 user 조회
     private SocialUserInfo getUser(String accessToken){
 
-        NaverUser naverUser = getUserInfo(accessToken);
+        GoogleUser googleUser = getUserInfo(accessToken);
 
-        Long userId = userService.checkUserHasJoin(naverUser.getUsername());
+        Long userId = userService.checkUserHasJoin(googleUser.getUsername());
 
         // 해당하는 사용자가 없으면 자동으로 회원가입 진행
         if(userId == -1L){
-            return userService.joinBySocial(naverUser.getUsername(), naverUser.getEmail());
+            return userService.joinBySocial(googleUser.getUsername(), googleUser.getEmail());
         }
 
-        return new SocialUserInfo(userId, naverUser.getUsername(), naverUser.getEmail());
+        return new SocialUserInfo(userId, googleUser.getUsername(), googleUser.getEmail());
     }
 
     // 사용자 정보 가져오기
-    private NaverUser getUserInfo(String accessToken){
+    private GoogleUser getUserInfo(String accessToken){
         try{
             URL url = new URL(userInfoHost);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -180,7 +180,7 @@ public class NaverUserServiceImpl implements NaverUserService {
 
             // 200 아닐경우 예외처리 필요
             if(responseCode != HttpStatus.OK.value()){
-                throw new BaseException(NAVER_GET_USER_INFO_FAIL);
+                throw new BaseException(GOOGLE_GET_USER_INFO_FAIL);
             }
 
             //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
@@ -197,19 +197,19 @@ public class NaverUserServiceImpl implements NaverUserService {
             JsonElement element = parser.parse(result);
 
             // 응답바디에서 사용자 정보 꺼내오기
-            String username = element.getAsJsonObject().get("response").getAsJsonObject().get("id").getAsString();
-            String email = element.getAsJsonObject().get("response").getAsJsonObject().get("email").getAsString();
+            String username = element.getAsJsonObject().get("id").getAsString();
+            String email = element.getAsJsonObject().get("email").getAsString();
 
-            NaverUser naverUser = new NaverUser(username, email);
+            GoogleUser googleUser = new GoogleUser(username, email);
 
             br.close();
 
-            return naverUser;
+            return googleUser;
         } catch (BaseException e){
             throw e;
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BaseException(NAVER_GET_USER_INFO_FAIL);
+            throw new BaseException(GOOGLE_GET_USER_INFO_FAIL);
         }
     }
 }

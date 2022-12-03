@@ -22,6 +22,7 @@ public class UserController {
     private final UserService userService;
     private final KakaoUserService kakaoUserService;
     private final NaverUserService naverUserService;
+    private final GoogleUserService googleUserService;
 
     /**
      * 회원가입
@@ -101,6 +102,22 @@ public class UserController {
         LoginResponse loginResponse = naverUserService.login(code, state, response);
 
         return new BaseResponse<>("네이버 로그인에 성공했습니다.", loginResponse);
+    }
+
+    /**
+     * 구글 로그인
+     * [GET] /user/login/google?code=
+     *
+     * @param code
+     * @param response
+     * @return
+     */
+    @GetMapping("/login/google")
+    public BaseResponse<LoginResponse> googleLogin(@RequestParam String code, HttpServletResponse response){
+
+        LoginResponse loginResponse = googleUserService.login(code, response);
+
+        return new BaseResponse<>("구글 로그인에 성공했습니다.", loginResponse);
     }
 
     /**
