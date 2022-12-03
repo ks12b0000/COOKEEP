@@ -34,6 +34,8 @@ jobs:
         KAKAO_API_KEY: ${{secrets.KAKAO_API_KEY}}
         NAVER_API_ID: ${{secrets.NAVER_API_ID}}
         NAVER_API_SECRET: ${{secrets.NAVER_API_SECRET}}
+        GOOGLE_API_ID: ${{secrets.GOOGLE_API_ID}}
+        GOOGLE_API_SECRET: ${{secrets.GOOGLE_API_SECRET}}
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       working-directory: ${{ env.working-directory }}
