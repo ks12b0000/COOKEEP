@@ -11,6 +11,7 @@ import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("/user")
@@ -20,6 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
     private final UserService userService;
+    private final KakaoUserService kakaoUserService;
+    private final NaverUserService naverUserService;
+    private final GoogleUserService googleUserService;
 
     /**
      * 회원가입
@@ -51,6 +55,8 @@ public class UserController {
         GetUsernameSameRes res = new GetUsernameSameRes(idDuplicate);
         return new BaseResponse<>("사용 가능한 아이디 입니다.", res);
     }
+    @GetMapping("/aa")
+    public void aa() {}
 
     /**
      * 로그인
@@ -66,6 +72,55 @@ public class UserController {
         LoginResponse loginResponse = userService.login(loginRequest, response);
 
         return new BaseResponse<>("로그인에 성공했습니다.", loginResponse);
+    }
+
+    /**
+     * 카카오 로그인
+     * [GET] /user/login/kakao?code=
+     *
+     * @param code
+     * @param response
+     * @return
+     */
+    @GetMapping("/login/kakao")
+    public BaseResponse<LoginResponse> kakaoLogin(@RequestParam String code, HttpServletResponse response){
+
+        LoginResponse loginResponse = kakaoUserService.login(code, response);
+
+        return new BaseResponse<>("카카오 로그인에 성공했습니다.", loginResponse);
+    }
+
+    /**
+     * 네이버 로그인
+     * [GET] /user/login/naver?code=&state=
+     *
+     * @param code
+     * @param state
+     * @param response
+     * @return
+     */
+    @GetMapping("/login/naver")
+    public BaseResponse<LoginResponse> naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
+
+        LoginResponse loginResponse = naverUserService.login(code, state, response);
+
+        return new BaseResponse<>("네이버 로그인에 성공했습니다.", loginResponse);
+    }
+
+    /**
+     * 구글 로그인
+     * [GET] /user/login/google?code=
+     *
+     * @param code
+     * @param response
+     * @return
+     */
+    @GetMapping("/login/google")
+    public BaseResponse<LoginResponse> googleLogin(@RequestParam String code, HttpServletResponse response){
+
+        LoginResponse loginResponse = googleUserService.login(code, response);
+
+        return new BaseResponse<>("구글 로그인에 성공했습니다.", loginResponse);
     }
 
     /**

@@ -2,6 +2,7 @@ package teamproject.backend.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.domain.User;
@@ -9,6 +10,7 @@ import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
+import teamproject.backend.user.dto.SocialUserInfo;
 import teamproject.backend.utils.CookieService;
 import teamproject.backend.utils.JwtService;
 import teamproject.backend.utils.SHA256;
@@ -22,7 +24,7 @@ import static teamproject.backend.response.BaseExceptionStatus.*;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, SocialUserService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -48,6 +50,34 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return user.getId();
+    }
+
+    // 소셜 로그인 유저의 회원가입
+    @Override
+    @Transactional
+    public SocialUserInfo joinBySocial(String username, String email){
+
+        User user = new User(username, email, username);
+
+        userRepository.save(user);
+
+        SocialUserInfo userInfo = new SocialUserInfo(user.getId(), user.getUsername(), user.getEmail());
+
+        return userInfo;
+    }
+
+    // 회원가입된 유저인지 확인
+    @Override
+    public Long checkUserHasJoin(String username){
+
+        User user = userRepository.findByUsername(username);
+
+        if(user == null){
+            return -1L; // 회원가입 안됨
+        }
+        else {
+            return user.getId(); // 회원가입 됨.
+        }
     }
 
     /**
@@ -98,6 +128,8 @@ public class UserServiceImpl implements UserService {
 
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
+        response.setHeader("accessCookie", String.valueOf(accessCookie));
+        response.setHeader("refreshCookie", String.valueOf(refreshCookie));
 
         LoginResponse loginResponse = new LoginResponse(user.getId());
 
