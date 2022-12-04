@@ -15,7 +15,6 @@ public class CookieService {
 
         Cookie cookie = new Cookie("accessToken", accessToken);
         cookie.setPath("/"); // 모든 경로에서 접근 가능하도록
-        cookie.setHttpOnly(false);
 
         if(autoLogin) {
             cookie.setMaxAge(ACCESS_COOKIE_EXPIRE_SECOND);
@@ -30,7 +29,6 @@ public class CookieService {
 
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setPath("/"); // 모든 경로에서 접근 가능하도록
-        cookie.setHttpOnly(false);
 
         if(autoLogin) {
             cookie.setMaxAge(REFRESH_COOKIE_EXPIRE_SECOND);
