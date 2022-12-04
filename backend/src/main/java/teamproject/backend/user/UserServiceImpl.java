@@ -2,6 +2,7 @@ package teamproject.backend.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.domain.User;
@@ -127,6 +128,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
+        response.setHeader("accessCookie", String.valueOf(accessCookie));
+        response.setHeader("refreshCookie", String.valueOf(refreshCookie));
 
         LoginResponse loginResponse = new LoginResponse(user.getId());
 

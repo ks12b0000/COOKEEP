@@ -11,6 +11,7 @@ import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("/user")
@@ -54,6 +55,8 @@ public class UserController {
         GetUsernameSameRes res = new GetUsernameSameRes(idDuplicate);
         return new BaseResponse<>("사용 가능한 아이디 입니다.", res);
     }
+    @GetMapping("/aa")
+    public void aa() {}
 
     /**
      * 로그인
