@@ -13,6 +13,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
-                .exposedHeaders("Set-Cookie");
+                .exposedHeaders("Set-Cookie")
+                .exposedHeaders("Set-cookie")
+                .exposedHeaders("SetCookie")
+                .exposedHeaders("setcookie")
+                .exposedHeaders("accessCookie")
+                .exposedHeaders("refreshCookie")
+                .exposedHeaders("set-cookie");
     }
 }
