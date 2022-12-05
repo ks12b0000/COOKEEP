@@ -1,9 +1,9 @@
-package teamproject.backend.foodCategory;
+package teamproject.backend.response.foodCategory;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import teamproject.backend.domain.FoodCategory;
-import teamproject.backend.foodCategory.dto.FoodCategoryResponse;
+import teamproject.backend.response.foodCategory.dto.FoodCategoryResponse;
 
 import java.util.ArrayList;
 import java.util.List;

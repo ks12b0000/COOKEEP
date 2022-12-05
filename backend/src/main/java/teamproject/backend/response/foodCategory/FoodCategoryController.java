@@ -1,10 +1,10 @@
-package teamproject.backend.foodCategory;
+package teamproject.backend.response.foodCategory;
 
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import teamproject.backend.foodCategory.dto.FoodCategoryResponse;
+import teamproject.backend.response.foodCategory.dto.FoodCategoryResponse;
 import teamproject.backend.response.BaseResponse;
 
 import java.util.List;

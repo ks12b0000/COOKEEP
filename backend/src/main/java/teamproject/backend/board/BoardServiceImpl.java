@@ -8,14 +8,15 @@ import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
-import teamproject.backend.foodCategory.FoodCategoryRepository;
+import teamproject.backend.response.foodCategory.FoodCategoryRepository;
 import teamproject.backend.response.BaseException;
-import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static teamproject.backend.response.BaseExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +31,11 @@ public class BoardServiceImpl implements BoardService{
     public Long save(BoardWriteRequest boardWriteRequest){
         //유저 검증
         Optional<User> user = userRepository.findById(boardWriteRequest.getUser_id());
-        if(user.isEmpty()) throw new BaseException(BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS);
+        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
 
         //음식 카테고리 찾기
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(boardWriteRequest.getCategory());
-        if(foodCategory == null) throw new BaseException(BaseExceptionStatus.NOT_EXIST_CATEGORY);
+        if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
 
         //글 생성
         Board board = new Board(foodCategory, boardWriteRequest, user.get());
@@ -50,7 +51,7 @@ public class BoardServiceImpl implements BoardService{
     public BoardReadResponse findById(Long board_id){
         //id 검증
         Optional<Board> board = boardRepository.findById(board_id);
-        if(board.isEmpty()) throw new BaseException(BaseExceptionStatus.NOT_EXIST_BOARD);
+        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
 
         //boardReadResponse 로 리턴
         return new BoardReadResponse(board.get());
@@ -60,7 +61,7 @@ public class BoardServiceImpl implements BoardService{
     public List<BoardReadResponse> getBoards(String category, int page) {
         //음식 카테고리 찾기
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(category);
-        if(foodCategory == null) throw new BaseException(BaseExceptionStatus.NOT_EXIST_CATEGORY);
+        if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
 
         //카테고리에 맞는 글 찾기
         List<Board> searchBoardList = boardRepository.findByCategory(foodCategory);
@@ -85,10 +86,10 @@ public class BoardServiceImpl implements BoardService{
     public void delete(Long user_id, Long board_id) {
         //글 찾기
         Optional<Board> board = boardRepository.findById(board_id);
-        if(board.isEmpty()) throw new BaseException(BaseExceptionStatus.NOT_EXIST_BOARD);
+        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
 
         //유저가 맞는지 확인
-        if(board.get().getUser().getId() != user_id) throw new BaseException(BaseExceptionStatus.SERVER_INTERNAL_ERROR);// 추후 변경
+        if(board.get().getUser().getId() != user_id) throw new BaseException(SERVER_INTERNAL_ERROR);// 추후 변경
 
         //글 삭제
         boardRepository.delete(board.get());

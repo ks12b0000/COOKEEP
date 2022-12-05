@@ -1,4 +1,4 @@
-package teamproject.backend.foodCategory;
+package teamproject.backend.response.foodCategory;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import teamproject.backend.domain.FoodCategory;

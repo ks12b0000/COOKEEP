@@ -1,4 +1,4 @@
-package teamproject.backend.foodCategory.dto;
+package teamproject.backend.response.foodCategory.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
