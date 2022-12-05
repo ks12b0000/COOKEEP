@@ -50,12 +50,12 @@ test.onlyIf {
 	!project.hasProperty('test')
 }
 
-def reactDir = "$projectDir/src/main/webapp/front";
+def reactDir = "backend/src/main/webapp/front";
 
 sourceSets{
 	main{
 		resources{
-			srcDirs = ["$projectDir/src/main/resources"]
+			srcDirs = ["backend/src/main/resources"]
 		}
 	}
 }
@@ -71,10 +71,10 @@ task installReact(type:Exec){
 
 	if(System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')){
 		commandLine "npm.cmd", "audit", "fix"
-		commandLine 'npm.cmd', 'install terser@3.14.1 --save-dev'
+		commandLine 'npm.cmd', 'install'
 	}else{
 		commandLine "npm", "audit", "fix"
-		commandLine 'npm', 'install terser@3.14.1 --save-dev'
+		commandLine 'npm', 'install'
 	}
 }
 
@@ -94,5 +94,5 @@ task buildReact(type:Exec){
 task copyReactBuildFiles(type:Copy){
 	dependsOn "buildReact"
 	from "$reactDir/build"
-	into "$projectDir/src/main/resources/static"
+	into "backend/src/main/resources/static"
 }
