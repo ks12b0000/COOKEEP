@@ -17,18 +17,22 @@ function Login() {
 
     const onLogin = async (e) => {
         e.preventDefault();
-        console.log(process.env);
 
         if(!(UserName&&Password)){
             alert('모든 값을 채워주세요.')
         }else{
             try{
                 await axios
-                api.post(`${process.env.REACT_APP_API_BASE_URL}/user/login`, {
+                api.post(`${process.env.REACT_APP_API_BASE_URL}/user/login`, 
+                {
                     username: UserName,
                     password: Password,
                     autoLogin: AutoLogin,
-                })
+                },
+                {
+                    withCredentials: true,
+                }
+                )
                 .then((res)=>{
                     console.log(res);
                 })
