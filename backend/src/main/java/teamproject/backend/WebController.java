@@ -18,6 +18,7 @@ public class WebController implements ErrorController {
         return "index.html";
     }
 
+    
     /*400에러 발생 시 getErrorPath() 호출*/
     @RequestMapping(value = "/error")
     public String handleNoHandleFoundException(HttpServletResponse response, HttpServletRequest request) {
