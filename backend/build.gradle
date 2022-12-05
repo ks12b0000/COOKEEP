@@ -71,10 +71,10 @@ task installReact(type:Exec){
 
 	if(System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')){
 		commandLine "npm.cmd", "audit", "fix"
-		commandLine 'npm.cmd', 'install'
+		commandLine 'npm.cmd', 'install terser@3.14.1 --save-dev'
 	}else{
 		commandLine "npm", "audit", "fix"
-		commandLine 'npm', 'install'
+		commandLine 'npm', 'install terser@3.14.1 --save-dev'
 	}
 }
 
