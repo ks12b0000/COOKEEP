@@ -32,7 +32,7 @@ public class NaverUserServiceImpl implements NaverUserService {
     private final CookieService cookieService;
     private final SocialUserService userService;
 
-    private String frontHost = "http://localhost:3000";
+    private String frontHost = "http://13.125.183.98:8080";
     private final String tokenHost = "https://nid.naver.com/oauth2.0/token";
     private final String userInfoHost = "https://openapi.naver.com/v1/nid/me";
     @Value("${NAVER_API_ID}")

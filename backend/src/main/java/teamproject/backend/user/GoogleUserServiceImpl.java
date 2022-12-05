@@ -32,7 +32,7 @@ public class GoogleUserServiceImpl implements GoogleUserService {
     private final CookieService cookieService;
     private final SocialUserService userService;
 
-    private String frontHost = "http://localhost:3000";
+    private String frontHost = "http://ec2-13-125-183-98.ap-northeast-2.compute.amazonaws.com";
     private final String tokenHost = "https://oauth2.googleapis.com/token";
     private final String userInfoHost = "https://www.googleapis.com/oauth2/v1/userinfo";
     @Value("${GOOGLE_API_ID}")
