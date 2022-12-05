@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.response.BaseException;
@@ -20,6 +21,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
 @Service
@@ -32,7 +34,7 @@ public class NaverUserServiceImpl implements NaverUserService {
     private final CookieService cookieService;
     private final SocialUserService userService;
 
-    private String frontHost = "http://13.125.183.98:8080";
+    private String frontHost = "http://localhost:3000";
     private final String tokenHost = "https://nid.naver.com/oauth2.0/token";
     private final String userInfoHost = "https://openapi.naver.com/v1/nid/me";
     @Value("${NAVER_API_ID}")
@@ -86,8 +88,8 @@ public class NaverUserServiceImpl implements NaverUserService {
         String accessToken = jwtService.createAccessToken(userInfo.getUsername());
 
         // 쿠키 발급
-        Cookie accessCookie = cookieService.createAccessCookie(accessToken, false);
-        response.addCookie(accessCookie);
+        ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, false);
+        response.addHeader(SET_COOKIE, accessCookie.toString());
         response.setHeader("accessToken", accessCookie.getValue());
 
         return new LoginResponse(userInfo.getId());

@@ -1,5 +1,6 @@
 package teamproject.backend.utils;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -11,13 +12,23 @@ import static teamproject.backend.utils.JwtData.REFRESH_COOKIE_EXPIRE_SECOND;
 public class CookieService {
 
     // 엑세스토큰 쿠키 생성
-    public Cookie createAccessCookie(String accessToken, boolean autoLogin){
+    public ResponseCookie createAccessCookie(String accessToken, boolean autoLogin){
 
-        Cookie cookie = new Cookie("accessToken", accessToken);
-        cookie.setPath("/"); // 모든 경로에서 접근 가능하도록
+        ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+                .path("/")
+                .secure(true)
+                .httpOnly(true)
+                .sameSite("None")
+                .build();;
 
         if(autoLogin) {
-            cookie.setMaxAge(ACCESS_COOKIE_EXPIRE_SECOND);
+            cookie = ResponseCookie.from("accessToken", accessToken)
+                    .path("/")
+                    .secure(true)
+                    .httpOnly(true)
+                    .sameSite("None")
+                    .maxAge(ACCESS_COOKIE_EXPIRE_SECOND)
+                    .build();
             // maxAge 설정 안하면, 앱 끌시 쿠키 삭제됨.
         }
 
@@ -25,17 +36,28 @@ public class CookieService {
     }
 
     // 리프레시토큰 쿠키 생성
-    public Cookie createRefreshCookie(String refreshToken, boolean autoLogin){
+    public ResponseCookie createRefreshCookie(String refreshToken, boolean autoLogin){
 
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setPath("/"); // 모든 경로에서 접근 가능하도록
+        ResponseCookie cookie;
 
         if(autoLogin) {
-            cookie.setMaxAge(REFRESH_COOKIE_EXPIRE_SECOND);
+            cookie = ResponseCookie.from("refreshToken", refreshToken)
+                    .path("/")
+                    .secure(true)
+                    .httpOnly(true)
+                    .sameSite("None")
+                    .maxAge(REFRESH_COOKIE_EXPIRE_SECOND)
+                    .build();
             // maxAge 설정 안하면, 앱 끌시 쿠키 삭제됨.
         }
         else {
-            cookie.setMaxAge(0);
+            cookie = ResponseCookie.from("refreshToken", refreshToken)
+                    .path("/")
+                    .secure(true)
+                    .httpOnly(true)
+                    .sameSite("None")
+                    .maxAge(0)
+                    .build();
             // 자동로그인이 아니면 refresh쿠키 안만듦.
         }
 

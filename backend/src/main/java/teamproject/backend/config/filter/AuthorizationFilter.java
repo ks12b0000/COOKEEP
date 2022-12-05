@@ -3,6 +3,7 @@ package teamproject.backend.config.filter;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.utils.CookieService;
 import teamproject.backend.utils.JwtService;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static teamproject.backend.response.BaseExceptionStatus.JWT_TOKEN_EXPIRE;
 import static teamproject.backend.response.BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS;
 
@@ -40,6 +42,7 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest httpReq = (HttpServletRequest) request;
         // 전체 쿠키 목록 가져오기
         Cookie[] cookies = httpReq.getCookies();
+        log.info("cookies = {}", cookies);
 
         Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
         Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
@@ -102,8 +105,8 @@ public class AuthorizationFilter implements Filter {
         String username = jwtService.getUsernameByJwt(claims);
 
         String reAccessToken = jwtService.createAccessToken(username);
-        Cookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
+        ResponseCookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
 
-        response.addCookie(reAccessCookie);
+        response.addHeader(SET_COOKIE, reAccessCookie.toString());
     }
 }

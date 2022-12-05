@@ -3,6 +3,7 @@ package teamproject.backend.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.domain.User;
@@ -18,6 +19,7 @@ import teamproject.backend.utils.SHA256;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
 @Service
@@ -123,12 +125,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String refreshToken = jwtService.createRefreshToken(username);
 
         // 쿠키 발급
-        Cookie accessCookie = cookieService.createAccessCookie(accessToken, isAutoLogin);
-        Cookie refreshCookie = cookieService.createRefreshCookie(refreshToken, isAutoLogin);
+        ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, isAutoLogin);
+        ResponseCookie refreshCookie = cookieService.createRefreshCookie(refreshToken, isAutoLogin);
 
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
+        response.addHeader(SET_COOKIE, accessCookie.toString());
+        response.addHeader(SET_COOKIE, refreshCookie.toString());
         response.setHeader("accessToken", accessCookie.getValue());
+        response.setHeader("refreshToken", refreshCookie.getValue());
 
         LoginResponse loginResponse = new LoginResponse(user.getId());
 
