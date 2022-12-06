@@ -10,6 +10,6 @@ import java.net.MalformedURLException;
 
 public interface ImageFileService {
     ImageFileResponse save(MultipartFile imageFile, Long user_id) throws IOException;
-    ImageFileResponse findByFileName(String name) throws MalformedURLException;
+    ImageFileResponse findById(Long image_id) throws MalformedURLException;
     void delete(String name);
 }

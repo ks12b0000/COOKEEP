@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.ImageFile;
 import teamproject.backend.domain.User;
 import teamproject.backend.imageFile.dto.ImageFileResponse;
-import teamproject.backend.imageFile.dto.ImageFileSaveRequest;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
@@ -41,7 +40,6 @@ public class ImageFileServiceImpl implements ImageFileService{
         objMeta.setContentLength(multipartFile.getInputStream().available());
 
         amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
-
         ImageFile imageFile = new ImageFile(s3FileName, amazonS3.getUrl(bucket, s3FileName).toString(), user.get());
         imageFileRepository.save(imageFile);
 
@@ -49,10 +47,10 @@ public class ImageFileServiceImpl implements ImageFileService{
     }
 
     @Override
-    public ImageFileResponse findByFileName(String name) throws MalformedURLException {
-        ImageFile imageFile = imageFileRepository.findByFileName(name);
-
-        return new ImageFileResponse(true, imageFile.getFileName(), imageFile.getUrl());
+    public ImageFileResponse findById(Long image_id) throws MalformedURLException {
+        Optional<ImageFile> imageFile = imageFileRepository.findById(image_id);
+        if(imageFile.isEmpty()) throw new BaseException(BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS);// 존재하지 않는 사진입니다. 새로 만들기
+        return new ImageFileResponse(true, imageFile.get().getFileName(), imageFile.get().getUrl());
     }
 
     @Override

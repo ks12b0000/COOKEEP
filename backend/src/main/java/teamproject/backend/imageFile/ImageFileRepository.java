@@ -6,5 +6,5 @@ import teamproject.backend.domain.ImageFile;
 
 @Repository
 public interface ImageFileRepository extends JpaRepository<ImageFile, Long> {
-    public ImageFile findByFileName(String fileName);
+
 }
