@@ -19,6 +19,7 @@ public class CookieService {
                 .secure(true)
                 .httpOnly(true)
                 .sameSite("None")
+                .maxAge(ACCESS_COOKIE_EXPIRE_SECOND)
                 .build();;
 
         if(autoLogin) {
