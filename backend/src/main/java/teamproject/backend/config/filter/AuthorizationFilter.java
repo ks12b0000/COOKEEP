@@ -105,8 +105,8 @@ public class AuthorizationFilter implements Filter {
         String username = jwtService.getUsernameByJwt(claims);
 
         String reAccessToken = jwtService.createAccessToken(username);
-        Cookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
+        ResponseCookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
 
-        response.addCookie(reAccessCookie);
+        response.addHeader(SET_COOKIE, reAccessCookie.getValue());
     }
 }

@@ -86,8 +86,8 @@ public class KakaoUserServiceImpl implements KakaoUserService {
         String accessToken = jwtService.createAccessToken(userInfo.getUsername());
 
         // 쿠키 발급
-        Cookie accessCookie = cookieService.createAccessCookie(accessToken, false);
-        response.addCookie(accessCookie);
+        ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, false);
+        response.addHeader(SET_COOKIE,accessCookie.getValue());
         response.setHeader("accessToken", accessCookie.getValue());
 
         return new LoginResponse(userInfo.getId());

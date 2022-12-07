@@ -125,13 +125,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String refreshToken = jwtService.createRefreshToken(username);
 
         // 쿠키 발급
-        Cookie accessCookie = cookieService.createAccessCookie(accessToken, isAutoLogin);
-        Cookie refreshCookie = cookieService.createRefreshCookie(refreshToken, isAutoLogin);
+        ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, isAutoLogin);
+        ResponseCookie refreshCookie = cookieService.createRefreshCookie(refreshToken, isAutoLogin);
 
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
-        response.setHeader("accessToken", String.valueOf(accessCookie));
-        response.setHeader("refreshToken", String.valueOf(refreshCookie));
+        response.addHeader(SET_COOKIE, accessCookie.getValue());
+        response.addHeader(SET_COOKIE, refreshCookie.getValue());
+        response.setHeader("accessToken", accessCookie.getValue());
+        response.setHeader("refreshToken", refreshCookie.getValue());
 
         LoginResponse loginResponse = new LoginResponse(user.getId());
 
