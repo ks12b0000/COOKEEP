@@ -57,7 +57,6 @@ public class CookieService {
                     .secure(true)
                     .sameSite("None")
                     .maxAge(0)
-                    .maxAge(REFRESH_COOKIE_EXPIRE_SECOND)
                     .httpOnly(true)
                     .build();
             // 자동로그인이 아니면 refresh쿠키 안만듦.
