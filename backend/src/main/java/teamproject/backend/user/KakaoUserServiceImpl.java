@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.response.BaseException;
@@ -21,7 +20,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
 @Service
@@ -86,8 +84,8 @@ public class KakaoUserServiceImpl implements KakaoUserService {
         String accessToken = jwtService.createAccessToken(userInfo.getUsername());
 
         // 쿠키 발급
-        ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, false);
-        response.addHeader(SET_COOKIE,accessCookie.getValue());
+        Cookie accessCookie = cookieService.createAccessCookie(accessToken, false);
+        response.addCookie(accessCookie);
         response.setHeader("accessToken", accessCookie.getValue());
 
         return new LoginResponse(userInfo.getId());
