@@ -20,6 +20,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
+import static org.springframework.http.HttpHeaders.SET_COOKIE2;
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
 @Service
@@ -129,7 +130,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         ResponseCookie refreshCookie = cookieService.createRefreshCookie(refreshToken, isAutoLogin);
 
         response.addHeader(SET_COOKIE, accessCookie.getValue());
-        response.addHeader(SET_COOKIE, refreshCookie.getValue());
+        response.addHeader(SET_COOKIE2, refreshCookie.getValue());
         response.setHeader("accessToken", accessCookie.getValue());
         response.setHeader("refreshToken", refreshCookie.getValue());
 
