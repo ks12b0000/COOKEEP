@@ -26,4 +26,6 @@ public class BoardWriteRequest {
 
     @NotNull(message = "유저 id를 입력하세요.", groups = ValidationGroup.NotNullGroup.class)
     private Long user_id;
+
+    private String thumbnail;
 }

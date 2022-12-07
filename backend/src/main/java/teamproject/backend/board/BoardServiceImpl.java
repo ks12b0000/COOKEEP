@@ -37,8 +37,12 @@ public class BoardServiceImpl implements BoardService{
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(boardWriteRequest.getCategory());
         if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
 
+        //만약 글에 섬네일 설정이 안되어 있으면 기본값 넣기
+        if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("http://13.125.183.98:8080/thumbnailDefaultImage.png");
+
         //글 생성
         Board board = new Board(foodCategory, boardWriteRequest, user.get());
+
 
         //글 저장
         boardRepository.save(board);

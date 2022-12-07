@@ -35,11 +35,15 @@ public class Board{
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
+    @Column
+    private String thumbnail;
+
     public Board(FoodCategory foodCategory, BoardWriteRequest boardWriteRequest, User user) {
         this.category = foodCategory;
         this.title = boardWriteRequest.getTitle();
         this.text = boardWriteRequest.getText();
         this.user = user;
         this.createDate = new Date(System.currentTimeMillis());
+        this.thumbnail = boardWriteRequest.getThumbnail();
     }
 }
