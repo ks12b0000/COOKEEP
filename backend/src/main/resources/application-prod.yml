@@ -1,7 +1,5 @@
 server:
-  port: 8080
-  host:
-    api: https://teamprojectvv.shop
+  port: 80
   servlet:
     context-path: /
 

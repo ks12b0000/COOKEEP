@@ -44,8 +44,8 @@ public class AuthorizationFilter implements Filter {
         Cookie[] cookies = httpReq.getCookies();
         log.info("cookies = {}", cookies);
 
-        Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
-        Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
+        Cookie accessCookie = cookieService.findCookie("accesstoken", cookies);
+        Cookie refreshCookie = cookieService.findCookie("refreshtoken", cookies);
 
         String accessToken, refreshToken;
 
@@ -105,8 +105,8 @@ public class AuthorizationFilter implements Filter {
         String username = jwtService.getUsernameByJwt(claims);
 
         String reAccessToken = jwtService.createAccessToken(username);
-        ResponseCookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
+        Cookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
 
-        response.addHeader(SET_COOKIE, reAccessCookie.toString());
+        response.addCookie(reAccessCookie);
     }
 }

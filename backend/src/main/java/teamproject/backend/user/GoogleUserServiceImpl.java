@@ -88,8 +88,8 @@ public class GoogleUserServiceImpl implements GoogleUserService {
         String accessToken = jwtService.createAccessToken(userInfo.getUsername());
 
         // 쿠키 발급
-        ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, false);
-        response.addHeader(SET_COOKIE,accessCookie.toString());
+        Cookie accessCookie = cookieService.createAccessCookie(accessToken, false);
+        response.addCookie(accessCookie);
         response.setHeader("accessToken", accessCookie.getValue());
 
         return new LoginResponse(userInfo.getId());
