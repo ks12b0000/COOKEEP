@@ -5,7 +5,7 @@ import { UserSlice } from "../reducer/userSlice";
 const store = configureStore({
     reducer: {
         listReducer: ListSlice.reducer,
-        userReducer: UserSlice,
+        userReducer: UserSlice.reducer,
     }
 });
 
