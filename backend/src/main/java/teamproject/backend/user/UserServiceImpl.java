@@ -127,8 +127,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
         ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, isAutoLogin);
         ResponseCookie refreshCookie = cookieService.createRefreshCookie(refreshToken, isAutoLogin);
 
-        response.addHeader("Set-Cookie", accessCookie.getValue());
-        response.addHeader("Set-Cookie", refreshCookie.getValue());
+        response.addHeader("Set-Cookie", accessCookie.toString());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
         response.setHeader("accessToken", accessCookie.getValue());
         response.setHeader("refreshToken", refreshCookie.getValue());
 
