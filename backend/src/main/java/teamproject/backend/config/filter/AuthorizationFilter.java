@@ -109,6 +109,6 @@ public class AuthorizationFilter implements Filter {
         String reAccessToken = jwtService.createAccessToken(username);
         ResponseCookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
 
-        response.addHeader("Set-Cookie", reAccessCookie.getValue());
+        response.setHeader("accessToken", reAccessCookie.getValue());
     }
 }
