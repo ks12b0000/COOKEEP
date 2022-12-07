@@ -3,8 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../../api/axios";
 import styled from "@emotion/styled";
-
 import Header from "../../components/layout/header/Header";
+import Cookies from 'universal-cookie'
+
+const cookies = new Cookies();
+
 
 function Login() {
 
@@ -35,6 +38,17 @@ function Login() {
                 )
                 .then((res)=>{
                     console.log(res);
+                    //로그인 성공 시 토큰을 쿠키에 담아줌
+                    if(res.data.code === 1000){
+                        cookies.set('accesstoken',res.headers.accesstoken,
+                            {path:'/'},
+                        );
+                        cookies.set('refreshtoken',res.headers.refreshtoken,
+                            {path:'/'},
+                        );
+                        //쿠키 생성이 완료되면 홈 화면으로 이동
+                        navigate('/');
+                    }
                 })
             } catch(err){
                 console.log(err);
