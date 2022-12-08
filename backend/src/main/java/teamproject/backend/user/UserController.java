@@ -11,10 +11,8 @@ import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-@RequestMapping("/user")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +30,7 @@ public class UserController {
      * @param joinRequest
      * @return
      */
-    @PostMapping("/join")
+    @PostMapping("/user/join")
     public BaseResponse join(@Validated(ValidationSequence.class) @RequestBody JoinRequest joinRequest) {
 
         userService.join(joinRequest);
@@ -47,7 +45,7 @@ public class UserController {
      * @param username
      * @return
      */
-    @GetMapping("/duplicate")
+    @GetMapping("/user/duplicate")
     public BaseResponse<GetUsernameSameRes> checkIdDuplicate(String username) {
 
         boolean idDuplicate = userService.checkIdDuplicate(username);
@@ -55,8 +53,6 @@ public class UserController {
         GetUsernameSameRes res = new GetUsernameSameRes(idDuplicate);
         return new BaseResponse<>("사용 가능한 아이디 입니다.", res);
     }
-    @GetMapping("/aa")
-    public void aa() {}
 
     /**
      * 로그인
@@ -66,7 +62,7 @@ public class UserController {
      * @param response
      * @return loginResponse
      */
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public BaseResponse<LoginResponse> login(@Validated(ValidationSequence.class) @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
         LoginResponse loginResponse = userService.login(loginRequest, response);
@@ -82,7 +78,7 @@ public class UserController {
      * @param response
      * @return
      */
-    @GetMapping("/login/kakao")
+    @GetMapping("/user/login/kakao")
     public BaseResponse<LoginResponse> kakaoLogin(@RequestParam String code, HttpServletResponse response){
 
         LoginResponse loginResponse = kakaoUserService.login(code, response);
@@ -99,7 +95,7 @@ public class UserController {
      * @param response
      * @return
      */
-    @GetMapping("/login/naver")
+    @GetMapping("/user/login/naver")
     public BaseResponse<LoginResponse> naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
 
         LoginResponse loginResponse = naverUserService.login(code, state, response);
@@ -115,12 +111,20 @@ public class UserController {
      * @param response
      * @return
      */
-    @GetMapping("/login/google")
+    @GetMapping("/user/login/google")
     public BaseResponse<LoginResponse> googleLogin(@RequestParam String code, HttpServletResponse response){
 
         LoginResponse loginResponse = googleUserService.login(code, response);
 
         return new BaseResponse<>("구글 로그인에 성공했습니다.", loginResponse);
+    }
+
+    @GetMapping("/auth/user/login")
+    public BaseResponse<LoginResponse> loginCheck(String username) {
+
+        LoginResponse loginResponse = userService.loginCheck(username);
+
+        return new BaseResponse<>("로그인 된 유저입니다", loginResponse);
     }
 
     /**

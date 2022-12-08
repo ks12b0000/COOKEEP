@@ -138,6 +138,15 @@ public class UserServiceImpl implements UserService, SocialUserService {
         return loginResponse;
     }
 
+    @Override
+    public LoginResponse loginCheck(String username) {
+        User user = userRepository.findByUsername(username);
+
+        LoginResponse loginResponse = new LoginResponse(user.getId());
+
+        return loginResponse;
+    }
+
     /**
      * 로그아웃
      * @param response

@@ -15,5 +15,7 @@ public interface UserService {
 
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response);
 
+    public LoginResponse loginCheck(String username);
+
     public void logout(HttpServletResponse response);
 }
