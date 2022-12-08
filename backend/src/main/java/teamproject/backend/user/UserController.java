@@ -11,6 +11,8 @@ import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -119,10 +121,12 @@ public class UserController {
         return new BaseResponse<>("구글 로그인에 성공했습니다.", loginResponse);
     }
 
-    @GetMapping("/auth/user/login")
-    public BaseResponse<LoginResponse> loginCheck(String username) {
+    @GetMapping("/user/login")
+    public BaseResponse<LoginResponse> loginCheck(HttpServletRequest request) {
 
-        LoginResponse loginResponse = userService.loginCheck(username);
+        Cookie[] cookies = request.getCookies();
+
+        LoginResponse loginResponse = userService.loginCheck(cookies);
 
         return new BaseResponse<>("로그인 된 유저입니다", loginResponse);
     }

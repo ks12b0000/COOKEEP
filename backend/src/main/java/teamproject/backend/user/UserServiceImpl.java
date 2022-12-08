@@ -139,13 +139,35 @@ public class UserServiceImpl implements UserService, SocialUserService {
     }
 
     @Override
-    public LoginResponse loginCheck(String username) {
+    public LoginResponse loginCheck(Cookie[] cookies) {
+        Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
+        Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
+
+        if(accessCookie == null && refreshCookie == null){
+            throw new BaseException(NOT_LOGIN_USER);
+        }
+
+        String username = null;
+        String token;
+        if(accessCookie != null){
+            token = accessCookie.getValue();
+            username = jwtService.getUsernameByJwt(token);
+        }
+        else if(refreshCookie != null){
+            token = refreshCookie.getValue();
+            username = jwtService.getUsernameByJwt(token);
+        }
+
         User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new BaseException(USER_NOT_EXIST);
+        }
 
         LoginResponse loginResponse = new LoginResponse(user.getId());
 
         return loginResponse;
     }
+
 
     /**
      * 로그아웃

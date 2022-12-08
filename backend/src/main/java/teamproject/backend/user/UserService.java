@@ -5,6 +5,7 @@ import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 public interface UserService {
@@ -15,7 +16,7 @@ public interface UserService {
 
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response);
 
-    public LoginResponse loginCheck(String username);
+    public LoginResponse loginCheck(Cookie[] cookies);
 
     public void logout(HttpServletResponse response);
 }
