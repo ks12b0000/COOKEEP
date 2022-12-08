@@ -1,6 +1,6 @@
-package teamproject.backend.response.foodCategory;
+package teamproject.backend.foodCategory;
 
-import teamproject.backend.response.foodCategory.dto.FoodCategoryResponse;
+import teamproject.backend.foodCategory.dto.FoodCategoryResponse;
 
 import java.util.List;
 

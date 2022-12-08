@@ -8,8 +8,9 @@ import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
-import teamproject.backend.response.foodCategory.FoodCategoryRepository;
+import teamproject.backend.foodCategory.FoodCategoryRepository;
 import teamproject.backend.response.BaseException;
+import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
 
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ public class BoardServiceImpl implements BoardService{
         if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
 
         //유저가 맞는지 확인
-        if(board.get().getUser().getId() != user_id) throw new BaseException(SERVER_INTERNAL_ERROR);// 추후 변경
+        if(board.get().getUser().getId() != user_id) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
 
         //글 삭제
         boardRepository.delete(board.get());

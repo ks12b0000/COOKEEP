@@ -55,6 +55,6 @@ public class ImageFileServiceImpl implements ImageFileService{
 
     @Override
     public void delete(String name) {
-
+        
     }
 }
