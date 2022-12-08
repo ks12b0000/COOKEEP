@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.ImageFile;
 import teamproject.backend.domain.User;
@@ -29,6 +30,7 @@ public class ImageFileServiceImpl implements ImageFileService{
     public String bucket;
 
     @Override
+    @Transactional
     public ImageFileResponse save(MultipartFile multipartFile, Long user_id) throws IOException {
 
         Optional<User> user = userRepository.findById(user_id);
