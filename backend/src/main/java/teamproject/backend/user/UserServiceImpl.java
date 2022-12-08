@@ -3,6 +3,7 @@ package teamproject.backend.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.domain.User;
@@ -123,17 +124,50 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String refreshToken = jwtService.createRefreshToken(username);
 
         // 쿠키 발급
-        Cookie accessCookie = cookieService.createAccessCookie(accessToken, isAutoLogin);
-        Cookie refreshCookie = cookieService.createRefreshCookie(refreshToken, isAutoLogin);
+        ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, isAutoLogin);
+        ResponseCookie refreshCookie = cookieService.createRefreshCookie(refreshToken, isAutoLogin);
 
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
+        response.addHeader("Set-Cookie", accessCookie.toString());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
         response.setHeader("accessToken", accessCookie.getValue());
+        response.setHeader("refreshToken", refreshCookie.getValue());
+
 
         LoginResponse loginResponse = new LoginResponse(user.getId());
 
         return loginResponse;
     }
+
+    @Override
+    public LoginResponse loginCheck(Cookie[] cookies) {
+        Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
+        Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
+
+        if(accessCookie == null && refreshCookie == null){
+            throw new BaseException(NOT_LOGIN_USER);
+        }
+
+        String username = null;
+        String token;
+        if(accessCookie != null){
+            token = accessCookie.getValue();
+            username = jwtService.getUsernameByJwt(token);
+        }
+        else if(refreshCookie != null){
+            token = refreshCookie.getValue();
+            username = jwtService.getUsernameByJwt(token);
+        }
+
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new BaseException(USER_NOT_EXIST);
+        }
+
+        LoginResponse loginResponse = new LoginResponse(user.getId());
+
+        return loginResponse;
+    }
+
 
     /**
      * 로그아웃
