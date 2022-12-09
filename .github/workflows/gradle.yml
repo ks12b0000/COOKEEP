@@ -33,6 +33,7 @@ jobs:
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
         cloud.aws.credentials.accessKey: ${{secrets.S3_ACCESSKEY}}
         cloud.aws.credentials.secretKey: ${{secrets.S3_SECRETKEY}}
+        cloud.aws.s3.bucket: ${{secrets.S3_BUCKET}}
         KAKAO_API_KEY: ${{secrets.KAKAO_API_KEY}}
         NAVER_API_ID: ${{secrets.NAVER_API_ID}}
         NAVER_API_SECRET: ${{secrets.NAVER_API_SECRET}}
