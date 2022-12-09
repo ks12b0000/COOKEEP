@@ -121,6 +121,12 @@ public class UserController {
         return new BaseResponse<>("구글 로그인에 성공했습니다.", loginResponse);
     }
 
+    /**
+     * 로그인 여부 체크
+     * [GET] /auth/user/login
+     * 
+     * @return
+     */
     @GetMapping("/auth/user/login")
     public BaseResponse loginCheck() {
         return new BaseResponse("로그인 된 유저입니다.");
