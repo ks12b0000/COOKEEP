@@ -121,14 +121,9 @@ public class UserController {
         return new BaseResponse<>("구글 로그인에 성공했습니다.", loginResponse);
     }
 
-    @GetMapping("/user/login")
-    public BaseResponse<LoginResponse> loginCheck(HttpServletRequest request, HttpServletResponse response) {
-
-        Cookie[] cookies = request.getCookies();
-
-        LoginResponse loginResponse = userService.loginCheck(cookies, response);
-
-        return new BaseResponse<>("로그인 된 유저입니다", loginResponse);
+    @GetMapping("/auth/user/login")
+    public BaseResponse loginCheck() {
+        return new BaseResponse("로그인 된 유저입니다.");
     }
 
     /**

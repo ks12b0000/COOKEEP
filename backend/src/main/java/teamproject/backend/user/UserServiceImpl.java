@@ -141,37 +141,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
         return loginResponse;
     }
 
-    @Override
-    public LoginResponse loginCheck(Cookie[] cookies, HttpServletResponse response) {
-        Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
-        Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
-
-        if (refreshCookie != null && accessCookie == null) {
-            String refreshToken = refreshCookie.getValue();
-
-            reissueAccessTokenAndSetCookie(refreshToken, true, response);
-        }
-        
-        accessCookie = cookieService.findCookie("accessToken", cookies);
-        String accessToken = accessCookie.getValue();
-        jwtService.validationAndGetJwt(accessToken);
-        String username = jwtService.getUsernameByJwt(accessToken);
-
-        if (accessCookie == null) {
-            throw new BaseException(NOT_LOGIN_USER);
-        }
-
-        User user = userRepository.findByUsername(username);
-        if(user == null){
-            throw new BaseException(USER_NOT_EXIST);
-        }
-
-        LoginResponse loginRes = new LoginResponse(user.getId());
-
-        return loginRes;
-    }
-
-
     /**
      * 로그아웃
      * @param response
@@ -189,18 +158,5 @@ public class UserServiceImpl implements UserService, SocialUserService {
         refreshCookie.setMaxAge(0);
         refreshCookie.setPath("/");
         response.addCookie(refreshCookie);
-    }
-
-    private void reissueAccessTokenAndSetCookie(String refreshToken, boolean autoLogin, HttpServletResponse response){
-        Jws<Claims> claims = jwtService.validationAndGetJwt(refreshToken);
-
-        // refresh토큰에서 username 가져오기
-        String username = jwtService.getUsernameByJwt(claims);
-
-        String reAccessToken = jwtService.createAccessToken(username);
-        ResponseCookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
-
-        response.addHeader("Set-Cookie", reAccessCookie.toString());
-        response.setHeader("accessToken", reAccessCookie.getValue());
     }
 }

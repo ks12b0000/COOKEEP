@@ -33,7 +33,7 @@ public class KakaoUserServiceImpl implements KakaoUserService {
     private final CookieService cookieService;
     private final SocialUserService userService;
 
-    private String frontHost = "http://localhost:3000";
+    private String frontHost = "https://localhost:3000";
     private final String tokenHost = "https://kauth.kakao.com/oauth/token";
     private final String userInfoHost = "https://kapi.kakao.com/v2/user/me";
     @Value("${KAKAO_API_KEY}")
