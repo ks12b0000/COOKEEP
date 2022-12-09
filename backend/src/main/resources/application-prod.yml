@@ -21,6 +21,18 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
 
+cloud:
+  aws:
+    credentials:
+      accessKey: ${accessKey}       # AWS IAM AccessKey 적기
+      secretKey: ${secretKey}  # AWS IAM SecretKey 적기
+    s3:
+      bucket: ${bucket}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 KAKAO_API_KEY: ${KAKAO_API_KEY}
 NAVER_API_ID: ${NAVER_API_ID}
 NAVER_API_SECRET: ${NAVER_API_SECRET}

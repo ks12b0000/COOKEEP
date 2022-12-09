@@ -18,6 +18,9 @@ public class FoodCategory {
     @Column
     private String categoryName;
 
+    @OneToMany
+    private List<Board> board_list = new LinkedList<>();
+
     public FoodCategory(String categoryName) {
         this.categoryName = categoryName;
     }

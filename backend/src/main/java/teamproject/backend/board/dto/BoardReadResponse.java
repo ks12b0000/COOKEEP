@@ -17,6 +17,7 @@ public class BoardReadResponse {
     private String text;
     private String user_name;
     private Date create_date;
+    private String thumbnail;
 
     public BoardReadResponse(Board board){
         this.board_id = board.getBoard_id();
@@ -25,5 +26,6 @@ public class BoardReadResponse {
         this.text = board.getText();
         this.user_name = board.getUser().getUsername();
         this.create_date = board.getCreateDate();
+        this.thumbnail = board.getThumbnail();
     }
 }
