@@ -20,7 +20,7 @@ public class CookieService {
                 .sameSite("None")
                 .maxAge(ACCESS_COOKIE_EXPIRE_SECOND)
                 .httpOnly(true)
-                .build();;
+                .build();
 
         if(autoLogin) {
             cookie = ResponseCookie.from("accessToken", accessToken)
