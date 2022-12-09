@@ -124,7 +124,7 @@ public class UserController {
     /**
      * 로그인 여부 체크
      * [GET] /auth/user/login
-     * 
+     *
      * @return
      */
     @GetMapping("/auth/user/login")
