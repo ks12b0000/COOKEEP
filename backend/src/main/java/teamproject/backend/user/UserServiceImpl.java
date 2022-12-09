@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseException;
+import teamproject.backend.response.BaseResponse;
 import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
@@ -141,11 +142,23 @@ public class UserServiceImpl implements UserService, SocialUserService {
     }
 
     @Override
-    public LoginResponse loginCheck(Cookie[] cookies) {
+    public LoginResponse loginCheck(Cookie[] cookies, HttpServletResponse response) {
+        Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
         Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
 
-        String token = accessCookie.getValue();
-        String username = jwtService.getUsernameByJwt(token);
+        if (refreshCookie != null && accessCookie == null) {
+            String refreshToken = refreshCookie.getValue();
+
+            reissueAccessTokenAndSetCookie(refreshToken, true, response);
+        }
+
+        String accessToken = accessCookie.getValue();
+        jwtService.validationAndGetJwt(accessToken);
+        String username = jwtService.getUsernameByJwt(accessToken);
+
+        if (accessCookie == null) {
+            throw new BaseException(NOT_LOGIN_USER);
+        }
 
         User user = userRepository.findByUsername(username);
         if(user == null){
@@ -177,4 +190,16 @@ public class UserServiceImpl implements UserService, SocialUserService {
         response.addCookie(refreshCookie);
     }
 
+    private void reissueAccessTokenAndSetCookie(String refreshToken, boolean autoLogin, HttpServletResponse response){
+        Jws<Claims> claims = jwtService.validationAndGetJwt(refreshToken);
+
+        // refresh토큰에서 username 가져오기
+        String username = jwtService.getUsernameByJwt(claims);
+
+        String reAccessToken = jwtService.createAccessToken(username);
+        ResponseCookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
+
+        response.addHeader("Set-Cookie", reAccessCookie.toString());
+        response.setHeader("accessToken", reAccessCookie.getValue());
+    }
 }
