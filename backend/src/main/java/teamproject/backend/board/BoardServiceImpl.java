@@ -63,7 +63,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<BoardReadResponse> getBoards(String category, int page) {
+    public List<BoardReadResponse> getBoards(String category) {
         //음식 카테고리 찾기
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(category);
         if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
@@ -71,15 +71,10 @@ public class BoardServiceImpl implements BoardService{
         //카테고리에 맞는 글 찾기
         List<Board> searchBoardList = boardRepository.findByCategory(foodCategory);
 
-        //페이지에 맞게 index 구하기
-        int searchBoardCnt = searchBoardList.size();
-        int startIndex = getStartIndex(searchBoardCnt, page);
-        int endIndex = Math.min(startIndex + 7, searchBoardCnt - 1);
-
         //주어진 페이지에 맞게 페이지 자르기
         List<BoardReadResponse> pageBoardList = new ArrayList<>();
-        for(int i = startIndex; i <= endIndex; i++){
-            pageBoardList.add(new BoardReadResponse(searchBoardList.get(i)));
+        for(Board board : searchBoardList){
+            pageBoardList.add(new BoardReadResponse(board));
         }
 
         //페이지 리턴

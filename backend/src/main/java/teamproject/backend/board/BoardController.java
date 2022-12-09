@@ -22,8 +22,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/list")
-    public BaseResponse<List<BoardReadResponse>> board_list(@RequestParam String category, @RequestParam int page){
-        List<BoardReadResponse> pages = boardService.getBoards(category, page);
+    public BaseResponse<List<BoardReadResponse>> board_list(@RequestParam String category){
+        List<BoardReadResponse> pages = boardService.getBoards(category);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
