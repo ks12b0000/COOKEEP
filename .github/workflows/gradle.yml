@@ -31,6 +31,8 @@ jobs:
         spring.datasource.url: ${{ secrets.DB_URL }} 
         spring.datasource.username: ${{ secrets.DB_USERNAME }} 
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+        cloud.aws.credentials.accessKey: ${{secrets.S3_ACCESSKEY}}
+        cloud.aws.credentials.secretKey: ${{secrets.S3_SECRETKEY}}
         KAKAO_API_KEY: ${{secrets.KAKAO_API_KEY}}
         NAVER_API_ID: ${{secrets.NAVER_API_ID}}
         NAVER_API_SECRET: ${{secrets.NAVER_API_SECRET}}
