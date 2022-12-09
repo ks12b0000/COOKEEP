@@ -144,10 +144,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
     public LoginResponse loginCheck(Cookie[] cookies) {
         Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
 
-        if(accessCookie == null){
-            throw new BaseException(NOT_LOGIN_USER);
-        }
-
         String token = accessCookie.getValue();
         String username = jwtService.getUsernameByJwt(token);
 
