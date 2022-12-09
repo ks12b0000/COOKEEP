@@ -1,5 +1,7 @@
 package teamproject.backend.user;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -141,31 +143,22 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     public LoginResponse loginCheck(Cookie[] cookies) {
         Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
-        Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
 
-        if(accessCookie == null && refreshCookie == null){
+        if(accessCookie == null){
             throw new BaseException(NOT_LOGIN_USER);
         }
 
-        String username = null;
-        String token;
-        if(accessCookie != null){
-            token = accessCookie.getValue();
-            username = jwtService.getUsernameByJwt(token);
-        }
-        else if(refreshCookie != null){
-            token = refreshCookie.getValue();
-            username = jwtService.getUsernameByJwt(token);
-        }
+        String token = accessCookie.getValue();
+        String username = jwtService.getUsernameByJwt(token);
 
         User user = userRepository.findByUsername(username);
         if(user == null){
             throw new BaseException(USER_NOT_EXIST);
         }
 
-        LoginResponse loginResponse = new LoginResponse(user.getId());
+        LoginResponse loginRes = new LoginResponse(user.getId());
 
-        return loginResponse;
+        return loginRes;
     }
 
 
@@ -186,6 +179,19 @@ public class UserServiceImpl implements UserService, SocialUserService {
         refreshCookie.setMaxAge(0);
         refreshCookie.setPath("/");
         response.addCookie(refreshCookie);
+    }
+
+    private void reissueAccessTokenAndSetCookie(String refreshToken, boolean autoLogin, HttpServletResponse response){
+        Jws<Claims> claims = jwtService.validationAndGetJwt(refreshToken);
+
+        // refresh토큰에서 username 가져오기
+        String username = jwtService.getUsernameByJwt(claims);
+
+        String reAccessToken = jwtService.createAccessToken(username);
+        ResponseCookie reAccessCookie = cookieService.createAccessCookie(reAccessToken, autoLogin);
+
+        response.addHeader("Set-Cookie", reAccessCookie.toString());
+        response.setHeader("accessToken", reAccessCookie.getValue());
     }
 
 }
