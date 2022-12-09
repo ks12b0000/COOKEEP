@@ -1,12 +1,9 @@
 import styled from "@emotion/styled";
-import Axios from "../../../http/http";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../pagination/Pagination";
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { categoryList1 } from "../../../data/category1/categoryList1";
 import categoryHttp from "../../../http/categoryHttp";
+import IsNonData from "../../isNonData/IsNonData";
 
 const Ul = styled.ul`
     margin: 20px 0 30px;
@@ -53,31 +50,33 @@ const TextBox = styled.div`
     }
 `;
 
-// const SelectBox = styled.div`
-//     position: relative;
-//     width: 100%;
-//     select {
-//         padding: 10px 15px;
-//         border: 1px solid #ccc;
-//         position: absolute;
-//         right: 0;
-//         top: -25px;
-//         border-radius: 5px;
-//         width: 150px;
-//         -webkit-appearance: none;
-//         background: url("https://i.imgur.com/e60gpgR.png") 88%/12px no-repeat;
-//         cursor: pointer;
-//         &:focus {
-//             outline: none;
-//         }
-//     }
-// `;
+const SelectBox = styled.div`
+    position: relative;
+    width: 100%;
+    select {
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        position: absolute;
+        right: 0;
+        top: -25px;
+        border-radius: 5px;
+        width: 150px;
+        -webkit-appearance: none;
+        background: url("https://i.imgur.com/e60gpgR.png") 88%/12px no-repeat;
+        cursor: pointer;
+        &:focus {
+            outline: none;
+        }
+    }
+`;
+
+const CategoryHttp = new categoryHttp();
 function CateItem() {
-    const [posts, setPosts] = useState(categoryList1);
+    const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [showPost, setShowPost] = useState(8);
-    const [totalPost, setTotalPost] = useState(posts.length);
+    const [totalPost, setTotalPost] = useState(0);
 
     const LastIndex = currentPage * showPost;
     const FirstIndex = LastIndex - showPost;
@@ -89,33 +88,50 @@ function CateItem() {
     const showPagination = () => {
         return <Pagination showPost={showPost} totalPost={totalPost} currentPage={currentPage} paginate={paginate} prevPage={prevPage} nextPage={nextPage} />;
     };
-    // const FilterPosts = (e) => {
-    //     setShowPost(parseInt(e.target.value));
-    // };
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const { result } = await CategoryHttp.getCategoryList(true, currentPage, `카테고리2`);
+                setPosts(result);
+                setTotalPost(result.length);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
+
+    const FilterPosts = (e) => {
+        setShowPost(parseInt(e.target.value));
+    };
 
     return (
         <>
-            {/*<SelectBox>*/}
-            {/*    <select onChange={FilterPosts} defaultValue="8">*/}
-            {/*        <option value="4">4개씩보기</option>*/}
-            {/*        <option value="8">8개씩 보기</option>*/}
-            {/*        <option value="100">100개씩 보기</option>*/}
-            {/*    </select>*/}
-            {/*</SelectBox>*/}
+            <SelectBox>
+                <select onChange={FilterPosts} defaultValue="8">
+                    <option value="4">4개씩보기</option>
+                    <option value="8">8개씩 보기</option>
+                    <option value="100">100개씩 보기</option>
+                </select>
+            </SelectBox>
             <Ul>
-                {currentPost.map((category, idx) => (
-                    <li key={idx + 1}>
-                        <Link to={`/category1/${category.board_id}`}>
-                            <Thumbnail>
-                                <img src={category.img} alt="" />
-                            </Thumbnail>
-                            <TextBox>
-                                <span>{category.mainTitle}</span>
-                                <span>{category.subTitle}</span>
-                            </TextBox>
-                        </Link>
-                    </li>
-                ))}
+                {posts.length === 0 ? (
+                    <IsNonData text="데이터가 존재하지않습니다." />
+                ) : (
+                    currentPost.map((category, idx) => (
+                        <li key={idx + 1}>
+                            <Link to={`/category1/${category.board_id}`}>
+                                <Thumbnail>
+                                    <img src="https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" alt="https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" />
+                                </Thumbnail>
+                                <TextBox>
+                                    <span>{category.title}</span>
+                                    <span>{category.text}</span>
+                                </TextBox>
+                            </Link>
+                        </li>
+                    ))
+                )}
             </Ul>
             <div>{showPagination()}</div>
         </>

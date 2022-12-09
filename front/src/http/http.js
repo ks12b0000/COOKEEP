@@ -1,5 +1,4 @@
 import axios from "axios";
-import STATUS from "../constants/status";
 
 class Http {
     constructor() {
@@ -8,12 +7,13 @@ class Http {
     }
     static createAxios() {
         return axios.create({
-            baseURL: "http://13.125.183.98:8080",
-            // withCredentials: true,
+            baseURL: process.env.REACT_APP_API_BASE_URL,
+            withCredentials: true,
             timeout: 30 * 1000,
             headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*"
+                // Authorization: `Bearer:${token}`
             }
         });
     }
@@ -23,7 +23,7 @@ class Http {
             onFulfilled: (response) => {
                 response.data = {
                     statusCode: response.status,
-                    jsonResult: response.status === STATUS.OK || response.status === STATUS.CREATED ? response.data : null
+                    jsonResult: response.status === 200 || response.status === 201 ? response.data : null
                 };
                 return response;
             },

@@ -20,11 +20,12 @@ const Container = styled.section`
 const categoryHttp = new CategoryHttp();
 function Category2() {
     const [Category, setCategory] = useState([]);
+
     useEffect(() => {
         (async () => {
             try {
-                const { result } = await categoryHttp.getCategoryList(true, 1, `카테고리2`);
-                setCategory(result);
+                const { result } = await categoryHttp.getCategoryList(true, 1, `카테고리1`);
+                console.log(result);
             } catch (err) {
                 console.log(err);
             }

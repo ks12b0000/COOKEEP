@@ -1,10 +1,9 @@
 import Header from "../../layout/header/Header";
 import { useState } from "react";
-import { categoryList1 } from "../../../data/category1/categoryList1";
+import { categoryList1 } from "../../../http/data/category1/categoryList1";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
-
 
 const Container = styled.section`
     width: 1200px;
@@ -33,7 +32,6 @@ const DetailSubTitle = styled.h3`
 function Detail() {
     // const { id } = useParams();
     // const { result } = useSelector((state) => state.listReducer.item);
-
 
     return (
         <>

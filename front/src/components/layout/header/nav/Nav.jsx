@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { NavDada } from "../../../../data/nav/navData";
+import { NavDada } from "../../../../http/data/nav/navData";
 import { NavLink } from "react-router-dom";
 
 const NavList = styled.nav`

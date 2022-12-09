@@ -130,12 +130,14 @@ function WritingForm() {
     }, [image]);
 
     const onSubmit = async (data) => {
+        data.user_id = 5;
         if (text.length < 5) {
             setIsError(true);
             return 0;
         } else {
             setIsError(false);
         }
+        //이미지 크기조정
         if (data.image[0].size > 625000) alert("이미지 용량은 5 메가비트 보다 작아야합니다");
         data.text = text;
         //이미지 URL전송
@@ -145,12 +147,11 @@ function WritingForm() {
         }
         try {
             const { code } = await categoryHttp.submitWritingForm(data);
+            alert("글 작성이 완료되었습니다.");
+            navigate("/category1");
         } catch (err) {
             console.log(err);
         }
-        console.log(data);
-        console.log(axios.defaults.headers);
-        console.log(document.cookie);
     };
 
     return (
@@ -158,9 +159,9 @@ function WritingForm() {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputBox>
                     <label htmlFor="">카테고리</label>
-                    <select name="select" defaultValue="category1" {...register("select")}>
-                        ><option value="category1">카테고리1</option>
-                        <option value="category2">카테고리2</option>
+                    <select name="category" defaultValue="category1" {...register("category")}>
+                        ><option value="카테고리1">카테고리1</option>
+                        <option value="카테고리2">카테고리2</option>
                     </select>
                 </InputBox>
                 <InputBox>
@@ -179,7 +180,7 @@ function WritingForm() {
                 </Upload>
                 {errors.image && <p style={{ color: "red" }}>이미지를 업로드!!!</p>}
                 <InputBox>
-                    <label htmlFor="">본문</label>평{" "}
+                    <label htmlFor="">본문</label>
                     <Ckedit>
                         <CKEditor
                             name="ckeditor"
