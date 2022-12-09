@@ -10,6 +10,6 @@ public class JwtData {
     // Duration.ofMinutes(30).toMillis() = 1,800,000 = 30분을 밀리초로 환산한 것
     public static long ACCESS_TOKEN_EXPIRE_MILLIS = Duration.ofMinutes(60).toMillis();
     public static long REFRESH_TOKEN_EXPIRE_MILLIS = Duration.ofDays(30).toMillis();
-    public static final int REFRESH_COOKIE_EXPIRE_SECOND = (int) Duration.ofDays(30).toSeconds();
-    public static final int ACCESS_COOKIE_EXPIRE_SECOND = (int) Duration.ofMinutes(60).toSeconds();
+    public static final int REFRESH_COOKIE_EXPIRE_SECOND = (int) Duration.ofDays(30).toMillis();
+    public static final int ACCESS_COOKIE_EXPIRE_SECOND = (int) Duration.ofMinutes(60).toMillis();
 }
