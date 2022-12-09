@@ -11,7 +11,6 @@ const Ul = styled.ul`
     gap: 10px;
     flex-wrap: wrap;
     justify-content: start;
-    min-height: 550px;
     li {
         margin-top: 20px;
         width: 23%;
