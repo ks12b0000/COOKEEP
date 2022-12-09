@@ -125,7 +125,7 @@ function CateItem() {
                                 </Thumbnail>
                                 <TextBox>
                                     <span>{category.title}</span>
-                                    <span>{category.text}</span>
+                                    <span>{category.text.replace("&nbsp;", "")}</span>
                                 </TextBox>
                             </Link>
                         </li>
