@@ -10,7 +10,7 @@ public interface BoardService {
 
     public BoardReadResponse findById(Long board_id);
 
-    public List<BoardReadResponse> getBoards(String category, int page);
+    public List<BoardReadResponse> getBoards(String category);
 
     public void delete(Long user_id, Long board_id);
 }
