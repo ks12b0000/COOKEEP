@@ -151,7 +151,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
             reissueAccessTokenAndSetCookie(refreshToken, true, response);
         }
-
+        
+        accessCookie = cookieService.findCookie("accessToken", cookies);
         String accessToken = accessCookie.getValue();
         jwtService.validationAndGetJwt(accessToken);
         String username = jwtService.getUsernameByJwt(accessToken);
