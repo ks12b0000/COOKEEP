@@ -21,7 +21,7 @@ const GnbContainer = styled.ul`
     }
 `;
 function RightGnb() {
-    const { isLoggedIn } = useSelector((state) => state.persistedReducer.userReducer);
+    const { isLoggedIn } = useSelector((state) => state.userReducer);
     const dispatch = useDispatch();
     useEffect(() => {}, [isLoggedIn]);
     const logout = () => {
