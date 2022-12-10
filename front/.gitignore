@@ -1,4 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+localhost+2-key.pem
+localhost+2.pem
+
 
 # dependencies
 /node_modules
