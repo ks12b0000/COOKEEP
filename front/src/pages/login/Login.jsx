@@ -4,75 +4,67 @@ import axios from "axios";
 import api from "../../api/axios";
 import styled from "@emotion/styled";
 import Header from "../../components/layout/header/Header";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/reducer/userSlice";
-import Cookies from 'universal-cookie'
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-
 function Login() {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [UserName, setUserName] = useState("");
     const [Password, setPassword] = useState("");
-    const [AutoLogin, setAutoLogin] = useState(false)
-
+    const [AutoLogin, setAutoLogin] = useState(false);
 
     const onLogin = async (e) => {
         e.preventDefault();
 
-        if(!(UserName&&Password)){
-            alert('모든 값을 채워주세요.')
-        }else{
-            try{
-                await axios
-                api.post(`${process.env.REACT_APP_API_BASE_URL}/user/login`, 
-                {
-                    username: UserName,
-                    password: Password,
-                    autoLogin: AutoLogin,
-                },
-                {
-                    withCredentials: true,
-                }
-                )
-                .then((res)=>{
+        if (!(UserName && Password)) {
+            alert("모든 값을 채워주세요.");
+        } else {
+            try {
+                await axios;
+                api.post(
+                    `${process.env.REACT_APP_API_BASE_URL}/user/login`,
+                    {
+                        username: UserName,
+                        password: Password,
+                        autoLogin: AutoLogin
+                    },
+                    {
+                        withCredentials: true
+                    }
+                ).then((res) => {
                     console.log(res);
 
                     //로그인 성공 시 토큰을 쿠키에 담아줌
-                    if(res.data.code === 1000){
-                        cookies.set('accesstoken',res.headers.accesstoken,
-                            {path:'/'},
-                        );
-                        cookies.set('refreshtoken',res.headers.refreshtoken,
-                            {path:'/'},
-                        );
+                    if (res.data.code === 1000) {
+                        cookies.set("accesstoken", res.headers.accesstoken, { path: "/" });
+                        cookies.set("refreshtoken", res.headers.refreshtoken, { path: "/" });
 
                         //리덕스 userReducer에 값을 넣어줌
-                        dispatch(loginUser(
-                            {
-                                userId : res.data.result.id,
-                                isLoggedIn : true,
-                            }
-                        ));
+                        dispatch(
+                            loginUser({
+                                userId: res.data.result.id,
+                                isLoggedIn: true
+                            })
+                        );
 
                         //홈 화면으로 이동
-                        navigate('/');
+                        navigate("/");
                     }
-                })
-            } catch(err){
+                });
+            } catch (err) {
                 console.log(err);
             }
         }
 
-        setUserName('');
-        setPassword('');
-        setAutoLogin(false)
-        
-    }
+        setUserName("");
+        setPassword("");
+        setAutoLogin(false);
+    };
 
     return (
         <>
@@ -80,30 +72,13 @@ function Login() {
             <LoginBackground>
                 <LoginWrap>
                     <LoginTitle>Welcome to our project !</LoginTitle>
-                    <LoginInput 
-                        value={UserName} 
-                        type="id" 
-                        placeholder="id" 
-                        onChange={(e) => setUserName(e.currentTarget.value)} 
-                    />
-                    <LoginInput 
-                        value={Password} 
-                        type="password" 
-                        placeholder="password" 
-                        onChange={(e) => setPassword(e.currentTarget.value)} 
-                    />
+                    <LoginInput value={UserName} type="id" placeholder="id" onChange={(e) => setUserName(e.currentTarget.value)} />
+                    <LoginInput value={Password} type="password" placeholder="password" onChange={(e) => setPassword(e.currentTarget.value)} />
                     <CheckBoxWrap>
-                        <input 
-                            value={AutoLogin}
-                            type="checkbox" 
-                            onChange={(e) => setAutoLogin(e.currentTarget.checked)}
-                            checked={AutoLogin}
-                        />
+                        <input value={AutoLogin} type="checkbox" onChange={(e) => setAutoLogin(e.currentTarget.checked)} checked={AutoLogin} />
                         <div>자동 로그인</div>
                     </CheckBoxWrap>
-                    <LoginButton
-                        onClick={(e)=>onLogin(e)}
-                    >로그인</LoginButton>
+                    <LoginButton onClick={(e) => onLogin(e)}>로그인</LoginButton>
                     <LinkWrap>
                         <LinkStyled to={"/"}>아이디 찾기</LinkStyled>|<LinkStyled to={"/"}>비밀번호 찾기</LinkStyled>|<LinkStyled to={"/sign"}>회원가입</LinkStyled>
                     </LinkWrap>
@@ -165,7 +140,6 @@ const LoginInput = styled.input`
     font-weight: 300;
     letter-spacing: 2px;
     color: #545454;
-
     ::placeholder {
         font-size: 18px;
         font-weight: 300;
@@ -192,13 +166,11 @@ const CheckBoxWrap = styled.div`
     display: flex;
     width: 375px;
     margin: 5px 0 30px 0;
-
     input {
         width: 19px;
         height: 19px;
         border: 1px solid #a2a2a2;
     }
-
     div {
         font-size: 16px;
         margin-left: 10px;
@@ -222,7 +194,6 @@ const LinkStyled = styled(Link)`
     font-weight: 300;
     cursor: pointer;
     transition: 0.2s;
-
     :hover {
         color: #35c5f0;
     }
@@ -238,7 +209,6 @@ const OtherLogin = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-
     img {
         width: 50px;
         height: 50px;
@@ -246,7 +216,6 @@ const OtherLogin = styled.div`
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         cursor: pointer;
     }
-
     div {
         text-align: center;
         margin-top: 20px;
