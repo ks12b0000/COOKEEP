@@ -27,7 +27,7 @@ function Login() {
             try {
                 await axios;
                 api.post(
-                    `/user/login`,
+                    `${process.env.REACT_APP_API_BASE_URL}/user/login`,
                     {
                         username: UserName,
                         password: Password,
@@ -44,9 +44,7 @@ function Login() {
                         cookies.set("accesstoken", res.headers.accesstoken, { path: "/" });
                         cookies.set("refreshtoken", res.headers.refreshtoken, { path: "/" });
 
-                        //리덕스 UserSlice에 값 넣어줌
-                        console.log(res.data.result.id);
-
+                        //리덕스 userReducer에 값을 넣어줌
                         dispatch(
                             loginUser({
                                 userId: res.data.result.id,
@@ -54,7 +52,7 @@ function Login() {
                             })
                         );
 
-                        //쿠키 생성이 완료되면 홈 화면으로 이동
+                        //홈 화면으로 이동
                         navigate("/");
                     }
                 });

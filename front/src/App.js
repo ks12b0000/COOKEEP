@@ -1,5 +1,8 @@
 import "./App.css";
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import MyPage from "./pages/myPage/MyPage";
@@ -10,7 +13,17 @@ import Detail from "./components/category1/detail/Detail";
 import Writing from "./components/category1/writing/Writing";
 import CategoryRouter from "./router/category1/CategoryRouter";
 
+
 function App() {
+
+    const user = useSelector( state => state )
+
+    useEffect(() => {
+
+        console.log(user);
+
+    },[])
+
     return (
         <>
             {/*라우터관리*/}
