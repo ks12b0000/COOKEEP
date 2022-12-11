@@ -39,3 +39,10 @@ NAVER_API_SECRET: ${NAVER_API_SECRET}
 GOOGLE_API_ID: ${GOOGLE_API_ID}
 GOOGLE_API_SECRET: ${GOOGLE_API_SECRET}
 
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+

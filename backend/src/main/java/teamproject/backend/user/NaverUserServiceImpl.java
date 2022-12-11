@@ -88,7 +88,7 @@ public class NaverUserServiceImpl implements NaverUserService {
 
         // 쿠키 발급
         ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, false);
-        response.addHeader("Set-Cookie", accessCookie.getValue());
+        response.addHeader("Set-Cookie", accessCookie.toString());
         response.setHeader("accessToken", accessCookie.getValue());
 
         return new LoginResponse(userInfo.getId());
