@@ -1,9 +1,9 @@
 import { useState } from "react";
-import axios from "axios";
-import api from "../../api/axios";
-import Header from "../../components/layout/header/Header";
 import styled from "@emotion/styled";
+import UserHttp from "../../http/userHttp";
+import Header from "../../components/layout/header/Header";
 
+const userHttp = new UserHttp();
 
 function SignUp() {
     const [UserName, setUserName] = useState("");
@@ -23,36 +23,34 @@ function SignUp() {
         } else if(!CheckUserName){
             return alert("닉네임 중복검사를 진행해 주세요")
         }else {
-            await axios
-                api.post(`${process.env.REACT_APP_API_BASE_URL}/user/join`, {
-                    username: UserName,
-                    email: Email,
-                    password: Password
-                })
-                .then((res) => {
+                try {
+                    const {res} = await userHttp.postSignUp({
+                        username: UserName,
+                        email: Email,
+                        password: Password
+                    })
                     console.log(res);
-                })
-                .catch((err) => {
+                } catch(err) {
                     console.log(err);
                     alert(err.response.data.message);
-                });
+                };
         }
     };
 
     //아이디 중복체크 실행 함수
-    const onCheckUserName = (e)=>{
+    const onCheckUserName = async(e)=>{
         e.preventDefault();
-        axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/duplicate?username=${UserName}`)
-        .then((res)=>{
+
+        try {
+            const {res} = await userHttp.getCheckUsername(UserName)
             if(!res.data.result.isDuplicate){
                 setCheckUserName(true)
                 alert(res.data.message)
-            }
-        })
-        .catch((err)=>{
+            }   
+        } catch(err){
             console.log(err);
             alert(err.response.data.message)
-        })
+        }
     }
 
     return (
