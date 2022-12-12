@@ -16,6 +16,12 @@ function SignUp() {
     const onSignUp = async(e) => {
         e.preventDefault();
 
+        const body = {
+            username: UserName,
+            email: Email,
+            password: Password
+        }
+
         if (!(UserName && Email && Password && CheckPassword)) {
             return alert("모든 값을 입력해주세요");
         } else if (Password != CheckPassword) {
@@ -24,15 +30,11 @@ function SignUp() {
             return alert("닉네임 중복검사를 진행해 주세요")
         }else {
                 try {
-                    const {res} = await userHttp.postSignUp({
-                        username: UserName,
-                        email: Email,
-                        password: Password
-                    })
+                    const res = await userHttp.postSignUp(body);
                     console.log(res);
                 } catch(err) {
                     console.log(err);
-                    alert(err.response.data.message);
+                    // alert(err.response.data.message);
                 };
         }
     };
