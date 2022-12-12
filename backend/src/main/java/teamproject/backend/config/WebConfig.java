@@ -17,6 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .exposedHeaders("accessToken","refreshToken" ,"Set-Cookie")
                 .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE", "HEAD")
                 .allowedHeaders("*")
+                .allowedOrigins("https://localhost:3000")
                 .allowCredentials(true);
     }
 }
