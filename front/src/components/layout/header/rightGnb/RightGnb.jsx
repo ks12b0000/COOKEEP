@@ -27,6 +27,7 @@ function RightGnb() {
     const logout = () => {
         dispatch(loginUser({ isLoggedIn: false }));
         removeCookie("accesstoken");
+        removeCookie("refreshtoken");
     };
     return (
         <>

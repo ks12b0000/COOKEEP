@@ -120,14 +120,14 @@ function WritingForm() {
     const [text, setText] = useState("");
     const [isError, setIsError] = useState(false);
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
-    const image = watch("image");
+    const thumbnail = watch("image");
 
     useEffect(() => {
-        if (image && image.length > 0) {
-            const file = image[0];
+        if (thumbnail && thumbnail.length > 0) {
+            const file = thumbnail[0];
             setImagePreview(URL.createObjectURL(file));
         }
-    }, [image]);
+    }, [thumbnail]);
 
     const onSubmit = async (data) => {
         data.user_id = 5;
@@ -138,14 +138,19 @@ function WritingForm() {
             setIsError(false);
         }
         //이미지 크기조정
-        if (data.image[0].size > 625000) alert("이미지 용량은 5 메가비트 보다 작아야합니다");
+        if (data.image[0].size > 625000) {
+            alert("이미지 용량은 5 메가비트 보다 작아야합니다");
+            return 0;
+        }
         data.text = text;
         //이미지 URL전송
-        if (image && image.length > 0) {
-            const file = image[0];
-            data.image = URL.createObjectURL(file);
+        if (thumbnail && thumbnail.length > 0) {
+            const file = thumbnail[0];
+            data.thumbnail = URL.createObjectURL(file);
         }
         try {
+            console.log(data);
+            delete data.image;
             const { code } = await categoryHttp.submitWritingForm(data);
             alert("글 작성이 완료되었습니다.");
             navigate("/category1");

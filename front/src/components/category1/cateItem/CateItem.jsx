@@ -121,7 +121,7 @@ function CateItem() {
                         <li key={idx + 1}>
                             <Link to={`/category1/${category.board_id}`}>
                                 <Thumbnail>
-                                    <img src="https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" alt="https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" />
+                                    <img src={category.thumbnail} alt="https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" />
                                 </Thumbnail>
                                 <TextBox>
                                     <span>{category.title}</span>
