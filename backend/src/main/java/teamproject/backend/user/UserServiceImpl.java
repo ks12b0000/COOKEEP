@@ -134,6 +134,9 @@ public class UserServiceImpl implements UserService, SocialUserService {
         response.addHeader("Set-Cookie", refreshCookie.toString());
         response.setHeader("accessToken", accessCookie.getValue());
         response.setHeader("refreshToken", refreshCookie.getValue());
+        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
 
 
         LoginResponse loginResponse = new LoginResponse(user.getId());
