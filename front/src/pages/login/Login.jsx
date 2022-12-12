@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import api from "../../api/axios";
-import styled from "@emotion/styled";
-import Header from "../../components/layout/header/Header";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/reducer/userSlice";
+import styled from "@emotion/styled";
+import Header from "../../components/layout/header/Header";
+import UserHttp from "../../http/userHttp";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
+const userHttp = new UserHttp();
 
 function Login() {
     const navigate = useNavigate();
@@ -25,37 +25,29 @@ function Login() {
             alert("모든 값을 채워주세요.");
         } else {
             try {
-                await axios;
-                api.post(
-                    `${process.env.REACT_APP_API_BASE_URL}/user/login`,
-                    {
-                        username: UserName,
-                        password: Password,
-                        autoLogin: AutoLogin
-                    },
-                    {
-                        withCredentials: true
-                    }
-                ).then((res) => {
-                    console.log(res);
+                const {res} = await userHttp.postLogin({
+                    username: UserName,
+                    password: Password,
+                    autoLogin: AutoLogin,
+                })
+                console.log(res);
 
-                    //로그인 성공 시 토큰을 쿠키에 담아줌
-                    if (res.data.code === 1000) {
-                        cookies.set("accesstoken", res.headers.accesstoken, { path: "/" });
-                        cookies.set("refreshtoken", res.headers.refreshtoken, { path: "/" });
+                //로그인 성공 시 토큰을 쿠키에 담아줌
+                if (res.data.code === 1000) {
+                    cookies.set("accesstoken", res.headers.accesstoken, { path: "/" });
+                    cookies.set("refreshtoken", res.headers.refreshtoken, { path: "/" });
 
-                        //리덕스 userReducer에 값을 넣어줌
-                        dispatch(
-                            loginUser({
-                                userId: res.data.result.id,
-                                isLoggedIn: true
-                            })
-                        );
+                //리덕스 userReducer에 값을 넣어줌
+                    dispatch(
+                        loginUser({
+                            userId: res.data.result.id,
+                            isLoggedIn: true,
+                        })
+                    );
 
-                        //홈 화면으로 이동
-                        navigate("/");
-                    }
-                });
+                    //홈 화면으로 이동
+                    navigate("/");
+                }
             } catch (err) {
                 console.log(err);
             }
