@@ -138,7 +138,7 @@ public class UserController {
      * @param response
      * @return
      */
-    @GetMapping("/logout")
+    @GetMapping("/user/logout")
     public BaseResponse logout(HttpServletResponse response) {
 
         userService.logout(response);
