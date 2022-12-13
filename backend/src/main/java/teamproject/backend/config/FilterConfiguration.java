@@ -28,13 +28,13 @@ public class FilterConfiguration implements WebMvcConfigurer {
         return registrationBean;
     }
 
-//    @Bean
-//    public FilterRegistrationBean<ExceptionCatchFilter> exceptionCatchFilterRegistrationBean(){
-//        FilterRegistrationBean<ExceptionCatchFilter> registrationBean = new FilterRegistrationBean<>();
-//        registrationBean.setFilter(new ExceptionCatchFilter());
-//        registrationBean.addUrlPatterns("/auth/user/login*");
-//        registrationBean.setOrder(1);
-//
-//        return registrationBean;
-//    }
+    @Bean
+    public FilterRegistrationBean<ExceptionCatchFilter> exceptionCatchFilterRegistrationBean(){
+        FilterRegistrationBean<ExceptionCatchFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new ExceptionCatchFilter());
+        registrationBean.addUrlPatterns("/auth/*");
+        registrationBean.setOrder(1);
+
+        return registrationBean;
+    }
 }
