@@ -32,6 +32,12 @@ public class ExceptionCatchFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request2 = (HttpServletRequest) request ;
         HttpServletResponse resp = (HttpServletResponse) response;
+        resp.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
+        resp.setHeader("Access-Control-Allow-Credentials", "true");
+        resp.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
+        resp.setHeader("Access-Control-Max-Age", "3600");
+        resp.setHeader("Access-Control-Allow-Headers",
+                "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-xsrf-token");
         if (request2.getMethod().equals("OPTIONS")) {
             resp.setStatus(HttpServletResponse.SC_OK);
             return;
@@ -58,14 +64,10 @@ public class ExceptionCatchFilter implements Filter {
     private void setBaseResponse(HttpServletResponse response, BaseExceptionStatus eStatus) throws IOException{
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-//        response.setHeader("Access-Control-Allow-Origin", "*");
-//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
-//        response.setHeader("Access-Control-Max-Age", "3600");
-//        response.setHeader("Access-Control-Allow-Headers", "x-requested-with, origin, content-type, accept");
-        response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
-        response.setHeader("Access-Control-Allow-Credentials", "true"); //쿠키 요청을 허용
-        response.setHeader("Access-Control-Allow-Methods","POST, GET, DELETE, PUT, OPTIONS"); //허용할 HTTP 메서드
-        response.setHeader("Access-Control-Allow-Headers", "*"); //요청을 허용할 헤더
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with, origin, content-type, accept");
         response.setStatus(HttpStatus.UNAUTHORIZED.value()); // 401 응답코드로 설정
 
         BaseResponse baseResponse = new BaseResponse(eStatus);
