@@ -8,6 +8,7 @@ import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.response.BaseResponse;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -28,6 +29,12 @@ public class ExceptionCatchFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request2 = (HttpServletRequest) request ;
+        HttpServletResponse resp = (HttpServletResponse) response;
+        if (request2.getMethod().equals("OPTIONS")) {
+            resp.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
         try {
             chain.doFilter(request, response);
         } catch (BaseException e){
