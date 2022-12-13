@@ -28,6 +28,22 @@ cloud:
       secretKey: ${secretKey}  # AWS IAM SecretKey 적기
     s3:
       bucket: ${bucket}
+      Properties:
+        BucketName: blog-media-upload
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders:
+                - "*"
+              AllowedMethods:
+                - GET
+              AllowedOrigins:
+                - "*"
+            - AllowedHeaders:
+                - "*"
+              AllowedMethods:
+                - POST
+              AllowedOrigins:
+                - "*"
     region:
       static: ap-northeast-2
     stack:
