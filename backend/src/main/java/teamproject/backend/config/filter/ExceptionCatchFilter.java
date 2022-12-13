@@ -3,6 +3,7 @@ package teamproject.backend.config.filter;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.cors.CorsUtils;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.response.BaseResponse;
@@ -33,6 +34,10 @@ public class ExceptionCatchFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         if (request2.getMethod().equals("OPTIONS")) {
             resp.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        if (CorsUtils.isPreFlightRequest(request2)) {
             return;
         }
         try {
