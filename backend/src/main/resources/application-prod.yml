@@ -46,6 +46,3 @@ logging:
         util:
           EC2MetadataUtils: error
 
-http.cors.enabled: true
-http.cors.allow-origin: "*"
-
