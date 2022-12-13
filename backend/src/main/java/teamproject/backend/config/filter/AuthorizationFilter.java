@@ -42,9 +42,12 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest httpReq = (HttpServletRequest) request;
         // 전체 쿠키 목록 가져오기
         Cookie[] cookies = httpReq.getCookies();
+        log.info("cookies = {}", cookies);
 
         Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
         Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
+        log.info("accessToken = {}", accessCookie.getValue());
+        log.info("refreshToken = {}", refreshCookie.getValue());
 
         String accessToken, refreshToken;
 
