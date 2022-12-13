@@ -39,7 +39,7 @@ public class BoardServiceImpl implements BoardService{
         if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
 
         //만약 글에 섬네일 설정이 안되어 있으면 기본값 넣기
-        //if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
+        if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
 
         //글 생성
         Board board = new Board(foodCategory, boardWriteRequest, user.get());
