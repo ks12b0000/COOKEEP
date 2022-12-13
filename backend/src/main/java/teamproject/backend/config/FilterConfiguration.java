@@ -22,19 +22,19 @@ public class FilterConfiguration implements WebMvcConfigurer {
         FilterRegistrationBean<AuthorizationFilter> registrationBean = new FilterRegistrationBean<>();
         AuthorizationFilter authorizationFilter = new AuthorizationFilter(jwtService, cookieService);
         registrationBean.setFilter(authorizationFilter);
-        registrationBean.addUrlPatterns("/auth/user/login*");
+        registrationBean.addUrlPatterns("/auth/*");
         registrationBean.setOrder(2);
 
         return registrationBean;
     }
 
-    @Bean
-    public FilterRegistrationBean<ExceptionCatchFilter> exceptionCatchFilterRegistrationBean(){
-        FilterRegistrationBean<ExceptionCatchFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new ExceptionCatchFilter());
-        registrationBean.addUrlPatterns("/auth/user/login*");
-        registrationBean.setOrder(1);
-
-        return registrationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean<ExceptionCatchFilter> exceptionCatchFilterRegistrationBean(){
+//        FilterRegistrationBean<ExceptionCatchFilter> registrationBean = new FilterRegistrationBean<>();
+//        registrationBean.setFilter(new ExceptionCatchFilter());
+//        registrationBean.addUrlPatterns("/auth/user/login*");
+//        registrationBean.setOrder(1);
+//
+//        return registrationBean;
+//    }
 }
