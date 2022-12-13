@@ -41,7 +41,7 @@ public class ExceptionCatchFilter implements Filter {
             return;
         }
         try {
-            chain.doFilter(request2, resp);
+            chain.doFilter(request, response);
         } catch (BaseException e){
 //            e.printStackTrace();
             log.info("인증 예외처리: {}", e.getMessage());
