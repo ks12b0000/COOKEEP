@@ -46,10 +46,10 @@ public class ExceptionCatchFilter implements Filter {
     private void setBaseResponse(HttpServletResponse response, BaseExceptionStatus eStatus) throws IOException{
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, HEAD, PATCH");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with, origin, content-type, accept");
         response.setStatus(HttpStatus.UNAUTHORIZED.value()); // 401 응답코드로 설정
 
         BaseResponse baseResponse = new BaseResponse(eStatus);
