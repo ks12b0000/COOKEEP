@@ -19,6 +19,7 @@ public class CookieService {
                 .secure(true)
                 .sameSite("None")
                 .maxAge(ACCESS_COOKIE_EXPIRE_SECOND)
+                .httpOnly(true)
                 .build();
 
         if(autoLogin) {
@@ -27,6 +28,7 @@ public class CookieService {
                     .secure(true)
                     .sameSite("None")
                     .maxAge(ACCESS_COOKIE_EXPIRE_SECOND)
+                    .httpOnly(true)
                     .build();
             // maxAge 설정 안하면, 앱 끌시 쿠키 삭제됨.
         }
