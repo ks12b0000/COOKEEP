@@ -121,17 +121,30 @@ function WritingForm() {
     const [isError, setIsError] = useState(false);
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
+
     const imageChange = (e) => {
         const files = e.target.files; // FileList 객체
         if (files[0].size > 65000) {
             alert("파일 크기 5메가 이상은안됩니다 ");
             return false;
         }
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(files[0]);
-        fileReader.onload = function (e) {
-            setImagePreview(e.currentTarget.result);
+        let formData = {
+            imageFile: files[0],
+            user_id: 5
         };
+        // const fileReader = new FileReader();
+        // fileReader.readAsDataURL(files[0]);
+        // fileReader.onload = function (e) {
+        //     setImagePreview(e.currentTarget.result);
+        // };
+        axios
+            .post("https://www.teamprojectvv.shop/image/upload", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
         // setImagePreview(URL.createObjectURL(files[0]));
     };
     useEffect(() => {
@@ -153,11 +166,11 @@ function WritingForm() {
             return false;
         }
         try {
-            const { code } = await categoryHttp.submitWritingForm(data, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
+            // const { code } = await categoryHttp.submitWritingForm(data, {
+            //     headers: {
+            //         "Content-Type": "multipart/form-data"
+            //     }
+            // });
             alert("글 작성이 완료되었습니다.");
             navigate("/category1");
         } catch (err) {
