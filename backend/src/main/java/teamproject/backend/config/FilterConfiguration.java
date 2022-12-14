@@ -22,7 +22,7 @@ public class FilterConfiguration implements WebMvcConfigurer {
         FilterRegistrationBean<AuthorizationFilter> registrationBean = new FilterRegistrationBean<>();
         AuthorizationFilter authorizationFilter = new AuthorizationFilter(jwtService, cookieService);
         registrationBean.setFilter(authorizationFilter);
-        registrationBean.addUrlPatterns("/auth/*");
+        registrationBean.addUrlPatterns("/sadasd/*");
         registrationBean.setOrder(2);
 
         return registrationBean;
@@ -32,7 +32,7 @@ public class FilterConfiguration implements WebMvcConfigurer {
     public FilterRegistrationBean<ExceptionCatchFilter> exceptionCatchFilterRegistrationBean(){
         FilterRegistrationBean<ExceptionCatchFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new ExceptionCatchFilter());
-        registrationBean.addUrlPatterns("/auth/*");
+        registrationBean.addUrlPatterns("/sadasd/*");
         registrationBean.setOrder(1);
 
         return registrationBean;
