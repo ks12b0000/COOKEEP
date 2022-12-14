@@ -120,14 +120,23 @@ function WritingForm() {
     const [text, setText] = useState("");
     const [isError, setIsError] = useState(false);
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
-    const thumbnail = watch("image");
-
-    useEffect(() => {
-        if (thumbnail && thumbnail.length > 0) {
-            const file = thumbnail[0];
-            setImagePreview(URL.createObjectURL(file));
+    const [error, setError] = useState(false);
+    const imageChange = (e) => {
+        const files = e.target.files; // FileList 객체
+        if (files[0].size > 65000) {
+            alert("파일 크기 5메가 이상은안됩니다 ");
+            return false;
         }
-    }, [thumbnail]);
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(files[0]);
+        fileReader.onload = function (e) {
+            setImagePreview(e.currentTarget.result);
+        };
+        // setImagePreview(URL.createObjectURL(files[0]));
+    };
+    useEffect(() => {
+        imagePreview === "" ? setError(true) : setError(false);
+    }, [imagePreview]);
 
     const onSubmit = async (data) => {
         data.user_id = 5;
@@ -137,21 +146,18 @@ function WritingForm() {
         } else {
             setIsError(false);
         }
-        //이미지 크기조정
-        if (data.image[0].size > 625000) {
-            alert("이미지 용량은 5 메가비트 보다 작아야합니다");
-            return 0;
-        }
         data.text = text;
-        //이미지 URL전송
-        if (thumbnail && thumbnail.length > 0) {
-            const file = thumbnail[0];
-            data.thumbnail = URL.createObjectURL(file);
+        data.thumbnail = imagePreview;
+        if (error) {
+            alert("빈칸 없이 전부 입력해주세요 !!");
+            return false;
         }
         try {
-            console.log(data);
-            delete data.image;
-            const { code } = await categoryHttp.submitWritingForm(data);
+            const { code } = await categoryHttp.submitWritingForm(data, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
             alert("글 작성이 완료되었습니다.");
             navigate("/category1");
         } catch (err) {
@@ -166,7 +172,7 @@ function WritingForm() {
                     <label htmlFor="">카테고리</label>
                     <select name="category" defaultValue="category1" {...register("category")}>
                         ><option value="카테고리1">카테고리1</option>
-                        <option value="카테고리2">카테고리2</option>
+                        <option value="카테고리3">카테고리3</option>
                     </select>
                 </InputBox>
                 <InputBox>
@@ -177,13 +183,13 @@ function WritingForm() {
                 <Upload>
                     <label htmlFor="">썸네일</label>
                     <InputFile htmlFor="input-file">파일 선택</InputFile>
-                    <input type="file" id="input-file" style={{ display: "none" }} {...register("image", { required: true })} accept=".svg, .gif, .jpg, .png" />
+                    <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
 
                     <IMGBOX>
                         <img src={imagePreview} alt={imagePreview} />
                     </IMGBOX>
                 </Upload>
-                {errors.image && <p style={{ color: "red" }}>이미지를 업로드!!!</p>}
+                {error && <p style={{ color: "red" }}>이미지를 업로드!!!</p>}
                 <InputBox>
                     <label htmlFor="">본문</label>
                     <Ckedit>

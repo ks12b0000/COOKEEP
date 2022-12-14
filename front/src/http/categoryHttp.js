@@ -18,13 +18,5 @@ class CategoryHttp extends Http {
             throw err;
         }
     };
-    postLogin = async (params) => {
-        try {
-            const data = await this.axios.post("user/login", params);
-            return data;
-        } catch (err) {
-            throw err;
-        }
-    };
 }
 export default CategoryHttp;

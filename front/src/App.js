@@ -13,16 +13,10 @@ import Detail from "./components/category1/detail/Detail";
 import Writing from "./components/category1/writing/Writing";
 import CategoryRouter from "./router/category1/CategoryRouter";
 
-
 function App() {
+    const user = useSelector((state) => state);
 
-    const user = useSelector( state => state )
-
-    useEffect(() => {
-
-        console.log(user);
-
-    },[])
+    useEffect(() => {}, []);
 
     return (
         <>
@@ -33,7 +27,7 @@ function App() {
                 <Route path="/sign" element={<SignUp />}></Route>
                 <Route path="/" element={<Home />}></Route>
                 {/*    네비바  */}
-                <Route path="/category1/*" element={<CategoryRouter/>}></Route>
+                <Route path="/category1/*" element={<CategoryRouter />}></Route>
                 <Route path="/category2" element={<Category2 />}></Route>
                 {/*    상세페이지*/}
             </Routes>

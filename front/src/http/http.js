@@ -9,12 +9,10 @@ class Http {
     static createAxios() {
         return axios.create({
             baseURL: process.env.REACT_APP_API_BASE_URL,
-            // withCredentials: true,
             timeout: 30 * 1000,
+            withCredentials: true,
             headers: {
-                "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "https://www.teamprojectvv.shop",
-                "Access-Control-Allow-Credentials": true,
                 Authorization: `Bearer ${token}`
             }
         });

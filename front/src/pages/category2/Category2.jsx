@@ -24,20 +24,39 @@ function Category2() {
     useEffect(() => {
         (async () => {
             try {
-                const res = await axios.get("https://www.teamprojectvv.shop/board/list?page=1&category=%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC2");
+                const res = await categoryHttp.submitWritingForm({
+                    category: "카테고리1",
+                    text: "안녕하세요",
+                    title: "김성훈입니다",
+                    user_id: 5,
+                    thumbnail: "https://cdn.pixabay.com/photo/2022/12/06/06/21/lavender-7638368_1280.jpg"
+                });
                 console.log(res);
             } catch (err) {
                 console.log(err);
             }
         })();
     }, []);
-
+    const [state, setState] = useState("");
+    const imageChange = (e) => {
+        const files = e.target.files; // FileList 객체
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(files[0]);
+        fileReader.onload = function (e) {
+            setState(e.currentTarget.result);
+        };
+    };
+    useEffect(() => {
+        console.log(state);
+    }, [state]);
     return (
         <>
             <Header />
             <Container>
                 <div>
-                    {getCookie && getCookie("accesstoken")}
+                    <input type="file" onChange={imageChange} />
+                    <img src={state} alt="" />
+                    {/*{getCookie && getCookie("accesstoken")}*/}
                     {Category.map((cate) => (
                         <li key={cate.board_id}>
                             <span>{cate.title}</span>
