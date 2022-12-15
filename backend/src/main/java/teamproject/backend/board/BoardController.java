@@ -32,4 +32,16 @@ public class BoardController {
         BoardReadResponse boardReadResponse = boardService.findById(board_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", boardReadResponse);
     }
+
+    @DeleteMapping("/board")
+    public BaseResponse delete_board(@RequestParam Long board_id, @RequestParam Long user_id){
+        boardService.delete(board_id, user_id);
+        return new BaseResponse<>("성공적으로 글을 삭제했습니다.");
+    }
+
+    @DeleteMapping("/board/thumbnail-err")
+    public BaseResponse delete_err_thumbnail_board(){
+        boardService.delete_err_thumbnail();
+        return new BaseResponse("성공적으로 해당 글을 삭제했습니다.");
+    }
 }

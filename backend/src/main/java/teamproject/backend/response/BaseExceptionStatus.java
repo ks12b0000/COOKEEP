@@ -30,6 +30,9 @@ public enum BaseExceptionStatus {
 
     LESS_PAGE_NUMBER(4052, "페이지 번호 부족"),
 
+    //[4070 ~] 이미지 관련 에러코드
+    NOT_EXIST_IMAGE_URL(4070, "존재하지 않는 이미지 url"),
+
     //[4090 ~] 카테고리 관련 에러코드
     NOT_EXIST_CATEGORY(4090, "존재하지 않는 카테고리입니다."),
 
