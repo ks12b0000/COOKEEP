@@ -49,7 +49,7 @@ const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, pagi
         [numbersPage]
     );
     const pageCount = useMemo(() => numberCalculator(numbersPage), [numbersPage]);
-    console.log(currentPage);
+
     return (
         <PaginationNav>
             {currentPage !== 1 && (

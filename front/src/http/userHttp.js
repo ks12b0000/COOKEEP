@@ -1,7 +1,6 @@
 import Http from "./http";
 
 class UserHttp extends Http {
-
     postSignUp = async (params) => {
         try {
             const res = await this.axios.get('user/join',params);
@@ -18,7 +17,7 @@ class UserHttp extends Http {
         } catch (err) {
             throw err;
         }
-    }
+    };
 
     postLogin = async (params) => {
         try {
@@ -37,6 +36,5 @@ class UserHttp extends Http {
             throw err;
         }
     };
-
 }
 export default UserHttp;

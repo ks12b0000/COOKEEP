@@ -2,6 +2,7 @@
   "name": "front",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://www.teamprojectvv.shop",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^35.3.2",
     "@ckeditor/ckeditor5-react": "^5.0.3",
@@ -49,6 +50,8 @@
       "last 1 safari version"
     ]
   },
+
+
   "devDependencies": {
     "cross-env": "^7.0.3",
     "universal-cookie": "^4.0.4"
