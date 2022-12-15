@@ -6,12 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.BoardReadResponse;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.domain.Board;
+import teamproject.backend.domain.BoardLike;
 import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
 import teamproject.backend.foodCategory.FoodCategoryRepository;
+import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
-import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
+import teamproject.backend.user.dto.LoginResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final FoodCategoryRepository foodCategoryRepository;
+    private final LikeBoardRepository likeBoardRepository;
 
     @Override
     @Transactional
@@ -95,11 +98,40 @@ public class BoardServiceImpl implements BoardService{
         boardRepository.delete(board.get());
     }
 
-
+    @Override
+    @Transactional
+    public String updateLikeOfBoard(Long board_id, User user) {
+        Board board = boardRepository.findById(board_id).orElseThrow(RuntimeException::new);
+        if (!hasLikeBoard(board, user)) {
+            board.increaseLikeCount();
+            return createLikeBoard(board, user);
+        }
+        board.decreaseLikeCount();
+        return removeLikeBoard(board, user);
+    }
 
     private int getStartIndex(int allCnt, int curPage){
         if(curPage < 1) return 0;
         if(allCnt < (curPage - 1) * 8) return (allCnt % 8) * 8;
         return (curPage - 1) * 8;
     }
+
+    public boolean hasLikeBoard(Board board, User user) {
+        return likeBoardRepository.findByBoardAndUser(board, user).isPresent();
+    }
+
+    public String createLikeBoard(Board board, User user) {
+        BoardLike boardLike = new BoardLike(board, user); // true 처리
+        likeBoardRepository.save(boardLike);
+        return "좋아요 누르기 성공.";
+    }
+
+    public String removeLikeBoard(Board board, User user) {
+        BoardLike boardLike = likeBoardRepository.findByBoardAndUser(board, user).orElseThrow(() -> {
+            throw new BaseException(NOT_LIKE_BOARD);
+        });
+        likeBoardRepository.delete(boardLike);
+        return "좋아요 취소 성공.";
+    }
+
 }
