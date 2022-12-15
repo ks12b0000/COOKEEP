@@ -3,8 +3,8 @@ import Http from "./http";
 class UserHttp extends Http {
     postSignUp = async (params) => {
         try {
-            const { data } = await this.axios.get("user/join", params);
-            return data;
+            const res = await this.axios.get('user/join',params);
+            return res;
         } catch (err) {
             throw err;
         }
@@ -12,8 +12,8 @@ class UserHttp extends Http {
 
     getCheckUsername = async (username) => {
         try {
-            const data = await this.axios.get(`user/duplicate?username=${username}`);
-            return data;
+            const res = await this.axios.get(`user/duplicate?username=${username}`);
+            return res;
         } catch (err) {
             throw err;
         }
@@ -21,8 +21,17 @@ class UserHttp extends Http {
 
     postLogin = async (params) => {
         try {
-            const data = await this.axios.post("user/login", params);
-            return data;
+            const res = await this.axios.post('user/login', params);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    getLogout = async () => {
+        try {
+            const res = await this.axios.get('user/logout');
+            return res;
         } catch (err) {
             throw err;
         }

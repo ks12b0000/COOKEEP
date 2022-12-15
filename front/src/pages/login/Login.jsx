@@ -20,16 +20,18 @@ function Login() {
     const onLogin = async (e) => {
         e.preventDefault();
 
+        const body = {
+            username: UserName,
+            password: Password,
+            autoLogin: AutoLogin,
+        }
+
         if (!(UserName && Password)) {
             alert("모든 값을 채워주세요.");
         } else {
             try {
-                const res = await userHttp.postLogin({
-                    username: UserName,
-                    password: Password,
-                    autoLogin: AutoLogin
-                });
-                console.log();
+                const res = await userHttp.postLogin(body);
+                console.log(res);
 
                 //로그인 성공 시 토큰을 쿠키에 담아줌
                 if (res.data.code === 1000) {
