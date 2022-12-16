@@ -12,17 +12,18 @@ import Category2 from "./pages/category2/Category2";
 import Detail from "./components/category1/detail/Detail";
 import Writing from "./components/category1/writing/Writing";
 import CategoryRouter from "./router/category1/CategoryRouter";
+import KaKaoLogin from "./pages/login/KakaoLogin";
+import UserHttp from "./http/userHttp";
 
 function App() {
     const user = useSelector((state) => state);
-
-    useEffect(() => {}, []);
-
+    
     return (
         <>
             {/*라우터관리*/}
             <Routes>
                 <Route path="/login" element={<Login />}></Route>
+                <Route path="/callback/kakao" element={<KaKaoLogin />}></Route>
                 <Route path="/myPage" element={<MyPage />}></Route>
                 <Route path="/sign" element={<SignUp />}></Route>
                 <Route path="/" element={<Home />}></Route>

@@ -10,6 +10,10 @@ import { setCookie } from "../../until/cookie";
 const userHttp = new UserHttp();
 
 function Login() {
+
+    //카카오 로그인 요청 주소
+    const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_KEY}&redirect_uri=https://localhost:3000/callback/kakao&response_type=code
+    `
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -17,7 +21,8 @@ function Login() {
     const [Password, setPassword] = useState("");
     const [AutoLogin, setAutoLogin] = useState(false);
 
-    const onLogin = async (e) => {
+    // 일반 로그인 동작 수행 함수
+    const onLogin = async(e) => {
         e.preventDefault();
 
         const body = {
@@ -30,10 +35,10 @@ function Login() {
             alert("모든 값을 채워주세요.");
         } else {
             try {
+                //로그인
                 const res = await userHttp.postLogin(body);
                 console.log(res);
 
-                //로그인 성공 시 토큰을 쿠키에 담아줌
                 if (res.data.code === 1000) {
                     setCookie("accesstoken", res.headers.accesstoken);
                     setCookie("refreshtoken", res.headers.refreshtoken);
@@ -80,10 +85,10 @@ function Login() {
                             <img src="/image/naver.png" alt="naver-logo" />
                             <div>네이버로 시작하기</div>
                         </OtherLogin>
-                        <OtherLogin>
+                        <a href={KakaoURL}><OtherLogin>
                             <img src="/image/kakao.png" alt="kakao-logo" />
                             <div>카카오로 시작하기</div>
-                        </OtherLogin>
+                        </OtherLogin></a>
                         <OtherLogin>
                             <img src="/image/google.png" alt="google-logo" />
                             <div>구글로 시작하기</div>
@@ -202,6 +207,7 @@ const OtherLogin = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
     img {
         width: 50px;
         height: 50px;
