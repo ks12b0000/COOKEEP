@@ -40,6 +40,8 @@ public enum BaseExceptionStatus {
     //[4090 ~] 카테고리 관련 에러코드
     NOT_EXIST_CATEGORY(4090, "존재하지 않는 카테고리입니다."),
 
+    EXIST_CATEGORY(4091, "존재하는 카테고리입니다."),
+
     // 쿠키, 토큰, 인증 관련 에러코드
     JWT_TOKEN_EXPIRE(5002, "JWT 토큰 만료되었습니다."),
     JWT_TOKEN_INVALID(5003,"잘못된 JWT 토큰입니다."),

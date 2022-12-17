@@ -52,6 +52,12 @@ public class Board{
         this.liked = 0;
     }
 
+    public void update(String title, String text, String thumbnail){
+        this.thumbnail = thumbnail;
+        this.title = title;
+        this.text = text;
+    }
+
     public void increaseLikeCount() {
         this.liked += 1;
     }

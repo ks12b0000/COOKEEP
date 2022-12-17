@@ -20,18 +20,57 @@ public class BoardController {
     private final BoardService boardService;
     private final UserService userService;
 
+    /**
+     * 글 작성
+     * [POST] /auth/board/write
+     * @param boardWriteRequest
+     * @return
+     */
     @PostMapping("/auth/board/write")
     public BaseResponse board_write(@Validated(ValidationSequence.class) @RequestBody BoardWriteRequest boardWriteRequest){
         boardService.save(boardWriteRequest);
         return new BaseResponse("성공적으로 글이 작성됐습니다.");
     }
 
+    /**
+     * 카테고리 글 목록 조회
+     * [GET] /board/list
+     * @param category
+     * @return
+     */
     @GetMapping("/board/list")
-    public BaseResponse<List<BoardReadResponse>> board_list(@RequestParam String category){
-        List<BoardReadResponse> pages = boardService.getBoards(category);
+    public BaseResponse<List<BoardReadResponse>> board_list_by_category(@RequestParam String category){
+        List<BoardReadResponse> pages = boardService.findByCategory(category);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
+    /**
+     * 전체 글 조회
+     * @return
+     */
+    @GetMapping("board/list")
+    public BaseResponse<List<BoardReadResponse>> board_list_all(){
+        List<BoardReadResponse> pages = boardService.findAll();
+        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    }
+
+    /**
+     * 회원 글 목록 조회
+     * @param user_id
+     * @return
+     */
+    @GetMapping("/board/list")
+    public BaseResponse<List<BoardReadResponse>> board_list_by_user(@RequestParam Long user_id){
+        List<BoardReadResponse> pages = boardService.findByUserId(user_id);
+        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    }
+
+    /**
+     * 글 단건 조회
+     * [GET] /board
+     * @param board_id
+     * @return
+     */
     @GetMapping("/board")
     public BaseResponse<BoardReadResponse> search_board(@RequestParam Long board_id){
         BoardReadResponse boardReadResponse = boardService.findById(board_id);
@@ -53,12 +92,24 @@ public class BoardController {
         return new BaseResponse("좋아요 성공.", boardService.updateLikeOfBoard(board_id, user));
     }
 
+    /**
+     * 글 삭제
+     * [DELETE] /board
+     * @param board_id
+     * @param user_id
+     * @return
+     */
     @DeleteMapping("/board")
     public BaseResponse delete_board(@RequestParam Long board_id, @RequestParam Long user_id){
         boardService.delete(board_id, user_id);
         return new BaseResponse<>("성공적으로 글을 삭제했습니다.");
     }
 
+    /**
+     * 섬네일 오류 글 전체 삭제
+     * [DELETE] /board/thumbnail-err
+     * @return
+     */
     @DeleteMapping("/board/thumbnail-err")
     public BaseResponse delete_err_thumbnail_board(){
         boardService.delete_err_thumbnail();

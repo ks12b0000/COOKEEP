@@ -11,13 +11,15 @@ import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
 import teamproject.backend.foodCategory.FoodCategoryRepository;
 import teamproject.backend.imageFile.ImageFileRepository;
+import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseExceptionStatus;
+import teamproject.backend.response.BaseResponse;
 import teamproject.backend.user.UserRepository;
-import teamproject.backend.user.dto.LoginResponse;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +33,9 @@ public class BoardServiceImpl implements BoardService{
     private final UserRepository userRepository;
     private final FoodCategoryRepository foodCategoryRepository;
     private final LikeBoardRepository likeBoardRepository;
-
     private final ImageFileRepository imageFileRepository;
+
+    private final ImageFileService imageFileService;
 
     @Override
     @Transactional
@@ -51,11 +54,8 @@ public class BoardServiceImpl implements BoardService{
         //만약 글에 섬네일 설정이 안되어 있으면 기본값 넣기
         if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
 
-
-
         //글 생성
         Board board = new Board(foodCategory, boardWriteRequest, user.get());
-
 
         //글 저장
         boardRepository.save(board);
@@ -75,7 +75,32 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<BoardReadResponse> getBoards(String category) {
+    public List<BoardReadResponse> findByUserId(Long user_id) {
+        List<Board> boards = boardRepository.findByUser_id(user_id);
+
+        List<BoardReadResponse> list = new ArrayList<>();
+        for(Board board : boards){
+            list.add(new BoardReadResponse(board));
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<BoardReadResponse> findAll() {
+        List<Board> boards = boardRepository.findAll();
+
+        List<BoardReadResponse> list = new ArrayList<>();
+        for(Board board : boards){
+            list.add(new BoardReadResponse(board));
+        }
+
+        return list;
+    }
+
+
+    @Override
+    public List<BoardReadResponse> findByCategory(String category) {
         //음식 카테고리 찾기
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(category);
         if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
@@ -95,6 +120,31 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
+    public void update(Long board_id, BoardWriteRequest boardWriteRequest){
+        Optional<Board> board = boardRepository.findById(board_id);
+
+        // 글 아이디 검증
+        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
+
+        //유저 검증
+        Optional<User> user = userRepository.findById(boardWriteRequest.getUser_id());
+        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+
+        //음식 카테고리 찾기
+        FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(boardWriteRequest.getCategory());
+        if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
+
+        //잘못된 섬네일 url 검증
+        if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
+
+        //만약 글에 섬네일 설정이 안되어 있으면 기본값 넣기
+        if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
+
+        board.get().update(boardWriteRequest.getTitle(), boardWriteRequest.getText(), boardWriteRequest.getThumbnail());
+    }
+
+    @Override
+    @Transactional
     public void delete(Long user_id, Long board_id) {
         //글 찾기
         Optional<Board> board = boardRepository.findById(board_id);
@@ -103,9 +153,27 @@ public class BoardServiceImpl implements BoardService{
         //유저가 맞는지 확인
         if(board.get().getUser().getId() != user_id) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
 
+        //글에 존재하는 사진 삭제
+        deleteImageAll(board.get());
+
         //글 삭제
         boardRepository.delete(board.get());
     }
+    private void deleteImageAll(Board board){
+        //섬네일 사진 삭제
+        String thumbnailURL = board.getThumbnail();
+        imageFileService.delete(thumbnailURL);
+
+        //글 속 사진 삭제 - 개발중
+        //List<String> imageUrlInText = getImageUrlInText(board.getText());
+    }
+
+    private List<String> getImageUrlInText(String text){
+        List<String> urls = new LinkedList<>();
+
+        return null;
+    }
+
 
     @Override
     @Transactional

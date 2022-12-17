@@ -7,16 +7,20 @@ import teamproject.backend.domain.User;
 import java.util.List;
 
 public interface BoardService {
-    public Long save(BoardWriteRequest boardWriteRequest);
+    Long save(BoardWriteRequest boardWriteRequest);
 
-    public BoardReadResponse findById(Long board_id);
+    BoardReadResponse findById(Long board_id);
+    List<BoardReadResponse> findByUserId(Long user_id);
 
-    public List<BoardReadResponse> getBoards(String category);
+    List<BoardReadResponse> findAll();
 
-    public void delete(Long user_id, Long board_id);
+    List<BoardReadResponse> findByCategory(String category);
+
+    void delete(Long user_id, Long board_id);
 
     void delete_err_thumbnail();
 
-    public String updateLikeOfBoard(Long board_id, User user);
+    String updateLikeOfBoard(Long board_id, User user);
 
+    public void update(Long board_id, BoardWriteRequest boardWriteRequest);
 }

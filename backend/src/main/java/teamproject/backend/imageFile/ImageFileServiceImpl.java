@@ -32,16 +32,21 @@ public class ImageFileServiceImpl implements ImageFileService{
     @Override
     @Transactional
     public ImageFileResponse save(MultipartFile multipartFile, Long user_id) throws IOException {
-
+        //유저 검증
         Optional<User> user = userRepository.findById(user_id);
         if(user.isEmpty()) throw new BaseException(BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS);
 
+        //파일 이름 변경(중복 방지)
         String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
 
+        //사진 변환
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(multipartFile.getInputStream().available());
 
+        //s3에 사진 저장
         amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
+
+        //DB에 사진 정보 저장
         ImageFile imageFile = new ImageFile(s3FileName, amazonS3.getUrl(bucket, s3FileName).toString(), user.get());
         imageFileRepository.save(imageFile);
 
@@ -56,7 +61,17 @@ public class ImageFileServiceImpl implements ImageFileService{
     }
 
     @Override
-    public void delete(String name) {
-        
+    @Transactional
+    public void delete(String url) {
+        //이름추출
+        int index = url.lastIndexOf("/");
+        String name = url.substring(index + 1);
+
+        //s3 삭제
+        amazonS3.deleteObject(bucket, name);
+
+        //DB 삭제
+        ImageFile imageFile = imageFileRepository.findByUrl(url);
+        imageFileRepository.delete(imageFile);
     }
 }
