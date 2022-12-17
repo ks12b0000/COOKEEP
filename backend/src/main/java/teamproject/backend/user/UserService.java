@@ -17,4 +17,6 @@ public interface UserService {
     public LoginResponse login(LoginRequest loginRequest, HttpServletResponse response);
 
     public void logout(HttpServletResponse response);
+
+    public User checkUserHasLogin(Cookie[] cookies);
 }

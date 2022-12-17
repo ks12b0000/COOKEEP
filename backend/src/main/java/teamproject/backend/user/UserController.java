@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
 import teamproject.backend.user.dto.GetUsernameSameRes;
@@ -128,8 +129,11 @@ public class UserController {
      * @return
      */
     @GetMapping("/auth/user/login")
-    public BaseResponse loginCheck() {
-        return new BaseResponse("로그인 된 유저입니다.");
+    public BaseResponse loginCheck(HttpServletRequest request) {
+
+        Cookie[] cookies = request.getCookies();
+        LoginResponse loginResponse = new LoginResponse(userService.checkUserHasLogin(cookies).getId());
+        return new BaseResponse("로그인 된 유저입니다.", loginResponse);
     }
 
     /**

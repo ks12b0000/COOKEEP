@@ -15,4 +15,7 @@ public interface BoardService {
     public void delete(Long user_id, Long board_id);
 
     void delete_err_thumbnail();
+
+    public String updateLikeOfBoard(Long board_id, User user);
+
 }

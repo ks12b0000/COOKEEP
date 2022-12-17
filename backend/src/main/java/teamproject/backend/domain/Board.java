@@ -2,6 +2,7 @@ package teamproject.backend.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import teamproject.backend.board.dto.BoardWriteRequest;
 
 import javax.persistence.*;
@@ -38,6 +39,9 @@ public class Board{
     @Column
     private String thumbnail;
 
+    @Column(nullable = true)
+    private Integer liked; // 좋아요 수
+
     public Board(FoodCategory foodCategory, BoardWriteRequest boardWriteRequest, User user) {
         this.category = foodCategory;
         this.title = boardWriteRequest.getTitle();
@@ -45,5 +49,14 @@ public class Board{
         this.user = user;
         this.createDate = new Date(System.currentTimeMillis());
         this.thumbnail = boardWriteRequest.getThumbnail();
+        this.liked = 0;
+    }
+
+    public void increaseLikeCount() {
+        this.liked += 1;
+    }
+
+    public void decreaseLikeCount() {
+        this.liked -= 1;
     }
 }
