@@ -5,15 +5,20 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.dto.BoardReadResponse;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
+import teamproject.backend.user.UserService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final UserService userService;
 
     @PostMapping("/auth/board/write")
     public BaseResponse board_write(@Validated(ValidationSequence.class) @RequestBody BoardWriteRequest boardWriteRequest){
@@ -42,6 +47,7 @@ public class BoardController {
      */
     @PostMapping("/auth/board/like/{board_id}")
     public BaseResponse likeBoard(@PathVariable Long board_id, HttpServletRequest request) {
+
         Cookie[] cookies = request.getCookies();
         User user = userService.checkUserHasLogin(cookies);
         return new BaseResponse("좋아요 성공.", boardService.updateLikeOfBoard(board_id, user));

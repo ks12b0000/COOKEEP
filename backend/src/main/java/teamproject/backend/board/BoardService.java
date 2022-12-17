@@ -2,6 +2,7 @@ package teamproject.backend.board;
 
 import teamproject.backend.board.dto.BoardReadResponse;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.domain.User;
 
 import java.util.List;
 

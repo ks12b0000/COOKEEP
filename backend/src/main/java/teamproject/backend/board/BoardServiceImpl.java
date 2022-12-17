@@ -10,6 +10,7 @@ import teamproject.backend.domain.BoardLike;
 import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
 import teamproject.backend.foodCategory.FoodCategoryRepository;
+import teamproject.backend.imageFile.ImageFileRepository;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseExceptionStatus;
