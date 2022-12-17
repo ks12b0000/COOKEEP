@@ -10,8 +10,10 @@ import teamproject.backend.domain.BoardLike;
 import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
 import teamproject.backend.foodCategory.FoodCategoryRepository;
+import teamproject.backend.imageFile.ImageFileRepository;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
+import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
 import teamproject.backend.user.dto.LoginResponse;
 
@@ -30,6 +32,8 @@ public class BoardServiceImpl implements BoardService{
     private final FoodCategoryRepository foodCategoryRepository;
     private final LikeBoardRepository likeBoardRepository;
 
+    private final ImageFileRepository imageFileRepository;
+
     @Override
     @Transactional
     public Long save(BoardWriteRequest boardWriteRequest){
@@ -41,8 +45,13 @@ public class BoardServiceImpl implements BoardService{
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(boardWriteRequest.getCategory());
         if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
 
+        //잘못된 섬네일 url 검증
+        if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
+
         //만약 글에 섬네일 설정이 안되어 있으면 기본값 넣기
         if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
+
+
 
         //글 생성
         Board board = new Board(foodCategory, boardWriteRequest, user.get());
@@ -108,6 +117,32 @@ public class BoardServiceImpl implements BoardService{
         }
         board.decreaseLikeCount();
         return removeLikeBoard(board, user);
+    }
+    @Override
+    @Transactional
+    public void delete_err_thumbnail(){
+        List<Board> list = boardRepository.findAll();
+
+        for(Board board : list){
+            if(isThumbnailErr(board.getThumbnail())){
+                System.out.println(board.getBoard_id());
+                boardRepository.delete(board);
+            }
+        }
+    }
+
+    private boolean isThumbnailErr(String thumbnail){
+        //url 주소 문제
+        if(!thumbnail.startsWith("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/")){
+            return true;
+        }
+
+        //이미지 파일 레포에 없는 경우
+        if(imageFileRepository.findByUrl(thumbnail) == null){
+            return true;
+        }
+
+        return false;
     }
 
     private int getStartIndex(int allCnt, int curPage){

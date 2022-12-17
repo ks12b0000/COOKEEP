@@ -9,7 +9,6 @@ import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
 import teamproject.backend.user.UserService;
-import teamproject.backend.user.dto.LoginResponse;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -48,8 +47,21 @@ public class BoardController {
      */
     @PostMapping("/auth/board/like/{board_id}")
     public BaseResponse likeBoard(@PathVariable Long board_id, HttpServletRequest request) {
+
         Cookie[] cookies = request.getCookies();
         User user = userService.checkUserHasLogin(cookies);
         return new BaseResponse("좋아요 성공.", boardService.updateLikeOfBoard(board_id, user));
+    }
+
+    @DeleteMapping("/board")
+    public BaseResponse delete_board(@RequestParam Long board_id, @RequestParam Long user_id){
+        boardService.delete(board_id, user_id);
+        return new BaseResponse<>("성공적으로 글을 삭제했습니다.");
+    }
+
+    @DeleteMapping("/board/thumbnail-err")
+    public BaseResponse delete_err_thumbnail_board(){
+        boardService.delete_err_thumbnail();
+        return new BaseResponse("성공적으로 해당 글을 삭제했습니다.");
     }
 }
