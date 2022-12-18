@@ -5,9 +5,11 @@ import teamproject.backend.foodCategory.dto.FoodCategoryResponse;
 import java.util.List;
 
 public interface FoodCategoryService {
-    public List<FoodCategoryResponse> getAll();
+    List<FoodCategoryResponse> getAll();
 
-    public Long save(String foodCategoryName);
+    Long save(String foodCategoryName);
 
-    public void delete(String foodCategoryName);
+    void delete(String foodCategoryName);
+
+    void change(String before, String after);
 }
