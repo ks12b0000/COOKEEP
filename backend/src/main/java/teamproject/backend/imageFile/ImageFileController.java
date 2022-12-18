@@ -26,7 +26,7 @@ public class ImageFileController {
     }
 
     @DeleteMapping("/image")
-    public BaseResponse imageFileDelete(@RequestParam String name){
+    public BaseResponse imageFileDelete(@RequestParam String url){
         return new BaseResponse("사진을 삭제했습니다. ");
     }
 }

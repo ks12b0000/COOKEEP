@@ -89,7 +89,7 @@ public class BoardController {
      * @param user_id
      * @return
      */
-    @DeleteMapping("/board")
+    @DeleteMapping("auth/board")
     public BaseResponse delete_board(@RequestParam Long board_id, @RequestParam Long user_id){
         boardService.delete(user_id, board_id);
         return new BaseResponse<>("성공적으로 글을 삭제했습니다.");
