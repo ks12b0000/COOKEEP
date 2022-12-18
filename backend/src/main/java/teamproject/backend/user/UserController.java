@@ -146,8 +146,14 @@ public class UserController {
         return new BaseResponse("로그아웃에 성공했습니다.");
     }
 
+    /**
+     * 아이디 찾기
+     * [POST] /user/find/id
+     * @param findIdRequest
+     * @return
+     */
     @PostMapping("/user/find/id")
-    public BaseResponse findByUserId(@RequestBody FindIdRequest findIdRequest) {
+    public BaseResponse findByUserId(@Validated(ValidationSequence.class) @RequestBody FindIdRequest findIdRequest) {
 
         userService.findByUserId(findIdRequest);
 
