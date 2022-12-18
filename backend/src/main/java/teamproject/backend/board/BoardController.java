@@ -45,22 +45,12 @@ public class BoardController {
     }
 
     /**
-     * 전체 글 조회
-     * @return
-     */
-    @GetMapping("board/list")
-    public BaseResponse<List<BoardReadResponse>> board_list_all(){
-        List<BoardReadResponse> pages = boardService.findAll();
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
-    }
-
-    /**
      * 회원 글 목록 조회
      * @param user_id
      * @return
      */
-    @GetMapping("/board/list")
-    public BaseResponse<List<BoardReadResponse>> board_list_by_user(@RequestParam Long user_id){
+    @GetMapping("/board/list/{user_id}")
+    public BaseResponse<List<BoardReadResponse>> board_list_by_user(@PathVariable Long user_id){
         List<BoardReadResponse> pages = boardService.findByUserId(user_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
@@ -101,7 +91,7 @@ public class BoardController {
      */
     @DeleteMapping("/board")
     public BaseResponse delete_board(@RequestParam Long board_id, @RequestParam Long user_id){
-        boardService.delete(board_id, user_id);
+        boardService.delete(user_id, board_id);
         return new BaseResponse<>("성공적으로 글을 삭제했습니다.");
     }
 

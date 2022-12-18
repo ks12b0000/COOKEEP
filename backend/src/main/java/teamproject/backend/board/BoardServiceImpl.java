@@ -14,8 +14,6 @@ import teamproject.backend.imageFile.ImageFileRepository;
 import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
-import teamproject.backend.response.BaseExceptionStatus;
-import teamproject.backend.response.BaseResponse;
 import teamproject.backend.user.UserRepository;
 
 import java.util.ArrayList;
@@ -156,14 +154,22 @@ public class BoardServiceImpl implements BoardService{
         //글에 존재하는 사진 삭제
         deleteImageAll(board.get());
 
+        //글에 좋아요 한 경우 삭제
+        List<BoardLike> likeList = likeBoardRepository.findByBoard(board.get());
+        for(BoardLike like : likeList){
+            likeBoardRepository.delete(like);
+        }
+
         //글 삭제
         boardRepository.delete(board.get());
     }
     private void deleteImageAll(Board board){
         //섬네일 사진 삭제
         String thumbnailURL = board.getThumbnail();
-        imageFileService.delete(thumbnailURL);
 
+        if(thumbnailURL != "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png") {
+            imageFileService.delete(thumbnailURL);
+        }
         //글 속 사진 삭제 - 개발중
         //List<String> imageUrlInText = getImageUrlInText(board.getText());
     }
@@ -193,13 +199,14 @@ public class BoardServiceImpl implements BoardService{
 
         for(Board board : list){
             if(isThumbnailErr(board.getThumbnail())){
-                System.out.println(board.getBoard_id());
-                boardRepository.delete(board);
+                delete(board.getUser().getId(), board.getBoard_id());
             }
         }
     }
 
     private boolean isThumbnailErr(String thumbnail){
+        if(thumbnail == "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png") return false;
+
         //url 주소 문제
         if(!thumbnail.startsWith("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/")){
             return true;

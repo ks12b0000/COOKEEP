@@ -2,6 +2,7 @@ package teamproject.backend.imageFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -63,15 +64,18 @@ public class ImageFileServiceImpl implements ImageFileService{
     @Override
     @Transactional
     public void delete(String url) {
+        //DB 삭제
+        ImageFile imageFile = imageFileRepository.findByUrl(url);
+        if(imageFile != null) {
+            imageFileRepository.delete(imageFile);
+            return;
+        }
+
         //이름추출
         int index = url.lastIndexOf("/");
         String name = url.substring(index + 1);
 
         //s3 삭제
         amazonS3.deleteObject(bucket, name);
-
-        //DB 삭제
-        ImageFile imageFile = imageFileRepository.findByUrl(url);
-        imageFileRepository.delete(imageFile);
     }
 }
