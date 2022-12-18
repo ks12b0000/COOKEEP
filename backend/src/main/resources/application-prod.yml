@@ -11,6 +11,14 @@ spring:
     url: ${url}
     username: ${username}
     password: ${password}
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: ${MASTER_EMAIL}
+    password: ${MASTER_EMAIL_PW}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
 
   jpa:
     hibernate:
@@ -38,6 +46,7 @@ NAVER_API_ID: ${NAVER_API_ID}
 NAVER_API_SECRET: ${NAVER_API_SECRET}
 GOOGLE_API_ID: ${GOOGLE_API_ID}
 GOOGLE_API_SECRET: ${GOOGLE_API_SECRET}
+JWT_SECRET_KEY: ${JWT_SECRET_KEY}
 
 logging:
   level:

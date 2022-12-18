@@ -1,24 +1,22 @@
 package teamproject.backend.user;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseException;
-import teamproject.backend.response.BaseResponse;
-import teamproject.backend.user.dto.JoinRequest;
-import teamproject.backend.user.dto.LoginRequest;
-import teamproject.backend.user.dto.LoginResponse;
-import teamproject.backend.user.dto.SocialUserInfo;
+import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
 import teamproject.backend.utils.JwtService;
 import teamproject.backend.utils.SHA256;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,6 +31,10 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final CookieService cookieService;
+    private final JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}")
+    private String from;
 
     /**
      * 회원가입
@@ -171,5 +173,32 @@ public class UserServiceImpl implements UserService, SocialUserService {
         }
 
         return user;
+    }
+
+    @Override
+    public void findByUserId(FindIdRequest findIdRequest) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        String email = findIdRequest.getEmail();
+
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new BaseException(USER_NOT_EXIST);
+        }
+
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            mimeMessageHelper.setFrom(from);
+            mimeMessageHelper.setTo(user.getEmail());
+            mimeMessageHelper.setSubject("[오늘 뭐먹지] 아이디 찾기 안내");
+            mimeMessageHelper.setText("<div style='text-align: center;'><h2>안녕하세요. 오늘 뭐먹지 입니다.</h2> <p>귀하께서 요청하신 아이디 찾기 수신을 위해 발송된 메일입니다.</p> <p>유저 아이디는 <Strong>" + user.getUsername() + "</Strong> 입니다.</p> <p>감사합니다.</p></div>", true);
+
+            javaMailSender.send(mimeMessage);
+            log.info("sent username: {}", user.getUsername());
+        } catch (MessagingException e) {
+            log.error("[EmailService.send()] error {}", e.getMessage());
+            throw new BaseException(EMAIL_ERROR);
+        }
     }
 }

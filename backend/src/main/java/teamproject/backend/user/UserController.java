@@ -4,13 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
-import teamproject.backend.user.dto.GetUsernameSameRes;
-import teamproject.backend.user.dto.JoinRequest;
-import teamproject.backend.user.dto.LoginRequest;
-import teamproject.backend.user.dto.LoginResponse;
+import teamproject.backend.user.dto.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -148,5 +144,13 @@ public class UserController {
         userService.logout(response);
 
         return new BaseResponse("로그아웃에 성공했습니다.");
+    }
+
+    @PostMapping("/user/find/id")
+    public BaseResponse findByUserId(@RequestBody FindIdRequest findIdRequest) {
+
+        userService.findByUserId(findIdRequest);
+
+        return new BaseResponse("아이디 찾기에 성공했습니다.");
     }
 }

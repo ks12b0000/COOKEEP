@@ -44,7 +44,10 @@ public enum BaseExceptionStatus {
     JWT_TOKEN_EXPIRE(5002, "JWT 토큰 만료되었습니다."),
     JWT_TOKEN_INVALID(5003,"잘못된 JWT 토큰입니다."),
     UNAUTHORIZED_USER_ACCESS(5004, "인증되지 않은 유저의 접근입니다."),
-    DO_NOT_LOGIN_USER(5005, "로그인이 필요한 요청입니다.");
+    DO_NOT_LOGIN_USER(5005, "로그인이 필요한 요청입니다."),
+
+    // 메일 인증 에러코드
+    EMAIL_ERROR(6001, "이메일 전송에 실패했습니다.");
 
     private final int code;
     private final String message;
