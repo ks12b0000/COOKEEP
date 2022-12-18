@@ -31,6 +31,8 @@ jobs:
         spring.datasource.url: ${{ secrets.DB_URL }} 
         spring.datasource.username: ${{ secrets.DB_USERNAME }} 
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+        spring.mail.username: ${{secrets.MASTER_EMAIL}}
+        spring.mail.password: ${{secrets.MASTER_EMAIL_PW}}
         cloud.aws.credentials.accessKey: ${{secrets.S3_ACCESSKEY}}
         cloud.aws.credentials.secretKey: ${{secrets.S3_SECRETKEY}}
         cloud.aws.s3.bucket: ${{secrets.S3_BUCKET}}
@@ -39,6 +41,7 @@ jobs:
         NAVER_API_SECRET: ${{secrets.NAVER_API_SECRET}}
         GOOGLE_API_ID: ${{secrets.GOOGLE_API_ID}}
         GOOGLE_API_SECRET: ${{secrets.GOOGLE_API_SECRET}}
+        JWT_SECRET_KEY: ${{secrets.JWT_SECRET_KEY}}
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       working-directory: ${{ env.working-directory }}
