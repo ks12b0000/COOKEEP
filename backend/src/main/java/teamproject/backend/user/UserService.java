@@ -22,4 +22,6 @@ public interface UserService {
     public User checkUserHasLogin(Cookie[] cookies);
 
     public void findByUserId(FindIdRequest findIdRequest);
+
+    public boolean checkEmailDuplicate(String email);
 }

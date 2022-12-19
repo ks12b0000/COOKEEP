@@ -175,6 +175,10 @@ public class UserServiceImpl implements UserService, SocialUserService {
         return user;
     }
 
+    /**
+     * 아이디 찾기
+     * @param findIdRequest
+     */
     @Override
     public void findByUserId(FindIdRequest findIdRequest) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -199,6 +203,22 @@ public class UserServiceImpl implements UserService, SocialUserService {
         } catch (MessagingException e) {
             log.error("[EmailService.send()] error {}", e.getMessage());
             throw new BaseException(EMAIL_ERROR);
+        }
+    }
+
+    /**
+     * 이메일 중복체크
+     * @param email
+     * @return
+     */
+    @Override
+    public boolean checkEmailDuplicate(String email) {
+        User user = userRepository.findByEmail(email);
+
+        if(user == null){
+            return false; // 중복 X
+        } else {
+            throw new BaseException(DUPLICATE_EMAIL); // 중복 O
         }
     }
 }

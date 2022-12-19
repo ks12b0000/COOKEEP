@@ -45,11 +45,11 @@ public class UserController {
      * @return
      */
     @GetMapping("/user/duplicate")
-    public BaseResponse<GetUsernameSameRes> checkIdDuplicate(String username) {
+    public BaseResponse<GetUserSameRes> checkIdDuplicate(String username) {
 
         boolean idDuplicate = userService.checkIdDuplicate(username);
 
-        GetUsernameSameRes res = new GetUsernameSameRes(idDuplicate);
+        GetUserSameRes res = new GetUserSameRes(idDuplicate);
         return new BaseResponse<>("사용 가능한 아이디 입니다.", res);
     }
 
@@ -158,5 +158,21 @@ public class UserController {
         userService.findByUserId(findIdRequest);
 
         return new BaseResponse("아이디 찾기에 성공했습니다.");
+    }
+
+    /**
+     * 이메일 중복체크
+     * [GET] /user/email/duplicate?email=
+     *
+     * @param email
+     * @return
+     */
+    @GetMapping("/user/email/duplicate")
+    public BaseResponse<GetUserSameRes> checkEmailDuplicate(String email) {
+
+        boolean emailDuplicate = userService.checkEmailDuplicate(email);
+
+        GetUserSameRes res = new GetUserSameRes(emailDuplicate);
+        return new BaseResponse<>("사용 가능한 이메일 입니다.", res);
     }
 }
