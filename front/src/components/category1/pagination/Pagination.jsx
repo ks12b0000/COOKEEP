@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 import styled from "@emotion/styled";
 
+<<<<<<< HEAD
 const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, paginate }) => {
     const numbersPage = Math.ceil(totalPost / showPost);
 
@@ -37,6 +38,8 @@ const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, pagi
     );
 };
 
+=======
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 const PaginationNav = styled.nav`
     display: flex;
     justify-content: center;
@@ -71,4 +74,42 @@ const PaginationNav = styled.nav`
         }
     }
 `;
+<<<<<<< HEAD
+=======
+const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, paginate }) => {
+    const numbersPage = Math.ceil(totalPost / showPost);
+
+    const numberCalculator = useCallback(
+        (numbersPage) => {
+            const pageNumbers = [];
+            for (let i = 1; i <= numbersPage; i++) {
+                pageNumbers.push(i);
+            }
+            return pageNumbers;
+        },
+        [numbersPage]
+    );
+    const pageCount = useMemo(() => numberCalculator(numbersPage), [numbersPage]);
+
+    return (
+        <PaginationNav>
+            {currentPage !== 1 && (
+                <li>
+                    <button onClick={() => prevPage()}>{"<"}</button>
+                </li>
+            )}
+            {pageCount.map((num, idx) => (
+                <li key={num} aria-current={currentPage === idx + 1 ? "page" : null}>
+                    <a onClick={() => paginate(num)}>{num}</a>
+                </li>
+            ))}
+            {pageCount.length !== currentPage && (
+                <li>
+                    <button onClick={() => nextPage()}>{">"}</button>
+                </li>
+            )}
+        </PaginationNav>
+    );
+};
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 export default Pagination;

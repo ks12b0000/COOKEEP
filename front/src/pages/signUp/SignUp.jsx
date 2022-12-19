@@ -42,9 +42,15 @@ function SignUp() {
     //아이디 중복체크 실행 함수
     const onCheckUserName = async(e)=>{
         e.preventDefault();
+<<<<<<< HEAD
 
         try {
             const {res} = await userHttp.getCheckUsername(UserName)
+=======
+        console.log(UserName);
+        try {
+            const res = await userHttp.getCheckUsername(UserName)
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
             if(!res.data.result.isDuplicate){
                 setCheckUserName(true)
                 alert(res.data.message)

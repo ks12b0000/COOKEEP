@@ -3,17 +3,28 @@ import styled from "@emotion/styled";
 import CateItem from "../../components/category1/cateItem/CateItem";
 import Buttons from "../../components/buttons/Buttons";
 import { useDispatch, useSelector } from "react-redux";
+<<<<<<< HEAD
 import {  Routes, Route } from "react-router";
 import {Link} from 'react-router-dom'
+=======
+import { Link, Routes, Route } from "react-router-dom";
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 import Detail from "../../components/category1/detail/Detail";
 import Writing from "../../components/category1/writing/Writing";
 
 const Container = styled.section`
     width: 1200px;
     margin: 0 auto;
+<<<<<<< HEAD
   
 `;
 const Category1Title = styled.div`
+=======
+    height: 1000px;
+`;
+const Category1Title = styled.div`
+    margin-top: 70px;
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
     padding: 50px;
     h1 {
         font-size: 24px;

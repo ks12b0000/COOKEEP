@@ -1,16 +1,31 @@
 import { useState } from "react";
+<<<<<<< HEAD
 import {  useNavigate } from "react-router";
 import {Link} from 'react-router-dom'
+=======
+import { Link, useNavigate } from "react-router-dom";
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/reducer/userSlice";
 import styled from "@emotion/styled";
 import Header from "../../components/layout/header/Header";
 import UserHttp from "../../http/userHttp";
+<<<<<<< HEAD
 
+=======
+import { setCookie } from "../../until/cookie";
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 
 const userHttp = new UserHttp();
 
 function Login() {
+<<<<<<< HEAD
+=======
+
+    //카카오 로그인 요청 주소
+    const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_KEY}&redirect_uri=https://localhost:3000/callback/kakao&response_type=code
+    `
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -18,7 +33,12 @@ function Login() {
     const [Password, setPassword] = useState("");
     const [AutoLogin, setAutoLogin] = useState(false);
 
+<<<<<<< HEAD
     const onLogin = async (e) => {
+=======
+    // 일반 로그인 동작 수행 함수
+    const onLogin = async(e) => {
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
         e.preventDefault();
 
         const body = {
@@ -31,6 +51,7 @@ function Login() {
             alert("모든 값을 채워주세요.");
         } else {
             try {
+<<<<<<< HEAD
                 const res = await userHttp.postLogin(body);
                 console.log(res);
 
@@ -38,6 +59,15 @@ function Login() {
                 if (res.data.code === 1000) {
                     // setCookie("accesstoken", res.headers.accesstoken);
                     // setCookie("refreshtoken", res.headers.refreshtoken);
+=======
+                //로그인
+                const res = await userHttp.postLogin(body);
+                console.log(res);
+
+                if (res.data.code === 1000) {
+                    setCookie("accesstoken", res.headers.accesstoken);
+                    setCookie("refreshtoken", res.headers.refreshtoken);
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 
                     //리덕스 userReducer에 값을 넣어줌
                     dispatch(
@@ -81,10 +111,17 @@ function Login() {
                             <img src="/image/naver.png" alt="naver-logo" />
                             <div>네이버로 시작하기</div>
                         </OtherLogin>
+<<<<<<< HEAD
                         <OtherLogin>
                             <img src="/image/kakao.png" alt="kakao-logo" />
                             <div>카카오로 시작하기</div>
                         </OtherLogin>
+=======
+                        <a href={KakaoURL}><OtherLogin>
+                            <img src="/image/kakao.png" alt="kakao-logo" />
+                            <div>카카오로 시작하기</div>
+                        </OtherLogin></a>
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
                         <OtherLogin>
                             <img src="/image/google.png" alt="google-logo" />
                             <div>구글로 시작하기</div>
@@ -203,6 +240,10 @@ const OtherLogin = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+<<<<<<< HEAD
+=======
+    cursor: pointer;
+>>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
     img {
         width: 50px;
         height: 50px;
