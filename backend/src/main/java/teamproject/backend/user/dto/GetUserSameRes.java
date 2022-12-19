@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetUsernameSameRes {
+public class GetUserSameRes {
 
     @JsonProperty("isDuplicate")
     private boolean duplicate; // false = 중복 X, 예외 터지면 = 중복 O

@@ -1,6 +1,7 @@
 package teamproject.backend.user;
 
 import teamproject.backend.domain.User;
+import teamproject.backend.user.dto.FindIdRequest;
 import teamproject.backend.user.dto.JoinRequest;
 import teamproject.backend.user.dto.LoginRequest;
 import teamproject.backend.user.dto.LoginResponse;
@@ -19,4 +20,8 @@ public interface UserService {
     public void logout(HttpServletResponse response);
 
     public User checkUserHasLogin(Cookie[] cookies);
+
+    public void findByUserId(FindIdRequest findIdRequest);
+
+    public boolean checkEmailDuplicate(String email);
 }

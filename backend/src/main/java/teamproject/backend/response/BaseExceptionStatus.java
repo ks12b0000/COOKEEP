@@ -11,8 +11,8 @@ public enum BaseExceptionStatus {
     DUPLICATE_ID(3001, "중복된 아이디가 있습니다."),
     FAIL_ENCRYPT_PASSWORD(3002, "비밀번호 암호화에 실패했습니다."),
     LOGIN_USER_NOT_EXIST(3003, "아이디, 또는 비밀번호가 일치하지 않습니다."),
-    NOT_LOGIN_USER(3004, "로그인하지 않은 유저입니다."),
     USER_NOT_EXIST(3005, "존재하지 않는 유저입니다."),
+    DUPLICATE_EMAIL(3001, "중복된 이메일이 있습니다."),
     KAKAO_GET_TOKEN_FAIL(3101, "예상치 못한 이유로 카카오 토큰 받기에 실패했습니다"),
     KAKAO_GET_USER_INFO_FAIL(3102, "예상치 못한 이유로 카카오 사용자 정보 가져오기에 실패했습니다"),
     NAVER_GET_TOKEN_FAIL(3103, "예상치 못한 이유로 네이버 토큰 받기에 실패했습니다"),
@@ -46,7 +46,10 @@ public enum BaseExceptionStatus {
     JWT_TOKEN_EXPIRE(5002, "JWT 토큰 만료되었습니다."),
     JWT_TOKEN_INVALID(5003,"잘못된 JWT 토큰입니다."),
     UNAUTHORIZED_USER_ACCESS(5004, "인증되지 않은 유저의 접근입니다."),
-    DO_NOT_LOGIN_USER(5005, "로그인이 필요한 요청입니다.");
+    DO_NOT_LOGIN_USER(5005, "로그인이 필요한 요청입니다."),
+
+    // 메일 인증 에러코드
+    EMAIL_ERROR(6001, "이메일 전송에 실패했습니다.");
 
     private final int code;
     private final String message;
