@@ -5,80 +5,9 @@ import { useState, useEffect } from "react";
 import categoryHttp from "../../../http/categoryHttp";
 import IsNonData from "../../isNonData/IsNonData";
 
-<<<<<<< HEAD
 const CategoryHttp = new categoryHttp();
 function CateItem() {
     const [posts, setPosts] = useState([]);
-=======
-const Ul = styled.ul`
-    margin: 20px 0 30px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: start;
-    li {
-        margin-top: 20px;
-        width: 23%;
-        height: 250px;
-        cursor: pointer;
-    }
-`;
-const Thumbnail = styled.div`
-    width: 250px;
-    height: 200px;
-    border-radius: 4px;
-    img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-`;
-
-const TextBox = styled.div`
-    margin-top: 10px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    span {
-        width: 90%;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        font-size: 16px;
-        font-weight: 500;
-    }
-`;
-
-const SelectBox = styled.div`
-    position: relative;
-    width: 100%;
-    select {
-        padding: 10px 15px;
-        border: 1px solid #ccc;
-        position: absolute;
-        right: 0;
-        top: -25px;
-        border-radius: 5px;
-        width: 150px;
-        -webkit-appearance: none;
-        background: url("https://i.imgur.com/e60gpgR.png") 88%/12px no-repeat;
-        cursor: pointer;
-        &:focus {
-            outline: none;
-        }
-    }
-`;
-
-const CategoryHttp = new categoryHttp();
-function CateItem() {
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(false);
->>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
     const [currentPage, setCurrentPage] = useState(1);
     const [showPost, setShowPost] = useState(8);
     const [totalPost, setTotalPost] = useState(0);
@@ -120,7 +49,6 @@ function CateItem() {
                 </select>
             </SelectBox>
             <Ul>
-<<<<<<< HEAD
                 {
                     posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다." /> :
                         currentPost.map((category, idx) => (
@@ -136,31 +64,11 @@ function CateItem() {
                                 </Link>
                             </li>
                         ))}
-=======
-                {posts.length === 0 ? (
-                    <IsNonData text="데이터가 존재하지않습니다." />
-                ) : (
-                    currentPost.map((category, idx) => (
-                        <li key={idx + 1}>
-                            <Link to={`/category1/${category.board_id}`}>
-                                <Thumbnail>
-                                    <img src={category.thumbnail} alt="https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" />
-                                </Thumbnail>
-                                <TextBox>
-                                    <span>{category.title}</span>
-                                    <span>{category.text.replace("&nbsp;", "")}</span>
-                                </TextBox>
-                            </Link>
-                        </li>
-                    ))
-                )}
->>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
             </Ul>
             <div>{showPagination()}</div>
         </>
     );
 }
-<<<<<<< HEAD
 
 const Ul = styled.ul`
     margin: 20px 0 30px;
@@ -224,6 +132,4 @@ const SelectBox = styled.div`
     }
 `;
 
-=======
->>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 export default CateItem;
