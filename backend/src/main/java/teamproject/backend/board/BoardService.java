@@ -32,7 +32,7 @@ public interface BoardService {
 
     void updateComment(BoardCommentUpdateRequest request);
 
-    void deleteComment(Long comment_id);
+    void deleteComment(Long comment_id, Long user_id);
 
     List<BoardCommentResponse> findCommentByBoardId(Long board_id);
 

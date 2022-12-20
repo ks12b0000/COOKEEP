@@ -180,11 +180,14 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void deleteComment(Long comment_id) {
+    public void deleteComment(Long comment_id, Long user_id) {
         Optional<BoardComment> comment = boardCommentRepository.findById(comment_id);
 
         //댓글 존재 유무 확인
         if(comment.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);// 추후 변경 예정
+
+        //댓글 본인 확인
+        if(comment.get().getUser().getId() != user_id) throw new BaseException(USER_NOT_EXIST);
 
         //reply 삭제
 
