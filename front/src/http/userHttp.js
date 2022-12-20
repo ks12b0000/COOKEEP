@@ -39,14 +39,14 @@ class UserHttp extends Http {
     };
 
     // 로그인 여부 확인
-    getisLoggedIn = async () => {
-        try {
-            const res = await this.axios.get('auth/user/login');
+    postLogin = async (params) => {
+        try{
+            const res = await this.axios.post('user/login',params)
             return res;
-        } catch (err) {
+        }catch (err){
             throw err;
         }
-    };
+    }
 
 
     getLogout = async () => {

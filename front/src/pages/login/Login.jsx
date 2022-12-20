@@ -46,13 +46,8 @@ function Login() {
                 if (res.data.code === 1000) {
                     // setCookie("accesstoken", res.headers.accesstoken);
                     // setCookie("refreshtoken", res.headers.refreshtoken);
-
                 const res = await userHttp.postLogin(body);
                 console.log(res);
-
-
-
-
                     //리덕스 userReducer에 값을 넣어줌
                     dispatch(
                         loginUser({
