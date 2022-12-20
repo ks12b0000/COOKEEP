@@ -6,9 +6,6 @@ import java.time.Duration;
 
 public class JwtData {
 
-    @Value("${JWT_SECRET_KEY}")
-    public static String JWT_SECRET_KEY;
-
     // 밀리초 = 1/1000, 30분 = 1800초
     // Duration.ofMinutes(30).toMillis() = 1,800,000 = 30분을 밀리초로 환산한 것
     public static long ACCESS_TOKEN_EXPIRE_MILLIS = Duration.ofHours(1).toMillis();

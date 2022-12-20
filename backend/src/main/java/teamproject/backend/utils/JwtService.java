@@ -2,6 +2,7 @@ package teamproject.backend.utils;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import teamproject.backend.response.BaseException;
 
@@ -15,6 +16,9 @@ import static teamproject.backend.utils.JwtData.*;
 @Service
 public class JwtService {
 
+    @Value("${JWT_SECRET_KEY}")
+    private String JWT_SECRET_KEY;
+    
     // 엑세스토큰 생성
     public String createAccessToken(String username){
         Date now = new Date();
