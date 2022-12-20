@@ -222,10 +222,7 @@ const OtherLogin = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-<<<<<<< HEAD
-=======
     cursor: pointer;
->>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
     img {
         width: 50px;
         height: 50px;

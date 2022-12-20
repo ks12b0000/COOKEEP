@@ -59,6 +59,8 @@ function SignUp() {
             console.log(err);
             alert(err.response.data.message)
         }
+    }catch (err){
+        console.log(err)}
     }
 
     return (

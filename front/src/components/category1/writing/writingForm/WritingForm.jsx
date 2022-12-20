@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-<<<<<<< HEAD
 import WriteHttp from "../../../../http/writeHttp";
 import {useSelector} from "react-redux";
 const writeHttp = new WriteHttp();
@@ -113,10 +112,6 @@ function WritingForm() {
         </>
     );
 }
-=======
-import CategoryHttp from "../../../../http/categoryHttp";
-import axios from "axios";
->>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 
 //스타일
 const InputBox = styled.fieldset`
@@ -153,10 +148,6 @@ const InputBox = styled.fieldset`
         }
     }
 `;
-<<<<<<< HEAD
-=======
-
->>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 const Ckedit = styled.div`
     height: 500px;
     margin-top: 20px;
@@ -220,132 +211,4 @@ const InputFile = styled.label`
     border-radius: 4px;
     cursor: pointer;
 `;
-<<<<<<< HEAD
-=======
-const categoryHttp = new CategoryHttp();
-function WritingForm() {
-    //hook from 가져오기
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors }
-    } = useForm();
-
-    const navigate = useNavigate();
-    const [text, setText] = useState("");
-    const [isError, setIsError] = useState(false);
-    const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
-    const [error, setError] = useState(false);
-
-    const imageChange = (e) => {
-        const files = e.target.files; // FileList 객체
-        if (files[0].size > 65000) {
-            alert("파일 크기 5메가 이상은안됩니다 ");
-            return false;
-        }
-        let formData = {
-            imageFile: files[0],
-            user_id: 5
-        };
-        // const fileReader = new FileReader();
-        // fileReader.readAsDataURL(files[0]);
-        // fileReader.onload = function (e) {
-        //     setImagePreview(e.currentTarget.result);
-        // };
-        axios
-            .post("https://www.teamprojectvv.shop/image/upload", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
-        // setImagePreview(URL.createObjectURL(files[0]));
-    };
-    useEffect(() => {
-        imagePreview === "" ? setError(true) : setError(false);
-    }, [imagePreview]);
-
-    const onSubmit = async (data) => {
-        data.user_id = 5;
-        if (text.length < 5) {
-            setIsError(true);
-            return 0;
-        } else {
-            setIsError(false);
-        }
-        data.text = text;
-        data.thumbnail = imagePreview;
-        if (error) {
-            alert("빈칸 없이 전부 입력해주세요 !!");
-            return false;
-        }
-        try {
-            // const { code } = await categoryHttp.submitWritingForm(data, {
-            //     headers: {
-            //         "Content-Type": "multipart/form-data"
-            //     }
-            // });
-            alert("글 작성이 완료되었습니다.");
-            navigate("/category1");
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <InputBox>
-                    <label htmlFor="">카테고리</label>
-                    <select name="category" defaultValue="category1" {...register("category")}>
-                        ><option value="카테고리1">카테고리1</option>
-                        <option value="카테고리3">카테고리3</option>
-                    </select>
-                </InputBox>
-                <InputBox>
-                    <label htmlFor="">제목</label>
-                    <input name="title" type="text" placeholder="제목을 입력해주세요" {...register("title", { required: true, minLength: 5 })} />
-                    {errors.title && <p style={{ color: "red", padding: " 0 20px" }}>최소 5자리를 입력해주세요</p>}
-                </InputBox>
-                <Upload>
-                    <label htmlFor="">썸네일</label>
-                    <InputFile htmlFor="input-file">파일 선택</InputFile>
-                    <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
-
-                    <IMGBOX>
-                        <img src={imagePreview} alt={imagePreview} />
-                    </IMGBOX>
-                </Upload>
-                {error && <p style={{ color: "red" }}>이미지를 업로드!!!</p>}
-                <InputBox>
-                    <label htmlFor="">본문</label>
-                    <Ckedit>
-                        <CKEditor
-                            name="ckeditor"
-                            editor={ClassicEditor}
-                            data=""
-                            config={{
-                                placeholder: "글을 입력해보세요!"
-                            }}
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setText(data.replace(/<[^>]*>?/g, "").replace(/\s/g, ""));
-                                text.length < 5 ? setIsError(true) : setIsError(false);
-                            }}
-                            required
-                        />
-                        {isError && <p style={{ color: "red", padding: " 10px 20px" }}>최소 5자리를 입력해주세요</p>}
-                    </Ckedit>
-                </InputBox>
-                <ButtonsWrap>
-                    <WritingButton onClick={() => navigate(-1)}>취소</WritingButton>
-                    <WritingButton type="submit">등록</WritingButton>
-                </ButtonsWrap>
-            </form>
-        </>
-    );
-}
->>>>>>> c895c0ef131ad3c7e020e886707b505ecbb5cbed
 export default WritingForm;
