@@ -65,7 +65,7 @@ function WritingForm() {
                 <InputBox>
                     <label htmlFor="">카테고리</label>
                     <select name="category" defaultValue="category1" {...register("category")}>
-                        ><option value="카테고리1">카테고리1</option>
+                        <option value="카테고리1">카테고리1</option>
                         <option value="카테고리3">카테고리3</option>
                     </select>
                 </InputBox>
