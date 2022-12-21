@@ -180,6 +180,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
      * @param findIdRequest
      */
     @Override
+    @Transactional
     public void findByUserId(FindIdRequest findIdRequest) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
