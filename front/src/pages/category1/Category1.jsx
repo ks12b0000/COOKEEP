@@ -11,6 +11,7 @@ import Writing from "../../components/category1/writing/Writing";
 const Container = styled.section`
     width: 1200px;
     margin: 0 auto;
+    margin-top: 100px;
   
 `;
 const Category1Title = styled.div`
