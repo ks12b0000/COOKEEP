@@ -175,4 +175,18 @@ public class UserController {
         GetUserSameRes res = new GetUserSameRes(emailDuplicate);
         return new BaseResponse<>("사용 가능한 이메일 입니다.", res);
     }
+
+    /**
+     * 비밀번호 찾기
+     * [POST] /user/find/password
+     * @param findPwRequest
+     * @return
+     */
+    @PostMapping("/user/find/password")
+    public BaseResponse findByUserPw(@Validated(ValidationSequence.class) @RequestBody FindPwRequest findPwRequest) {
+
+        userService.findByUserPw(findPwRequest);
+
+        return new BaseResponse("비밀번호 찾기에 성공했습니다.");
+    }
 }
