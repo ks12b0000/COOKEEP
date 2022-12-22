@@ -40,7 +40,7 @@ class UserHttp extends Http {
         } catch (err) {
             throw err;
         }
-    }
+    };
 
     // 일반 로그인
     postLogin = async (params) => {
@@ -62,6 +62,26 @@ class UserHttp extends Http {
         }
     };
 
+    // 구글 로그인
+    getGoogleLogin = async (code) => {
+        try {
+            const res = await this.axios.get(`user/login/google?code=${code}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    // 네이버 로그인
+    getNaverLogin = async (code, state) => {
+        try {
+            const res = await this.axios.get(`user/login/naver?code=${code}&state=${state}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
     // 로그인 여부 확인
     getisLoggedIn = async () => {
         try {
@@ -71,7 +91,6 @@ class UserHttp extends Http {
             throw err;
         }
     };
-
 
     // 로그아웃
     getLogout = async () => {
