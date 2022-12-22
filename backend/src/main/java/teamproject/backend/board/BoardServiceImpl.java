@@ -197,7 +197,10 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<BoardCommentResponse> findCommentByBoardId(Long board_id) {
-        List<BoardComment> comments = boardCommentRepository.findByBoard_id(board_id);
+        Optional<Board> board = boardRepository.findById(board_id);
+        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
+
+        List<BoardComment> comments = boardCommentRepository.findByBoard(board.get());
 
         List<BoardCommentResponse> list = new LinkedList<>();
         for (BoardComment comment : comments){
@@ -209,7 +212,10 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<BoardCommentResponse> findCommentByUserId(Long user_id) {
-        List<BoardComment> comments = boardCommentRepository.findByUser_id(user_id);
+        Optional<User> user = userRepository.findById(user_id);
+        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+
+        List<BoardComment> comments = boardCommentRepository.findByUser(user.get());
 
         List<BoardCommentResponse> list = new LinkedList<>();
         for (BoardComment comment : comments){
@@ -239,6 +245,10 @@ public class BoardServiceImpl implements BoardService{
         }
 
         // 글 댓글 삭제
+        List<BoardComment> commentList = boardCommentRepository.findByBoard(board.get());
+        for(BoardComment comment : commentList){
+            delete(comment.getUser().getId(), comment.getBoardComment_id());
+        }
 
         //글 삭제
         boardRepository.delete(board.get());
