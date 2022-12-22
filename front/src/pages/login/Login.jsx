@@ -19,7 +19,7 @@ function Login() {
 
     //네이버 로그인 요청 주소
     const state = Math.floor(new Date().getTime() + Math.random() * 1000);
-    const NaverURL = "https://nid.naver.com/oauth2.0/authorize?client_id=92iO7IYduFlBEHoQfTkR&response_type=code&redirect_uri=https://localhost:3000/callback/naver&state=1234";
+    const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.REACT_APP_NAVER_REST_KEY}&response_type=code&redirect_uri=https://localhost:3000/callback/naver&state=${state}`;
 
     const navigate = useNavigate();
     const dispatch = useDispatch();

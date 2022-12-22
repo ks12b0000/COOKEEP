@@ -5,21 +5,21 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/reducer/userSlice";
 import { useNavigate } from "react-router";
 
-const GoogleLogin = () => {
+const NaverLogin = () => {
     const code = new URL(window.location.href).searchParams.get("code");
-    const state = Math.floor(new Date().getTime() + Math.random() * 1000);
+    const state = new URL(window.location.href).searchParams.get("state");
     const userHttp = new UserHttp();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
         console.log(code, state);
-        // onNaverLogin();
+        onNaverLogin();
     }, []);
 
     const onNaverLogin = async () => {
         try {
-            const res = await userHttp.getGoogleLogin(code);
+            const res = await userHttp.getNaverLogin(code, state);
             console.log(res);
 
             if (res.data.code === 1000) {
@@ -70,4 +70,4 @@ const PageText = styled.div`
     margin-bottom: 60px;
 `;
 
-export default GoogleLogin;
+export default NaverLogin;

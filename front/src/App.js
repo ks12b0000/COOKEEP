@@ -11,6 +11,7 @@ import CategoryRouter from "./router/category1/CategoryRouter";
 import PrivateRoute from "./until/PrivateRoute";
 import KaKaoLogin from "./pages/login/KakaoLogin";
 import GoogleLogin from "./pages/login/GoogleLogin";
+import NaverLogin from "./pages/login/NaverLogin";
 
 function App() {
     const user = useSelector((state) => state);
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/login" element={<Login />}></Route>
                 <Route path="/callback/kakao" element={<KaKaoLogin />}></Route>
                 <Route path="/callback/google" element={<GoogleLogin />}></Route>
+                <Route path="/callback/naver" element={<NaverLogin />}></Route>
                 <Route path="/sign" element={<SignUp />}></Route>
                 <Route path="/" element={<Home />}></Route>
                 {/*    네비바  */}
