@@ -24,7 +24,7 @@ function SignUp() {
 
         if (!(UserName && Email && Password && CheckPassword)) {
             return alert("모든 값을 입력해주세요");
-        } else if (Password != CheckPassword) {
+        } else if (Password !== CheckPassword) {
             return alert("비밀번호와 비밀번호 확인 값이 일치하지 않습니다");
         } else if(!CheckUserName){
             return alert("닉네임 중복검사를 진행해 주세요")
@@ -35,7 +35,7 @@ function SignUp() {
                 } catch(err) {
                     console.log(err);
                     // alert(err.response.data.message);
-                };
+                }
         }
     };
 
@@ -43,11 +43,6 @@ function SignUp() {
     const onCheckUserName = async(e)=>{
         e.preventDefault();
 
-
-        try {
-            const {res} = await userHttp.getCheckUsername(UserName)
-
-        console.log(UserName);
         try {
             const res = await userHttp.getCheckUsername(UserName)
 
@@ -59,8 +54,6 @@ function SignUp() {
             console.log(err);
             alert(err.response.data.message)
         }
-    }catch (err){
-        console.log(err)}
     }
 
     return (
@@ -126,7 +119,7 @@ const SignBackground = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 `;
 
 const SignWrap = styled.div`

@@ -12,7 +12,6 @@ function WritingForm() {
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors }
     } = useForm();
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
@@ -51,7 +50,7 @@ function WritingForm() {
             return false;
         }
         try {
-            const { code } = await writeHttp.submitWritingForm(data, { headers: { "Content-Type": "multipart/form-data" } });
+            await writeHttp.submitWritingForm(data, { headers: { "Content-Type": "multipart/form-data" } });
             alert("글 작성이 완료되었습니다.");
             navigate("/category1");
         } catch (err) {

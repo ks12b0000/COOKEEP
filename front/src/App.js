@@ -18,7 +18,6 @@ function App() {
         <>
             {/*라우터관리*/}
             <Routes>
-
                 <Route element={<PrivateRoute />}>
                     <Route path="/myPage" element={<MyPage />}></Route>
                     <Route path="/category2" element={<Category2 />}></Route>
@@ -29,10 +28,6 @@ function App() {
                 <Route path="/sign" element={<SignUp />}></Route>
                 <Route path="/" element={<Home />}></Route>
                 {/*    네비바  */}
-
-
-
-
             </Routes>
         </>
     );

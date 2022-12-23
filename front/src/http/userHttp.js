@@ -24,10 +24,6 @@ class UserHttp extends Http {
         }
     };
 
-
-
-
-
     // 카카오 로그인
     getKaKaoLogin = async (code) => {
         try {
@@ -39,14 +35,14 @@ class UserHttp extends Http {
     };
 
     // 로그인 여부 확인
-    getisLoggedIn = async () => {
+    postLogin = async (params) => {
         try {
-            const res = await this.axios.get('auth/user/login');
+            const res = await this.axios.post('user/login',params);
             return res;
         } catch (err) {
             throw err;
         }
-    };
+    }
 
 
     getLogout = async () => {

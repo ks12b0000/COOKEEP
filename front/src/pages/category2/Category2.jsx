@@ -1,6 +1,6 @@
 import Header from "../../components/layout/header/Header";
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 
 import CategoryHttp from "../../http/categoryHttp";
 import axios from "axios";
@@ -19,17 +19,11 @@ const Container = styled.section`
 const categoryHttp = new CategoryHttp();
 function Category2() {
 
-
-
     return (
         <>
             <Header />
             <Container>
-                <div>
-
-
-                 카테고리2
-                </div>
+               카테고리2
             </Container>
         </>
     );
