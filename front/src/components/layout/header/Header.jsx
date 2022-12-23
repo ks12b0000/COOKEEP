@@ -7,7 +7,11 @@ const HeaderContainer = styled.header`
     width: 100%;
     height: 70px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+<<<<<<< HEAD
     position: relative;
+=======
+    position: absolute;
+>>>>>>> c9777236550cd2dad548e9d6aa0fea5f88a8e67a
     top: 0;
     left: 0;
     z-index: 10;

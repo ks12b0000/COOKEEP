@@ -2,11 +2,10 @@ import Http from "./http";
 
 class UserHttp extends Http {
 
-
-
+    // 회원가입
     postSignUp = async (params) => {
         try {
-            const res = await this.axios.get('user/join',params);
+            const res = await this.axios.post('user/join', params);
             return res;
         } catch (err) {
             throw err;
@@ -14,7 +13,6 @@ class UserHttp extends Http {
     };
 
     // id 중복 확인
-
     getCheckUsername = async (username) => {
         try {
             const res = await this.axios.get(`user/duplicate?username=${username}`);
@@ -23,6 +21,29 @@ class UserHttp extends Http {
             throw err;
         }
     };
+
+
+    // Email 중복 확인
+    getCheckEmail = async (email) => {
+        try {
+            const res = await this.axios.get(`user/email/duplicate?email=${email}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    // 아이디 찾기
+    postFindId = async (params) => {
+        try {
+            const res = await this.axios.post('user/find/id', params);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+
 
     // 카카오 로그인
     getKaKaoLogin = async (code) => {
@@ -45,6 +66,7 @@ class UserHttp extends Http {
     }
 
 
+    // 로그아웃
     getLogout = async () => {
         try {
             const res = await this.axios.get('user/logout');

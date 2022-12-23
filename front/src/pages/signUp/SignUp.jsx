@@ -2,15 +2,19 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import UserHttp from "../../http/userHttp";
 import Header from "../../components/layout/header/Header";
+import { useNavigate } from "react-router";
 
 const userHttp = new UserHttp();
 
 function SignUp() {
+    const navigate = useNavigate();
+
     const [UserName, setUserName] = useState("");
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
     const [CheckPassword, setCheckPassword] = useState("");
     const [CheckUserName, setCheckUserName] = useState(false);
+    const [CheckEmail, setCheckEmail] = useState(false);
 
     //회원가입 실행 함수
     const onSignUp = async(e) => {
@@ -24,18 +28,22 @@ function SignUp() {
 
         if (!(UserName && Email && Password && CheckPassword)) {
             return alert("모든 값을 입력해주세요");
-        } else if (Password !== CheckPassword) {
+        } else if (Password != CheckPassword) {
             return alert("비밀번호와 비밀번호 확인 값이 일치하지 않습니다");
         } else if(!CheckUserName){
             return alert("닉네임 중복검사를 진행해 주세요")
-        }else {
-                try {
-                    const res = await userHttp.postSignUp(body);
-                    console.log(res);
-                } catch(err) {
-                    console.log(err);
-                    // alert(err.response.data.message);
-                }
+        } else if(!CheckEmail){
+            return alert("이메일 중복검사를 진행해 주세요")
+        } else {
+            try {
+                const res = await userHttp.postSignUp(body);
+                console.log(res);
+
+                navigate('/login');
+            } catch(err) {
+                console.log(err);
+                // alert(err.response.data.message);
+            };
         }
     };
 
@@ -45,15 +53,36 @@ function SignUp() {
 
         try {
             const res = await userHttp.getCheckUsername(UserName)
+            console.log(res);
 
             if(!res.data.result.isDuplicate){
                 setCheckUserName(true)
                 alert(res.data.message)
-            }   
+            }
         } catch(err){
             console.log(err);
             alert(err.response.data.message)
         }
+
+    }
+
+    //이메일 중복체크 실행 함수
+    const onCheckEmail = async(e)=>{
+        e.preventDefault();
+
+        try {
+            const res = await userHttp.getCheckEmail(Email)
+            console.log(res);
+
+            if(!res.data.result.isDuplicate){
+                setCheckEmail(true)
+                alert(res.data.message)
+            }
+        } catch(err){
+            console.log(err);
+            alert(err.response.data.message)
+        }
+
     }
 
     return (
@@ -77,14 +106,17 @@ function SignUp() {
                     </IdWrap>
                     {/* 이메일 입력 */}
                     <SignName>이메일</SignName>
-                    <SignInput
-                        value={Email}
-                        type="email"
-                        placeholder="이메일을 입력하세요"
-                        onChange={(e) => {
-                            setEmail(e.currentTarget.value);
-                        }}
-                    />
+                    <IdWrap>
+                        <SignInput
+                            value={Email}
+                            type="email"
+                            placeholder="이메일을 입력하세요"
+                            onChange={(e) => {
+                                setEmail(e.currentTarget.value);
+                            }}
+                        />
+                        <IdButton onClick={(e)=>onCheckEmail(e)}>중복확인</IdButton>
+                    </IdWrap>
                     {/* 비밀번호 입력 */}
                     <SignName>비밀번호</SignName>
                     <SignInput
@@ -119,10 +151,11 @@ const SignBackground = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 `;
 
 const SignWrap = styled.div`
+    margin-top: 50px;
     width: 600px;
     height: 670px;
     background-color: white;

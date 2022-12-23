@@ -11,6 +11,7 @@ const Container = styled.section`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 100px;
 
     div {
         font-size: 64px;
