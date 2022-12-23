@@ -5,6 +5,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.dto.BoardReadResponse;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.boardComment.dto.BoardCommentResponse;
+import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
+import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
 import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
@@ -104,5 +107,29 @@ public class BoardController {
     public BaseResponse delete_err_thumbnail_board(){
         boardService.delete_err_thumbnail();
         return new BaseResponse("성공적으로 해당 글을 삭제했습니다.");
+    }
+
+    @PostMapping("/board/comment")
+    public BaseResponse save_comment(@RequestBody BoardCommentWriteRequest request){
+        boardService.saveComment(request);
+        return new BaseResponse("성공적으로 댓글이 작성되었습니다.");
+    }
+
+    @PutMapping("/board/comment")
+    public BaseResponse update_comment(@RequestBody BoardCommentUpdateRequest request){
+        boardService.updateComment(request);
+        return new BaseResponse("성공적으로 댓글을 수정하였습니다.");
+    }
+
+    @DeleteMapping("/board/comment")
+    public BaseResponse delete_comment(@RequestParam Long comment_id, Long user_id){
+        boardService.deleteComment(comment_id, user_id);
+        return new BaseResponse("성공적으로 댓글을 삭제했습니다.");
+    }
+
+    @GetMapping("/board/comment/list")
+    public BaseResponse list_board_comments(@RequestParam Long board_id){
+        List<BoardCommentResponse> comments = boardService.findCommentByBoardId(board_id);
+        return new BaseResponse("성공적으로 글의 댓글들을 가져왔습니다.", comments);
     }
 }

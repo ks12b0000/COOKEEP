@@ -5,10 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.BoardReadResponse;
 import teamproject.backend.board.dto.BoardWriteRequest;
-import teamproject.backend.domain.Board;
-import teamproject.backend.domain.BoardLike;
-import teamproject.backend.domain.FoodCategory;
-import teamproject.backend.domain.User;
+import teamproject.backend.boardComment.BoardCommentRepository;
+import teamproject.backend.boardComment.dto.BoardCommentResponse;
+import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
+import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
+import teamproject.backend.domain.*;
 import teamproject.backend.foodCategory.FoodCategoryRepository;
 import teamproject.backend.imageFile.ImageFileRepository;
 import teamproject.backend.imageFile.ImageFileService;
@@ -34,6 +35,8 @@ public class BoardServiceImpl implements BoardService{
     private final ImageFileRepository imageFileRepository;
 
     private final ImageFileService imageFileService;
+
+    private final BoardCommentRepository boardCommentRepository;
 
     @Override
     @Transactional
@@ -143,6 +146,87 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
+    public Long saveComment(BoardCommentWriteRequest boardCommentWriteRequest) {
+        Optional<Board> board = boardRepository.findById(boardCommentWriteRequest.getBoard_id());
+
+        // 글 아이디 검증
+        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
+
+        //유저 검증
+        Optional<User> user = userRepository.findById(boardCommentWriteRequest.getUser_id());
+        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+
+        //댓글 생성
+        BoardComment comment = new BoardComment(user.get(), board.get(), boardCommentWriteRequest.getText());
+
+        boardCommentRepository.save(comment);
+
+        return comment.getBoardComment_id();
+    }
+
+    @Override
+    @Transactional
+    public void updateComment(BoardCommentUpdateRequest request) {
+        Optional<BoardComment> comment = boardCommentRepository.findById(request.getBoardComment_id());
+
+        //댓글 존재 유무 확인
+        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);// 추후 변경 예정
+
+        //유저 검증
+        Optional<User> user = userRepository.findById(request.getUser_id());
+        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+
+        comment.get().setText(request.getText());
+    }
+
+    @Override
+    public void deleteComment(Long comment_id, Long user_id) {
+        Optional<BoardComment> comment = boardCommentRepository.findById(comment_id);
+
+        //댓글 존재 유무 확인
+        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);// 추후 변경 예정
+
+        //댓글 본인 확인
+        if(comment.get().getUser().getId() != user_id) throw new BaseException(USER_NOT_EXIST);
+
+        //reply 삭제
+
+        //댓글 삭제
+        boardCommentRepository.delete(comment.get());
+    }
+
+    @Override
+    public List<BoardCommentResponse> findCommentByBoardId(Long board_id) {
+        Optional<Board> board = boardRepository.findById(board_id);
+        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
+
+        List<BoardComment> comments = boardCommentRepository.findByBoard(board.get());
+
+        List<BoardCommentResponse> list = new LinkedList<>();
+        for (BoardComment comment : comments){
+            list.add(new BoardCommentResponse(comment));
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<BoardCommentResponse> findCommentByUserId(Long user_id) {
+        Optional<User> user = userRepository.findById(user_id);
+        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+
+        List<BoardComment> comments = boardCommentRepository.findByUser(user.get());
+
+        List<BoardCommentResponse> list = new LinkedList<>();
+        for (BoardComment comment : comments){
+            list.add(new BoardCommentResponse(comment));
+        }
+
+        return list;
+    }
+
+    @Override
+    @Transactional
     public void delete(Long user_id, Long board_id) {
         //글 찾기
         Optional<Board> board = boardRepository.findById(board_id);
@@ -160,9 +244,16 @@ public class BoardServiceImpl implements BoardService{
             likeBoardRepository.delete(like);
         }
 
+        // 글 댓글 삭제
+        List<BoardComment> commentList = boardCommentRepository.findByBoard(board.get());
+        for(BoardComment comment : commentList){
+            delete(comment.getUser().getId(), comment.getBoardComment_id());
+        }
+
         //글 삭제
         boardRepository.delete(board.get());
     }
+
     private void deleteImageAll(Board board){
         //섬네일 사진 삭제
         String thumbnailURL = board.getThumbnail();
@@ -218,12 +309,6 @@ public class BoardServiceImpl implements BoardService{
         }
 
         return false;
-    }
-
-    private int getStartIndex(int allCnt, int curPage){
-        if(curPage < 1) return 0;
-        if(allCnt < (curPage - 1) * 8) return (allCnt % 8) * 8;
-        return (curPage - 1) * 8;
     }
 
     public boolean hasLikeBoard(Board board, User user) {

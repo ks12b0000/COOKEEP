@@ -2,6 +2,10 @@ package teamproject.backend.board;
 
 import teamproject.backend.board.dto.BoardReadResponse;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.boardComment.dto.BoardCommentResponse;
+import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
+import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
+import teamproject.backend.domain.BoardComment;
 import teamproject.backend.domain.User;
 
 import java.util.List;
@@ -22,5 +26,15 @@ public interface BoardService {
 
     String updateLikeOfBoard(Long board_id, User user);
 
-    public void update(Long board_id, BoardWriteRequest boardWriteRequest);
+    void update(Long board_id, BoardWriteRequest boardWriteRequest);
+
+    Long saveComment(BoardCommentWriteRequest boardCommentWriteRequest);
+
+    void updateComment(BoardCommentUpdateRequest request);
+
+    void deleteComment(Long comment_id, Long user_id);
+
+    List<BoardCommentResponse> findCommentByBoardId(Long board_id);
+
+    List<BoardCommentResponse> findCommentByUserId(Long user_id);
 }
