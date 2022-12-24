@@ -41,7 +41,7 @@ class UserHttp extends Http {
         } catch (err) {
             throw err;
         }
-    }
+    };
 
 
 
@@ -49,6 +49,26 @@ class UserHttp extends Http {
     getKaKaoLogin = async (code) => {
         try {
             const res = await this.axios.get(`user/login/kakao?code=${code}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    // 구글 로그인
+    getGoogleLogin = async (code) => {
+        try {
+            const res = await this.axios.get(`user/login/google?code=${code}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    // 네이버 로그인
+    getNaverLogin = async (code, state) => {
+        try {
+            const res = await this.axios.get(`user/login/naver?code=${code}&state=${state}`);
             return res;
         } catch (err) {
             throw err;
@@ -64,7 +84,6 @@ class UserHttp extends Http {
             throw err;
         }
     }
-
 
     // 로그아웃
     getLogout = async () => {

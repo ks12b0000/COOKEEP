@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/reducer/userSlice";
 import styled from "@emotion/styled";
@@ -10,10 +10,17 @@ import UserHttp from "../../http/userHttp";
 const userHttp = new UserHttp();
 
 function Login() {
-
     //카카오 로그인 요청 주소
     const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_KEY}&redirect_uri=https://localhost:3000/callback/kakao&response_type=code
-    `
+    `;
+
+    //구글 로그인 요청 주소
+    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${process.env.REACT_APP_GOOGLE_REST_KEY}&redirect_uri=https://localhost:3000/callback/google&response_type=code&scope=email`;
+
+    //네이버 로그인 요청 주소
+    const state = Math.floor(new Date().getTime() + Math.random() * 1000);
+    const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.REACT_APP_NAVER_REST_KEY}&response_type=code&redirect_uri=https://localhost:3000/callback/naver&state=${state}`;
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -22,7 +29,7 @@ function Login() {
     const [Password, setPassword] = useState("");
     const [AutoLogin, setAutoLogin] = useState(false);
 
-    //모달창 관리 
+    //모달창 관리
     const [FindId, setFindId] = useState(false);
     const [FindPassword, setFindPassword] = useState(false);
 
@@ -32,29 +39,24 @@ function Login() {
     //메일 발송 체크
     const [SendEmail, setSendEmail] = useState(false);
 
-
-
     // 일반 로그인 동작 수행 함수
-    const onLogin = async(e) => {
-
+    const onLogin = async (e) => {
         e.preventDefault();
 
         const body = {
             username: UserName,
             password: Password,
-            autoLogin: AutoLogin,
-        }
+            autoLogin: AutoLogin
+        };
 
         if (!(UserName && Password)) {
             alert("모든 값을 채워주세요.");
         } else {
-
             try {
                 const res = await userHttp.postLogin(body);
                 console.log(res);
 
                 if (res.data.code === 1000) {
-
                     //리덕스 userReducer에 값을 넣어줌
                     dispatch(
                         loginUser({
@@ -66,7 +68,6 @@ function Login() {
                     //홈 화면으로 이동
                     navigate("/");
                 }
-
             } catch (err) {
                 console.log(err);
             }
@@ -80,10 +81,10 @@ function Login() {
     // 아이디 찾기 동작 실행 함수
     const onFindId = async (e) => {
         e.preventDefault();
-        
+
         const body = {
-            email: Email,
-        }
+            email: Email
+        };
 
         try {
             const res = await userHttp.postFindId(body);
@@ -92,13 +93,13 @@ function Login() {
             console.log(err);
         }
 
-        setSendEmail(true)
+        setSendEmail(true);
         console.log(Email);
         setTimeout(() => {
-            setSendEmail(false)
-            setEmail('');
+            setSendEmail(false);
+            setEmail("");
         }, 5000);
-    }
+    };
 
     return (
         <>
@@ -114,47 +115,47 @@ function Login() {
                     </CheckBoxWrap>
                     <LoginButton onClick={(e) => onLogin(e)}>로그인</LoginButton>
                     <LinkWrap>
-                        <NonLink onClick={()=>setFindId(true)}>아이디 찾기</NonLink>|<NonLink>비밀번호 찾기</NonLink>|<LinkStyled to={"/sign"}>회원가입</LinkStyled>
+                        <NonLink onClick={() => setFindId(true)}>아이디 찾기</NonLink>|<NonLink>비밀번호 찾기</NonLink>|<LinkStyled to={"/sign"}>회원가입</LinkStyled>
                     </LinkWrap>
                     <OtherLoginWrap>
-                        <OtherLogin>
-                            <img src="/image/naver.png" alt="naver-logo" />
-                            <div>네이버로 시작하기</div>
-                        </OtherLogin>
+                        <a href={NaverURL}>
+                            <OtherLogin>
+                                <img src="/image/naver.png" alt="naver-logo" />
+                                <div>네이버로 시작하기</div>
+                            </OtherLogin>
+                        </a>
                         <a href={KakaoURL}>
                             <OtherLogin>
                                 <img src="/image/kakao.png" alt="kakao-logo" />
                                 <div>카카오로 시작하기</div>
                             </OtherLogin>
                         </a>
-                        <OtherLogin>
-                            <img src="/image/google.png" alt="google-logo" />
-                            <div>구글로 시작하기</div>
-                        </OtherLogin>
+                        <a href={googleURL}>
+                            <OtherLogin>
+                                <img src="/image/google.png" alt="google-logo" />
+                                <div>구글로 시작하기</div>
+                            </OtherLogin>
+                        </a>
                     </OtherLoginWrap>
                 </LoginWrap>
                 {/* 아이디 찾기 모달창 */}
-                {FindId? 
-                <>
-                <ModalBackground />
-                <ModalWrap>
-                    <ModalTitle>아이디 찾기</ModalTitle>
-                    <XButton onClick={()=>setFindId(false)}/>
-                    <ModalContentsWrap>
-                        <ModalText>이메일 주소를 입력해 주세요</ModalText>
-                        <ModalInput value={Email} type="email" placeholder="email" onChange={(e) => setEmail(e.currentTarget.value)} />
-                        {SendEmail?
-                        <ModalMiniText>이메일로 아이디가 전송되었습니다.</ModalMiniText>
-                        :
-                        <></>
-                        }
-                        <ModalButton onClick={(e)=>onFindId(e)}>확 인</ModalButton>
-                    </ModalContentsWrap>
-                </ModalWrap>
-                </>
-                :
-                <></>
-                }
+                {FindId ? (
+                    <>
+                        <ModalBackground />
+                        <ModalWrap>
+                            <ModalTitle>아이디 찾기</ModalTitle>
+                            <XButton onClick={() => setFindId(false)} />
+                            <ModalContentsWrap>
+                                <ModalText>이메일 주소를 입력해 주세요</ModalText>
+                                <ModalInput value={Email} type="email" placeholder="email" onChange={(e) => setEmail(e.currentTarget.value)} />
+                                {SendEmail ? <ModalMiniText>이메일로 아이디가 전송되었습니다.</ModalMiniText> : <></>}
+                                <ModalButton onClick={(e) => onFindId(e)}>확 인</ModalButton>
+                            </ModalContentsWrap>
+                        </ModalWrap>
+                    </>
+                ) : (
+                    <></>
+                )}
             </LoginBackground>
         </>
     );
@@ -267,7 +268,7 @@ const NonLink = styled.div`
     :hover {
         color: #35c5f0;
     }
-`
+`;
 
 const OtherLoginWrap = styled.div`
     display: flex;
@@ -306,7 +307,7 @@ const ModalBackground = styled.div`
     top: 0;
     left: 0;
     opacity: 0.3;
-`
+`;
 
 const ModalWrap = styled.div`
     width: 450px;
@@ -331,7 +332,7 @@ const XButton = styled.div`
     opacity: 0.5;
     cursor: pointer;
     z-index: 10;
-`
+`;
 
 const ModalContentsWrap = styled.div`
     position: absolute;
@@ -345,7 +346,7 @@ const ModalContentsWrap = styled.div`
     justify-content: center;
     padding: 0 50px;
     box-sizing: border-box;
-`
+`;
 
 const ModalTitle = styled.div`
     font-size: 20px;
@@ -353,13 +354,13 @@ const ModalTitle = styled.div`
     margin: 35px 50px;
     border-bottom: 2px solid #35c5f0;
     padding-bottom: 15px;
-`
+`;
 
 const ModalText = styled.div`
     font-size: 16px;
     margin-bottom: 25px;
     margin-left: 10px;
-`
+`;
 
 const ModalInput = styled.input`
     width: 100%;
@@ -380,7 +381,7 @@ const ModalInput = styled.input`
         letter-spacing: 2px;
         color: #aaaaaa;
     }
-`
+`;
 
 const ModalMiniText = styled.div`
     position: absolute;
@@ -389,7 +390,7 @@ const ModalMiniText = styled.div`
     font-size: 13px;
     color: #35c5f0;
     font-weight: 300;
-`
+`;
 
 const ModalButton = styled.button`
     background-color: white;
