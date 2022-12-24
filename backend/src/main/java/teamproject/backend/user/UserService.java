@@ -1,10 +1,7 @@
 package teamproject.backend.user;
 
 import teamproject.backend.domain.User;
-import teamproject.backend.user.dto.FindIdRequest;
-import teamproject.backend.user.dto.JoinRequest;
-import teamproject.backend.user.dto.LoginRequest;
-import teamproject.backend.user.dto.LoginResponse;
+import teamproject.backend.user.dto.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -24,4 +21,6 @@ public interface UserService {
     public void findByUserId(FindIdRequest findIdRequest);
 
     public boolean checkEmailDuplicate(String email);
+
+    public void findByUserPw(FindPwRequest findPwRequest);
 }

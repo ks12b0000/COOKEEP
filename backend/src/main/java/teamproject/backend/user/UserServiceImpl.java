@@ -164,6 +164,10 @@ public class UserServiceImpl implements UserService, SocialUserService {
     public User checkUserHasLogin(Cookie[] cookies){
         Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
 
+        if (accessCookie == null) {
+            throw new BaseException(JWT_TOKEN_INVALID);
+        }
+
         String token = accessCookie.getValue();
         String username = jwtService.getUsernameByJwt(token);
 
@@ -182,7 +186,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     @Transactional
     public void findByUserId(FindIdRequest findIdRequest) {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         String email = findIdRequest.getEmail();
 
@@ -192,12 +195,14 @@ public class UserServiceImpl implements UserService, SocialUserService {
             throw new BaseException(USER_NOT_EXIST);
         }
 
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(user.getEmail());
-            mimeMessageHelper.setSubject("[오늘 뭐먹지] 아이디 찾기 안내");
-            mimeMessageHelper.setText("<div style='text-align: center;'><h2>안녕하세요. 오늘 뭐먹지 입니다.</h2> <p>귀하께서 요청하신 아이디 찾기 수신을 위해 발송된 메일입니다.</p> <p>유저 아이디는 <Strong>" + user.getUsername() + "</Strong> 입니다.</p> <p>감사합니다.</p></div>", true);
+            mimeMessageHelper.setSubject("[오늘 뭐먹지?] 아이디 찾기 안내");
+            mimeMessageHelper.setText("<div style='text-align: center;'><h1 style='color:blue'>아이디  찾기</h1><br> <h3>안녕하세요. 고객님 오늘 뭐먹지 입니다.</h3><br> <p>귀하께서 요청하신 아이디 찾기 수신을 위해 발송된 메일입니다.</p> <p>유저 아이디는 <Strong>" + user.getUsername() + "</Strong> 입니다.</p> <p>감사합니다.</p></div>", true);
 
             javaMailSender.send(mimeMessage);
             log.info("sent username: {}", user.getUsername());
@@ -220,6 +225,55 @@ public class UserServiceImpl implements UserService, SocialUserService {
             return false; // 중복 X
         } else {
             throw new BaseException(DUPLICATE_EMAIL); // 중복 O
+        }
+    }
+
+    /**
+     * 비밀번호 찾기
+     * @param findPwRequest
+     */
+    @Override
+    @Transactional
+    public void findByUserPw(FindPwRequest findPwRequest) {
+
+        String username = findPwRequest.getUsername();
+        String email = findPwRequest.getEmail();
+
+        User user = userRepository.findByUsernameAndEmail(username, email);
+
+        if (user == null) {
+            throw new BaseException(USER_NOT_EXIST);
+        }
+
+        char[] charSet = new char[]{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+
+        String password = "";
+
+        /* 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 조합 */
+        int idx = 0;
+        for(int i = 0; i < 10; i++){
+            idx = (int) (charSet.length * Math.random());
+            password += charSet[idx];
+        }
+
+        String encPassword = SHA256.encrypt(password);
+        user.updatePassword(encPassword);
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            mimeMessageHelper.setFrom(from);
+            mimeMessageHelper.setTo(user.getEmail());
+            mimeMessageHelper.setSubject("[오늘 뭐먹지?] 비밀번호 찾기 안내");
+            mimeMessageHelper.setText("<div style='text-align: center;'><h1 style='color:blue'>임시  비밀번호  생성</h1><br> <h3>안녕하세요. " + username + "님 <br> 오늘 뭐먹지 입니다.</h3><br> <p>귀하께서 요청하신 비밀번호 찾기 수신을 위해 발송된 메일입니다.</p> <p>유저 임시 비밀번호는 <Strong>" + password + "</Strong> 입니다.</p> <p>임시 비밀번호를 활용하여 <Strong style='color:red'>새로운 비밀번호로 변경</Strong> 해주시고 이용해 주시길 바랍니다.</p> <p>감사합니다.</p></div>", true);
+
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            log.error("[EmailService.send()] error {}", e.getMessage());
+            throw new BaseException(EMAIL_ERROR);
         }
     }
 }
