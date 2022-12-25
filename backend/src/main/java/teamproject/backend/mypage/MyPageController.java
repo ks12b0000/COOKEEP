@@ -15,6 +15,12 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
+    /**
+     * 마이페이지 조회
+     * [GET] /auth/user/mypage?user_id=
+     * @param user_id
+     * @return
+     */
     @GetMapping("/auth/user/mypage")
     public BaseResponse<GetUserResponse> myPageUserInfo(@RequestParam Long user_id) {
         GetUserResponse user = myPageService.userInfo(user_id);

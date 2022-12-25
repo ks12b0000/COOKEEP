@@ -18,6 +18,11 @@ public class MyPageServiceImpl implements MyPageService {
 
     private final MyPageRepository myPageRepository;
 
+    /**
+     * 마이페이지 조회
+     * @param userId
+     * @return
+     */
     public GetUserResponse userInfo(Long userId) {
         User user = myPageRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
