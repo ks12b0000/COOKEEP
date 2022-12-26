@@ -1,51 +1,100 @@
 import Header from "../../layout/header/Header";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { categoryList1 } from "../../../http/data/category1/categoryList1";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
+import WriteHttp from "../../../http/writeHttp";
+import IsNonData from "../../isNonData/IsNonData";
 
-const Container = styled.section`
-    width: 1200px;
-    margin: 0 auto;
-    div {
-        margin: 20px auto;
-        width: 1000px;
-        height: 775px;
-        img {
-            border-radius: 15px;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    }
-`;
-const DetailTitle = styled.h1`
-    padding: 10px 0 5px;
-    font-size: 28px;
-    font-weight: bold;
-`;
-const DetailSubTitle = styled.h3`
-    font-size: 18px;
-    font-weight: 400;
-`;
+
+
 function Detail() {
-    // const { id } = useParams();
-    // const { result } = useSelector((state) => state.listReducer.item);
+    const writeHttp = new WriteHttp();
+    const { id } = useParams();
+    const [detailPost,setDetailPost] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+           try {
+               const res = await writeHttp.getDetailPost(id);
+               setDetailPost(res.result);
+
+           } catch (err){
+               console.log(err);
+           }
+        })()
+    },[])
+
 
     return (
         <>
             <Header />
             <Container>
-                {/*{result.map((item) => (*/}
-                {/*    <div key={item.id}>*/}
-                {/*        <img src={item.img} alt="" />*/}
-                {/*        <DetailTitle>{item.mainTitle}</DetailTitle>*/}
-                {/*        <DetailSubTitle>{item.subTitle}</DetailSubTitle>*/}
-                {/*    </div>*/}
-                {/*))}*/}
+                <Top>
+
+                        <TopImg>
+                            <img src={detailPost.thumbnail} alt=""/>
+                        </TopImg>
+                        <TopText>
+                              <TextTitle>{detailPost.title}</TextTitle>
+                              <Text>{detailPost.text}</Text>
+                              <LikeButton >좋아요</LikeButton>
+                        </TopText>
+
+                </Top>
             </Container>
         </>
     );
 }
 export default Detail;
+
+
+const Container = styled.article`
+    width: 1200px;
+    margin: 2rem auto 0;
+  
+`;
+const Top = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+const TopImg = styled.figure`
+  width: 60%;
+  height: 500px;
+
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`
+const TopText = styled.figcaption`
+  width: 40%;
+  height: 500px;
+  border:1px solid #eee;
+  box-sizing: border-box;
+  padding:1rem 1rem 0;
+  span{
+    display: block;
+  }
+  
+`
+const TextTitle = styled.span`
+   font-size:24px;
+   font-weight: 600;
+   height: 10%;
+ `
+const Text = styled.span`
+    font-size:18px;
+    height: 80%;
+  
+    font-weight: 500;
+`
+const LikeButton = styled.button`
+   border:1px solid ;
+   background:#222;
+   height: 10%;
+   width: 100%;
+   color: wheat;
+`

@@ -18,5 +18,14 @@ class WriteHttp extends Http {
             throw err;
         }
     };
+
+    getDetailPost = async(id) => {
+        try {
+            const {data} =  await  this.axios.get(`board/?board_id=${id}`);
+            return data;
+        }catch (err){
+            throw err;
+        }
+    }
 }
 export default WriteHttp;
