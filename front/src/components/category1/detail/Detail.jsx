@@ -53,16 +53,14 @@ export default Detail;
 const Container = styled.article`
     width: 1200px;
     margin: 2rem auto 0;
-  
 `;
 const Top = styled.div`
   display: flex;
   justify-content: space-between;
 `
 const TopImg = styled.figure`
-  width: 60%;
+  width: 50%;
   height: 500px;
-
   img{
     width: 100%;
     height: 100%;
@@ -70,13 +68,15 @@ const TopImg = styled.figure`
   }
 `
 const TopText = styled.figcaption`
-  width: 40%;
+  width: 50%;
   height: 500px;
   border:1px solid #eee;
   box-sizing: border-box;
-  padding:1rem 1rem 0;
+  padding:1rem 0 0;
   span{
     display: block;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
   
 `
@@ -88,13 +88,17 @@ const TextTitle = styled.span`
 const Text = styled.span`
     font-size:18px;
     height: 80%;
-  
     font-weight: 500;
 `
 const LikeButton = styled.button`
-   border:1px solid ;
+   cursor:  pointer;
+ 
    background:#222;
    height: 10%;
    width: 100%;
    color: wheat;
+  transition: 0.5s;
+  &:hover{
+    background:#333;
+  }
 `
