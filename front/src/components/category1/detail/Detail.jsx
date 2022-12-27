@@ -38,7 +38,7 @@ function Detail() {
                         </TopImg>
                         <TopText>
                               <TextTitle>{detailPost.title}</TextTitle>
-                              <Text>{detailPost.text}</Text>
+                              <Text dangerouslySetInnerHTML={{ __html: detailPost.text }}></Text>
                               <LikeButton >좋아요</LikeButton>
                         </TopText>
 

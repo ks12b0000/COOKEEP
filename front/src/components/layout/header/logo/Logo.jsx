@@ -17,7 +17,7 @@ function Logo() {
     return (
         <LogoContainer>
             <div>
-                <Link to="/">헤더</Link>
+                <Link to="/">프로젝트이름</Link>
             </div>
         </LogoContainer>
     );
