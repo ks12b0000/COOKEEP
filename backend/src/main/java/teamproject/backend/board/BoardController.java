@@ -8,6 +8,8 @@ import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
 import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
 import teamproject.backend.domain.User;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
@@ -109,27 +111,76 @@ public class BoardController {
         return new BaseResponse("성공적으로 해당 글을 삭제했습니다.");
     }
 
+    /**
+     * 댓글 작성
+     * [POST] /board/comment
+     * @param request
+     * @return
+     */
     @PostMapping("/board/comment")
     public BaseResponse save_comment(@RequestBody BoardCommentWriteRequest request){
         boardService.saveComment(request);
         return new BaseResponse("성공적으로 댓글이 작성되었습니다.");
     }
 
-    @PutMapping("/board/comment")
+    /**
+     * 댓글 수정
+     * [PATCH] /board/comment
+     * @param request
+     * @return
+     */
+    @PatchMapping("/board/comment")
     public BaseResponse update_comment(@RequestBody BoardCommentUpdateRequest request){
         boardService.updateComment(request);
         return new BaseResponse("성공적으로 댓글을 수정하였습니다.");
     }
 
+    /**
+     * 댓글 삭제
+     * [DELETE] /board/comment
+     * @param comment_id
+     * @param user_id
+     * @return
+     */
     @DeleteMapping("/board/comment")
     public BaseResponse delete_comment(@RequestParam Long comment_id, Long user_id){
         boardService.deleteComment(comment_id, user_id);
         return new BaseResponse("성공적으로 댓글을 삭제했습니다.");
     }
 
+    /**
+     * 댓글 조회
+     * [GET] /board/comment/list
+     * @param board_id
+     * @return
+     */
     @GetMapping("/board/comment/list")
     public BaseResponse list_board_comments(@RequestParam Long board_id){
         List<BoardCommentResponse> comments = boardService.findCommentByBoardId(board_id);
         return new BaseResponse("성공적으로 글의 댓글들을 가져왔습니다.", comments);
+    }
+
+    @PostMapping("/board/comment/reply")
+    public BaseResponse save_reply(BoardCommentReplyWriteRequest request){
+        boardService.saveReply(request);
+        return new BaseResponse("성공적으로 대댓글을 작성했습니다.");
+    }
+
+    @PatchMapping("/board/comment/reply")
+    public BaseResponse update_reply(BoardCommentReplyUpdateRequest request){
+        boardService.updateReply(request);
+        return new BaseResponse("성공적으로 대댓글을 수정했습니다.");
+    }
+
+    @DeleteMapping("/board/comment/reply")
+    public BaseResponse delete_reply(@RequestParam Long reply_id, @RequestParam Long user_id){
+        boardService.deleteReply(reply_id, user_id);
+        return new BaseResponse("성공적으로 대댓글을 삭제했습니다.");
+    }
+
+    @GetMapping("/board/comment/reply/list")
+    public BaseResponse list_board_replies(@RequestParam Long comment_id){
+        boardService.findReplyByCommentId(comment_id);
+        return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.");
     }
 }
