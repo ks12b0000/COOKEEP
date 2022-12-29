@@ -23,7 +23,7 @@ function App() {
             <Routes>
                 <Route element={<Layout />}>
                     <Route element={<PrivateRoute />}>
-                        <Route path="/myPage" element={<MyPage />}></Route>
+                        <Route path="/myPage/:userId" element={<MyPage />}></Route>
                         <Route path="/category2" element={<Category2 />}></Route>
                     </Route>
                     <Route path="/category1/*" element={<CategoryRouter />}></Route>

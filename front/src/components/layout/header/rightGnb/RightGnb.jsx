@@ -26,9 +26,10 @@ const GnbContainer = styled.ul`
 const userHttp = new UserHttp();
 
 function RightGnb() {
-    const { isLoggedIn } = useSelector((state) => state.persistedReducer.userReducer);
+    const userInfo = useSelector((state) => state.persistedReducer.userReducer);
     const dispatch = useDispatch();
-    useEffect(() => {}, [isLoggedIn]);
+    useEffect(() => {
+    }, [userInfo]);
 
     const logout = async() => {
         //서버에 요청을 하여 accesstoken과 refreshtoken을 삭제시켜줌
@@ -54,7 +55,7 @@ function RightGnb() {
     return (
         <>
             <GnbContainer>
-                {isLoggedIn === false ? (
+                {userInfo.isLoggedIn === false ? (
                     <>
                         <li>
                             <Link to="/login"> 로그인</Link>
@@ -66,7 +67,7 @@ function RightGnb() {
                 ) : (
                     <>
                         <li>
-                            <Link to="/myPage">마이페이지</Link>
+                            <Link to={`/myPage/${userInfo.userId}`}>마이페이지</Link>
                         </li>
                         <li>
                             <Link to="/" onClick={logout}>로그아웃</Link>
