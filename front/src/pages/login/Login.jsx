@@ -106,35 +106,33 @@ function Login() {
         }, 5000);
     };
 
-        // 비밀번호 찾기 동작 실행 함수
-        const onFindPassword = async (e) => {
-            e.preventDefault();
-    
-            const body = {
-                username: UserNameForFindPassword,
-                email: EmailForFindPassword,
-            };
-    
-            try {
-                const res = await userHttp.postFindPassword(body);
-                setMailText(res.data.message+' 이메일로 비밀번호를 확인하세요')
-                console.log(res);
-            } catch (err) {
-                console.log(err);
-                setMailText(err.response.data.message)
-            }
-    
-            console.log(UserNameForFindPassword, EmailForFindPassword);
-            setTimeout(() => {
-                setUserNameForFindPassword("");
-                setEmailForFindPassword("");
-                setMailText("")
-            }, 5000);
+    // 비밀번호 찾기 동작 실행 함수
+    const onFindPassword = async (e) => {
+        e.preventDefault();
+
+        const body = {
+            username: UserNameForFindPassword,
+            email: EmailForFindPassword,
         };
+    
+        try {
+            const res = await userHttp.postFindPassword(body);
+            setMailText(res.data.message+' 이메일로 비밀번호를 확인하세요')
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+            setMailText(err.response.data.message)
+        }
+    
+        setTimeout(() => {
+            setUserNameForFindPassword("");
+            setEmailForFindPassword("");
+            setMailText("")
+        }, 5000);
+    };
 
     return (
         <>
-            <Header />
             <LoginBackground>
                 <LoginWrap>
                     <LoginTitle>Welcome to our project !</LoginTitle>

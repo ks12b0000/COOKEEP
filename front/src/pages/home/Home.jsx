@@ -16,7 +16,7 @@ function Home() {
 
     const onCheck = async()=>{
         try {
-            const res = await userHttp.getisLoggedIn();
+            const res = await userHttp.getIsLoggedIn();
             console.log(res);
         } catch (err) {
             console.log(err);
@@ -25,7 +25,6 @@ function Home() {
 
     return (
         <>
-            <Header />
             <Main />
         </>
     );
