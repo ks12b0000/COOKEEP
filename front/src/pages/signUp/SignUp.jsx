@@ -87,7 +87,6 @@ function SignUp() {
 
     return (
         <>
-            <Header />
             <SignBackground>
                 <SignWrap>
                     <SignTitle>회원가입</SignTitle>
