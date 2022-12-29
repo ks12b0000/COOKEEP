@@ -43,7 +43,15 @@ class UserHttp extends Http {
         }
     };
 
-
+    // 비밀번호 찾기
+    postFindPassword = async (params) => {
+        try {
+            const res = await this.axios.post('user/find/password', params);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
 
     // 카카오 로그인
     getKaKaoLogin = async (code) => {
