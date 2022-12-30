@@ -6,4 +6,6 @@ import teamproject.backend.domain.User;
 
 @Repository
 public interface MyPageRepository extends JpaRepository<User, Long> {
+
+    User findByPassword(String password);
 }
