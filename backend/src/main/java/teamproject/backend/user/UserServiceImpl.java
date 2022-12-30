@@ -62,6 +62,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     @Transactional
     public SocialUserInfo joinBySocial(String username, String email){
+        
+        checkEmailDuplicate(email);
 
         User user = new User(username, email, username);
 
