@@ -5,7 +5,9 @@ import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
 import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
-import teamproject.backend.domain.BoardComment;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
 import teamproject.backend.domain.User;
 
 import java.util.List;
@@ -37,4 +39,12 @@ public interface BoardService {
     List<BoardCommentResponse> findCommentByBoardId(Long board_id);
 
     List<BoardCommentResponse> findCommentByUserId(Long user_id);
+
+    Long saveReply(BoardCommentReplyWriteRequest request);
+
+    void updateReply(BoardCommentReplyUpdateRequest request);
+
+    void deleteReply(Long reply_id, Long user_id);
+
+    List<BoardCommentReplyResponse> findReplyByCommentId(Long comment_id);
 }
