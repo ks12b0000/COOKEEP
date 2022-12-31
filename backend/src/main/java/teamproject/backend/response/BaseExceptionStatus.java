@@ -34,6 +34,11 @@ public enum BaseExceptionStatus {
 
     LESS_PAGE_NUMBER(4052, "페이지 번호 부족"),
 
+    //[4080 ~] 댓글, 대댓글 관련 에러코드
+    NOT_EXIST_COMMENT(4080, "댓글이 존재하지 않습니다."),
+
+    NOT_EXIST_REPLY(4081, "대댓글이 존재하지 않습니다."),
+
     //[4070 ~] 이미지 관련 에러코드
     NOT_EXIST_IMAGE_URL(4070, "존재하지 않는 이미지 url"),
 

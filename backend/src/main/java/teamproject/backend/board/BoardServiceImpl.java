@@ -19,8 +19,6 @@ import teamproject.backend.imageFile.ImageFileRepository;
 import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
-import teamproject.backend.response.BaseExceptionStatus;
-import teamproject.backend.response.BaseResponse;
 import teamproject.backend.user.UserRepository;
 
 import java.util.ArrayList;
@@ -175,7 +173,7 @@ public class BoardServiceImpl implements BoardService{
         Optional<BoardComment> comment = boardCommentRepository.findById(request.getBoardComment_id());
 
         //댓글 존재 유무 확인
-        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);// 추후 변경 예정
+        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
 
         //유저 검증
         Optional<User> user = userRepository.findById(request.getUser_id());
@@ -190,7 +188,7 @@ public class BoardServiceImpl implements BoardService{
         Optional<BoardComment> comment = boardCommentRepository.findById(comment_id);
 
         //댓글 존재 유무 확인
-        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);// 추후 변경 예정
+        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
 
         //댓글 본인 확인
         if(comment.get().getUser().getId() != user_id) throw new BaseException(USER_NOT_EXIST);
@@ -236,7 +234,7 @@ public class BoardServiceImpl implements BoardService{
     public Long saveReply(BoardCommentReplyWriteRequest request) {
         //댓글이 존재하는지 확인
         Optional<BoardComment> comment = boardCommentRepository.findById(request.getComment_id());
-        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_CATEGORY);// 추후변경
+        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
 
         //유저가 존재하는지 확인
         Optional<User> user = userRepository.findById(request.getUser_id());
@@ -256,7 +254,7 @@ public class BoardServiceImpl implements BoardService{
     public void updateReply(BoardCommentReplyUpdateRequest request) {
         //딥글이 존재하는지 확인
         Optional<BoardCommentReply> reply = boardCommentReplyRepository.findById(request.getReply_id());
-        if(reply.isEmpty()) throw new BaseException(NOT_EXIST_CATEGORY);// 추후변경
+        if(reply.isEmpty()) throw new BaseException(NOT_EXIST_REPLY);
 
         //유저가 존재하는지 확인
         Optional<User> user = userRepository.findById(request.getUser_id());
@@ -272,7 +270,7 @@ public class BoardServiceImpl implements BoardService{
     public void deleteReply(Long reply_id, Long user_id) {
         //딥글이 존재하는지 확인
         Optional<BoardCommentReply> reply = boardCommentReplyRepository.findById(reply_id);
-        if(reply.isEmpty()) throw new BaseException(NOT_EXIST_CATEGORY);// 추후변경
+        if(reply.isEmpty()) throw new BaseException(NOT_EXIST_REPLY);
 
         //유저가 존재하는지 확인
         Optional<User> user = userRepository.findById(user_id);
@@ -288,7 +286,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public List<BoardCommentReplyResponse> findReplyByCommentId(Long comment_id) {
         Optional<BoardComment> boardComment = boardCommentRepository.findById(comment_id);
-        if(boardComment.isEmpty()) throw new BaseException(NOT_EXIST_CATEGORY);// 추후변경
+        if(boardComment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
 
         List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(boardComment.get());
 
