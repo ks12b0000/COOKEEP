@@ -52,11 +52,11 @@ public class BoardServiceImpl implements BoardService{
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(boardWriteRequest.getCategory());
         if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
 
-        //잘못된 섬네일 url 검증
-        if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
-
         //만약 글에 섬네일 설정이 안되어 있으면 기본값 넣기
         if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
+
+        //잘못된 섬네일 url 검증
+        if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
 
         //글 생성
         Board board = new Board(foodCategory, boardWriteRequest, user.get());
@@ -243,6 +243,9 @@ public class BoardServiceImpl implements BoardService{
         //답글 제작
         BoardCommentReply reply = new BoardCommentReply(user.get(), comment.get(), request.getText());
 
+        //답글 저장
+        boardCommentReplyRepository.save(reply);
+
         //댓글에 replyCnt + 1
         comment.get().increaseReplyCount();
 
@@ -289,7 +292,7 @@ public class BoardServiceImpl implements BoardService{
         if(boardComment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
 
         List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(boardComment.get());
-
+        System.out.println(replies.size());
         List<BoardCommentReplyResponse> list = new LinkedList<>();
         for(BoardCommentReply reply : replies){
             list.add(new BoardCommentReplyResponse(reply));

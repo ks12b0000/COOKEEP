@@ -8,6 +8,7 @@ import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
 import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
 import teamproject.backend.domain.User;
@@ -161,13 +162,13 @@ public class BoardController {
     }
 
     @PostMapping("/board/comment/reply")
-    public BaseResponse save_reply(BoardCommentReplyWriteRequest request){
+    public BaseResponse save_reply(@RequestBody BoardCommentReplyWriteRequest request){
         boardService.saveReply(request);
         return new BaseResponse("성공적으로 대댓글을 작성했습니다.");
     }
 
     @PatchMapping("/board/comment/reply")
-    public BaseResponse update_reply(BoardCommentReplyUpdateRequest request){
+    public BaseResponse update_reply(@RequestBody BoardCommentReplyUpdateRequest request){
         boardService.updateReply(request);
         return new BaseResponse("성공적으로 대댓글을 수정했습니다.");
     }
@@ -179,8 +180,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/comment/reply/list")
-    public BaseResponse list_board_replies(@RequestParam Long comment_id){
-        boardService.findReplyByCommentId(comment_id);
-        return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.");
+    public BaseResponse<List<BoardCommentReplyResponse>> list_board_replies(@RequestParam Long comment_id){
+        List<BoardCommentReplyResponse> list = boardService.findReplyByCommentId(comment_id);
+        return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.", list);
     }
 }

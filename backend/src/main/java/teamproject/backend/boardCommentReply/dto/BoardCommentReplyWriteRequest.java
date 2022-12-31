@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardCommentReplyWriteRequest {
-    @NotBlank(message = "comment_id를 입력해주세요.", groups = ValidationGroup.NotBlankGroup.class)
+    @NotNull(message = "comment_id를 입력해주세요.", groups = ValidationGroup.NotBlankGroup.class)
     private Long comment_id;
 
     @Size(min = 5, message = "댓글의 내용은 5글자 이상 입력하세요.", groups = ValidationGroup.PatternGroup.class)
