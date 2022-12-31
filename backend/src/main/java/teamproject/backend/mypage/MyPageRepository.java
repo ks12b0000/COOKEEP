@@ -8,4 +8,6 @@ import teamproject.backend.domain.User;
 public interface MyPageRepository extends JpaRepository<User, Long> {
 
     User findByPassword(String password);
+
+    User findByUsername(String username);
 }
