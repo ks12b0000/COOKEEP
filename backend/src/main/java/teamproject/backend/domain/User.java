@@ -39,7 +39,12 @@ public class User {
     }
 
     // 비밀번호 변경
-    public void updatePassword(String password){
-        this.password = password;
+    public void updatePassword(String updatePassword){
+        this.password = updatePassword;
+    }
+
+    // 아이디 변경
+    public void updateUsername(String updateUsername) {
+        this.username = updateUsername;
     }
 }

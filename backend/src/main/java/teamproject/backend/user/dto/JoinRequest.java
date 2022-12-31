@@ -28,6 +28,6 @@ public class JoinRequest {
 
     // 유저 비밀번호 (영문, 숫자 조합 5~15자 특수문자 포함해도되고 안해도 됨.)
     @NotBlank(message = "비밀번호를 입력하세요.", groups = NotBlankGroup.class)
-    @Pattern(regexp= "^(?=.*[a-z])(?=.*\\d)[A-Za-z\\d!?@#$%&*]{5,15}$", message = "비민번호는 5자 이상의 영어, 숫자를 포함해주세요.", groups = PatternGroup.class)
+    @Pattern(regexp= "^(?=.*[a-z])(?=.*\\d)[A-Za-z\\d!?@#$%&*]{5,15}$", message = "비밀번호는 5자 이상의 영어, 숫자를 포함해주세요.", groups = PatternGroup.class)
     private String password;
 }

@@ -10,9 +10,10 @@ public enum BaseExceptionStatus {
     // 유저 관련 에러코드
     DUPLICATE_ID(3001, "중복된 아이디가 있습니다."),
     FAIL_ENCRYPT_PASSWORD(3002, "비밀번호 암호화에 실패했습니다."),
-    LOGIN_USER_NOT_EXIST(3003, "아이디, 또는 비밀번호가 일치하지 않습니다."),
+    LOGIN_USER_NOT_EXIST(3003, "아이디 또는 비밀번호가 일치하지 않습니다."),
+    DUPLICATE_EMAIL(3004, "중복된 이메일이 있습니다."),
     USER_NOT_EXIST(3005, "존재하지 않는 유저입니다."),
-    DUPLICATE_EMAIL(3001, "중복된 이메일이 있습니다."),
+    USER_NOT_PASSWORD(3006, "비밀번호를 확인해주세요."),
     KAKAO_GET_TOKEN_FAIL(3101, "예상치 못한 이유로 카카오 토큰 받기에 실패했습니다"),
     KAKAO_GET_USER_INFO_FAIL(3102, "예상치 못한 이유로 카카오 사용자 정보 가져오기에 실패했습니다"),
     NAVER_GET_TOKEN_FAIL(3103, "예상치 못한 이유로 네이버 토큰 받기에 실패했습니다"),
