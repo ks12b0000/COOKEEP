@@ -65,17 +65,7 @@ public class MyPageServiceImpl implements MyPageService {
         String updatePassword = SHA256.encrypt(updatePwRequest.getUpdatePassword());
         user.updatePassword(updatePassword);
 
-        // accessToken 삭제
-        Cookie accessCookie = new Cookie("accessToken", null);
-        accessCookie.setMaxAge(0);
-        accessCookie.setPath("/");
-        response.addCookie(accessCookie);
-
-        // refreshToken 삭제
-        Cookie refreshCookie = new Cookie("refreshToken", null);
-        refreshCookie.setMaxAge(0);
-        refreshCookie.setPath("/");
-        response.addCookie(refreshCookie);
+        logout(response);
     }
 
     /**
@@ -96,20 +86,64 @@ public class MyPageServiceImpl implements MyPageService {
 
         if(userIdCheck == null){    // 중복 X
             user.updateUsername(updateUsername);
-
-            // accessToken 삭제
-            Cookie accessCookie = new Cookie("accessToken", null);
-            accessCookie.setMaxAge(0);
-            accessCookie.setPath("/");
-            response.addCookie(accessCookie);
-
-            // refreshToken 삭제
-            Cookie refreshCookie = new Cookie("refreshToken", null);
-            refreshCookie.setMaxAge(0);
-            refreshCookie.setPath("/");
-            response.addCookie(refreshCookie);
+            logout(response);
         } else {
             throw new BaseException(DUPLICATE_ID); // 중복 O(중복된 아이디가 있습니다.)
         }
+    }
+
+    /**
+     * 유저 이메일 변경
+     * @param user_id
+     * @param updateEmailRequest
+     * @param response
+     */
+    @Override
+    @Transactional
+    public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response) {
+
+        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+
+        String updateEmail = updateEmailRequest.getUpdateEmail();
+
+        User updateEmailCheck = myPageRepository.findByEmail(updateEmail);
+
+        if(updateEmailCheck == null){    // 중복 X
+            user.updateEmail(updateEmail);
+            logout(response);
+        } else {
+            throw new BaseException(DUPLICATE_EMAIL); // 중복 O(중복된 이메일이 있습니다.)
+        }
+    }
+
+    /**
+     * 유저 정보 수정 후 로그아웃
+     * @param response
+     */
+    public void logout(HttpServletResponse response) {
+        // accessToken 삭제
+        Cookie accessCookie = new Cookie("accessToken", null);
+        accessCookie.setMaxAge(0);
+        accessCookie.setPath("/");
+        response.addCookie(accessCookie);
+
+        // refreshToken 삭제
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setPath("/");
+        response.addCookie(refreshCookie);
+    }
+
+    /**
+     * 회원 탈퇴
+     * @param user_id
+     */
+    @Override
+    @Transactional
+    public void userDelete(Long user_id) {
+
+        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+
+        myPageRepository.delete(user);
     }
 }

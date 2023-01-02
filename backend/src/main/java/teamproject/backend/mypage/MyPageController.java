@@ -75,4 +75,34 @@ public class MyPageController {
 
         return new BaseResponse("아이디 변경에 성공했습니다.");
     }
+
+    /**
+     * 유저 이메일 변경
+     * [PUT] /user/update/email/{user_id}
+     * @param user_id
+     * @param updateEmailRequest
+     * @param response
+     * @return
+     */
+    @PutMapping("/user/update/email/{user_id}")
+    public BaseResponse updateEmail(@PathVariable Long user_id, @Validated(ValidationSequence.class) @RequestBody UpdateEmailRequest updateEmailRequest, HttpServletResponse response) {
+
+        myPageService.updateByUserEmail(user_id, updateEmailRequest, response);
+
+        return new BaseResponse("이메일 변경에 성공했습니다.");
+    }
+
+    /**
+     * 회원 탈퇴
+     * [DELETE] /user/delete/{user_id}
+     * @param user_id
+     * @return
+     */
+    @DeleteMapping("/user/delete/{user_id}")
+    public BaseResponse userDelete(@PathVariable Long user_id) {
+
+        myPageService.userDelete(user_id);
+
+        return new BaseResponse("회원 탈퇴에 성공했습니다.");
+    }
 }
