@@ -25,7 +25,8 @@ const GoogleLogin = () => {
                 dispatch(
                     loginUser({
                         userId: res.data.result.id,
-                        isLoggedIn: true
+                        isLoggedIn: true,
+                        isSocialLogin: true,
                     })
                 );
 

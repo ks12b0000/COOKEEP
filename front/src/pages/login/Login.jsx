@@ -65,7 +65,8 @@ function Login() {
                     dispatch(
                         loginUser({
                             userId: res.data.result.id,
-                            isLoggedIn: true
+                            isLoggedIn: true,
+                            isSocialLogin: false,
                         })
                     );
 

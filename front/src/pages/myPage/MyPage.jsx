@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router";
+import { useSelector } from "react-redux";
 import UserHttp from "../../http/userHttp";
 
 const userHttp = new UserHttp();
@@ -9,6 +10,7 @@ const userHttp = new UserHttp();
 function MyPage() {
     const params = useParams();
     const { userId } = params;
+    const isSocialLogin = useSelector((state) => state.persistedReducer.userReducer.isSocialLogin);
 
     const [UserInfo, setUserInfo] = useState([]);
 
@@ -36,7 +38,7 @@ function MyPage() {
                             <span>{UserInfo.username}</span> 님 안녕하세요
                         </UserInfoTitle>
                         <UserInfoEmail>{UserInfo.email}</UserInfoEmail>
-                        <UserInfoButton>내정보 변경</UserInfoButton>
+                        {isSocialLogin?<></>:<UserInfoButton>내정보 변경</UserInfoButton>}
                     </UserInfoBlock>
                     <UserLogBlock>
                         <UserLogTitle>나의 활동</UserLogTitle>
