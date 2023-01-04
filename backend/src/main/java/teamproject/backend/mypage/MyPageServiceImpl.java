@@ -4,13 +4,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamproject.backend.board.BoardRepository;
+import teamproject.backend.domain.Board;
+import teamproject.backend.domain.BoardLike;
 import teamproject.backend.domain.User;
+import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mypage.dto.*;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
@@ -21,6 +30,8 @@ import static teamproject.backend.response.BaseExceptionStatus.*;
 public class MyPageServiceImpl implements MyPageService {
 
     private final MyPageRepository myPageRepository;
+    private final LikeBoardRepository likeBoardRepository;
+    private final BoardRepository boardRepository;
 
     /**
      * 마이페이지 조회
@@ -146,4 +157,35 @@ public class MyPageServiceImpl implements MyPageService {
 
         myPageRepository.delete(user);
     }
+
+    /**
+     * 유저가 좋아요 누른 글 목록
+     * @param user_id
+     * @return
+     */
+    @Override
+    public GetLikeByUserResponse likeByUser(Long user_id) {
+        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        List<LikeByUserResponse> likeBoards = likeBoardRepository.findByUser(user).stream().map(BoardLike::toDto).collect(Collectors.toList());     // map으로 매핑 후  리스트로 변환
+
+        GetLikeByUserResponse getLikeByUserResponse = GetLikeByUserResponse.builder().likeList(likeBoards).build();
+
+        return getLikeByUserResponse;
+    }
+
+    /**
+     * 유저가 쓴 글 목록
+     * @param user_id
+     * @return
+     */
+    @Override
+    public GetBoardByUserResponse boardByUser(Long user_id) {
+        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        List<BoardByUserResponse> userBoards = boardRepository.findByUser(user).stream().map(Board::toDto).collect(Collectors.toList());
+
+        GetBoardByUserResponse getBoardByUserResponse = GetBoardByUserResponse.builder().boardList(userBoards).build();
+
+        return getBoardByUserResponse;
+    }
+
 }

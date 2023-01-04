@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import teamproject.backend.user.dto.LoginResponse;
+import teamproject.backend.mypage.dto.LikeByUserResponse;
 
 import javax.persistence.*;
 
@@ -36,5 +36,11 @@ public class BoardLike {
         this.board = board;
         this.user = user;
         this.status = true;
+    }
+
+    public LikeByUserResponse toDto(){
+        return LikeByUserResponse.builder()
+                .board(board)
+                .build();
     }
 }

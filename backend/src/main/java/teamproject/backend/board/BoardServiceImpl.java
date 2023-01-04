@@ -405,5 +405,5 @@ public class BoardServiceImpl implements BoardService{
         likeBoardRepository.delete(boardLike);
         return "좋아요 취소 성공.";
     }
-    
+
 }
