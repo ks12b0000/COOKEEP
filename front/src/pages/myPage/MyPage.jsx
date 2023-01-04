@@ -4,15 +4,17 @@ import { useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import UserHttp from "../../http/userHttp";
+import UserInfoChange from "../../components/mypage/UserInfoChange";
 
 const userHttp = new UserHttp();
 
-function MyPage() {
+const MyPage = () => {
     const params = useParams();
     const { userId } = params;
     const isSocialLogin = useSelector((state) => state.persistedReducer.userReducer.isSocialLogin);
 
     const [UserInfo, setUserInfo] = useState([]);
+    const [IsModal, setIsModal] = useState(false);
 
     useEffect(() => {
         onMypage();
@@ -38,7 +40,7 @@ function MyPage() {
                             <span>{UserInfo.username}</span> 님 안녕하세요
                         </UserInfoTitle>
                         <UserInfoEmail>{UserInfo.email}</UserInfoEmail>
-                        {isSocialLogin?<></>:<UserInfoButton>내정보 변경</UserInfoButton>}
+                        {isSocialLogin ? <></> : <UserInfoButton onClick={() => setIsModal(true)}>내정보 변경</UserInfoButton>}
                     </UserInfoBlock>
                     <UserLogBlock>
                         <UserLogTitle>나의 활동</UserLogTitle>
@@ -51,28 +53,31 @@ function MyPage() {
                             </UserLogContentsBox>
                         </UserLogContentsBlock>
                     </UserLogBlock>
+                    {IsModal ? <UserInfoChange setIsModal={setIsModal} /> : <></>}
                 </MypageWrap>
             ) : (
                 <></>
             )}
         </>
     );
-}
+};
 
 const MypageWrap = styled.div`
-    width: 900px;
+    width: 100%;
     height: 100vh;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #f2f2f2;
+    position: relative;
 `;
 
 const UserInfoBlock = styled.div`
-    width: 100%;
-    background-color: #fcfcfc;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 12px;
+    width: 900px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     height: 200px;
     border-radius: 30px;
     padding: 40px 60px;
@@ -118,7 +123,7 @@ const UserInfoButton = styled.div`
 `;
 
 const UserLogBlock = styled.div`
-    width: 100%;
+    width: 900px;
     display: flex;
     flex-direction: column;
 `;
@@ -139,8 +144,8 @@ const UserLogContentsBlock = styled.div`
 
 const UserLogContentsBox = styled.div`
     width: 100%;
-    background-color: #fcfcfc;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     height: 150px;
     border-radius: 30px;
     display: flex;
