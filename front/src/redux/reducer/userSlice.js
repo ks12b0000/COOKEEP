@@ -4,17 +4,20 @@ export const UserSlice = createSlice({
     name: "user",
     initialState: {
         userId: "",
-        isLoggedIn: false
+        isLoggedIn: false,
+        isSocialLogin: false,
     },
     reducers: {
         loginUser: (state, action) => {
             state.userId = action.payload.userId;
             state.isLoggedIn = action.payload.isLoggedIn;
+            state.isSocialLogin = action.payload.isSocialLogin;
         },
 
         logoutUser: (state) => {
             state.userId = "";
             state.isLoggedIn = false;
+            state.isSocialLogin = false;
         }
     }
 });

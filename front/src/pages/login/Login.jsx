@@ -65,7 +65,8 @@ function Login() {
                     dispatch(
                         loginUser({
                             userId: res.data.result.id,
-                            isLoggedIn: true
+                            isLoggedIn: true,
+                            isSocialLogin: false
                         })
                     );
 
@@ -92,17 +93,17 @@ function Login() {
 
         try {
             const res = await userHttp.postFindId(body);
-            setMailText(res.data.message+' 이메일로 아이디를 확인하세요')
+            setMailText(res.data.message + " 이메일로 아이디를 확인하세요");
             console.log(res);
         } catch (err) {
             console.log(err);
-            setMailText(err.response.data.message)
+            setMailText(err.response.data.message);
         }
 
         console.log(EmailForFindId);
         setTimeout(() => {
             setEmailForFindId("");
-            setMailText("")
+            setMailText("");
         }, 5000);
     };
 
@@ -112,22 +113,22 @@ function Login() {
 
         const body = {
             username: UserNameForFindPassword,
-            email: EmailForFindPassword,
+            email: EmailForFindPassword
         };
-    
+
         try {
             const res = await userHttp.postFindPassword(body);
-            setMailText(res.data.message+' 이메일로 비밀번호를 확인하세요')
+            setMailText(res.data.message + " 이메일로 비밀번호를 확인하세요");
             console.log(res);
         } catch (err) {
             console.log(err);
-            setMailText(err.response.data.message)
+            setMailText(err.response.data.message);
         }
-    
+
         setTimeout(() => {
             setUserNameForFindPassword("");
             setEmailForFindPassword("");
-            setMailText("")
+            setMailText("");
         }, 5000);
     };
 
@@ -174,11 +175,11 @@ function Login() {
                         <ModalBackground />
                         <ModalWrap height="350px">
                             <ModalTitle>아이디 찾기</ModalTitle>
-                            <XButton onClick={() => setFindId(false)} top='11%'/>
+                            <XButton onClick={() => setFindId(false)} top="11%" />
                             <ModalContentsWrap>
                                 <ModalText>이메일 주소를 입력해 주세요</ModalText>
-                                <ModalInput value={EmailForFindId} type="email" placeholder="email" onChange={(e) => setEmailForFindId(e.currentTarget.value)} mb='40px'/>
-                                <ModalMiniText top='54%'>{MailText}</ModalMiniText>
+                                <ModalInput value={EmailForFindId} type="email" placeholder="email" onChange={(e) => setEmailForFindId(e.currentTarget.value)} mb="50px" />
+                                <ModalMiniText top="54%">{MailText}</ModalMiniText>
                                 <ModalButton onClick={(e) => onFindId(e)}>확 인</ModalButton>
                             </ModalContentsWrap>
                         </ModalWrap>
@@ -192,13 +193,13 @@ function Login() {
                         <ModalBackground />
                         <ModalWrap height="430px">
                             <ModalTitle>비밀번호 찾기</ModalTitle>
-                            <XButton onClick={() => setFindPassword(false)} top='9%'/>
+                            <XButton onClick={() => setFindPassword(false)} top="9%" />
                             <ModalContentsWrap>
                                 <ModalText>아이디를 입력해 주세요</ModalText>
-                                <ModalInput value={UserNameForFindPassword} type="id" placeholder="id" onChange={(e) => setUserNameForFindPassword(e.currentTarget.value)} mb='20px'/>
+                                <ModalInput value={UserNameForFindPassword} type="id" placeholder="id" onChange={(e) => setUserNameForFindPassword(e.currentTarget.value)} mb="30px" />
                                 <ModalText>이메일 주소를 입력해 주세요</ModalText>
-                                <ModalInput value={EmailForFindPassword} type="email" placeholder="email" onChange={(e) => setEmailForFindPassword(e.currentTarget.value)} mb='40px'/>
-                                <ModalMiniText top='65%'>{MailText}</ModalMiniText>
+                                <ModalInput value={EmailForFindPassword} type="email" placeholder="email" onChange={(e) => setEmailForFindPassword(e.currentTarget.value)} mb="40px" />
+                                <ModalMiniText top="65%">{MailText}</ModalMiniText>
                                 <ModalButton onClick={(e) => onFindPassword(e)}>확 인</ModalButton>
                             </ModalContentsWrap>
                         </ModalWrap>
@@ -231,6 +232,7 @@ const LoginWrap = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 `;
 
 const LoginTitle = styled.div`
@@ -378,7 +380,7 @@ const XButton = styled.div`
     background-size: 17px;
     position: absolute;
     left: 84%;
-    top: ${props=>props.top};
+    top: ${(props) => props.top};
     opacity: 0.5;
     cursor: pointer;
     z-index: 10;
@@ -399,17 +401,20 @@ const ModalContentsWrap = styled.div`
 `;
 
 const ModalTitle = styled.div`
-    font-size: 20px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     margin: 35px 50px;
     border-bottom: 2px solid #35c5f0;
     padding-bottom: 15px;
+    color: #515151;
 `;
 
 const ModalText = styled.div`
     font-size: 16px;
-    margin-bottom: 18px;
+    margin-bottom: 15px;
     margin-left: 10px;
+    color: #515151;
+    font-weight: 500;
 `;
 
 const ModalInput = styled.input`
@@ -417,7 +422,7 @@ const ModalInput = styled.input`
     height: 45px;
     border: 1.5px solid #cecece;
     border-radius: 30px;
-    margin-bottom: ${props=>props.mb};
+    margin-bottom: ${(props) => props.mb};
     outline: none;
     font-size: 16px;
     font-weight: 300;
@@ -435,7 +440,7 @@ const ModalInput = styled.input`
 
 const ModalMiniText = styled.div`
     position: absolute;
-    top: ${props=>props.top};
+    top: ${(props) => props.top};
     margin-left: 10px;
     font-size: 13px;
     color: #35c5f0;
