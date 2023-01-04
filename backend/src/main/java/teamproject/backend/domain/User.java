@@ -47,4 +47,9 @@ public class User {
     public void updateUsername(String updateUsername) {
         this.username = updateUsername;
     }
+
+    // 이메일 변경
+    public void updateEmail(String updateEmail) {
+        this.email = updateEmail;
+    }
 }

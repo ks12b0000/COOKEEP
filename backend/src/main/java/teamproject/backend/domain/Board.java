@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.mypage.dto.BoardByUserResponse;
+import teamproject.backend.mypage.dto.LikeByUserResponse;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -64,5 +66,14 @@ public class Board{
 
     public void decreaseLikeCount() {
         this.liked -= 1;
+    }
+
+    public BoardByUserResponse toDto(){
+        return BoardByUserResponse.builder()
+                .board_id(board_id)
+                .category_id(category.getCategory_id())
+                .title(title)
+                .thumbnail(thumbnail)
+                .build();
     }
 }
