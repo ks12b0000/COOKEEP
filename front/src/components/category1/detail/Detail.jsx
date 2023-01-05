@@ -52,7 +52,7 @@ export default Detail;
 
 const Container = styled.article`
     width: 1200px;
-    margin: 2rem auto 0;
+    margin: 100px auto 0;
 `;
 const Top = styled.div`
   display: flex;

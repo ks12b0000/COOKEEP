@@ -9,7 +9,7 @@ const CategoryHttp = new categoryHttp();
 function CateItem() {
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showPost, setShowPost] = useState(8);
+    const [showPost, setShowPost] = useState(1);
     const [totalPost, setTotalPost] = useState(0);
 
     const LastIndex = currentPage * showPost;

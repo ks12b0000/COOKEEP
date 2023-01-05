@@ -10,8 +10,8 @@ import Writing from "../../components/category1/writing/Writing";
 
 const Container = styled.section`
     width: 1200px;
-    margin: 0 auto;
-    margin-top: 100px;
+    margin: 100px auto 0;
+    
   
 `;
 const Category1Title = styled.div`

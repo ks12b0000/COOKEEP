@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import Banner from "./banner/Banner";
 
 const MainContainer = styled.main`
     width: 1200px;
@@ -14,7 +15,7 @@ const MainContainer = styled.main`
 function Main() {
     return (
         <MainContainer>
-            <div>메인페이지입니다.</div>
+            <Banner />
         </MainContainer>
     );
 }
