@@ -22,7 +22,6 @@ function Category2() {
 
     return (
         <>
-            <Header />
             <Container>
                카테고리2
             </Container>

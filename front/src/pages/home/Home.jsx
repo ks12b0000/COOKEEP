@@ -7,25 +7,23 @@ import UserHttp from "../../http/userHttp";
 const userHttp = new UserHttp();
 
 function Home() {
-    
-
+    //
     // // 로그인 여부 체크 (임시 위치)
     // useEffect(()=>{
     //     onCheck()
     // },[])
-    //
     // const onCheck = async()=>{
     //     try {
-    //         const res = await userHttp.getisLoggedIn();
+    //         const res = await userHttp.getIsLoggedIn();
     //         console.log(res);
     //     } catch (err) {
     //         console.log(err);
     //     }
     // }
 
+
     return (
         <>
-            <Header />
             <Main />
         </>
     );

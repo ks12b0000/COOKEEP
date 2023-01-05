@@ -37,16 +37,17 @@ const MediaMenu = styled.div`
 const userHttp = new UserHttp();
 
 function RightGnb() {
-    const { isLoggedIn } = useSelector((state) => state.persistedReducer.userReducer);
+    const userInfo = useSelector((state) => state.persistedReducer.userReducer);
     const dispatch = useDispatch();
-    useEffect(() => {}, [isLoggedIn]);
+    useEffect(() => {
+    }, [userInfo]);
 
     const logout = async() => {
         //서버에 요청을 하여 accesstoken과 refreshtoken을 삭제시켜줌
         //현재는 서버에서 직접 토큰을 지워줄 수 없어서 통신여부만 체크함
-        console.log(userHttp.getLogout);
         try{
             const res = await userHttp.getLogout();
+            console.log(res);
 
         }catch(err){
             console.log(err);
@@ -65,7 +66,7 @@ function RightGnb() {
     return (
         <>
             <GnbContainer>
-                {isLoggedIn === false ? (
+                {userInfo.isLoggedIn === false ? (
                     <>
                         <li>
                             <Link to="/login"> 로그인</Link>
@@ -77,7 +78,7 @@ function RightGnb() {
                 ) : (
                     <>
                         <li>
-                            <Link to="/myPage">마이페이지</Link>
+                            <Link to={`/myPage/${userInfo.userId}`}>마이페이지</Link>
                         </li>
                         <li>
                             <Link to="/" onClick={logout}>로그아웃</Link>

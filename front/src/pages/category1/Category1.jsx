@@ -32,7 +32,6 @@ function Category1() {
             <Routes>
                 <Route path="writing" element={<Writing />}></Route>
             </Routes>
-            <Header />
             <Container>
                 <Category1Title>
                     <h1>카테고리 이름</h1>
