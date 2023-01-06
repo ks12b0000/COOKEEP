@@ -21,7 +21,7 @@ public class User {
     private String username;
 
     // 유저 이메일
-    @Column(length = 30, nullable = false)
+    @Column(length = 30, nullable = false, unique = true)
     private String email;
 
     // 유저 비밀번호

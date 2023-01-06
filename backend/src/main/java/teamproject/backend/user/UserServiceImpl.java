@@ -123,6 +123,10 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
         User user = userRepository.findByUsername(username);
 
+        if(user == null) {
+            throw new BaseException(LOGIN_USER_NOT_EXIST);
+        }
+
         password = SHA256.encrypt(password, user.getSalt()); // 비번 암호화
 
         user = userRepository.findByUsernameAndPassword(username, password);
