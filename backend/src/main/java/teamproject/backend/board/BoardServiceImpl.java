@@ -56,6 +56,7 @@ public class BoardServiceImpl implements BoardService{
         if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
 
         //잘못된 섬네일 url 검증
+
         if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
 
         //글 생성
