@@ -46,7 +46,7 @@ public class BoardController {
      */
     @GetMapping("/board/list")
     public BaseResponse<List<BoardReadResponse>> board_list_by_category(@RequestParam String category){
-        List<BoardReadResponse> pages = boardService.findByCategory(category);
+        List<BoardReadResponse> pages = boardService.getBoardReadResponseListByFoodCategoryName(category);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -57,7 +57,7 @@ public class BoardController {
      */
     @GetMapping("/board/list/{user_id}")
     public BaseResponse<List<BoardReadResponse>> board_list_by_user(@PathVariable Long user_id){
-        List<BoardReadResponse> pages = boardService.findByUserId(user_id);
+        List<BoardReadResponse> pages = boardService.getBoardReadResponseListByUserId(user_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -69,7 +69,7 @@ public class BoardController {
      */
     @GetMapping("/board")
     public BaseResponse<BoardReadResponse> search_board(@RequestParam Long board_id){
-        BoardReadResponse boardReadResponse = boardService.findById(board_id);
+        BoardReadResponse boardReadResponse = boardService.getBoardReadResponse(board_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", boardReadResponse);
     }
 
@@ -99,17 +99,6 @@ public class BoardController {
     public BaseResponse delete_board(@RequestParam Long board_id, @RequestParam Long user_id){
         boardService.delete(user_id, board_id);
         return new BaseResponse<>("성공적으로 글을 삭제했습니다.");
-    }
-
-    /**
-     * 섬네일 오류 글 전체 삭제
-     * [DELETE] /board/thumbnail-err
-     * @return
-     */
-    @DeleteMapping("/board/thumbnail-err")
-    public BaseResponse delete_err_thumbnail_board(){
-        boardService.delete_err_thumbnail();
-        return new BaseResponse("성공적으로 해당 글을 삭제했습니다.");
     }
 
     /**

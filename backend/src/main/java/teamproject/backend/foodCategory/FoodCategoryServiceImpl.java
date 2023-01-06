@@ -11,6 +11,8 @@ import teamproject.backend.response.BaseExceptionStatus;
 import java.util.ArrayList;
 import java.util.List;
 
+import static teamproject.backend.response.BaseExceptionStatus.NOT_EXIST_CATEGORY;
+
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +61,12 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
         FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(before);
 
         foodCategory.setCategoryName(after);
+    }
+
+    @Override
+    public FoodCategory getFoodCategory(String name) {
+        FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(name);
+        if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
+        return foodCategory;
     }
 }

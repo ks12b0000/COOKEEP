@@ -1,5 +1,6 @@
 package teamproject.backend.foodCategory;
 
+import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.foodCategory.dto.FoodCategoryResponse;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface FoodCategoryService {
     void delete(String foodCategoryName);
 
     void change(String before, String after);
+
+    FoodCategory getFoodCategory(String name);
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.foodCategory.FoodCategoryService;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -52,10 +53,11 @@ public class Board{
         this.liked = 0;
     }
 
-    public void update(String title, String text, String thumbnail){
+    public void update(String title, String text, String thumbnail, FoodCategory category){
         this.thumbnail = thumbnail;
         this.title = title;
         this.text = text;
+        this.category = category;
     }
 
     public void increaseLikeCount() {
