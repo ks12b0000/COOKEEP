@@ -52,13 +52,14 @@ public class MyPageServiceImpl implements MyPageService {
      */
     @Override
     public CheckIdPwResponse checkPassword(CheckPwRequest checkPwRequest, Long user_id) {
-        Optional<User> user = myPageRepository.findById(user_id);
-        user = myPageRepository.findByPassword(SHA256.encrypt(checkPwRequest.getPassword(),user.get().getSalt()));
+        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+
+        user = myPageRepository.findByPassword(SHA256.encrypt(checkPwRequest.getPassword(), user.getSalt()));
 
         if(user == null){
             throw new BaseException(USER_NOT_PASSWORD);
         } else {
-            return new CheckIdPwResponse(user.get().getId());
+            return new CheckIdPwResponse(user.getId());
         }
     }
 
