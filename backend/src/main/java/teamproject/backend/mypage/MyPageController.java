@@ -33,11 +33,11 @@ public class MyPageController {
 
     /**
      * 유저 정보 수정 시 비밀번호 확인
-     * [GET] /auth/user/check/password
+     * [POST] /auth/user/check/password
      * @param checkPwRequest
      * @return
      */
-    @GetMapping("/auth/user/check/password")
+    @PostMapping("/auth/user/check/password")
     public BaseResponse<CheckIdPwResponse> checkPassword(@Validated(ValidationSequence.class) @RequestBody CheckPwRequest checkPwRequest) {
 
         CheckIdPwResponse user = myPageService.checkPassword(checkPwRequest);
