@@ -52,7 +52,7 @@ public class BoardServiceImpl implements BoardService{
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(boardWriteRequest.getCategory());
 
         if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail(DEFAULT_IMAGE_URL);
-        if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
+        if(!thumbnailExist(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
 
         Board board = new Board(foodCategory, boardWriteRequest, user);
         return board;
@@ -111,7 +111,7 @@ public class BoardServiceImpl implements BoardService{
 
         if(UpdateUser != board.getUser()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
         if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail(DEFAULT_IMAGE_URL);
-        if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
+        if(!thumbnailExist(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
 
         board.update(boardWriteRequest, foodCategory);
     }
@@ -309,9 +309,9 @@ public class BoardServiceImpl implements BoardService{
         return removeLikeBoard(board, user);
     }
 
-    private boolean isThumbnailErr(String thumbnail){
-        if(!thumbnail.startsWith("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/")) return true;
-        if(imageFileRepository.findByUrl(thumbnail) == null) return true;
+    private boolean thumbnailExist(String thumbnail){
+        if(thumbnail.startsWith("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/")) return true;
+        if(imageFileRepository.findByUrl(thumbnail) != null) return true;
 
         return false;
     }
