@@ -9,7 +9,7 @@ public interface MyPageService {
 
     public GetUserResponse userInfo(Long userId);
 
-    public CheckIdPwResponse checkPassword(CheckPwRequest checkPwRequest);
+    public CheckIdPwResponse checkPassword(CheckPwRequest checkPwRequest, Long user_id);
 
     public void updateByUserPw(Long user_id, UpdatePwRequest updatePwRequest, HttpServletResponse response);
 

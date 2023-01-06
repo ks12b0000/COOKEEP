@@ -37,10 +37,10 @@ public class MyPageController {
      * @param checkPwRequest
      * @return
      */
-    @PostMapping("/auth/user/check/password")
-    public BaseResponse<CheckIdPwResponse> checkPassword(@Validated(ValidationSequence.class) @RequestBody CheckPwRequest checkPwRequest) {
+    @PostMapping("/auth/user/check/password/{user_id}")
+    public BaseResponse<CheckIdPwResponse> checkPassword(@Validated(ValidationSequence.class) @RequestBody CheckPwRequest checkPwRequest, @PathVariable Long user_id) {
 
-        CheckIdPwResponse user = myPageService.checkPassword(checkPwRequest);
+        CheckIdPwResponse user = myPageService.checkPassword(checkPwRequest, user_id);
 
         return new BaseResponse("비밀번호 확인에 성공했습니다.", user);
     }

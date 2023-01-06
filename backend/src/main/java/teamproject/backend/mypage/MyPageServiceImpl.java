@@ -17,8 +17,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
@@ -51,13 +51,14 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public CheckIdPwResponse checkPassword(CheckPwRequest checkPwRequest) {
-        User user = myPageRepository.findByPassword(SHA256.encrypt(checkPwRequest.getPassword()));
+    public CheckIdPwResponse checkPassword(CheckPwRequest checkPwRequest, Long user_id) {
+        Optional<User> user = myPageRepository.findById(user_id);
+        user = myPageRepository.findByPassword(SHA256.encrypt(checkPwRequest.getPassword(),user.get().getSalt()));
 
         if(user == null){
             throw new BaseException(USER_NOT_PASSWORD);
         } else {
-            return new CheckIdPwResponse(user.getId());
+            return new CheckIdPwResponse(user.get().getId());
         }
     }
 
@@ -73,7 +74,7 @@ public class MyPageServiceImpl implements MyPageService {
 
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
-        String updatePassword = SHA256.encrypt(updatePwRequest.getUpdatePassword());
+        String updatePassword = SHA256.encrypt(updatePwRequest.getUpdatePassword(), user.getSalt());
         user.updatePassword(updatePassword);
 
         logout(response);

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,8 +28,18 @@ public class User {
     @Column(length = 100, nullable = false)
     private String password;
 
+    @Column
+    private String salt;
+
     @OneToMany
     private List<Board> board_list = new LinkedList<>();
+
+    public User(String username, String email, String password, String salt) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.salt = salt;
+    }
 
     public User(String username, String email, String password) {
         this.username = username;
