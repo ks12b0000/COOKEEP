@@ -45,7 +45,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/user/duplicate")
-    public BaseResponse<GetUserSameRes> checkIdDuplicate(String username) {
+    public BaseResponse<GetUserSameRes> checkIdDuplicate(@RequestParam String username) {
 
         boolean idDuplicate = userService.checkIdDuplicate(username);
 
@@ -168,7 +168,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/user/email/duplicate")
-    public BaseResponse<GetUserSameRes> checkEmailDuplicate(String email) {
+    public BaseResponse<GetUserSameRes> checkEmailDuplicate(@RequestParam String email) {
 
         boolean emailDuplicate = userService.checkEmailDuplicate(email);
 

@@ -3,36 +3,52 @@ package teamproject.backend.utils;
 import teamproject.backend.response.BaseException;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 import static teamproject.backend.response.BaseExceptionStatus.FAIL_ENCRYPT_PASSWORD;
 
 public class SHA256 {
-    public static String encrypt(String planText) {
+    // 무작위 문자열 Salt
+    public static String getSalt() {
+        //1. Random, salt 생성
+        SecureRandom sr = new SecureRandom();
+        byte[] salt = new byte[20];
+
+        //2. 난수 생성
+        sr.nextBytes(salt);
+
+        //3. byte To String (10진수 문자열로 변경)
+        StringBuffer sb = new StringBuffer();
+        for(byte b : salt) {
+            sb.append(String.format("%02x", b));
+        }
+
+        return sb.toString();
+    }
+
+    // SHA-256 알고리즘 적용
+    public static String encrypt(String password, String salt) {
+        String result = "";
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(planText.getBytes());
-            byte[] byteData = md.digest();
+
+            md.update((password + salt).getBytes());
+            byte[] pwdSalt = md.digest();
+
             StringBuffer sb = new StringBuffer();
-
-            for(int i = 0; i < byteData.length; ++i) {
-                sb.append(Integer.toString((byteData[i] & 255) + 256, 16).substring(1));
+            for(byte b : pwdSalt) {
+                sb.append(String.format("%02x", b));
             }
 
-            StringBuffer hexString = new StringBuffer();
+            result = sb.toString();
 
-            for(int i = 0; i < byteData.length; ++i) {
-                String hex = Integer.toHexString(255 & byteData[i]);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             throw new BaseException(FAIL_ENCRYPT_PASSWORD);
+
         }
+
+        return result;
     }
 }

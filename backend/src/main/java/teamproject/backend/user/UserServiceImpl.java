@@ -47,12 +47,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String username = joinRequest.getUsername();
         String email = joinRequest.getEmail();
         String password = joinRequest.getPassword();
+        String salt = SHA256.getSalt();
 
-        password = SHA256.encrypt(password);
+        password = SHA256.encrypt(password, salt);
 
         if (checkIdDuplicate(username)){}
 
-        User user = new User(username, email, password);
+        User user = new User(username, email, password, salt);
         userRepository.save(user);
 
         return user.getId();
@@ -117,9 +118,14 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String password = loginRequest.getPassword();
         boolean isAutoLogin = loginRequest.getAutoLogin(); // 자동 로그인 여부
 
+
         // 회원가입된 유저인지 확인
-        password = SHA256.encrypt(password); // 비번 암호화
-        User user = userRepository.findByUsernameAndPassword(username, password);
+
+        User user = userRepository.findByUsername(username);
+
+        password = SHA256.encrypt(password, user.getSalt()); // 비번 암호화
+
+        user = userRepository.findByUsernameAndPassword(username, password);
 
         // 해당하는 유저가 없음.(아이디, 또는 비밀번호가 일치하지 않습니다.)
         if(user == null) {
@@ -260,7 +266,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
             password += charSet[idx];
         }
 
-        String encPassword = SHA256.encrypt(password);
+        String salt = user.getSalt();
+        String encPassword = SHA256.encrypt(password,salt);
         user.updatePassword(encPassword);
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
