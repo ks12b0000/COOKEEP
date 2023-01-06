@@ -16,9 +16,9 @@ import java.util.List;
 public interface BoardService {
     Long save(BoardWriteRequest boardWriteRequest);
 
-    BoardReadResponse getBoardReadResponse(Long board_id);
+    BoardReadResponse getBoardReadResponseByBoardId(Long board_id);
 
-    Board getBoard(Long board_id);
+    Board getBoardByBoardId(Long board_id);
 
     List<BoardReadResponse> getBoardReadResponseListByUserId(Long user_id);
 

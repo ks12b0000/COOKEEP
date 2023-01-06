@@ -53,10 +53,10 @@ public class Board{
         this.liked = 0;
     }
 
-    public void update(String title, String text, String thumbnail, FoodCategory category){
-        this.thumbnail = thumbnail;
-        this.title = title;
-        this.text = text;
+    public void update(BoardWriteRequest boardWriteRequest, FoodCategory category){
+        this.thumbnail = boardWriteRequest.getThumbnail();
+        this.title = boardWriteRequest.getTitle();
+        this.text = boardWriteRequest.getText();
         this.category = category;
     }
 

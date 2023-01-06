@@ -69,7 +69,7 @@ public class BoardController {
      */
     @GetMapping("/board")
     public BaseResponse<BoardReadResponse> search_board(@RequestParam Long board_id){
-        BoardReadResponse boardReadResponse = boardService.getBoardReadResponse(board_id);
+        BoardReadResponse boardReadResponse = boardService.getBoardReadResponseByBoardId(board_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", boardReadResponse);
     }
 
