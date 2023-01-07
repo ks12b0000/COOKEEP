@@ -13,6 +13,7 @@ import teamproject.backend.boardCommentReply.BoardCommentReplyRepository;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
+import teamproject.backend.boardTag.BoardTagService;
 import teamproject.backend.domain.*;
 import teamproject.backend.foodCategory.FoodCategoryService;
 import teamproject.backend.imageFile.ImageFileRepository;
@@ -38,12 +39,14 @@ public class BoardServiceImpl implements BoardService{
     private final ImageFileRepository imageFileRepository;
     private final BoardCommentRepository boardCommentRepository;
     private final BoardCommentReplyRepository boardCommentReplyRepository;
+    private final BoardTagService boardTagService;
     private final String DEFAULT_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
     @Override
     @Transactional
     public Long save(BoardWriteRequest boardWriteRequest){
         Board board = createBoard(boardWriteRequest);
         boardRepository.save(board);
+        boardTagService.saveTags(board, boardWriteRequest.getTags());
         return board.getBoard_id();
     }
 

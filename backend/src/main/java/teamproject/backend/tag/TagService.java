@@ -10,4 +10,5 @@ public interface TagService {
     Tag findById(Long tag_id);
     Tag findByName(String tagName);
     List<Tag> findAll();
+    boolean exist(String tagName);
 }

@@ -16,6 +16,7 @@ public class TagServiceImpl implements TagService{
 
     @Override
     public Long save(String tagName) {
+        if(exist(tagName)) throw new BaseException(BaseExceptionStatus.NOT_EXIST_TAG);
         Tag tag = new Tag(tagName);
         tagRepository.save(tag);
         return tag.getTag_id();
@@ -46,4 +47,12 @@ public class TagServiceImpl implements TagService{
         List<Tag> tags = tagRepository.findAll();
         return tags;
     }
+
+    @Override
+    public boolean exist(String tagName) {
+        Tag tag = tagRepository.findByTagName(tagName);
+        if(tag == null) return false;
+        return true;
+    }
+
 }
