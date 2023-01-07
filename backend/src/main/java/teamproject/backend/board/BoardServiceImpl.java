@@ -14,9 +14,8 @@ import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
 import teamproject.backend.domain.*;
-import teamproject.backend.foodCategory.FoodCategoryRepository;
+import teamproject.backend.foodCategory.FoodCategoryService;
 import teamproject.backend.imageFile.ImageFileRepository;
-import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
@@ -34,134 +33,96 @@ public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-    private final FoodCategoryRepository foodCategoryRepository;
+    private final FoodCategoryService foodCategoryService;
     private final LikeBoardRepository likeBoardRepository;
     private final ImageFileRepository imageFileRepository;
-    private final ImageFileService imageFileService;
     private final BoardCommentRepository boardCommentRepository;
     private final BoardCommentReplyRepository boardCommentReplyRepository;
-
+    private final String DEFAULT_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
     @Override
     @Transactional
     public Long save(BoardWriteRequest boardWriteRequest){
-        //유저 검증
-        Optional<User> user = userRepository.findById(boardWriteRequest.getUser_id());
-        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
-
-        //음식 카테고리 찾기
-        FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(boardWriteRequest.getCategory());
-        if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
-
-        //만약 글에 섬네일 설정이 안되어 있으면 기본값 넣기
-        if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
-
-        //잘못된 섬네일 url 검증
-        if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
-
-        //글 생성
-        Board board = new Board(foodCategory, boardWriteRequest, user.get());
-
-        //글 저장
+        Board board = createBoard(boardWriteRequest);
         boardRepository.save(board);
-
-        //글 아이디 리턴
         return board.getBoard_id();
     }
 
+    private Board createBoard(BoardWriteRequest boardWriteRequest) {
+        User user = getUserById(boardWriteRequest.getUser_id());
+        FoodCategory foodCategory = foodCategoryService.getFoodCategory(boardWriteRequest.getCategory());
+
+        if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail(DEFAULT_IMAGE_URL);
+        if(!thumbnailExist(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
+
+        Board board = new Board(foodCategory, boardWriteRequest, user);
+        return board;
+    }
+
+    private User getUserById(Long user_id) {
+        Optional<User> user = userRepository.findById(user_id);
+        if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
+        return user.get();
+    }
+
     @Override
-    public BoardReadResponse findById(Long board_id){
-        //id 검증
+    public BoardReadResponse getBoardReadResponseByBoardId(Long board_id){
+        Board board = getBoardByBoardId(board_id);
+        return new BoardReadResponse(board);
+    }
+
+    @Override
+    public Board getBoardByBoardId(Long board_id) {
         Optional<Board> board = boardRepository.findById(board_id);
         if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
-
-        //boardReadResponse 로 리턴
-        return new BoardReadResponse(board.get());
+        return board.get();
     }
 
     @Override
-    public List<BoardReadResponse> findByUserId(Long user_id) {
+    public List<BoardReadResponse> getBoardReadResponseListByUserId(Long user_id) {
         List<Board> boards = boardRepository.findByUser_id(user_id);
 
-        List<BoardReadResponse> list = new ArrayList<>();
+        List<BoardReadResponse> responses = new ArrayList<>();
         for(Board board : boards){
-            list.add(new BoardReadResponse(board));
+            responses.add(new BoardReadResponse(board));
         }
 
-        return list;
+        return responses;
     }
 
     @Override
-    public List<BoardReadResponse> findAll() {
-        List<Board> boards = boardRepository.findAll();
+    public List<BoardReadResponse> getBoardReadResponseListByFoodCategoryName(String categoryName) {
+        FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
+        List<Board> boards = boardRepository.findByCategory(foodCategory);
 
-        List<BoardReadResponse> list = new ArrayList<>();
+        List<BoardReadResponse> responses = new ArrayList<>();
         for(Board board : boards){
-            list.add(new BoardReadResponse(board));
+            responses.add(new BoardReadResponse(board));
         }
 
-        return list;
-    }
-
-
-    @Override
-    public List<BoardReadResponse> findByCategory(String category) {
-        //음식 카테고리 찾기
-        FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(category);
-        if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
-
-        //카테고리에 맞는 글 찾기
-        List<Board> searchBoardList = boardRepository.findByCategory(foodCategory);
-
-        //주어진 페이지에 맞게 페이지 자르기
-        List<BoardReadResponse> pageBoardList = new ArrayList<>();
-        for(Board board : searchBoardList){
-            pageBoardList.add(new BoardReadResponse(board));
-        }
-
-        //페이지 리턴
-        return pageBoardList;
+        return responses;
     }
 
     @Override
     @Transactional
     public void update(Long board_id, BoardWriteRequest boardWriteRequest){
-        Optional<Board> board = boardRepository.findById(board_id);
+        Board board = getBoardByBoardId(board_id);
+        User UpdateUser = getUserById(boardWriteRequest.getUser_id());
+        FoodCategory foodCategory = foodCategoryService.getFoodCategory(boardWriteRequest.getCategory());
 
-        // 글 아이디 검증
-        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
+        if(UpdateUser != board.getUser()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+        if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail(DEFAULT_IMAGE_URL);
+        if(!thumbnailExist(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
 
-        //유저 검증
-        Optional<User> user = userRepository.findById(boardWriteRequest.getUser_id());
-        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
-
-        //음식 카테고리 찾기
-        FoodCategory foodCategory = foodCategoryRepository.findByCategoryName(boardWriteRequest.getCategory());
-        if(foodCategory == null) throw new BaseException(NOT_EXIST_CATEGORY);
-
-        //잘못된 섬네일 url 검증
-        if(isThumbnailErr(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
-
-        //만약 글에 섬네일 설정이 안되어 있으면 기본값 넣기
-        if(boardWriteRequest.getThumbnail() == null) boardWriteRequest.setThumbnail("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png");
-
-        board.get().update(boardWriteRequest.getTitle(), boardWriteRequest.getText(), boardWriteRequest.getThumbnail());
+        board.update(boardWriteRequest, foodCategory);
     }
 
     @Override
     @Transactional
     public Long saveComment(BoardCommentWriteRequest boardCommentWriteRequest) {
-        Optional<Board> board = boardRepository.findById(boardCommentWriteRequest.getBoard_id());
+        Board board = getBoardByBoardId(boardCommentWriteRequest.getBoard_id());
+        User user = getUserById(boardCommentWriteRequest.getUser_id());
 
-        // 글 아이디 검증
-        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
-
-        //유저 검증
-        Optional<User> user = userRepository.findById(boardCommentWriteRequest.getUser_id());
-        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
-
-        //댓글 생성
-        BoardComment comment = new BoardComment(user.get(), board.get(), boardCommentWriteRequest.getText());
-
+        BoardComment comment = new BoardComment(user, board, boardCommentWriteRequest.getText());
         boardCommentRepository.save(comment);
 
         return comment.getBoardComment_id();
@@ -176,8 +137,7 @@ public class BoardServiceImpl implements BoardService{
         if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
 
         //유저 검증
-        Optional<User> user = userRepository.findById(request.getUser_id());
-        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+        getUserById(request.getUser_id());
 
         comment.get().setText(request.getText());
     }
@@ -216,10 +176,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<BoardCommentResponse> findCommentByUserId(Long user_id) {
-        Optional<User> user = userRepository.findById(user_id);
-        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+        User user = getUserById(user_id);
 
-        List<BoardComment> comments = boardCommentRepository.findByUser(user.get());
+        List<BoardComment> comments = boardCommentRepository.findByUser(user);
 
         List<BoardCommentResponse> list = new LinkedList<>();
         for (BoardComment comment : comments){
@@ -237,11 +196,10 @@ public class BoardServiceImpl implements BoardService{
         if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
 
         //유저가 존재하는지 확인
-        Optional<User> user = userRepository.findById(request.getUser_id());
-        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+        User user = getUserById(request.getUser_id());
 
         //답글 제작
-        BoardCommentReply reply = new BoardCommentReply(user.get(), comment.get(), request.getText());
+        BoardCommentReply reply = new BoardCommentReply(user, comment.get(), request.getText());
 
         //답글 저장
         boardCommentReplyRepository.save(reply);
@@ -260,8 +218,7 @@ public class BoardServiceImpl implements BoardService{
         if(reply.isEmpty()) throw new BaseException(NOT_EXIST_REPLY);
 
         //유저가 존재하는지 확인
-        Optional<User> user = userRepository.findById(request.getUser_id());
-        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+        getUserById(request.getUser_id());
 
         //답글 수정
         reply.get().setText(request.getText());
@@ -276,8 +233,7 @@ public class BoardServiceImpl implements BoardService{
         if(reply.isEmpty()) throw new BaseException(NOT_EXIST_REPLY);
 
         //유저가 존재하는지 확인
-        Optional<User> user = userRepository.findById(user_id);
-        if(user.isEmpty()) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+        getUserById(user_id);
 
         //댓글의 replyCnt - 1
         reply.get().getBoardComment().decreaseReplyCount();
@@ -304,42 +260,34 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void delete(Long user_id, Long board_id) {
-        //글 찾기
-        Optional<Board> board = boardRepository.findById(board_id);
-        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
+        Board board = getBoardByBoardId(board_id);
+        User requestUser = getUserById(user_id);
+        if(board.getUser() != requestUser) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
 
-        //유저가 맞는지 확인
-        if(board.get().getUser().getId() != user_id) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+        deleteImageAll(board);
+        deleteBoardLikes(board);
+        deleteBoardComments(board);
 
-        //글에 존재하는 사진 삭제
-        deleteImageAll(board.get());
+        boardRepository.delete(board);
+    }
 
-        //글에 좋아요 한 경우 삭제
-        List<BoardLike> likeList = likeBoardRepository.findByBoard(board.get());
+    private void deleteBoardComments(Board board) {
+        List<BoardComment> commentList = boardCommentRepository.findByBoard(board);
+        for(BoardComment comment : commentList){
+            boardCommentRepository.delete(comment);
+        }
+    }
+
+    private void deleteBoardLikes(Board board) {
+        List<BoardLike> likeList = likeBoardRepository.findByBoard(board);
         for(BoardLike like : likeList){
             likeBoardRepository.delete(like);
         }
-
-        // 글 댓글 삭제
-        List<BoardComment> commentList = boardCommentRepository.findByBoard(board.get());
-        for(BoardComment comment : commentList){
-            delete(comment.getUser().getId(), comment.getBoardComment_id());
-        }
-
-        //글 삭제
-        boardRepository.delete(board.get());
     }
 
     @Transactional
     private void deleteImageAll(Board board){
-        //섬네일 사진 삭제
-        String thumbnailURL = board.getThumbnail();
-
-        if(thumbnailURL != "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png") {
-            imageFileService.delete(thumbnailURL);
-        }
-        //글 속 사진 삭제 - 개발중
-        //List<String> imageUrlInText = getImageUrlInText(board.getText());
+        //글삭제 알고리즘
     }
 
     private List<String> getImageUrlInText(String text){
@@ -360,30 +308,10 @@ public class BoardServiceImpl implements BoardService{
         board.decreaseLikeCount();
         return removeLikeBoard(board, user);
     }
-    @Override
-    @Transactional
-    public void delete_err_thumbnail(){
-        List<Board> list = boardRepository.findAll();
 
-        for(Board board : list){
-            if(isThumbnailErr(board.getThumbnail())){
-                delete(board.getUser().getId(), board.getBoard_id());
-            }
-        }
-    }
-
-    private boolean isThumbnailErr(String thumbnail){
-        if(thumbnail == "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png") return false;
-
-        //url 주소 문제
-        if(!thumbnail.startsWith("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/")){
-            return true;
-        }
-
-        //이미지 파일 레포에 없는 경우
-        if(imageFileRepository.findByUrl(thumbnail) == null){
-            return true;
-        }
+    private boolean thumbnailExist(String thumbnail){
+        if(thumbnail.startsWith("https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/")) return true;
+        if(imageFileRepository.findByUrl(thumbnail) != null) return true;
 
         return false;
     }
