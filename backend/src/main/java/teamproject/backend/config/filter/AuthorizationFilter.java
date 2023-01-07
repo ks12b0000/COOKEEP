@@ -47,7 +47,8 @@ public class AuthorizationFilter implements Filter {
         Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
         Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
 
-        String accessToken, refreshToken;
+        String accessToken;
+        String refreshToken;
 
         // access쿠키는 있으나, refresh쿠키는 없는경우
         if(accessCookie != null && refreshCookie == null){

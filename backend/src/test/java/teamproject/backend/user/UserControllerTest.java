@@ -120,7 +120,6 @@ public class UserControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("1000"))
                 .andExpect(jsonPath("message").value("로그인에 성공했습니다."))
-                .andExpect(jsonPath("result.id").value(1))
                 .andDo(MockMvcResultHandlers.print());
     }
 

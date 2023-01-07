@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import teamproject.backend.board.dto.BoardWriteRequest;
-import teamproject.backend.foodCategory.FoodCategoryService;
+import teamproject.backend.mypage.dto.BoardByUserResponse;
+import teamproject.backend.mypage.dto.LikeByUserResponse;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -53,11 +54,10 @@ public class Board{
         this.liked = 0;
     }
 
-    public void update(BoardWriteRequest boardWriteRequest, FoodCategory category){
-        this.thumbnail = boardWriteRequest.getThumbnail();
-        this.title = boardWriteRequest.getTitle();
-        this.text = boardWriteRequest.getText();
-        this.category = category;
+    public void update(String title, String text, String thumbnail){
+        this.thumbnail = thumbnail;
+        this.title = title;
+        this.text = text;
     }
 
     public void increaseLikeCount() {
@@ -66,5 +66,14 @@ public class Board{
 
     public void decreaseLikeCount() {
         this.liked -= 1;
+    }
+
+    public BoardByUserResponse toDto(){
+        return BoardByUserResponse.builder()
+                .board_id(board_id)
+                .category_id(category.getCategory_id())
+                .title(title)
+                .thumbnail(thumbnail)
+                .build();
     }
 }
