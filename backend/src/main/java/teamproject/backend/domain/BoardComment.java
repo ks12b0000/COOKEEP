@@ -16,12 +16,12 @@ public class BoardComment {
     private Long boardComment_id;
 
     //댓글 작성자, FK(외래키 - User)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     //댓글이 작성된 글
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
