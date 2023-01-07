@@ -70,7 +70,8 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardReadResponse getBoardReadResponseByBoardId(Long board_id){
         Board board = getBoardByBoardId(board_id);
-        return new BoardReadResponse(board);
+        String tags = boardTagService.findTagsByBoard(board);
+        return new BoardReadResponse(board, tags);
     }
 
     @Override
@@ -86,7 +87,8 @@ public class BoardServiceImpl implements BoardService{
 
         List<BoardReadResponse> responses = new ArrayList<>();
         for(Board board : boards){
-            responses.add(new BoardReadResponse(board));
+            String tags = boardTagService.findTagsByBoard(board);
+            responses.add(new BoardReadResponse(board, tags));
         }
 
         return responses;
@@ -99,7 +101,8 @@ public class BoardServiceImpl implements BoardService{
 
         List<BoardReadResponse> responses = new ArrayList<>();
         for(Board board : boards){
-            responses.add(new BoardReadResponse(board));
+            String tags = boardTagService.findTagsByBoard(board);
+            responses.add(new BoardReadResponse(board, tags));
         }
 
         return responses;

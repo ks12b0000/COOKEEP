@@ -8,7 +8,6 @@ import teamproject.backend.domain.Tag;
 import teamproject.backend.tag.TagService;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -48,22 +47,37 @@ public class BoardTagServiceImpl implements BoardTagService{
     }
     @Override
     public void deleteAllByBoard(Board board) {
-        List<BoardTag> boardTags = findByBoard(board);
+        List<BoardTag> boardTags = findBoardTagByBoard(board);
         for(BoardTag boardTag : boardTags){
             boardTagRepository.delete(boardTag);
         }
     }
 
     @Override
-    public List<BoardTag> findByBoard(Board board) {
+    public List<BoardTag> findBoardTagByBoard(Board board) {
         List<BoardTag> boardTags = boardTagRepository.findByBoard(board);
         return boardTags;
     }
 
     @Override
-    public List<BoardTag> findByTag(Tag tag) {
+    public String findTagsByBoard(Board board) {
+        List<BoardTag> boardTags = findBoardTagByBoard(board);
+        String tags = "";
+        for(BoardTag boardTag : boardTags){
+            tags += "#" + boardTag.getTag().getTagName() + " ";
+        }
+        return tags;
+    }
+
+    @Override
+    public List<BoardTag> findBoardTagByTag(Tag tag) {
         List<BoardTag> boardTags = boardTagRepository.findByTag(tag);
         return boardTags;
+    }
+
+    @Override
+    public List<Board> findBoardByTag(Tag tag) {
+        return null;
     }
 
 }
