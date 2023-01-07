@@ -28,4 +28,6 @@ public class BoardWriteRequest {
     private Long user_id;
 
     private String thumbnail;
+
+    private String tags;
 }

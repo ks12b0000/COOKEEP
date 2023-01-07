@@ -35,6 +35,9 @@ public enum BaseExceptionStatus {
 
     LESS_PAGE_NUMBER(4052, "페이지 번호 부족"),
 
+    //[4060 ~ ]태그 관련 에러코드
+    NOT_EXIST_TAG(4060, "존재하지 않는 태그"),
+
     //[4080 ~] 댓글, 대댓글 관련 에러코드
     NOT_EXIST_COMMENT(4080, "댓글이 존재하지 않습니다."),
 

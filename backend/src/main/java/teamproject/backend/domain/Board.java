@@ -18,11 +18,11 @@ public class Board{
     private Long board_id;
 
     //글 작성자, FK(외래키 - User)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private FoodCategory category;
 

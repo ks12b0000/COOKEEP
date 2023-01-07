@@ -13,6 +13,7 @@ import teamproject.backend.boardCommentReply.BoardCommentReplyRepository;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
+import teamproject.backend.boardTag.BoardTagService;
 import teamproject.backend.domain.*;
 import teamproject.backend.foodCategory.FoodCategoryService;
 import teamproject.backend.imageFile.ImageFileRepository;
@@ -38,12 +39,14 @@ public class BoardServiceImpl implements BoardService{
     private final ImageFileRepository imageFileRepository;
     private final BoardCommentRepository boardCommentRepository;
     private final BoardCommentReplyRepository boardCommentReplyRepository;
+    private final BoardTagService boardTagService;
     private final String DEFAULT_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
     @Override
     @Transactional
     public Long save(BoardWriteRequest boardWriteRequest){
         Board board = createBoard(boardWriteRequest);
         boardRepository.save(board);
+        boardTagService.saveTags(board, boardWriteRequest.getTags());
         return board.getBoard_id();
     }
 
@@ -67,7 +70,8 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardReadResponse getBoardReadResponseByBoardId(Long board_id){
         Board board = getBoardByBoardId(board_id);
-        return new BoardReadResponse(board);
+        String tags = boardTagService.findTagsByBoard(board);
+        return new BoardReadResponse(board, tags);
     }
 
     @Override
@@ -83,7 +87,8 @@ public class BoardServiceImpl implements BoardService{
 
         List<BoardReadResponse> responses = new ArrayList<>();
         for(Board board : boards){
-            responses.add(new BoardReadResponse(board));
+            String tags = boardTagService.findTagsByBoard(board);
+            responses.add(new BoardReadResponse(board, tags));
         }
 
         return responses;
@@ -96,7 +101,8 @@ public class BoardServiceImpl implements BoardService{
 
         List<BoardReadResponse> responses = new ArrayList<>();
         for(Board board : boards){
-            responses.add(new BoardReadResponse(board));
+            String tags = boardTagService.findTagsByBoard(board);
+            responses.add(new BoardReadResponse(board, tags));
         }
 
         return responses;
