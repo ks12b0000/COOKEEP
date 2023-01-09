@@ -13,5 +13,5 @@ public interface MainPageRepository extends JpaRepository<Board, Long> {
 
     List<Board> findByTitleContaining(@Param("keyword") String keyword);
 
-    List<Tag> findByTagNameContaining(@Param("tag") String tag);
+//    List<Tag> findByTagNameContaining(@Param("tag") String tag);
 }
