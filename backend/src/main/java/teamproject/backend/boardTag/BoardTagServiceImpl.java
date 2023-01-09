@@ -19,19 +19,19 @@ public class BoardTagServiceImpl implements BoardTagService{
     private final TagService tagService;
 
     @Override
-    public void saveTags(Board board, String tagRequest) {
+    public void saveBoardTags(Board board, String tagRequest) {
         List<String> tagNames = splitTagName(tagRequest);
         for(String tagName : tagNames){
-            Tag tag = getTag(tagName);
+            createTag(tagName);
+            Tag tag = tagService.findByName(tagName);
             boardTagRepository.save(new BoardTag(board,tag));
         }
     }
 
-    private Tag getTag(String tagName){
+    private void createTag(String tagName){
         if(!tagService.exist(tagName)){
             tagService.save(tagName);
         }
-        return tagService.findByName(tagName);
     }
     private List<String> splitTagName(String tags){
         String[] tagArray = tags.split("#");
@@ -78,7 +78,7 @@ public class BoardTagServiceImpl implements BoardTagService{
 
     @Override
     public List<BoardTag> findBoardTagByTagName(String tagName) {
-        Tag tag = getTag(tagName);
+        Tag tag = tagService.findByName(tagName);
         List<BoardTag> boardTags = boardTagRepository.findByTag(tag);
         return boardTags;
     }

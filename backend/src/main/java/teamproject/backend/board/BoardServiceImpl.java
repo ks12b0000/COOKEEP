@@ -46,7 +46,7 @@ public class BoardServiceImpl implements BoardService{
     public Long save(BoardWriteRequest boardWriteRequest){
         Board board = createBoard(boardWriteRequest);
         boardRepository.save(board);
-        boardTagService.saveTags(board, boardWriteRequest.getTags());
+        boardTagService.saveBoardTags(board, boardWriteRequest.getTags());
         return board.getBoard_id();
     }
 
