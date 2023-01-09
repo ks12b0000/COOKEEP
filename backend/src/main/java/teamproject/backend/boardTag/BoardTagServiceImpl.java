@@ -27,7 +27,7 @@ public class BoardTagServiceImpl implements BoardTagService{
     }
 
     private Tag getTag(String tagName){
-        if(tagService.exist(tagName)){
+        if(!tagService.exist(tagName)){
             tagService.save(tagName);
         }
         return tagService.findByName(tagName);
