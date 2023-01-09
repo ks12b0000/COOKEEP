@@ -2,6 +2,7 @@ package teamproject.backend.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import teamproject.backend.mainPage.dto.SearchByResponse;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,5 +26,15 @@ public class BoardTag {
     public BoardTag(Board board, Tag tag) {
         this.board = board;
         this.tag = tag;
+    }
+
+    public SearchByResponse toSearchDto(){
+        return SearchByResponse.builder()
+                .board_id(board.getBoard_id())
+                .category_id(board.getCategory().getCategory_id())
+                .title(board.getTitle())
+                .user_id(board.getUser().getId())
+                .thumbnail(board.getThumbnail())
+                .build();
     }
 }
