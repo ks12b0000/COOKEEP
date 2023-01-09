@@ -75,6 +75,7 @@ public class Board{
                 .board_id(board_id)
                 .category_id(category.getCategory_id())
                 .title(title)
+                .user_id(user.getId())
                 .thumbnail(thumbnail)
                 .build();
     }
@@ -84,6 +85,7 @@ public class Board{
                 .board_id(board_id)
                 .category_id(category.getCategory_id())
                 .title(title)
+                .user_id(user.getId())
                 .thumbnail(thumbnail)
                 .build();
     }
