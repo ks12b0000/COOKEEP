@@ -2,6 +2,7 @@ package teamproject.backend.boardTag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import teamproject.backend.board.BoardService;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardTag;
 import teamproject.backend.domain.Tag;
@@ -18,27 +19,33 @@ public class BoardTagServiceImpl implements BoardTagService{
     private final TagService tagService;
 
     @Override
-    public void saveTags(Board board, String tagRequest) {
+    public void saveBoardTags(Board board, String tagRequest) {
         List<String> tagNames = splitTagName(tagRequest);
         for(String tagName : tagNames){
-            Tag tag = getTag(tagName);
+            createTag(tagName);
+            Tag tag = tagService.findByName(tagName);
             boardTagRepository.save(new BoardTag(board,tag));
         }
     }
 
-    private Tag getTag(String tagName){
-        if(tagService.exist(tagName)){
+    private void createTag(String tagName){
+        if(!tagService.exist(tagName)){
             tagService.save(tagName);
         }
-        return tagService.findByName(tagName);
     }
     private List<String> splitTagName(String tags){
         String[] tagArray = tags.split("#");
         List<String> tagNames = new ArrayList<>();
         for(String tagName : tagArray){
-            if(usableTagName(tagName)) tagNames.add(tagName);
+            if(usableTagName(tagName)){
+                tagNames.add(deleteLastChar(tagName));
+            }
         }
         return tagNames;
+    }
+
+    private String deleteLastChar(String name){
+        return name.substring(0, name.length() - 1);
     }
 
     private boolean usableTagName(String tagName){
@@ -70,14 +77,20 @@ public class BoardTagServiceImpl implements BoardTagService{
     }
 
     @Override
-    public List<BoardTag> findBoardTagByTag(Tag tag) {
+    public List<BoardTag> findBoardTagByTagName(String tagName) {
+        Tag tag = tagService.findByName(tagName);
         List<BoardTag> boardTags = boardTagRepository.findByTag(tag);
         return boardTags;
     }
 
     @Override
-    public List<Board> findBoardByTag(Tag tag) {
-        return null;
+    public List<Board> findBoardByTagName(String tagName) {
+        List<BoardTag> boardTags = findBoardTagByTagName(tagName);
+        List<Board> boards = new ArrayList<>();
+        for(BoardTag boardTag : boardTags){
+            boards.add(boardTag.getBoard());
+        }
+        return boards;
     }
 
 }
