@@ -2,6 +2,7 @@ package teamproject.backend.boardTag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import teamproject.backend.board.BoardService;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardTag;
 import teamproject.backend.domain.Tag;
@@ -36,9 +37,15 @@ public class BoardTagServiceImpl implements BoardTagService{
         String[] tagArray = tags.split("#");
         List<String> tagNames = new ArrayList<>();
         for(String tagName : tagArray){
-            if(usableTagName(tagName)) tagNames.add(tagName);
+            if(usableTagName(tagName)){
+                tagNames.add(deleteLastChar(tagName));
+            }
         }
         return tagNames;
+    }
+
+    private String deleteLastChar(String name){
+        return name.substring(0, name.length() - 1);
     }
 
     private boolean usableTagName(String tagName){
@@ -70,14 +77,20 @@ public class BoardTagServiceImpl implements BoardTagService{
     }
 
     @Override
-    public List<BoardTag> findBoardTagByTag(Tag tag) {
+    public List<BoardTag> findBoardTagByTagName(String tagName) {
+        Tag tag = getTag(tagName);
         List<BoardTag> boardTags = boardTagRepository.findByTag(tag);
         return boardTags;
     }
 
     @Override
-    public List<Board> findBoardByTag(Tag tag) {
-        return null;
+    public List<Board> findBoardByTagName(String tagName) {
+        List<BoardTag> boardTags = findBoardTagByTagName(tagName);
+        List<Board> boards = new ArrayList<>();
+        for(BoardTag boardTag : boardTags){
+            boards.add(boardTag.getBoard());
+        }
+        return boards;
     }
 
 }
