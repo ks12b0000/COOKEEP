@@ -8,6 +8,7 @@ import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
+import teamproject.backend.domain.Board;
 import teamproject.backend.domain.User;
 
 import java.util.List;
@@ -15,16 +16,15 @@ import java.util.List;
 public interface BoardService {
     Long save(BoardWriteRequest boardWriteRequest);
 
-    BoardReadResponse findById(Long board_id);
-    List<BoardReadResponse> findByUserId(Long user_id);
+    BoardReadResponse getBoardReadResponseByBoardId(Long board_id);
 
-    List<BoardReadResponse> findAll();
+    Board getBoardByBoardId(Long board_id);
 
-    List<BoardReadResponse> findByCategory(String category);
+    List<BoardReadResponse> getBoardReadResponseListByUserId(Long user_id);
+
+    List<BoardReadResponse> getBoardReadResponseListByFoodCategoryName(String categoryName);
 
     void delete(Long user_id, Long board_id);
-
-    void delete_err_thumbnail();
 
     String updateLikeOfBoard(Long board_id, User user);
 

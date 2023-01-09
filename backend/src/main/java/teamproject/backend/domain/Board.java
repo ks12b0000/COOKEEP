@@ -19,11 +19,11 @@ public class Board{
     private Long board_id;
 
     //글 작성자, FK(외래키 - User)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private FoodCategory category;
 
@@ -55,10 +55,11 @@ public class Board{
         this.liked = 0;
     }
 
-    public void update(String title, String text, String thumbnail){
-        this.thumbnail = thumbnail;
-        this.title = title;
-        this.text = text;
+    public void update(BoardWriteRequest boardWriteRequest, FoodCategory foodCategory){
+        this.thumbnail = boardWriteRequest.getThumbnail();
+        this.title = boardWriteRequest.getTitle();
+        this.text = boardWriteRequest.getText();
+        this.category = foodCategory;
     }
 
     public void increaseLikeCount() {
