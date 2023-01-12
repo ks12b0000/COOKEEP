@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamproject.backend.domain.BoardCommentReply;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Getter
@@ -13,13 +14,18 @@ import java.util.Date;
 public class BoardCommentReplyResponse {
     private Long reply_id;
     private String user_name;
-    private Date create_date;
+    private String create_date;
     private String text;
 
     public BoardCommentReplyResponse(BoardCommentReply reply) {
         this.reply_id = reply.getBoardCommentReply_id();
         this.user_name = reply.getUser().getUsername();
-        this.create_date = reply.getCreateDate();
+        this.create_date = asString(reply.getCreateDate());
         this.text = reply.getText();
+    }
+
+    private String asString(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
     }
 }
