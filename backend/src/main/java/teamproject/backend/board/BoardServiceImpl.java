@@ -130,6 +130,7 @@ public class BoardServiceImpl implements BoardService{
 
         BoardComment comment = new BoardComment(user, board, boardCommentWriteRequest.getText());
         boardCommentRepository.save(comment);
+        board.increaseCommentCount();
 
         return comment.getBoardComment_id();
     }
@@ -137,46 +138,56 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void updateComment(BoardCommentUpdateRequest request) {
-        Optional<BoardComment> comment = boardCommentRepository.findById(request.getBoardComment_id());
+        BoardComment comment = getBoardComment(request.getBoardComment_id());
 
-        //댓글 존재 유무 확인
-        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
-
-        //유저 검증
         getUserById(request.getUser_id());
 
-        comment.get().setText(request.getText());
+        comment.setText(request.getText());
+    }
+
+    private BoardComment getBoardComment(Long request) {
+        Optional<BoardComment> comment = boardCommentRepository.findById(request);
+        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
+        return comment.get();
     }
 
     @Override
     @Transactional
-    public void deleteComment(Long comment_id, Long user_id) {
-        Optional<BoardComment> comment = boardCommentRepository.findById(comment_id);
+    public void deleteComment(Long comment_id, Long commentDeleteUser) {
+        BoardComment comment = getBoardComment(comment_id);
+        Board board = comment.getBoard();
 
-        //댓글 존재 유무 확인
-        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
+        Long commentCreateUser = comment.getUser().getId();
+        if(commentCreateUser != commentDeleteUser) throw new BaseException(USER_NOT_EXIST);
 
-        //댓글 본인 확인
-        if(comment.get().getUser().getId() != user_id) throw new BaseException(USER_NOT_EXIST);
+        deleteAllReplyOf(comment);
 
-        //reply 삭제
+        boardCommentRepository.delete(comment);
+        board.decreaseCommentCount();
+    }
 
-        //댓글 삭제
-        boardCommentRepository.delete(comment.get());
+    private void deleteAllReplyOf(BoardComment comment) {
+        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(comment);
+        for(BoardCommentReply reply : replies){
+            boardCommentReplyRepository.delete(reply);
+        }
     }
 
     @Override
     public List<BoardCommentResponse> findCommentByBoardId(Long board_id) {
-        Optional<Board> board = boardRepository.findById(board_id);
-        if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
+        Board board = getBoardByBoardId(board_id);
 
-        List<BoardComment> comments = boardCommentRepository.findByBoard(board.get());
+        List<BoardComment> comments = boardCommentRepository.findByBoard(board);
 
+        List<BoardCommentResponse> list = getBoardCommentResponses(comments);
+        return list;
+    }
+
+    private List<BoardCommentResponse> getBoardCommentResponses(List<BoardComment> comments) {
         List<BoardCommentResponse> list = new LinkedList<>();
         for (BoardComment comment : comments){
             list.add(new BoardCommentResponse(comment));
         }
-
         return list;
     }
 
@@ -186,32 +197,20 @@ public class BoardServiceImpl implements BoardService{
 
         List<BoardComment> comments = boardCommentRepository.findByUser(user);
 
-        List<BoardCommentResponse> list = new LinkedList<>();
-        for (BoardComment comment : comments){
-            list.add(new BoardCommentResponse(comment));
-        }
-
+        List<BoardCommentResponse> list = getBoardCommentResponses(comments);
         return list;
     }
 
     @Override
     @Transactional
     public Long saveReply(BoardCommentReplyWriteRequest request) {
-        //댓글이 존재하는지 확인
-        Optional<BoardComment> comment = boardCommentRepository.findById(request.getComment_id());
-        if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
-
-        //유저가 존재하는지 확인
+        BoardComment comment = getBoardComment(request.getComment_id());
         User user = getUserById(request.getUser_id());
 
-        //답글 제작
-        BoardCommentReply reply = new BoardCommentReply(user, comment.get(), request.getText());
+        BoardCommentReply reply = new BoardCommentReply(user, comment, request.getText());
 
-        //답글 저장
         boardCommentReplyRepository.save(reply);
-
-        //댓글에 replyCnt + 1
-        comment.get().increaseReplyCount();
+        comment.increaseReplyCount();
 
         return reply.getBoardCommentReply_id();
     }
@@ -219,41 +218,40 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void updateReply(BoardCommentReplyUpdateRequest request) {
-        //딥글이 존재하는지 확인
-        Optional<BoardCommentReply> reply = boardCommentReplyRepository.findById(request.getReply_id());
+        BoardCommentReply reply = getBoardCommentReply(request.getReply_id());
+        User requestUser = getUserById(request.getUser_id());
+        User createUser = reply.getUser();
+
+        if(createUser != requestUser) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
+
+        reply.setText(request.getText());
+    }
+
+    private BoardCommentReply getBoardCommentReply(Long reply_id) {
+        Optional<BoardCommentReply> reply = boardCommentReplyRepository.findById(reply_id);
         if(reply.isEmpty()) throw new BaseException(NOT_EXIST_REPLY);
-
-        //유저가 존재하는지 확인
-        getUserById(request.getUser_id());
-
-        //답글 수정
-        reply.get().setText(request.getText());
-
+        return reply.get();
     }
 
     @Override
     @Transactional
     public void deleteReply(Long reply_id, Long user_id) {
-        //딥글이 존재하는지 확인
-        Optional<BoardCommentReply> reply = boardCommentReplyRepository.findById(reply_id);
-        if(reply.isEmpty()) throw new BaseException(NOT_EXIST_REPLY);
+        BoardCommentReply reply = getBoardCommentReply(reply_id);
+        User deleteUser = getUserById(user_id);
+        User createUser = reply.getUser();
 
-        //유저가 존재하는지 확인
-        getUserById(user_id);
+        if(createUser != deleteUser) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
 
-        //댓글의 replyCnt - 1
-        reply.get().getBoardComment().decreaseReplyCount();
+        reply.getBoardComment().decreaseReplyCount();
 
-        //답글 삭제
-        boardCommentReplyRepository.delete(reply.get());
+        boardCommentReplyRepository.delete(reply);
     }
 
     @Override
     public List<BoardCommentReplyResponse> findReplyByCommentId(Long comment_id) {
-        Optional<BoardComment> boardComment = boardCommentRepository.findById(comment_id);
-        if(boardComment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
+        BoardComment boardComment = getBoardComment(comment_id);
 
-        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(boardComment.get());
+        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(boardComment);
         System.out.println(replies.size());
         List<BoardCommentReplyResponse> list = new LinkedList<>();
         for(BoardCommentReply reply : replies){

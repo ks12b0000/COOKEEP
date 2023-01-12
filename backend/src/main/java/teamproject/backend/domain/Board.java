@@ -45,6 +45,9 @@ public class Board{
     @Column(nullable = true)
     private Integer liked; // 좋아요 수
 
+    @Column
+    private Integer commented;
+
     public Board(FoodCategory foodCategory, BoardWriteRequest boardWriteRequest, User user) {
         this.category = foodCategory;
         this.title = boardWriteRequest.getTitle();
@@ -60,6 +63,14 @@ public class Board{
         this.title = boardWriteRequest.getTitle();
         this.text = boardWriteRequest.getText();
         this.category = foodCategory;
+    }
+
+    public void increaseCommentCount() {
+        this.commented += 1;
+    }
+
+    public void decreaseCommentCount() {
+        this.commented -= 1;
     }
 
     public void increaseLikeCount() {
