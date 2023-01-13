@@ -92,7 +92,8 @@ public class BoardServiceImpl implements BoardService{
 
     private List<BoardReadResponse> getBoardReadResponses(List<Board> boards, int length) {
         List<BoardReadResponse> responses = new ArrayList<>();
-        for(int i = 0; i < length; i++){
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
             Board board = boards.get(i);
             String tags = boardTagService.findTagsByBoard(board);
             responses.add(new BoardReadResponse(board, tags));
@@ -112,13 +113,13 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<BoardReadResponse> findBoardReadResponseOrderByCommentedDesc(int numberOfBoard) {
-        List<Board> boards = boardRepository.findAllOrderByCommentedDesc();
+        List<Board> boards = boardRepository.findAllByOrderByCommentedDesc();
         return getBoardReadResponses(boards, 10);
     }
 
     @Override
     public List<BoardReadResponse> findBoardReadResponseOrderByLikedDesc(int numberOfBoard) {
-        List<Board> boards = boardRepository.findAllOrderByLikedDesc();
+        List<Board> boards = boardRepository.findAllByOrderByLikedDesc();
         return getBoardReadResponses(boards, 10);
     }
 
