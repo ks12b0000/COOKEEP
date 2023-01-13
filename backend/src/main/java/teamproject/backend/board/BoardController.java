@@ -173,4 +173,16 @@ public class BoardController {
         List<BoardCommentReplyResponse> list = boardService.findReplyByCommentId(comment_id);
         return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.", list);
     }
+
+    @GetMapping("/board/list/best/liked")
+    public BaseResponse<List<BoardReadResponse>> board_list_order_by_liked(){
+        List<BoardReadResponse> pages = boardService.findBoardReadResponseOrderByLikedDesc(10);
+        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    }
+
+    @GetMapping("/board/list/best/commented")
+    public BaseResponse<List<BoardReadResponse>> board_list_order_by_commented(){
+        List<BoardReadResponse> pages = boardService.findBoardReadResponseOrderByCommentedDesc(10);
+        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    }
 }
