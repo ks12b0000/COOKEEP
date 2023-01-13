@@ -16,13 +16,17 @@ import java.util.List;
 public interface BoardService {
     Long save(BoardWriteRequest boardWriteRequest);
 
-    BoardReadResponse getBoardReadResponseByBoardId(Long boardId);
+    BoardReadResponse findBoardReadResponseByBoardId(Long boardId);
 
-    Board getBoardByBoardId(Long boardId);
+    Board findBoardByBoardId(Long boardId);
 
-    List<BoardReadResponse> getBoardReadResponseListByUserId(Long userId);
+    List<BoardReadResponse> findBoardReadResponseListByUserId(Long userId);
 
-    List<BoardReadResponse> getBoardReadResponseListByFoodCategoryName(String categoryName);
+    List<BoardReadResponse> findBoardReadResponseListByFoodCategoryName(String categoryName);
+
+    List<BoardReadResponse> findBoardReadResponseOrderByCommentedDesc(int numberOfBoard);
+
+    List<BoardReadResponse> findBoardReadResponseOrderByLikedDesc(int numberOdBoard);
 
     void delete(Long userId, Long boardId);
 

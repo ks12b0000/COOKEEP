@@ -46,7 +46,7 @@ public class BoardController {
      */
     @GetMapping("/board/list")
     public BaseResponse<List<BoardReadResponse>> board_list_by_category(@RequestParam String category){
-        List<BoardReadResponse> pages = boardService.getBoardReadResponseListByFoodCategoryName(category);
+        List<BoardReadResponse> pages = boardService.findBoardReadResponseListByFoodCategoryName(category);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -57,7 +57,7 @@ public class BoardController {
      */
     @GetMapping("/board/list/{user_id}")
     public BaseResponse<List<BoardReadResponse>> board_list_by_user(@PathVariable Long user_id){
-        List<BoardReadResponse> pages = boardService.getBoardReadResponseListByUserId(user_id);
+        List<BoardReadResponse> pages = boardService.findBoardReadResponseListByUserId(user_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -69,7 +69,7 @@ public class BoardController {
      */
     @GetMapping("/board")
     public BaseResponse<BoardReadResponse> search_board(@RequestParam Long board_id){
-        BoardReadResponse boardReadResponse = boardService.getBoardReadResponseByBoardId(board_id);
+        BoardReadResponse boardReadResponse = boardService.findBoardReadResponseByBoardId(board_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", boardReadResponse);
     }
 

@@ -13,7 +13,11 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByCategory(FoodCategory category);
 
-    List<Board> findByUser_id(Long user_id);
+    List<Board> findByUser_id(Long userId);
 
     List<Board> findByUser(User user);
+
+    List<Board> findAllOrderByCommentedDesc();
+
+    List<Board> findAllOrderByLikedDesc();
 }
