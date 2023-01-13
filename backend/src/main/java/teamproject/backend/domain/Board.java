@@ -2,11 +2,9 @@ package teamproject.backend.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.mainPage.dto.SearchByResponse;
 import teamproject.backend.mypage.dto.BoardByUserResponse;
-import teamproject.backend.mypage.dto.LikeByUserResponse;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Board{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long board_id;
+    private Long boardId;
 
     //글 작성자, FK(외래키 - User)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -83,8 +81,8 @@ public class Board{
 
     public BoardByUserResponse toDto(){
         return BoardByUserResponse.builder()
-                .board_id(board_id)
-                .category_id(category.getCategory_id())
+                .board_id(boardId)
+                .category_id(category.getCategoryId())
                 .title(title)
                 .thumbnail(thumbnail)
                 .build();
@@ -92,8 +90,8 @@ public class Board{
 
     public SearchByResponse toSearchDto(){
         return SearchByResponse.builder()
-                .board_id(board_id)
-                .category_id(category.getCategory_id())
+                .board_id(boardId)
+                .category_id(category.getCategoryId())
                 .title(title)
                 .thumbnail(thumbnail)
                 .build();

@@ -13,7 +13,7 @@ import java.util.List;
 public class FoodCategory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long category_id;
+    private Long categoryId;
 
     @Column
     private String categoryName;
