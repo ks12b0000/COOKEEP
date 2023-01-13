@@ -18,6 +18,8 @@ public class BoardCommentResponse {
     private String create_date;
     private String text;
     private Integer replyCount;
+    private boolean edit_selected = false;
+    private boolean reply_selected = false;
 
     public BoardCommentResponse(BoardComment comment) {
         this.comment_id = comment.getBoardComment_id();
