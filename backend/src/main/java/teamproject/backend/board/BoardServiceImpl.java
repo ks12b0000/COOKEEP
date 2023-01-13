@@ -117,7 +117,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseOrderByLikedDesc(int numberOdBoard) {
+    public List<BoardReadResponse> findBoardReadResponseOrderByLikedDesc(int numberOfBoard) {
         List<Board> boards = boardRepository.findAllOrderByLikedDesc();
         return getBoardReadResponses(boards, 10);
     }

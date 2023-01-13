@@ -26,7 +26,7 @@ public interface BoardService {
 
     List<BoardReadResponse> findBoardReadResponseOrderByCommentedDesc(int numberOfBoard);
 
-    List<BoardReadResponse> findBoardReadResponseOrderByLikedDesc(int numberOdBoard);
+    List<BoardReadResponse> findBoardReadResponseOrderByLikedDesc(int numberOfBoard);
 
     void delete(Long userId, Long boardId);
 
