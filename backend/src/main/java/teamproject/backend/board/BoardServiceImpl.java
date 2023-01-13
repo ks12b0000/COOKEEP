@@ -40,7 +40,7 @@ public class BoardServiceImpl implements BoardService{
     private final BoardCommentRepository boardCommentRepository;
     private final BoardCommentReplyRepository boardCommentReplyRepository;
     private final BoardTagService boardTagService;
-    private final String DEFAULT_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
+    private static final String DEFAULT_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
     @Override
     @Transactional
     public Long save(BoardWriteRequest boardWriteRequest){
@@ -153,11 +153,12 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public void deleteComment(Long commentId, Long commentDeleteUser) {
+    public void deleteComment(Long commentId, Long deleteUser) {
         BoardComment comment = getBoardComment(commentId);
         Board board = comment.getBoard();
 
-        Long commentCreateUser = comment.getUser().getId();
+        User commentCreateUser = comment.getUser();
+        User commentDeleteUser = getUserById(deleteUser);
         if(commentCreateUser != commentDeleteUser) throw new BaseException(USER_NOT_EXIST);
 
         deleteAllReplyOf(comment);
@@ -294,11 +295,11 @@ public class BoardServiceImpl implements BoardService{
         //글삭제 알고리즘
     }
 
-    private List<String> getImageUrlInText(String text){
+    /*private List<String> getImageUrlInText(String text){
         List<String> urls = new LinkedList<>();
 
         return null;
-    }
+    }*/
 
 
     @Override
