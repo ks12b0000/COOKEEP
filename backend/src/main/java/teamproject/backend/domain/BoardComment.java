@@ -13,7 +13,7 @@ public class BoardComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long boardComment_id;
+    private Long boardCommentId;
 
     //댓글 작성자, FK(외래키 - User)
     @ManyToOne(fetch = FetchType.LAZY)

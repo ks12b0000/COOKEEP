@@ -16,35 +16,35 @@ import java.util.List;
 public interface BoardService {
     Long save(BoardWriteRequest boardWriteRequest);
 
-    BoardReadResponse getBoardReadResponseByBoardId(Long board_id);
+    BoardReadResponse getBoardReadResponseByBoardId(Long boardId);
 
-    Board getBoardByBoardId(Long board_id);
+    Board getBoardByBoardId(Long boardId);
 
-    List<BoardReadResponse> getBoardReadResponseListByUserId(Long user_id);
+    List<BoardReadResponse> getBoardReadResponseListByUserId(Long userId);
 
     List<BoardReadResponse> getBoardReadResponseListByFoodCategoryName(String categoryName);
 
-    void delete(Long user_id, Long board_id);
+    void delete(Long userId, Long boardId);
 
-    String updateLikeOfBoard(Long board_id, User user);
+    String updateLikeOfBoard(Long boardId, User user);
 
-    void update(Long board_id, BoardWriteRequest boardWriteRequest);
+    void update(Long boardId, BoardWriteRequest boardWriteRequest);
 
     Long saveComment(BoardCommentWriteRequest boardCommentWriteRequest);
 
     void updateComment(BoardCommentUpdateRequest request);
 
-    void deleteComment(Long comment_id, Long user_id);
+    void deleteComment(Long commentId, Long userId);
 
-    List<BoardCommentResponse> findCommentByBoardId(Long board_id);
+    List<BoardCommentResponse> findCommentByBoardId(Long boardId);
 
-    List<BoardCommentResponse> findCommentByUserId(Long user_id);
+    List<BoardCommentResponse> findCommentByUserId(Long userId);
 
     Long saveReply(BoardCommentReplyWriteRequest request);
 
     void updateReply(BoardCommentReplyUpdateRequest request);
 
-    void deleteReply(Long reply_id, Long user_id);
+    void deleteReply(Long replyId, Long userId);
 
-    List<BoardCommentReplyResponse> findReplyByCommentId(Long comment_id);
+    List<BoardCommentReplyResponse> findReplyByCommentId(Long commentId);
 }

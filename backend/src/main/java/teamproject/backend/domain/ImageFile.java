@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class ImageFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long imageFile_id;
+    private Long imageFileId;
 
     @Column
     private String fileName;

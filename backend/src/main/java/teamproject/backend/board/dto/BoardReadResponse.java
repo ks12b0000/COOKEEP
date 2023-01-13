@@ -21,7 +21,7 @@ public class BoardReadResponse {
     private String tags;
 
     public BoardReadResponse(Board board, String tags){
-        this.board_id = board.getBoard_id();
+        this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
         this.text = board.getText();
