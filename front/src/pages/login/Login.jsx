@@ -65,6 +65,7 @@ function Login() {
                     dispatch(
                         loginUser({
                             userId: res.data.result.id,
+                            username: res.data.result.username,
                             isLoggedIn: true,
                             isSocialLogin: false
                         })
@@ -75,7 +76,7 @@ function Login() {
                 }
             } catch (err) {
                 console.log(err);
-                alert(err.response.data.message);
+                alert("로그인에 실패하셨습니다.");
             }
         }
 
