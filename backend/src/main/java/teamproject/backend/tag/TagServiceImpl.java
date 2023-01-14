@@ -19,7 +19,7 @@ public class TagServiceImpl implements TagService{
         if(exist(tagName)) throw new BaseException(BaseExceptionStatus.NOT_EXIST_TAG);
         Tag tag = new Tag(tagName);
         tagRepository.save(tag);
-        return tag.getTag_id();
+        return tag.getTagId();
     }
 
     @Override

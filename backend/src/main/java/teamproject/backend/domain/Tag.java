@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Getter
 @Entity
@@ -12,7 +11,7 @@ import java.util.Date;
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tag_id;
+    private Long tagId;
 
     @Column
     private String tagName;

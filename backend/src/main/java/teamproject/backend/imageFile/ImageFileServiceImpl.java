@@ -2,7 +2,6 @@ package teamproject.backend.imageFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,9 +30,9 @@ public class ImageFileServiceImpl implements ImageFileService{
 
     @Override
     @Transactional
-    public ImageFileResponse save(MultipartFile multipartFile, Long user_id) throws IOException {
+    public ImageFileResponse save(MultipartFile multipartFile, Long userId) throws IOException {
         //유저 검증
-        Optional<User> user = userRepository.findById(user_id);
+        Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()) throw new BaseException(BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS);
 
         //파일 이름 변경(중복 방지)
@@ -55,8 +53,8 @@ public class ImageFileServiceImpl implements ImageFileService{
     }
 
     @Override
-    public ImageFileResponse findById(Long image_id) throws MalformedURLException {
-        Optional<ImageFile> imageFile = imageFileRepository.findById(image_id);
+    public ImageFileResponse findById(Long imageId) {
+        Optional<ImageFile> imageFile = imageFileRepository.findById(imageId);
         if(imageFile.isEmpty()) throw new BaseException(BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS);// 존재하지 않는 사진입니다. 새로 만들기
         return new ImageFileResponse(true, imageFile.get().getFileName(), imageFile.get().getUrl());
     }

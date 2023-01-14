@@ -42,7 +42,7 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 
         FoodCategory newFoodCategory = new FoodCategory(foodCategoryName);
         foodCategoryRepository.save(newFoodCategory);
-        return newFoodCategory.getCategory_id();
+        return newFoodCategory.getCategoryId();
     }
 
     @Override

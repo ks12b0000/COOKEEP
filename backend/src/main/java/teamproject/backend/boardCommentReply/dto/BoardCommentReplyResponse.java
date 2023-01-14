@@ -18,7 +18,7 @@ public class BoardCommentReplyResponse {
     private String text;
 
     public BoardCommentReplyResponse(BoardCommentReply reply) {
-        this.reply_id = reply.getBoardCommentReply_id();
+        this.reply_id = reply.getBoardCommentReplyId();
         this.user_name = reply.getUser().getUsername();
         this.create_date = asString(reply.getCreateDate());
         this.text = reply.getText();

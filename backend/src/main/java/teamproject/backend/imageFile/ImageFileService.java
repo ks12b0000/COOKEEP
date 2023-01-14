@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 public interface ImageFileService {
-    ImageFileResponse save(MultipartFile imageFile, Long user_id) throws IOException;
-    ImageFileResponse findById(Long image_id) throws MalformedURLException;
+    ImageFileResponse save(MultipartFile imageFile, Long userId) throws IOException;
+    ImageFileResponse findById(Long imageId) throws MalformedURLException;
     void delete(String name);
 }

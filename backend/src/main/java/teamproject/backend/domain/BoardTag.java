@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import teamproject.backend.mainPage.dto.SearchByResponse;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Getter
 @Entity
@@ -13,7 +12,7 @@ import java.util.Date;
 public class BoardTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long boardTag_Id;
+    private Long boardTagId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
