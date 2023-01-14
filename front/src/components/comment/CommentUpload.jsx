@@ -7,47 +7,51 @@ import CommentHttp from "../../http/commentHttp";
 const commentHttp = new CommentHttp();
 
 const CommentUpload = (props) => {
-    const[Text, setText] = useState('')
+    const [Text, setText] = useState("");
     const userId = useSelector((state) => state.persistedReducer.userReducer.userId);
 
-    useEffect(()=>{
-        console.log('보드아디',props.boardId);
-    },[])
-
-    const onSubmit = async(e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
 
         const body = {
-            board_id : props.boardId,
-            user_id : userId,
+            board_id: props.boardId,
+            user_id: userId,
             text: Text
-        }
+        };
 
-        if(!Text){
-            alert('댓글 내용을 입력해주세요')
-        }else{
+        if (!Text) {
+            alert("댓글 내용을 입력해주세요");
+        } else {
             try {
                 const res = await commentHttp.postCommentUpload(body);
                 console.log(res);
             } catch (err) {
                 console.log(err);
+                alert(err.response.data.message);
             }
         }
-    }
+        return window.location.reload();
+    };
 
-    return(
+    return (
         <RepleWrap>
-            <RepleTextarea placeholder="댓글을 입력해 주세요" value={Text} onChange={(e)=>{setText(e.currentTarget.value)}}/>
-            <RepleButton onClick={(e)=>onSubmit(e)}>댓글 쓰기</RepleButton>
+            <RepleTextarea
+                placeholder="댓글을 입력해 주세요"
+                value={Text}
+                onChange={(e) => {
+                    setText(e.currentTarget.value);
+                }}
+            />
+            <RepleButton onClick={(e) => onSubmit(e)}>댓글 쓰기</RepleButton>
         </RepleWrap>
-    )
-}
+    );
+};
 
 const RepleWrap = styled.div`
     width: 100%;
     height: auto;
-    margin: 70px 0;
-`
+    margin: 70px 0 0 0;
+`;
 
 const RepleTextarea = styled.textarea`
     padding: 15px;
@@ -69,7 +73,7 @@ const RepleTextarea = styled.textarea`
         letter-spacing: 2px;
         color: #aaaaaa;
     }
-`
+`;
 
 const RepleButton = styled.div`
     width: 100px;
@@ -83,6 +87,7 @@ const RepleButton = styled.div`
     color: white;
     margin-top: 10px;
     font-weight: 600;
-`
+    cursor: pointer;
+`;
 
 export default CommentUpload;

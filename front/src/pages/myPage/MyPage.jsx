@@ -44,13 +44,13 @@ const MyPage = () => {
                 const res = await authHttp.deleteUser(userId);
                 setUserInfo(res.data.result);
                 console.log(res);
+                alert("계정이 삭제되었습니다");
+                dispatch(logoutUser());
+                navigate("/login");
             } catch (err) {
                 console.log(err);
+                alert(err.response.data.message);
             }
-
-            alert("계정이 삭제되었습니다");
-            dispatch(logoutUser());
-            navigate("/login");
         } else {
             return;
         }
