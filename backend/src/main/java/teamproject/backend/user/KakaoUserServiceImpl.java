@@ -88,7 +88,7 @@ public class KakaoUserServiceImpl implements KakaoUserService {
         ResponseCookie accessCookie = cookieService.createAccessCookie(accessToken, false);
         response.addHeader("Set-Cookie", accessCookie.toString());
 
-        return new LoginResponse(userInfo.getId());
+        return new LoginResponse(userInfo.getId(), userInfo.getUsername());
     }
 
     // 카카오의 access토큰 받기
