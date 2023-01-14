@@ -34,6 +34,7 @@ public class BoardTagServiceImpl implements BoardTagService{
         }
     }
     private List<String> splitTagName(String tags){
+        if(tags == null) return new ArrayList<>();
         String[] tagArray = tags.split("#");
         List<String> tagNames = new ArrayList<>();
         for(String tagName : tagArray){
