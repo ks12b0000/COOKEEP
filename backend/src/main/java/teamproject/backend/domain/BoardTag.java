@@ -29,8 +29,8 @@ public class BoardTag {
 
     public SearchByResponse toSearchDto(){
         return SearchByResponse.builder()
-                .board_id(board.getBoard_id())
-                .category_id(board.getCategory().getCategory_id())
+                .board_id(board.getBoardId())
+                .category_id(board.getCategory().getCategoryId())
                 .title(board.getTitle())
                 .user_id(board.getUser().getId())
                 .thumbnail(board.getThumbnail())
