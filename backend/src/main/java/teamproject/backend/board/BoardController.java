@@ -33,7 +33,7 @@ public class BoardController {
      * @return
      */
     @PostMapping("/auth/board/write")
-    public BaseResponse board_write(@Validated(ValidationSequence.class) @RequestBody BoardWriteRequest boardWriteRequest){
+    public BaseResponse boardWrite(@Validated(ValidationSequence.class) @RequestBody BoardWriteRequest boardWriteRequest){
         boardService.save(boardWriteRequest);
         return new BaseResponse("성공적으로 글이 작성됐습니다.");
     }
@@ -45,8 +45,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/list")
-    public BaseResponse<List<BoardReadResponse>> board_list_by_category(@RequestParam String category){
-        List<BoardReadResponse> pages = boardService.getBoardReadResponseListByFoodCategoryName(category);
+    public BaseResponse<List<BoardReadResponse>> boardListByCategory(@RequestParam String category){
+        List<BoardReadResponse> pages = boardService.findBoardReadResponseListByFoodCategoryName(category);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -56,8 +56,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/list/{user_id}")
-    public BaseResponse<List<BoardReadResponse>> board_list_by_user(@PathVariable Long user_id){
-        List<BoardReadResponse> pages = boardService.getBoardReadResponseListByUserId(user_id);
+    public BaseResponse<List<BoardReadResponse>> boardListByUser(@PathVariable Long user_id){
+        List<BoardReadResponse> pages = boardService.findBoardReadResponseListByUserId(user_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -68,8 +68,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board")
-    public BaseResponse<BoardReadResponse> search_board(@RequestParam Long board_id){
-        BoardReadResponse boardReadResponse = boardService.getBoardReadResponseByBoardId(board_id);
+    public BaseResponse<BoardReadResponse> searchBoard(@RequestParam Long board_id){
+        BoardReadResponse boardReadResponse = boardService.findBoardReadResponseByBoardId(board_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", boardReadResponse);
     }
 
@@ -96,7 +96,7 @@ public class BoardController {
      * @return
      */
     @DeleteMapping("/auth/board")
-    public BaseResponse delete_board(@RequestParam Long board_id, @RequestParam Long user_id){
+    public BaseResponse deleteBoard(@RequestParam Long board_id, @RequestParam Long user_id){
         boardService.delete(user_id, board_id);
         return new BaseResponse<>("성공적으로 글을 삭제했습니다.");
     }
@@ -108,7 +108,7 @@ public class BoardController {
      * @return
      */
     @PostMapping("/board/comment")
-    public BaseResponse save_comment(@RequestBody BoardCommentWriteRequest request){
+    public BaseResponse saveComment(@RequestBody BoardCommentWriteRequest request){
         boardService.saveComment(request);
         return new BaseResponse("성공적으로 댓글이 작성되었습니다.");
     }
@@ -120,7 +120,7 @@ public class BoardController {
      * @return
      */
     @PatchMapping("/board/comment")
-    public BaseResponse update_comment(@RequestBody BoardCommentUpdateRequest request){
+    public BaseResponse updateComment(@RequestBody BoardCommentUpdateRequest request){
         boardService.updateComment(request);
         return new BaseResponse("성공적으로 댓글을 수정하였습니다.");
     }
@@ -133,7 +133,7 @@ public class BoardController {
      * @return
      */
     @DeleteMapping("/board/comment")
-    public BaseResponse delete_comment(@RequestParam Long comment_id, Long user_id){
+    public BaseResponse deleteComment(@RequestParam Long comment_id, Long user_id){
         boardService.deleteComment(comment_id, user_id);
         return new BaseResponse("성공적으로 댓글을 삭제했습니다.");
     }
@@ -145,32 +145,44 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/comment/list")
-    public BaseResponse list_board_comments(@RequestParam Long board_id){
+    public BaseResponse listBoardComments(@RequestParam Long board_id){
         List<BoardCommentResponse> comments = boardService.findCommentByBoardId(board_id);
         return new BaseResponse("성공적으로 글의 댓글들을 가져왔습니다.", comments);
     }
 
     @PostMapping("/board/comment/reply")
-    public BaseResponse save_reply(@RequestBody BoardCommentReplyWriteRequest request){
+    public BaseResponse saveReply(@RequestBody BoardCommentReplyWriteRequest request){
         boardService.saveReply(request);
         return new BaseResponse("성공적으로 대댓글을 작성했습니다.");
     }
 
     @PatchMapping("/board/comment/reply")
-    public BaseResponse update_reply(@RequestBody BoardCommentReplyUpdateRequest request){
+    public BaseResponse updateReply(@RequestBody BoardCommentReplyUpdateRequest request){
         boardService.updateReply(request);
         return new BaseResponse("성공적으로 대댓글을 수정했습니다.");
     }
 
     @DeleteMapping("/board/comment/reply")
-    public BaseResponse delete_reply(@RequestParam Long reply_id, @RequestParam Long user_id){
+    public BaseResponse deleteReply(@RequestParam Long reply_id, @RequestParam Long user_id){
         boardService.deleteReply(reply_id, user_id);
         return new BaseResponse("성공적으로 대댓글을 삭제했습니다.");
     }
 
     @GetMapping("/board/comment/reply/list")
-    public BaseResponse<List<BoardCommentReplyResponse>> list_board_replies(@RequestParam Long comment_id){
+    public BaseResponse<List<BoardCommentReplyResponse>> listBoardReplies(@RequestParam Long comment_id){
         List<BoardCommentReplyResponse> list = boardService.findReplyByCommentId(comment_id);
         return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.", list);
+    }
+
+    @GetMapping("/board/list/best/liked")
+    public BaseResponse<List<BoardReadResponse>> boardListOrderByLiked(){
+        List<BoardReadResponse> pages = boardService.findBoardReadResponseOrderByLikedDesc(10);
+        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    }
+
+    @GetMapping("/board/list/best/commented")
+    public BaseResponse<List<BoardReadResponse>> boardListOrderByCommented(){
+        List<BoardReadResponse> pages = boardService.findBoardReadResponseOrderByCommentedDesc(10);
+        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 }

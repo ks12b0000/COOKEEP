@@ -14,7 +14,7 @@ public class BoardCommentReply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long boardCommentReply_id;
+    private Long boardCommentReplyId;
 
     //댓글 작성자, FK(외래키 - User)
     @ManyToOne(fetch = FetchType.LAZY)

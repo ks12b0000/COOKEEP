@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamproject.backend.domain.BoardComment;
 
-import javax.persistence.Id;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,7 +21,7 @@ public class BoardCommentResponse {
     private boolean reply_selected = false;
 
     public BoardCommentResponse(BoardComment comment) {
-        this.comment_id = comment.getBoardComment_id();
+        this.comment_id = comment.getBoardCommentId();
         this.user_name = comment.getUser().getUsername();
         this.create_date = asString(comment.getCreateDate());
         this.text = comment.getText();
