@@ -54,6 +54,7 @@ public class Board{
         this.createDate = new Date(System.currentTimeMillis());
         this.thumbnail = boardWriteRequest.getThumbnail();
         this.liked = 0;
+        this.commented = 0;
     }
 
     public void update(BoardWriteRequest boardWriteRequest, FoodCategory foodCategory){
