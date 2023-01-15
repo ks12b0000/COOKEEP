@@ -21,6 +21,7 @@ public class BoardLike {
     // 좋아요 누른 글
     @ManyToOne(fetch = FetchType.LAZY) // 지연로딩 방식, 실제 board를 사용하는 시점에만 조회하는 쿼리 나감.
     @JoinColumn(name = "board_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
     // 좋아요 누른 유저
