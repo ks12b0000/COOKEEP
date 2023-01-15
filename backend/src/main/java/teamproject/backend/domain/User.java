@@ -31,7 +31,7 @@ public class User {
     @Column
     private String salt;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Board> board_list = new LinkedList<>();
 
     public User(String username, String email, String password, String salt) {
