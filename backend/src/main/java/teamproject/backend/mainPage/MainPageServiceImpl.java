@@ -62,4 +62,15 @@ public class MainPageServiceImpl implements MainPageService {
 
         return getSearchByResponse;
     }
+
+    /**
+     * 전체 태그 가져오기
+     * @return
+     */
+    @Override
+    public List<Tag> allTagList() {
+        List<Tag> tagList = tagRepository.findAll();
+
+        return tagList;
+    }
 }
