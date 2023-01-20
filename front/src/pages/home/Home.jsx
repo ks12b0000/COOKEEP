@@ -5,18 +5,18 @@ const authHttp = new AuthHttp();
 
 function Home() {
     // 로그인 여부 체크 (임시 위치)
-    useEffect(() => {
-        onCheck();
-    }, []);
+    // useEffect(() => {
+    //     onCheck();
+    // }, []);
 
-    const onCheck = async () => {
-        try {
-            const res = await authHttp.getIsLoggedIn();
-            console.log(res);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    // const onCheck = async () => {
+    //     try {
+    //         const res = await authHttp.getIsLoggedIn();
+    //         console.log(res);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
 
     return (
         <>
