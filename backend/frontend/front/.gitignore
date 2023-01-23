@@ -3,7 +3,6 @@
 /localhost+2.pem
 
 # dependencies
-/node_modules
 /.pnp
 .pnp.js
 .idea
