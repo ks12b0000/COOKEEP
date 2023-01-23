@@ -54,7 +54,13 @@ test.onlyIf {
 }
 
 
+nodeSetup.onlyIf {
+	!nodeSetup.nodeDir.exists()
+}
 
+npmSetup.onlyIf {
+	!npmSetup.npmDir.exists()
+}
 def webappDir = "$projectDir/frontend/front"
 task installReact(type: Exec) {
 	workingDir "$webappDir"
