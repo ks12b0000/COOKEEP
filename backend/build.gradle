@@ -8,7 +8,7 @@ plugins {
 group = 'teamproject'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
-apply plugin: "com.moowork.node"
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
