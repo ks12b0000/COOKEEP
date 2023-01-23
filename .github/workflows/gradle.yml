@@ -58,7 +58,6 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       working-directory: ${{ env.working-directory }}
-    - run: npm ci
     - name: Build with Gradle
       run: ./gradlew build
       working-directory: ${{ env.working-directory }}
