@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.7'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 	id 'java'
+	id "com.moowork.node" version "1.3.1"
 }
 
 group = 'teamproject'
@@ -51,3 +52,20 @@ jar {
 test.onlyIf {
 	!project.hasProperty('test')
 }
+
+
+
+def webappDir = "$projectDir/frontend/front"
+
+task appNpmInstall(type: NpmTask) {
+	workingDir = file("${webappDir}")
+	args = ["run", "build"]
+}
+
+task copyWebApp(type: Copy) {
+	from 'frontend/front/build'
+	into "build/resources/main/static"
+}
+
+copyWebApp.dependsOn(appNpmInstall)
+compileJava.dependsOn(copyWebApp)
