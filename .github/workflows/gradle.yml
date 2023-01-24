@@ -37,6 +37,7 @@ jobs:
         cloud.aws.credentials.secretKey: ${{secrets.S3_SECRETKEY}}
         cloud.aws.s3.bucket: ${{secrets.S3_BUCKET}}
         KAKAO_API_KEY: ${{secrets.KAKAO_API_KEY}}
+        KAKAO_SECRET_KEY: ${{secrets.KAKAO_SECRET_KEY}}
         NAVER_API_ID: ${{secrets.NAVER_API_ID}}
         NAVER_API_SECRET: ${{secrets.NAVER_API_SECRET}}
         GOOGLE_API_ID: ${{secrets.GOOGLE_API_ID}}
