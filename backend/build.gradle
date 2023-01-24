@@ -53,7 +53,7 @@ test.onlyIf {
 }
 
 node {
-	version = '16.18.0'
+	version = '16.19.0'
 	download = true
 	nodeModulesDir = file("${projectDir}frontend/front/build")
 
