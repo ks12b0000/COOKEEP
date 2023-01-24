@@ -60,19 +60,13 @@ node {
 }
 
 def webappDir = "$projectDir/frontend/front"
-task installReact(type: Exec) {
-	workingDir "$webappDir"
-	inputs.dir "$webappDir"
-	group = BasePlugin.BUILD_GROUP
-	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-		commandLine "npm.cmd", "audit", "fix"
-		commandLine 'npm.cmd', 'install'
-	} else {
-		commandLine "npm", "audit", "fix"
-		commandLine 'npm', 'install'
-	}
-}
+
 task appNpmInstall(type: NpmTask) {
+	workingDir = file("${webappDir}")
+	args = ["install"]
+}
+
+task appNpmBuild(type: NpmTask) {
 	workingDir = file("${webappDir}")
 	args = ["run", "build"]
 }
@@ -82,5 +76,6 @@ task copyWebApp(type: Copy) {
 	into "build/resources/main/static"
 }
 
-copyWebApp.dependsOn(appNpmInstall)
+appNpmBuild.dependsOn(appNpmInstall)
+copyWebApp.dependsOn(appNpmBuild)
 compileJava.dependsOn(copyWebApp)
