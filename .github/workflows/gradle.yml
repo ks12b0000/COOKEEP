@@ -43,19 +43,19 @@ jobs:
         GOOGLE_API_ID: ${{secrets.GOOGLE_API_ID}}
         GOOGLE_API_SECRET: ${{secrets.GOOGLE_API_SECRET}}
         JWT_SECRET_KEY: ${{secrets.JWT_SECRET_KEY}}
-    - name: Create env file
-      env:
-        REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
-        REACT_APP_KAKAO_REST_KEY: ${{ secrets.REACT_APP_KAKAO_REST_KEY }}
-        REACT_APP_GOOGLE_REST_KEY: ${{ secrets.REACT_APP_GOOGLE_REST_KEY }}
-        REACT_APP_NAVER_REST_KEY: ${{ secrets.REACT_APP_NAVER_REST_KEY }}
-      run: |
-        touch .env
-        echo REACT_APP_API_BASE_URL="$REACT_APP_API_BASE_URL" >> .env
-        echo REACT_APP_KAKAO_REST_KEY="$REACT_APP_KAKAO_REST_KEY" >> .env
-        echo REACT_APP_GOOGLE_REST_KEY="$REACT_APP_GOOGLE_REST_KEY" >> .env
-        echo REACT_APP_NAVER_REST_KEY="$REACT_APP_NAVER_REST_KEY" >> .env
-        cat .env | head -n 1
+#     - name: Create env file
+#       env:
+#         REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
+#         REACT_APP_KAKAO_REST_KEY: ${{ secrets.REACT_APP_KAKAO_REST_KEY }}
+#         REACT_APP_GOOGLE_REST_KEY: ${{ secrets.REACT_APP_GOOGLE_REST_KEY }}
+#         REACT_APP_NAVER_REST_KEY: ${{ secrets.REACT_APP_NAVER_REST_KEY }}
+#       run: |
+#         touch .env
+#         echo REACT_APP_API_BASE_URL="$REACT_APP_API_BASE_URL" >> .env
+#         echo REACT_APP_KAKAO_REST_KEY="$REACT_APP_KAKAO_REST_KEY" >> .env
+#         echo REACT_APP_GOOGLE_REST_KEY="$REACT_APP_GOOGLE_REST_KEY" >> .env
+#         echo REACT_APP_NAVER_REST_KEY="$REACT_APP_NAVER_REST_KEY" >> .env
+#         cat .env | head -n 1
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       working-directory: ${{ env.working-directory }}
