@@ -49,12 +49,12 @@ jobs:
         REACT_APP_GOOGLE_REST_KEY: ${{ secrets.REACT_APP_GOOGLE_REST_KEY }}
         REACT_APP_NAVER_REST_KEY: ${{ secrets.REACT_APP_NAVER_REST_KEY }}
       run: |
-        touch .env.production
-        echo REACT_APP_API_BASE_URL="$REACT_APP_API_BASE_URL" >> .env.production
-        echo REACT_APP_KAKAO_REST_KEY="$REACT_APP_KAKAO_REST_KEY" >> .env.production
-        echo REACT_APP_GOOGLE_REST_KEY="$REACT_APP_GOOGLE_REST_KEY" >> .env.production
-        echo REACT_APP_NAVER_REST_KEY="$REACT_APP_NAVER_REST_KEY" >> .env.production
-        cat .env.production | head -n 1
+        touch .env
+        echo REACT_APP_API_BASE_URL="$REACT_APP_API_BASE_URL" >> .env
+        echo REACT_APP_KAKAO_REST_KEY="$REACT_APP_KAKAO_REST_KEY" >> .env
+        echo REACT_APP_GOOGLE_REST_KEY="$REACT_APP_GOOGLE_REST_KEY" >> .env
+        echo REACT_APP_NAVER_REST_KEY="$REACT_APP_NAVER_REST_KEY" >> .env
+        cat .env | head -n 1
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       working-directory: ${{ env.working-directory }}
