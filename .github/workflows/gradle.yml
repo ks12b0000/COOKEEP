@@ -55,6 +55,8 @@ jobs:
         echo REACT_APP_GOOGLE_REST_KEY="$REACT_APP_GOOGLE_REST_KEY" >> .env.production
         echo REACT_APP_NAVER_REST_KEY="$REACT_APP_NAVER_REST_KEY" >> .env.production
         cat .env.production | head -n 1
+        env:
+         CI: "" 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       working-directory: ${{ env.working-directory }}
