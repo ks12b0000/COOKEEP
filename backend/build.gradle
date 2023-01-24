@@ -2,7 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.7'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 	id 'java'
-	id "com.moowork.node" version "1.3.1"
+	id "com.github.node-gradle.node" version "3.1.0"
 }
 
 group = 'teamproject'
@@ -33,7 +33,6 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-
 	// jwt 토큰
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
@@ -53,14 +52,13 @@ test.onlyIf {
 	!project.hasProperty('test')
 }
 
+node {
+	version = '16.18.0'
+	download = true
+	nodeModulesDir = file("${projectDir}frontend/front/build")
 
-nodeSetup.onlyIf {
-	!nodeSetup.nodeDir.exists()
 }
 
-npmSetup.onlyIf {
-	!npmSetup.npmDir.exists()
-}
 def webappDir = "$projectDir/frontend/front"
 task installReact(type: Exec) {
 	workingDir "$webappDir"
