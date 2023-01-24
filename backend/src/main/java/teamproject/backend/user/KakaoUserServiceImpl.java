@@ -38,6 +38,8 @@ public class KakaoUserServiceImpl implements KakaoUserService {
     private final String userInfoHost = "https://kapi.kakao.com/v2/user/me";
     @Value("${KAKAO_API_KEY}")
     private String KAKAO_API_KEY;
+    @Value("${KAKAO_SECRET_KEY}")
+    private String KAKAO_SECRET_KEY;
     private String redirectionUrl;
 
     private class Token{
@@ -108,6 +110,7 @@ public class KakaoUserServiceImpl implements KakaoUserService {
             sb.append("&client_id="+KAKAO_API_KEY);
             sb.append("&redirect_uri="+redirectionUrl);
             sb.append("&code=" + code);
+            sb.append("&client_secret=" + KAKAO_SECRET_KEY);
             bw.write(sb.toString());
             bw.flush();
 
