@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
 import UserHttp from "../../http/userHttp";
-import Header from "../../components/layout/header/Header";
 import { useNavigate } from "react-router";
+import AgreeForm from "../../components/signUp/AgreeForm";
 
 const userHttp = new UserHttp();
 
@@ -15,6 +15,8 @@ function SignUp() {
     const [CheckPassword, setCheckPassword] = useState("");
     const [CheckUsername, setCheckUsername] = useState(false);
     const [CheckEmail, setCheckEmail] = useState(false);
+    const [CheckAgree, setCheckAgree] = useState(false);
+    const [AgreeModal, setAgreeModal] = useState(false);
 
     //회원가입 실행 함수
     const onSignUp = async (e) => {
@@ -34,6 +36,8 @@ function SignUp() {
             return alert("닉네임 중복검사를 진행해 주세요");
         } else if (!CheckEmail) {
             return alert("이메일 중복검사를 진행해 주세요");
+        } else if (!CheckAgree) {
+            return alert("회원가입 약관동의를 진행해 주세요");
         } else {
             try {
                 const res = await userHttp.postSignUp(body);
@@ -134,7 +138,12 @@ function SignUp() {
                             setCheckPassword(e.currentTarget.value);
                         }}
                     />
+                    <AgreeText onClick={() => setAgreeModal(true)}>
+                        회원가입 약관동의
+                        {CheckAgree ? <img src="image/check.png" alt="checked" /> : <img src="image/check-x.png" alt="checked" />}
+                    </AgreeText>
                     <SignButton onClick={(e) => onSignUp(e)}>가입하기</SignButton>
+                    {AgreeModal ? <AgreeForm setAgreeModal={setAgreeModal} setCheckAgree={setCheckAgree} /> : <></>}
                 </SignWrap>
             </SignBackground>
         </>
@@ -152,6 +161,7 @@ const SignBackground = styled.div`
 `;
 
 const SignWrap = styled.div`
+    position: relative;
     margin-top: 50px;
     width: 600px;
     height: 670px;
@@ -190,7 +200,7 @@ const SignInput = styled.input`
     margin-bottom: 15px;
 
     ::placeholder {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 300;
         color: #aaaaaa;
     }
@@ -225,6 +235,22 @@ const IdButton = styled.button`
     }
 `;
 
+const AgreeText = styled.div`
+    width: 380px;
+    text-align: left;
+    font-size: 16px;
+    color: #545454;
+    margin-top: 20px;
+    cursor: pointer;
+
+    img {
+        width: 22px;
+        height: 22px;
+        margin-left: 3px;
+        margin-bottom: 4px;
+    }
+`;
+
 const SignButton = styled.button`
     width: 380px;
     height: 55px;
@@ -235,7 +261,7 @@ const SignButton = styled.button`
     font-size: 18px;
     font-weight: 600;
     letter-spacing: 3px;
-    margin-top: 30px;
+    margin-top: 10px;
     cursor: pointer;
 `;
 
