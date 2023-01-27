@@ -5,20 +5,18 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/reducer/userSlice";
 import { useNavigate } from "react-router";
 
-
 const KaKaoLogin = () => {
-
-    const code = new URL(window.location.href).searchParams.get('code');
+    const code = new URL(window.location.href).searchParams.get("code");
     const userHttp = new UserHttp();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    useEffect(()=>{
+    useEffect(() => {
         onKaKaoLogin();
-    },[])
+    }, []);
 
-    const onKaKaoLogin = async() => {
-        try{
+    const onKaKaoLogin = async () => {
+        try {
             const res = await userHttp.getKaKaoLogin(code);
             console.log(res);
 
@@ -27,28 +25,29 @@ const KaKaoLogin = () => {
                 dispatch(
                     loginUser({
                         userId: res.data.result.id,
+                        username: res.data.result.username,
                         isLoggedIn: true,
-                        isSocialLogin: true,
+                        isSocialLogin: true
                     })
                 );
 
                 //홈 화면으로 이동
                 navigate("/");
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
-            alert('로그인에 실패하셨습니다.');
+            alert("로그인에 실패하셨습니다.");
             navigate("/login");
         }
-    }
+    };
 
-    return(
+    return (
         <PageWrap>
             <PageTitle>로그인이 진행 중 입니다</PageTitle>
             <PageText>페이지를 새로고침하지 마세요</PageText>
         </PageWrap>
-    )
-}
+    );
+};
 
 const PageWrap = styled.div`
     width: 100%;
@@ -57,18 +56,18 @@ const PageWrap = styled.div`
     align-items: center;
     display: flex;
     flex-direction: column;
-`
+`;
 
 const PageTitle = styled.div`
     font-size: 43px;
     margin-bottom: 30px;
     color: #3c3c3c;
-`
+`;
 
 const PageText = styled.div`
     font-size: 21px;
     color: #909090;
     margin-bottom: 60px;
-`
+`;
 
 export default KaKaoLogin;

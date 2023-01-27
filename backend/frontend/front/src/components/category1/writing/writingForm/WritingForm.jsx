@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import WriteHttp from "../../../../http/writeHttp";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 const writeHttp = new WriteHttp();
 function WritingForm() {
     //hook from 가져오기
@@ -14,7 +14,7 @@ function WritingForm() {
         handleSubmit,
         formState: { errors }
     } = useForm();
-    const {userId} = useSelector(state => state.persistedReducer.userReducer);
+    const { userId } = useSelector((state) => state.persistedReducer.userReducer);
     const navigate = useNavigate();
     const [text, setText] = useState("");
     const [isError, setIsError] = useState(false);
@@ -27,7 +27,8 @@ function WritingForm() {
             const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id: 5 });
             setImagePreview(result.url);
         } catch (err) {
-            alert("파일 크기는 1메가로 지정되어있씁니다.");
+            console.log(err);
+            alert(err.response.data.message);
         }
     };
     useEffect(() => {
