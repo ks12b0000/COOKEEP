@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CommentHttp from "../../http/commentHttp";
 import styled from "@emotion/styled";
-import ReplyList from "./ReplyList";
-import ReplyUpload from "./ReplyUpload";
 
 const commentHttp = new CommentHttp();
 
-const CommentList = (props) => {
+const ReplyList = (props) => {
     const username = useSelector((state) => state.persistedReducer.userReducer.username);
     const userId = useSelector((state) => state.persistedReducer.userReducer.userId);
 
-    const [Comments, setComments] = useState([]);
+    const [Replys, setReplys] = useState([]);
     const [EditComment, setEditComment] = useState("");
 
     useEffect(() => {
@@ -20,20 +18,20 @@ const CommentList = (props) => {
 
     const getList = async () => {
         try {
-            const res = await commentHttp.getCommentList(props.boardId);
-            setComments(res.data.result);
-            console.log(res);
+            const res = await commentHttp.getReplyList(props.commentId);
+            setReplys(res.data.result);
+            console.log(res.data.result);
         } catch (err) {
             console.log(err);
         }
     };
 
-    // 댓글 수정 기능
-    const submitEdit = async (e, commentId, text) => {
+    // 대댓글 수정 기능
+    const submitEdit = async (e, replyId, text) => {
         e.preventDefault();
 
         const body = {
-            boardComment_id: commentId,
+            reply_id: replyId,
             user_id: userId,
             text: EditComment
         };
@@ -42,7 +40,7 @@ const CommentList = (props) => {
             alert("댓글 내용을 변경해주세요");
         } else {
             try {
-                await commentHttp.patchCommentEdit(body);
+                await commentHttp.patchReplyEdit(body);
                 window.location.reload();
             } catch (err) {
                 console.log(err);
@@ -51,42 +49,28 @@ const CommentList = (props) => {
         }
     };
 
-    //답글창 켜기 기능
-    const onReply = (id) => {
-        const copyList = [...Comments];
-        copyList.find((comment) => comment.comment_id === id).reply_selected = true;
-        setComments(copyList);
-    };
-
-    //답글창 닫기 기능
-    const offReply = (id) => {
-        const copyList = [...Comments];
-        copyList.find((comment) => comment.comment_id === id).reply_selected = false;
-        setComments(copyList);
-    };
-
-    //댓글 수정창 켜기 기능
+    //대댓글 수정창 켜기 기능
     const onEdit = (id, text) => {
-        const copyList = [...Comments];
-        copyList.find((comment) => comment.comment_id === id).edit_selected = true;
-        setComments(copyList);
+        const copyList = [...Replys];
+        copyList.find((reply) => reply.reply_id === id).edit_selected = true;
+        setReplys(copyList);
         setEditComment(text);
     };
 
-    //댓글 수정창 닫기 기능
+    //대댓글 수정창 닫기 기능
     const offEdit = (id) => {
-        const copyList = [...Comments];
-        copyList.find((comment) => comment.comment_id === id).edit_selected = false;
-        setComments(copyList);
+        const copyList = [...Replys];
+        copyList.find((reply) => reply.reply_id === id).edit_selected = false;
+        setReplys(copyList);
     };
 
-    //댓글 삭제 기능
-    const onDelete = async (e, commentId) => {
+    //대댓글 삭제 기능
+    const onDelete = async (e, replyId) => {
         e.preventDefault();
 
         if (window.confirm("정말 댓글을 삭제하겠습니까?")) {
             try {
-                await commentHttp.deleteComment(commentId, userId);
+                await commentHttp.deleteReply(replyId, userId);
                 alert("댓글이 삭제되었습니다.");
                 window.location.reload();
             } catch (err) {
@@ -99,18 +83,18 @@ const CommentList = (props) => {
 
     return (
         <>
-            {Comments?.map((comment) => (
-                <CommentWrap key={comment.comment_id}>
+            {Replys?.map((reply) => (
+                <CommentWrap key={reply.reply_id}>
                     <CommentBlock>
                         <TextWrap>
                             <TextBlock>
-                                <UsernameText>{comment.user_name}</UsernameText>
-                                <DateText>{comment.create_date}</DateText>
+                                <UsernameText>{reply.user_name}</UsernameText>
+                                <DateText>{reply.create_date}</DateText>
                             </TextBlock>
-                            {username === comment.user_name ? (
+                            {username === reply.user_name ? (
                                 <TextBlock>
-                                    <ButtonText onClick={() => onEdit(comment.comment_id, comment.text)}>수정</ButtonText>
-                                    <ButtonText marginLeft onClick={(e) => onDelete(e, comment.comment_id)}>
+                                    <ButtonText onClick={() => onEdit(reply.reply_id, reply.text)}>수정</ButtonText>
+                                    <ButtonText marginLeft onClick={(e) => onDelete(e, reply.reply_id)}>
                                         삭제
                                     </ButtonText>
                                 </TextBlock>
@@ -119,14 +103,14 @@ const CommentList = (props) => {
                             )}
                         </TextWrap>
                         <ContentBlock>
-                            <ContentText>{comment.text}</ContentText>
-                            {comment.edit_selected ? (
+                            <ContentText>{reply.text}</ContentText>
+                            {reply.edit_selected ? (
                                 <>
                                     <EditBlock value={EditComment} type="text" onChange={(e) => setEditComment(e.currentTarget.value)} />
-                                    <EditButton left="91%" onClick={(e) => submitEdit(e, comment.comment_id, comment.text)}>
+                                    <EditButton left="91%" onClick={(e) => submitEdit(e, reply.reply_id, reply.text)}>
                                         확인
                                     </EditButton>
-                                    <EditButton left="95%" onClick={() => offEdit(comment.comment_id)}>
+                                    <EditButton left="95%" onClick={() => offEdit(reply.reply_id)}>
                                         취소
                                     </EditButton>
                                 </>
@@ -134,20 +118,7 @@ const CommentList = (props) => {
                                 <></>
                             )}
                         </ContentBlock>
-                        {comment.reply_selected ? (
-                            <ReplyText onClick={() => offReply(comment.comment_id)}>답글 닫기</ReplyText>
-                        ) : (
-                            <ReplyText onClick={() => onReply(comment.comment_id)}>답글 보기</ReplyText>
-                        )}
                     </CommentBlock>
-                    {comment.reply_selected ? (
-                        <ReplyWrap>
-                            <ReplyList commentId={comment.comment_id} />
-                            <ReplyUpload commentId={comment.comment_id} />
-                        </ReplyWrap>
-                    ) : (
-                        <></>
-                    )}
                 </CommentWrap>
             ))}
         </>
@@ -155,17 +126,18 @@ const CommentList = (props) => {
 };
 
 const CommentWrap = styled.div`
-    width: 1100px;
+    width: 100%;
     height: auto;
     margin: 0 auto;
+    box-sizing: border-box;
 `;
 
 const CommentBlock = styled.div`
     width: 100%;
     height: auto;
-    padding: 20px 0;
+    padding: 10px 0;
     box-sizing: border-box;
-    margin: 10px 0;
+    margin: 5px 0;
     border-bottom: 0.5px solid #929292;
 `;
 
@@ -179,7 +151,6 @@ const UsernameText = styled.div`
 const TextWrap = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
 `;
 
 const TextBlock = styled.div`
@@ -217,23 +188,15 @@ const ContentText = styled.div`
     display: block;
 `;
 
-const ReplyText = styled.div`
-    font-size: 11px;
-    margin-left: 1px;
-    color: #878787;
-    display: block;
-    cursor: pointer;
-`;
-
 const EditBlock = styled.input`
     width: 100%;
-    height: 100%;
+    height: 80%;
     position: absolute;
-    top: 0;
+    top: 17%;
     left: 0;
     border-radius: 15px;
     border: 1px solid #8b8b8b;
-    font-size: 16px;
+    font-size: 15px;
     padding: 0 20px;
     box-sizing: border-box;
 
@@ -243,7 +206,7 @@ const EditBlock = styled.input`
     }
 
     ::placeholder {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 300;
         letter-spacing: 2px;
         color: #aaaaaa;
@@ -268,10 +231,4 @@ const EditButton = styled.div`
     }
 `;
 
-const ReplyWrap = styled.div`
-    width: 100%;
-    padding-left: 40px;
-    box-sizing: border-box;
-`;
-
-export default CommentList;
+export default ReplyList;

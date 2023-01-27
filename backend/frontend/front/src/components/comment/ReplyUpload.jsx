@@ -6,7 +6,7 @@ import CommentHttp from "../../http/commentHttp";
 
 const commentHttp = new CommentHttp();
 
-const CommentUpload = (props) => {
+const ReplyUpload = (props) => {
     const [Text, setText] = useState("");
     const userId = useSelector((state) => state.persistedReducer.userReducer.userId);
 
@@ -14,7 +14,7 @@ const CommentUpload = (props) => {
         e.preventDefault();
 
         const body = {
-            board_id: props.boardId,
+            comment_id: props.commentId,
             user_id: userId,
             text: Text
         };
@@ -23,7 +23,7 @@ const CommentUpload = (props) => {
             alert("댓글 내용을 입력해주세요");
         } else {
             try {
-                const res = await commentHttp.postCommentUpload(body);
+                const res = await commentHttp.postReplyUpload(body);
                 console.log(res);
             } catch (err) {
                 console.log(err);
@@ -36,13 +36,13 @@ const CommentUpload = (props) => {
     return (
         <RepleWrap>
             <RepleTextarea
-                placeholder="댓글을 입력해 주세요"
+                placeholder="대댓글을 입력해 주세요"
                 value={Text}
                 onChange={(e) => {
                     setText(e.currentTarget.value);
                 }}
             />
-            <RepleButton onClick={(e) => onSubmit(e)}>댓글 쓰기</RepleButton>
+            <RepleButton onClick={(e) => onSubmit(e)}>대댓글 쓰기</RepleButton>
         </RepleWrap>
     );
 };
@@ -50,17 +50,18 @@ const CommentUpload = (props) => {
 const RepleWrap = styled.div`
     width: 100%;
     height: auto;
-    margin: 70px 0 0 0;
+    margin: 40px 0 40px 0;
+    display: block;
 `;
 
 const RepleTextarea = styled.textarea`
     padding: 15px;
     width: 100%;
-    height: 80px;
-    border-radius: 15px 20px;
+    height: 50px;
+    border-radius: 15px;
     border: 1px solid #8b8b8b;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 15px;
 
     :focus {
         outline: none;
@@ -68,7 +69,7 @@ const RepleTextarea = styled.textarea`
     }
 
     ::placeholder {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 300;
         letter-spacing: 2px;
         color: #aaaaaa;
@@ -85,9 +86,9 @@ const RepleButton = styled.div`
     border-radius: 10px;
     margin-left: auto;
     color: white;
-    margin-top: 10px;
     font-weight: 600;
     cursor: pointer;
+    margin-top: 10px;
 `;
 
-export default CommentUpload;
+export default ReplyUpload;
