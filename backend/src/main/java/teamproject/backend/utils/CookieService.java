@@ -16,8 +16,8 @@ public class CookieService {
 
         ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
                 .path("/")
-//                .secure(true)
-//                .sameSite("None")
+                .secure(true)
+                .sameSite("None")
                 .maxAge(ACCESS_COOKIE_EXPIRE_SECOND)
                 .httpOnly(true)
                 .build();
@@ -25,8 +25,8 @@ public class CookieService {
         if(autoLogin) {
             cookie = ResponseCookie.from("accessToken", accessToken)
                     .path("/")
-//                    .secure(true)
-//                    .sameSite("None")
+                    .secure(true)
+                    .sameSite("None")
                     .maxAge(ACCESS_COOKIE_EXPIRE_SECOND)
                     .httpOnly(true)
                     .build();
@@ -44,8 +44,8 @@ public class CookieService {
         if(autoLogin) {
             cookie = ResponseCookie.from("refreshToken", refreshToken)
                     .path("/")
-//                    .secure(true)
-//                    .sameSite("None")
+                    .secure(true)
+                    .sameSite("None")
                     .maxAge(REFRESH_COOKIE_EXPIRE_SECOND)
                     .httpOnly(true)
                     .build();
@@ -54,8 +54,8 @@ public class CookieService {
         else {
             cookie = ResponseCookie.from("refreshToken", refreshToken)
                     .path("/")
-//                    .secure(true)
-//                    .sameSite("None")
+                    .secure(true)
+                    .sameSite("None")
                     .maxAge(0)
                     .httpOnly(true)
                     .build();
