@@ -319,8 +319,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public String updateLikeOfBoard(Long boardId, User user) {
+    public String updateLikeOfBoard(Long boardId, Long user_id) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BaseException(NOT_EXIST_BOARD));
+        User user = userRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         if (!hasLikeBoard(board, user)) {
             board.increaseLikeCount();
             return createLikeBoard(board, user);
