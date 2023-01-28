@@ -75,17 +75,18 @@ public class BoardController {
 
     /**
      * 좋아요 기능
-     * [POST] /auth/board/like/{board_id}
+     * [POST] /auth/board/like/{board_id}/{user_id}
      * @param board_id
      * @param request
      * @return
      */
-    @PostMapping("/auth/board/like/{board_id}")
-    public BaseResponse likeBoard(@PathVariable Long board_id, HttpServletRequest request) {
+    @PostMapping("/auth/board/like/{board_id}/{user_id}")
+    public BaseResponse likeBoard(@PathVariable Long board_id, @PathVariable Long user_id, HttpServletRequest request) {
 
-        Cookie[] cookies = request.getCookies();
-        User user = userService.checkUserHasLogin(cookies);
-        return new BaseResponse("좋아요 성공.", boardService.updateLikeOfBoard(board_id, user));
+//        Cookie[] cookies = request.getCookies();
+//        User user = userService.checkUserHasLogin(cookies);
+
+        return new BaseResponse("좋아요 성공.", boardService.updateLikeOfBoard(board_id, user_id));
     }
 
     /**
