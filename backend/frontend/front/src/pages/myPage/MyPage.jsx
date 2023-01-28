@@ -38,21 +38,34 @@ const MyPage = () => {
 
     const onDeleteUser = async (e) => {
         e.preventDefault();
+        const getPassword = prompt("비밀번호를 입력해주세오");
 
-        if (window.confirm("정말 계정을 삭제하겠습니까?")) {
-            try {
-                const res = await authHttp.deleteUser(userId);
-                setUserInfo(res.data.result);
-                console.log(res);
-                alert("계정이 삭제되었습니다");
-                dispatch(logoutUser());
-                navigate("/login");
-            } catch (err) {
-                console.log(err);
-                alert(err.response.data.message);
+        const body = {
+            password: getPassword
+        };
+
+        try {
+            const res = await authHttp.postCheckPassword(userId, body);
+            console.log(res);
+            if (res.data.code === 1000) {
+                if (window.confirm("정말 계정을 삭제하겠습니까?")) {
+                    try {
+                        const res = await authHttp.deleteUser(userId);
+                        setUserInfo(res.data.result);
+                        console.log(res);
+                        alert("계정이 삭제되었습니다");
+                        dispatch(logoutUser());
+                        navigate("/login");
+                    } catch (err) {
+                        console.log(err);
+                        alert(err.response.data.message);
+                    }
+                } else {
+                    return;
+                }
             }
-        } else {
-            return;
+        } catch (err) {
+            alert("비밀번호가 일치하지 않습니다.");
         }
     };
 
