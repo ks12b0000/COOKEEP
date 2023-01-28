@@ -49,6 +49,7 @@ function SignUp() {
                 alert(err.response.data.message);
             }
         }
+        alert("회원가입이 완료되었습니다. 로그인을 진행해주세요");
     };
 
     //아이디 중복체크 실행 함수
