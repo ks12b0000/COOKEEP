@@ -10,18 +10,23 @@ const Container = styled.div`
 `;
 const Contents = styled.div`
     width: 100%;
-    padding: 30px 50px 50px;
-`;
+    padding:30px 50px 50px;
 
-function Writing() {
-    return (
+
+`
+
+function Writing(){
+
+
+    return(
         <>
+
             <Container>
                 <Contents>
                     <WritingForm />
                 </Contents>
             </Container>
         </>
-    );
+    )
 }
 export default Writing;
