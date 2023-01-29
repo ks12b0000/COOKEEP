@@ -9,7 +9,7 @@ const CategoryHttp = new categoryHttp();
 function CateItem() {
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showPost, setShowPost] = useState(1);
+    const [showPost, setShowPost] = useState(8);
     const [totalPost, setTotalPost] = useState(0);
 
     const LastIndex = currentPage * showPost;
@@ -26,7 +26,7 @@ function CateItem() {
     useEffect(() => {
         (async () => {
             try {
-                const { result } = await CategoryHttp.getCategoryList(true, currentPage, `카테고리3`);
+                const { result } = await CategoryHttp.getCategoryList(true, currentPage, `한식`);
                 setPosts(result);
                 setTotalPost(result.length);
             } catch (err) {
@@ -43,8 +43,8 @@ function CateItem() {
         <>
             <SelectBox>
                 <select onChange={FilterPosts} defaultValue="8">
-                    <option value="4">4개씩보기</option>
-                    <option value="8">8개씩 보기</option>
+                    <option value="8">8개씩보기</option>
+                    <option value="16">16개씩 보기</option>
                     <option value="100">100개씩 보기</option>
                 </select>
             </SelectBox>
