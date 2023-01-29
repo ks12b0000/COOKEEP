@@ -17,7 +17,7 @@ public interface MyPageService {
 
     public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response);
 
-    public void userDelete(Long user_id);
+    public void userDelete(Long user_id, HttpServletResponse response);
 
     public GetLikeByUserResponse likeByUser(Long user_id);
 

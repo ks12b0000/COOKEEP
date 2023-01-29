@@ -153,11 +153,12 @@ public class MyPageServiceImpl implements MyPageService {
      */
     @Override
     @Transactional
-    public void userDelete(Long user_id) {
+    public void userDelete(Long user_id, HttpServletResponse response) {
 
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
         myPageRepository.delete(user);
+        logout(response);
     }
 
     /**
