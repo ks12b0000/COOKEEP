@@ -100,9 +100,9 @@ public class MyPageController {
      * @return
      */
     @DeleteMapping("/auth/user/delete/{user_id}")
-    public BaseResponse userDelete(@PathVariable Long user_id) {
+    public BaseResponse userDelete(@PathVariable Long user_id, HttpServletResponse response) {
 
-        myPageService.userDelete(user_id);
+        myPageService.userDelete(user_id, response);
 
         return new BaseResponse("회원 탈퇴에 성공했습니다.");
     }
