@@ -14,6 +14,7 @@ const LogoContainer = styled.div`
         text-align: left;
       }
         a {
+        
           font-weight: 500;
           font-size: 20px;
           line-height: 24px;
@@ -23,11 +24,13 @@ const LogoContainer = styled.div`
         }
     }
 `;
-function Logo() {
+function Logo({color}) {
+
+
     return (
         <LogoContainer>
             <div>
-                <Link to="/">오늘 뭐 먹지</Link>
+                <Link to="/" style={{color:`${color}`}}>오늘 뭐 먹지</Link>
             </div>
         </LogoContainer>
     );

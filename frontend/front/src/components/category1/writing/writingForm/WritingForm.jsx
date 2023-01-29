@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import WriteHttp from "../../../../http/writeHttp";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 const writeHttp = new WriteHttp();
 function WritingForm() {
     //hook from 가져오기
@@ -14,7 +14,7 @@ function WritingForm() {
         handleSubmit,
         formState: { errors }
     } = useForm();
-    const { userId } = useSelector((state) => state.persistedReducer.userReducer);
+    const {userId} = useSelector(state => state.persistedReducer.userReducer);
     const navigate = useNavigate();
     const [text, setText] = useState("");
     const [isError, setIsError] = useState(false);
@@ -24,11 +24,10 @@ function WritingForm() {
     const imageChange = async (e) => {
         const files = e.target.files; // FileList 객체
         try {
-            const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id: 5 });
+            const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id:userId  });
             setImagePreview(result.url);
         } catch (err) {
-            console.log(err);
-            alert(err.response.data.message);
+            alert("파일 크기는 1메가로 지정되어있씁니다.");
         }
     };
     useEffect(() => {
@@ -65,14 +64,20 @@ function WritingForm() {
                 <InputBox>
                     <label htmlFor="">카테고리</label>
                     <select name="category" defaultValue="category1" {...register("category")}>
-                        <option value="카테고리1">카테고리1</option>
-                        <option value="카테고리3">카테고리3</option>
+                        <option value="한식">한식</option>
+                        <option value="카테고리3">중식</option>
                     </select>
                 </InputBox>
                 <InputBox>
                     <label htmlFor="">제목</label>
                     <input name="title" type="text" placeholder="제목을 입력해주세요" {...register("title", { required: true, minLength: 5 })} />
                     {errors.title && <p style={{ color: "red", padding: " 0 20px" }}>최소 5자리를 입력해주세요</p>}
+                </InputBox>
+
+                <InputBox>
+                    <label htmlFor="">태그</label>
+                    <input name="tags" type="tags" placeholder="원하시는 태그를 입력해주세요" {...register("tags", { required: true, minLength: 5 })} />
+                    {errors.tags && <p style={{ color: "red", padding: " 0 20px" }}>태그는 최소  5자리를 입력해주세요</p>}
                 </InputBox>
                 <Upload>
                     <label htmlFor="">썸네일</label>
