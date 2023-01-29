@@ -1,22 +1,23 @@
-import styled from "@emotion/styled";
-import Banner from "./banner/Banner";
 
-const MainContainer = styled.main`
-    width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    height: 100vh;
-    align-items: center;
-    div {
-        font-size: 64px;
-    }
-`;
+import Popularity from "./popularity/Popularity";
+import Ranking from "./ranking/Ranking";
+import Header from "../header/Header";
+import {color} from "../../../constants/color";
+
+
 function Main() {
+    const headerColor = color.headerColor;
+    const isMain = false;
+    const Props = {
+        color:headerColor,
+        isMain
+    }
     return (
-        <MainContainer>
-            <Banner />
-        </MainContainer>
+        <>
+            <Header {...Props}/>
+            <Popularity />
+            <Ranking />
+        </>
     );
 }
 
