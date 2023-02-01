@@ -1,3 +1,50 @@
+<<<<<<< HEAD
+=======
+HELP.md
+.gradle
+build/
+.DS_Store
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+#yml 파일 제외
+application.yml
+application-dev.yml
+
+
+>>>>>>> 4594c2d8f60be6aa67f38ae6ded566608952cadf
 
 
 
@@ -28,7 +75,14 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea/
+<<<<<<< HEAD
 /front/certificate
 /front/node_modules
 /front/.env
 .idea
+=======
+/frontend/front/certificate
+/frontend/front/node_modules
+/frontend/front/.env
+.idea
+>>>>>>> 4594c2d8f60be6aa67f38ae6ded566608952cadf
