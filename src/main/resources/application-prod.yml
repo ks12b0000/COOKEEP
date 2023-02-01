@@ -1,0 +1,58 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${url}
+    username: ${username}
+    password: ${password}
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: ${MASTER_EMAIL}
+    password: ${MASTER_EMAIL_PW}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update   #create update none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${accessKey}       # AWS IAM AccessKey 적기
+      secretKey: ${secretKey}  # AWS IAM SecretKey 적기
+    s3:
+      bucket: ${bucket}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+KAKAO_API_KEY: ${KAKAO_API_KEY}
+KAKAO_SECRET_KEY: ${KAKAO_SECRET_KEY}
+NAVER_API_ID: ${NAVER_API_ID}
+NAVER_API_SECRET: ${NAVER_API_SECRET}
+GOOGLE_API_ID: ${GOOGLE_API_ID}
+GOOGLE_API_SECRET: ${GOOGLE_API_SECRET}
+JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+
