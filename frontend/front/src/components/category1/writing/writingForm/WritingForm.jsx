@@ -44,7 +44,6 @@ function WritingForm() {
         }
         data.text = text;
         data.thumbnail = imagePreview;
-        console.log(data);
         if (error) {
             alert("이미지를 업로드해주세요");
             return false;

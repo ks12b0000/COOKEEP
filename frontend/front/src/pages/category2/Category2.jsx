@@ -4,6 +4,7 @@ import {useCallback, useEffect, useState} from "react";
 
 import CategoryHttp from "../../http/categoryHttp";
 import axios from "axios";
+import Layout from "../../components/layout/Layout";
 
 const Container = styled.section`
     width: 1200px;
@@ -22,9 +23,11 @@ function Category2() {
 
     return (
         <>
-            <Container>
-               카테고리2
-            </Container>
+            <Layout>
+              <Container>
+                 카테고리2
+              </Container>
+            </Layout>
         </>
     );
 }
