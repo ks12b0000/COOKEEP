@@ -13,10 +13,5 @@ class CategoryHttp extends Http {
             }
         }
     };
-
-
-
-
-
 }
 export default CategoryHttp;

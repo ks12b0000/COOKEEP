@@ -66,6 +66,8 @@ const ContainerFalse = styled.div`
   border:1px solid #ccc;
   box-shadow: 4px 4px 16px rgba(0,0,0,.1);
 `
+
+
 function Header({color, isMain}) {
 
     const [isFocus, setIsFocus] = useState(false);
@@ -98,8 +100,7 @@ const TitleWrap = styled.div`
     }
     return (
        <>
-            {isMain ?
-                <ContainerFalse>
+            {!isMain ? <ContainerFalse>
                     <Logo color={color}/>
                     <Search />
                     <RightGnb color={color}/>

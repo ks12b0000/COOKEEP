@@ -3,7 +3,7 @@ class WriteHttp extends Http {
 
     imgUpload = async (formData) => {
         try{
-            const {data } = await this.axios.post("image", formData, {headers: {"Content-Type": "multipart/form-data"}})
+            const { data } = await this.axios.post("image", formData, {headers: {"Content-Type": "multipart/form-data"}})
             return data;
         }
         catch (err) {

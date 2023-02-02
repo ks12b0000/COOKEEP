@@ -2,10 +2,10 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination/Pagination";
 import { useState, useEffect } from "react";
-import categoryHttp from "../../../http/categoryHttp";
+import CategoryHttp from "../../../http/categoryHttp";
 import IsNonData from "../../isNonData/IsNonData";
 
-const CategoryHttp = new categoryHttp();
+const categoryHttp = new CategoryHttp();
 function CateItem() {
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +26,7 @@ function CateItem() {
     useEffect(() => {
         (async () => {
             try {
-                const { result } = await CategoryHttp.getCategoryList(true, currentPage, `한식`);
+                const { result } = await categoryHttp.getCategoryList(true, currentPage, `한식`);
                 setPosts(result);
                 setTotalPost(result.length);
             } catch (err) {

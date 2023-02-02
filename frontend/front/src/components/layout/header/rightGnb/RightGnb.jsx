@@ -60,9 +60,7 @@ function RightGnb({color}) {
             isLoggedIn: false,
         }));
 
-        // //나중에 서버와 통신이 가능한 URL을 사용하게 된다면 지워도 되는 코드
-        // removeCookie("accesstoken");
-        // removeCookie("refreshtoken");
+        alert('로그아웃이 완료되었습니다.');
     };
 
     return (

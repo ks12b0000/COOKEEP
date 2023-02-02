@@ -7,7 +7,7 @@ import {color} from "../../../constants/color";
 
 function Main() {
     const headerColor = color.headerColor;
-    const isMain = false;
+    const isMain = true;
     const Props = {
         color:headerColor,
         isMain
