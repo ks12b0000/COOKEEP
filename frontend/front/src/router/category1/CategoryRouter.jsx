@@ -1,18 +1,18 @@
 import { Route, Routes } from "react-router";
-import Detail from "../../components/category1/detail/Detail";
-import Writing from "../../components/category1/writing/Writing";
-import Category1 from "../../pages/category1/Category1";
+import Detail from "../../components/categoryLayout/detail/Detail";
+import Writing from "../../components/categoryLayout/writing/Writing";
+import Korean from "../../pages/category/korean/Korean";
 import PrivateRoute from "../../until/PrivateRoute";
 
 function CategoryRouter() {
     return (
         <>
+
             <Routes>
                 <Route element={<PrivateRoute />}>
                     <Route path="/writing" element={<Writing />} />
                 </Route>
-                <Route path="*" element={<Category1 />} />
-                <Route path="/:id" element={<Detail />} />
+                <Route path="*" element={<Korean />} />
             </Routes>
         </>
     );
