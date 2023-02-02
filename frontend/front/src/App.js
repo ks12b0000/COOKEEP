@@ -21,7 +21,6 @@ function App() {
         <>
             {/*라우터관리*/}
             <Routes>
-                <Route element={<Layout />}>
                     <Route element={<PrivateRoute />}>
                         <Route path="/myPage/:userId" element={<MyPage />}></Route>
                         <Route path="/category2" element={<Category2 />}></Route>
@@ -33,7 +32,6 @@ function App() {
                     <Route path="/callback/naver" element={<NaverLogin />}></Route>
                     <Route path="/sign" element={<SignUp />}></Route>
                     <Route path="/" element={<Home />}></Route>
-                </Route>
             </Routes>
         </>
     );

@@ -3,11 +3,12 @@ import { Outlet } from "react-router";
 import Footer from "./footer/Footer";
 import {color} from "../../constants/color";
 
-function Layout() {
+function Layout({children }) {
 
     return (
         <>
-            <Outlet />
+            <Header isMain={false} color={color.falseMainColor} />
+                {children}
             <Footer/>
         </>
     );

@@ -1,12 +1,11 @@
-import Header from "../../components/layout/header/Header";
+
 import styled from "@emotion/styled";
 import CateItem from "../../components/category1/cateItem/CateItem";
 import Buttons from "../../components/buttons/Buttons";
-import { useDispatch, useSelector } from "react-redux";
 import {  Routes, Route } from "react-router";
 import {Link} from 'react-router-dom'
-import Detail from "../../components/category1/detail/Detail";
 import Writing from "../../components/category1/writing/Writing";
+import Layout from "../../components/layout/Layout";
 
 const Container = styled.section`
     width: 1200px;
@@ -29,22 +28,24 @@ const ButtonWrap = styled.div`
 function Category1() {
     return (
         <>
-            <Routes>
+         <Layout>
+              <Routes>
                 <Route path="writing" element={<Writing />}></Route>
-            </Routes>
-            <Container>
+              </Routes>
+              <Container>
                 <Category1Title>
-                    <h1>카테고리 이름</h1>
-                    <CateItem />
+                  <h1>카테고리 이름</h1>
+                  <CateItem />
                     <ButtonWrap>
-                        <div>
-                            <Link to="/category1/writing">
-                                <Buttons text="글쓰기" />
-                            </Link>
-                        </div>
+                      <div>
+                        <Link to="/category1/writing">
+                          <Buttons text="글쓰기" />
+                        </Link>
+                       </div>
                     </ButtonWrap>
                 </Category1Title>
             </Container>
+         </Layout>
         </>
     );
 }
