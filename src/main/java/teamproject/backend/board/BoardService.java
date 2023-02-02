@@ -33,22 +33,4 @@ public interface BoardService {
     String updateLikeOfBoard(Long boardId, Long user_id);
 
     void update(Long boardId, BoardWriteRequest boardWriteRequest);
-
-    Long saveComment(BoardCommentWriteRequest boardCommentWriteRequest);
-
-    void updateComment(BoardCommentUpdateRequest request);
-
-    void deleteComment(Long commentId, Long userId);
-
-    List<BoardCommentResponse> findCommentByBoardId(Long boardId);
-
-    List<BoardCommentResponse> findCommentByUserId(Long userId);
-
-    Long saveReply(BoardCommentReplyWriteRequest request);
-
-    void updateReply(BoardCommentReplyUpdateRequest request);
-
-    void deleteReply(Long replyId, Long userId);
-
-    List<BoardCommentReplyResponse> findReplyByCommentId(Long commentId);
 }
