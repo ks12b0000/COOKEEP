@@ -19,8 +19,8 @@ public class BoardTagServiceImpl implements BoardTagService{
     private final TagService tagService;
 
     @Override
-    public void saveBoardTags(Board board, String tagRequest) {
-        List<String> tagNames = splitTagName(tagRequest);
+    public void saveBoardTags(Board board, String tagRequest){
+        List<String> tagNames = splitTagName(tagRequest.replace(" ", ""));
         for(String tagName : tagNames){
             createTag(tagName);
             Tag tag = tagService.findByName(tagName);
@@ -39,7 +39,7 @@ public class BoardTagServiceImpl implements BoardTagService{
         List<String> tagNames = new ArrayList<>();
         for(String tagName : tagArray){
             if(usableTagName(tagName)){
-                tagNames.add(deleteLastChar(tagName));
+                tagNames.add(tagName);
             }
         }
         return tagNames;
@@ -74,7 +74,7 @@ public class BoardTagServiceImpl implements BoardTagService{
         for(BoardTag boardTag : boardTags){
             tags += "#" + boardTag.getTag().getTagName() + " ";
         }
-        return tags;
+        return deleteLastChar(tags);
     }
 
     @Override
