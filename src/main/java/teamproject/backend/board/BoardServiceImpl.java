@@ -137,49 +137,10 @@ public class BoardServiceImpl implements BoardService{
         board.update(boardWriteRequest, foodCategory);
     }
 
-    @Override
-    @Transactional
-    public Long saveComment(BoardCommentWriteRequest boardCommentWriteRequest) {
-        Board board = findBoardByBoardId(boardCommentWriteRequest.getBoard_id());
-        User user = getUserById(boardCommentWriteRequest.getUser_id());
-
-        BoardComment comment = new BoardComment(user, board, boardCommentWriteRequest.getText());
-        boardCommentRepository.save(comment);
-        board.increaseCommentCount();
-
-        return comment.getBoardCommentId();
-    }
-
-    @Override
-    @Transactional
-    public void updateComment(BoardCommentUpdateRequest request) {
-        BoardComment comment = getBoardComment(request.getBoardComment_id());
-
-        getUserById(request.getUser_id());
-
-        comment.setText(request.getText());
-    }
-
     private BoardComment getBoardComment(Long request) {
         Optional<BoardComment> comment = boardCommentRepository.findById(request);
         if(comment.isEmpty()) throw new BaseException(NOT_EXIST_COMMENT);
         return comment.get();
-    }
-
-    @Override
-    @Transactional
-    public void deleteComment(Long commentId, Long deleteUser) {
-        BoardComment comment = getBoardComment(commentId);
-        Board board = comment.getBoard();
-
-        User commentCreateUser = comment.getUser();
-        User commentDeleteUser = getUserById(deleteUser);
-        if(commentCreateUser != commentDeleteUser) throw new BaseException(USER_NOT_EXIST);
-
-        deleteAllReplyOf(comment);
-
-        boardCommentRepository.delete(comment);
-        board.decreaseCommentCount();
     }
 
     private void deleteAllReplyOf(BoardComment comment) {
@@ -187,16 +148,6 @@ public class BoardServiceImpl implements BoardService{
         for(BoardCommentReply reply : replies){
             boardCommentReplyRepository.delete(reply);
         }
-    }
-
-    @Override
-    public List<BoardCommentResponse> findCommentByBoardId(Long boardId) {
-        Board board = findBoardByBoardId(boardId);
-
-        List<BoardComment> comments = boardCommentRepository.findByBoard(board);
-
-        List<BoardCommentResponse> list = getBoardCommentResponses(comments);
-        return list;
     }
 
     private List<BoardCommentResponse> getBoardCommentResponses(List<BoardComment> comments) {
@@ -207,74 +158,10 @@ public class BoardServiceImpl implements BoardService{
         return list;
     }
 
-    @Override
-    public List<BoardCommentResponse> findCommentByUserId(Long userId) {
-        User user = getUserById(userId);
-
-        List<BoardComment> comments = boardCommentRepository.findByUser(user);
-
-        List<BoardCommentResponse> list = getBoardCommentResponses(comments);
-        return list;
-    }
-
-    @Override
-    @Transactional
-    public Long saveReply(BoardCommentReplyWriteRequest request) {
-        BoardComment comment = getBoardComment(request.getComment_id());
-        User user = getUserById(request.getUser_id());
-
-        BoardCommentReply reply = new BoardCommentReply(user, comment, request.getText());
-
-        boardCommentReplyRepository.save(reply);
-        comment.increaseReplyCount();
-
-        return reply.getBoardCommentReplyId();
-    }
-
-    @Override
-    @Transactional
-    public void updateReply(BoardCommentReplyUpdateRequest request) {
-        BoardCommentReply reply = getBoardCommentReply(request.getReply_id());
-        User requestUser = getUserById(request.getUser_id());
-        User createUser = reply.getUser();
-
-        if(createUser != requestUser) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
-
-        reply.setText(request.getText());
-    }
-
     private BoardCommentReply getBoardCommentReply(Long replyId) {
         Optional<BoardCommentReply> reply = boardCommentReplyRepository.findById(replyId);
         if(reply.isEmpty()) throw new BaseException(NOT_EXIST_REPLY);
         return reply.get();
-    }
-
-    @Override
-    @Transactional
-    public void deleteReply(Long replyId, Long userId) {
-        BoardCommentReply reply = getBoardCommentReply(replyId);
-        User deleteUser = getUserById(userId);
-        User createUser = reply.getUser();
-
-        if(createUser != deleteUser) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
-
-        reply.getBoardComment().decreaseReplyCount();
-
-        boardCommentReplyRepository.delete(reply);
-    }
-
-    @Override
-    public List<BoardCommentReplyResponse> findReplyByCommentId(Long commentId) {
-        BoardComment boardComment = getBoardComment(commentId);
-
-        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(boardComment);
-        System.out.println(replies.size());
-        List<BoardCommentReplyResponse> list = new LinkedList<>();
-        for(BoardCommentReply reply : replies){
-            list.add(new BoardCommentReplyResponse(reply));
-        }
-
-        return list;
     }
 
     @Override
