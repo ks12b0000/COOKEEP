@@ -7,6 +7,7 @@ import { logoutUser } from '../../redux/reducer/userSlice';
 import AuthHttp from '../../http/authHttp';
 import UserInfoChange from '../../components/mypage/UserInfoChange';
 import Header from '../../components/layout/header/Header';
+import Footer from '../../components/layout/footer/Footer';
 
 const authHttp = new AuthHttp();
 
@@ -76,6 +77,7 @@ const MyPage = () => {
 
   return (
     <>
+      <Header />
       {UserInfo ? (
         <MypageWrap>
           <UserInfoBlock>
@@ -110,6 +112,7 @@ const MyPage = () => {
       ) : (
         <></>
       )}
+      <Footer />
     </>
   );
 };
