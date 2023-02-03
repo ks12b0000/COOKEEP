@@ -42,6 +42,12 @@ public class BoardController {
         return new BaseResponse("성공적으로 글이 작성됐습니다.");
     }
 
+    @PatchMapping("/auth/board/{board_id}")
+    public BaseResponse boardUpdate(@Validated(ValidationSequence.class) @RequestBody BoardWriteRequest boardWriteRequest, @PathVariable Long board_id){
+        boardService.update(board_id, boardWriteRequest);
+        return new BaseResponse("성공적으로 글이 수정됐습니다.");
+    }
+
     /**
      * 카테고리 글 목록 조회
      * [GET] /board/list
