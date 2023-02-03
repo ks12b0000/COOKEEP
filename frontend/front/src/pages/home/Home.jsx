@@ -1,26 +1,27 @@
 import { useEffect } from "react";
 import Main from "../../components/layout/home/Main";
 import AuthHttp from "../../http/authHttp";
+import {color} from "../../constants/color";
+import Header from "../../components/layout/header/Header";
+import Popularity from "../../components/layout/home/popularity/Popularity";
+import Ranking from "../../components/layout/home/ranking/Ranking";
+import Footer from "../../components/layout/footer/Footer";
 const authHttp = new AuthHttp();
 
 function Home() {
-    // 로그인 여부 체크 (임시 위치)
-    // useEffect(() => {
-    //     onCheck();
-    // }, []);
+    //메인페이지에 layout컴포넌트가없는이유는 메인페이지 부분만 header달라서 분기처리를 해주었습니다.
 
-    // const onCheck = async () => {
-    //     try {
-    //         const res = await authHttp.getIsLoggedIn();
-    //         console.log(res);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-
+    const headerColor = color.headerColor;
+    const isMain = true;
+    const Props = {
+        color:headerColor,
+        isMain
+    }
     return (
         <>
+            <Header {...Props}/>
             <Main />
+            <Footer/>
         </>
     );
 }

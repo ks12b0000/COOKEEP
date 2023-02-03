@@ -6,19 +6,12 @@ import {color} from "../../../constants/color";
 
 
 function Main() {
-    const headerColor = color.headerColor;
-    const isMain = false;
-    const Props = {
-        color:headerColor,
-        isMain
-    }
-    return (
-        <>
-            <Header {...Props}/>
-            <Popularity />
-            <Ranking />
-        </>
-    );
+   return(
+       <>
+           <Popularity />
+           <Ranking />
+       </>
+   )
 }
 
 export default Main;

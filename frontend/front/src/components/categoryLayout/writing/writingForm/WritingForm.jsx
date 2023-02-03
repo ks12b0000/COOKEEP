@@ -5,21 +5,48 @@ import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import WriteHttp from "../../../../http/writeHttp";
+import CategoryHttp from "../../../../http/categoryHttp";
 import {useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
 const writeHttp = new WriteHttp();
+const categoryHttp = new CategoryHttp();
 function WritingForm() {
+
+
     //hook from 가져오기
     const {
         register,
         handleSubmit,
         formState: { errors }
     } = useForm();
-    const {userId} = useSelector(state => state.persistedReducer.userReducer);
+    //초기값 지정
+    const { category } = useParams();
+
+    const { userId } = useSelector(state => state.persistedReducer.userReducer);
     const navigate = useNavigate();
+    const [categoryList,setCategoryList] = useState([]);
+    const [categoryValue, setCategoryValue] = useState('한식');
     const [text, setText] = useState("");
     const [isError, setIsError] = useState(false);
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
+
+
+
+
+    useEffect(() => {
+        (async () => {
+           try {
+               const res = await categoryHttp.getCategoryMenu();
+               setCategoryList(res.result);
+           } catch (err){
+               console.log(err);
+           }
+        })()
+    },[])
+    useEffect(() => {
+        imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png" ? setError(true) : setError(false);
+    }, [imagePreview]);
 
     const imageChange = async (e) => {
         const files = e.target.files; // FileList 객체
@@ -30,11 +57,9 @@ function WritingForm() {
             alert("파일 크기는 1메가로 지정되어있씁니다.");
         }
     };
-    useEffect(() => {
-        imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png" ? setError(true) : setError(false);
-    }, [imagePreview]);
-
     const onSubmit = async (data) => {
+        console.log(data);
+        data.category = categoryValue;
         data.user_id = userId;
         if (text.length < 5) {
             setIsError(true);
@@ -44,7 +69,6 @@ function WritingForm() {
         }
         data.text = text;
         data.thumbnail = imagePreview;
-        console.log(data);
         if (error) {
             alert("이미지를 업로드해주세요");
             return false;
@@ -52,20 +76,27 @@ function WritingForm() {
         try {
             await writeHttp.submitWritingForm(data, { headers: { "Content-Type": "multipart/form-data" } });
             alert("글 작성이 완료되었습니다.");
-            navigate("/category1");
+            navigate(`/${category}`);
         } catch (err) {
             console.log(err);
         }
     };
-
+    const onChange = (e) =>{
+        console.log(e.target.value);
+       setCategoryValue(e.target.value);
+    }
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputBox>
                     <label htmlFor="">카테고리</label>
-                    <select name="category" defaultValue="category1" {...register("category")}>
-                        <option value="한식">한식</option>
-                        <option value="카테고리3">중식</option>
+                    <select name="category" value={categoryValue} onChange={onChange}>
+                        {categoryList.map((categoryName,index) => {
+                            return(
+                                <option value={categoryName.name} key={index} >{categoryName.name}</option>
+                            )
+                        })}
+
                     </select>
                 </InputBox>
                 <InputBox>
