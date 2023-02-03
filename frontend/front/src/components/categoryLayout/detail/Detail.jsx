@@ -1,18 +1,32 @@
-import Header from "../../layout/header/Header";
 import { useEffect, useState } from "react";
-import { categoryList1 } from "../../../http/data/category1/categoryList1";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import WriteHttp from "../../../http/writeHttp";
-import IsNonData from "../../isNonData/IsNonData";
 import CommentUpload from "../../comment/CommentUpload";
 import CommentList from "../../comment/CommentList";
+import Layout from "../../layout/Layout";
+import CategoryHttp from "../../../http/categoryHttp";
+import Alert from "../../modal/Alert";
+import useModal from "../../../hooks/useModal";
+import {useNavigate} from "react-router";
 
 function Detail() {
     const writeHttp = new WriteHttp();
+    const navigate = useNavigate()
+    const categoryHttp = new CategoryHttp();
+    const {userId} = useSelector(state => state.persistedReducer.userReducer);
     const { id } = useParams();
     const [detailPost, setDetailPost] = useState([]);
+    const {isOpen,controller} = useModal();
+    const FetchDelete = async () => {
+        try {
+            await categoryHttp.deleteCategoryList(id,userId);
+            navigate(-1)
+        }catch (err){
+            alert('유저아이디가 일치하지 않습니다.')
+        }
+    }
 
     useEffect(() => {
         (async () => {
@@ -25,8 +39,15 @@ function Detail() {
         })();
     }, []);
 
+
+  const Props = {
+    text:'해당 게시물을 삭제를 원하십니까?',
+    setOpenModal:controller,
+    onClick:FetchDelete
+  }
     return (
         <>
+          <Layout>
             <Container>
                 <Top>
                     <TopImg>
@@ -38,9 +59,15 @@ function Detail() {
                         <LikeButton>좋아요</LikeButton>
                     </TopText>
                 </Top>
+                <ButtonWrap>
+                  <ButtonStyle onClick={controller}>삭제</ButtonStyle>
+                  <ButtonStyle onClick={() => navigate(`/${id}/edit`)}>수정</ButtonStyle>
+                </ButtonWrap>
                 <CommentUpload boardId={id} />
                 <CommentList boardId={id} />
             </Container>
+              {isOpen && <Alert {...Props} />}
+          </Layout>
         </>
     );
 }
@@ -97,3 +124,25 @@ const LikeButton = styled.button`
         background: #333;
     }
 `;
+const ButtonWrap = styled.div`
+ display: flex;
+  justify-content: end;
+  gap:15px;
+`
+const ButtonStyle = styled.button`
+  
+  margin-top:10px;
+  width: 100px;
+  height: 50px;
+  border:1px solid #ccc;
+  background:#ffffff;
+  cursor: pointer;
+  border-radius: 3px;
+  &:hover{
+    background:#222;
+    color:#ffffff;
+  }
+  &:focus{
+    border:1px solid #ccc;
+  }
+`
