@@ -135,6 +135,7 @@ public class BoardServiceImpl implements BoardService{
         if(!thumbnailExist(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
 
         board.update(boardWriteRequest, foodCategory);
+        boardTagService.updateBoardTags(board, boardWriteRequest.getTags());
     }
 
     private BoardComment getBoardComment(Long request) {
