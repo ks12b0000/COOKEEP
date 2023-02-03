@@ -24,6 +24,16 @@ class CategoryHttp extends Http {
             throw err;
         }
     }
+    //글 조회
+     getBoard = async (id) => {
+          try {
+              const {data} = await this.axios.get(`board?board_id=${id}`)
+              return data;
+          }catch (err){
+              throw err;
+          }
+     }
+
     //카테고리 삭제
     deleteCategoryList = async (boardId,userId) => {
       try {
@@ -32,6 +42,8 @@ class CategoryHttp extends Http {
          throw  err;
       }
     }
+
+
 
 }
 export default CategoryHttp;

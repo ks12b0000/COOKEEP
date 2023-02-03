@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Pagination from "../pagination/Pagination";
 import { useState, useEffect } from "react";
 import CategoryHttp from "../../../http/categoryHttp";
@@ -7,6 +7,7 @@ import IsNonData from "../../isNonData/IsNonData";
 
 const categoryHttp = new CategoryHttp();
 function CateItem({cateItemName}) {
+
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [showPost, setShowPost] = useState(8);

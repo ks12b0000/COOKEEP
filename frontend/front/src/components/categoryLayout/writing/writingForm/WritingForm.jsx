@@ -7,9 +7,12 @@ import { useState, useEffect } from "react";
 import WriteHttp from "../../../../http/writeHttp";
 import CategoryHttp from "../../../../http/categoryHttp";
 import {useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
 const writeHttp = new WriteHttp();
 const categoryHttp = new CategoryHttp();
 function WritingForm() {
+
+
     //hook from 가져오기
     const {
         register,
@@ -17,9 +20,10 @@ function WritingForm() {
         formState: { errors }
     } = useForm();
     //초기값 지정
-    const {userId} = useSelector(state => state.persistedReducer.userReducer);
-    const navigate = useNavigate();
+    const { category } = useParams();
 
+    const { userId } = useSelector(state => state.persistedReducer.userReducer);
+    const navigate = useNavigate();
     const [categoryList,setCategoryList] = useState([]);
     const [categoryValue, setCategoryValue] = useState('한식');
     const [text, setText] = useState("");
@@ -72,7 +76,7 @@ function WritingForm() {
         try {
             await writeHttp.submitWritingForm(data, { headers: { "Content-Type": "multipart/form-data" } });
             alert("글 작성이 완료되었습니다.");
-            navigate(-1);
+            navigate(`/${category}`);
         } catch (err) {
             console.log(err);
         }
