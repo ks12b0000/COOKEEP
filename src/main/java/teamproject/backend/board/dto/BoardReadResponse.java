@@ -19,6 +19,8 @@ public class BoardReadResponse {
     private Date create_date;
     private String thumbnail;
     private String tags;
+    private Integer commented;
+    private Integer liked;
 
     public BoardReadResponse(Board board, String tags){
         this.board_id = board.getBoardId();
@@ -29,5 +31,7 @@ public class BoardReadResponse {
         this.create_date = board.getCreateDate();
         this.thumbnail = board.getThumbnail();
         this.tags = tags;
+        this.commented = board.getCommented();
+        this.liked = board.getLiked();
     }
 }
