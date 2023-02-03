@@ -6,6 +6,7 @@ import { loginUser } from "../../redux/reducer/userSlice";
 import styled from "@emotion/styled";
 import Header from "../../components/layout/header/Header";
 import UserHttp from "../../http/userHttp";
+import Footer from "../../components/layout/footer/Footer";
 
 const userHttp = new UserHttp();
 
@@ -136,6 +137,7 @@ function Login() {
 
     return (
         <>
+            <Header/>
             <LoginBackground>
                 <LoginWrap>
                     <LoginTitle>Welcome to our project !</LoginTitle>
@@ -210,6 +212,7 @@ function Login() {
                     <></>
                 )}
             </LoginBackground>
+            <Footer/>
         </>
     );
 }

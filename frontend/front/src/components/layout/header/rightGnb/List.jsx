@@ -7,8 +7,7 @@ import {NavDada} from "../../../../http/data/nav/navData";
 
 const AllCategory = styled.li`
   position: relative;
- 
- 
+  z-index: 100;
 `
 
 function List() {
