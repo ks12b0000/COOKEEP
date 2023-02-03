@@ -25,16 +25,14 @@ const ButtonWrap = styled.div`
 function Category({title,categoryName}){
     return(
         <Layout>
-            <Routes>
-                <Route path="writing" element={<Writing />}></Route>
-            </Routes>
+
             <Container>
                 <Category1Title>
                     <h1>{title}</h1>
                     <CateItem cateItemName={categoryName}/>
                     <ButtonWrap>
                         <div>
-                            <Link to="/category1/writing">
+                            <Link to="writing">
                                 <Buttons text="글쓰기" />
                             </Link>
                         </div>

@@ -8,6 +8,7 @@ import {useState} from "react";
 import {useEffect} from "react";
 import CategoryHttp from "../../../../http/categoryHttp";
 import WriteHttp from "../../../../http/writeHttp";
+import {useParams} from "react-router-dom";
 
 function EditForm() {
     const categoryHttp = new CategoryHttp();
@@ -19,25 +20,37 @@ function EditForm() {
         formState: { errors }
     } = useForm();
     //초기값 지정
+    const {id} = useParams();
+
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
     const navigate = useNavigate();
 
+
     const [categoryList,setCategoryList] = useState([]);
     const [categoryValue, setCategoryValue] = useState('한식');
+    const [board,setBoard] = useState([]);
     const [text, setText] = useState("");
     const [isError, setIsError] = useState(false);
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
+
+
+
+
     useEffect(() => {
         (async () => {
-            try {
-                const res = await categoryHttp.getCategoryMenu();
-                setCategoryList(res.result);
-            } catch (err){
-                console.log(err);
+            const result = await Promise.allSettled([categoryHttp.getCategoryMenu(),categoryHttp.getBoard(id)]);
+            const [categoryMenu, board] = result.filter((res) => res.status === "fulfilled").map((res) => res.value);
+            if(categoryMenu.code !== 1000 || board.code !== 1000){
+                alert('잘못된 요청입니다.')
             }
+            setCategoryList(categoryMenu.result);
+            setBoard(board.result);
+            setCategoryValue(board.result.category)
+
         })()
     },[])
+
     useEffect(() => {
         imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png" ? setError(true) : setError(false);
     }, [imagePreview]);
