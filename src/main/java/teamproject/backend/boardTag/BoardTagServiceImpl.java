@@ -2,6 +2,7 @@ package teamproject.backend.boardTag;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardService;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardTag;
@@ -19,8 +20,8 @@ public class BoardTagServiceImpl implements BoardTagService{
     private final TagService tagService;
 
     @Override
-    public void saveBoardTags(Board board, String tagRequest) {
-        List<String> tagNames = splitTagName(tagRequest);
+    public void saveBoardTags(Board board, String tagRequest){
+        List<String> tagNames = splitTagName(tagRequest.replace(" ", ""));
         for(String tagName : tagNames){
             createTag(tagName);
             Tag tag = tagService.findByName(tagName);
@@ -39,7 +40,7 @@ public class BoardTagServiceImpl implements BoardTagService{
         List<String> tagNames = new ArrayList<>();
         for(String tagName : tagArray){
             if(usableTagName(tagName)){
-                tagNames.add(deleteLastChar(tagName));
+                tagNames.add(tagName);
             }
         }
         return tagNames;
@@ -54,7 +55,7 @@ public class BoardTagServiceImpl implements BoardTagService{
         return true;
     }
     @Override
-    public void deleteAllByBoard(Board board) {
+    public void deleteBoardTags(Board board) {
         List<BoardTag> boardTags = findBoardTagByBoard(board);
         for(BoardTag boardTag : boardTags){
             boardTagRepository.delete(boardTag);
@@ -74,7 +75,7 @@ public class BoardTagServiceImpl implements BoardTagService{
         for(BoardTag boardTag : boardTags){
             tags += "#" + boardTag.getTag().getTagName() + " ";
         }
-        return tags;
+        return deleteLastChar(tags);
     }
 
     @Override
@@ -92,6 +93,13 @@ public class BoardTagServiceImpl implements BoardTagService{
             boards.add(boardTag.getBoard());
         }
         return boards;
+    }
+
+    @Override
+    @Transactional
+    public void updateBoardTags(Board board, String tags) {
+        deleteBoardTags(board);
+        saveBoardTags(board, tags);
     }
 
 }

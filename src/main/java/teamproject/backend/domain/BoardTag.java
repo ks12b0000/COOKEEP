@@ -21,7 +21,7 @@ public class BoardTag {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)//boardTag 조회시 Tag를 반드시 조회하는 구조
     @JoinColumn(name = "tag_id")
     private Tag tag;
 

@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface BoardTagService {
     void saveBoardTags(Board board, String tagName);
-    void deleteAllByBoard(Board board);
+    void deleteBoardTags(Board board);
     List<BoardTag> findBoardTagByBoard(Board board);
     String findTagsByBoard(Board board);
     List<BoardTag> findBoardTagByTagName(String tagName);
     List<Board> findBoardByTagName(String tagName);
+    void updateBoardTags(Board board, String tags);
 }
