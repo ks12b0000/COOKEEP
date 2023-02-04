@@ -14,19 +14,19 @@ function Popularity() {
                             <h5>작성자: <span>홍길동</span></h5>
                             <PopularListIMG><img src="https://recipe1.ezmember.co.kr/cache/data/goods/22/03/13/1000026683/1000026683_detail_089.jpg?w=500" alt=""/></PopularListIMG>
                             <PopularSubText><span>텍스트설명을 적어놓겠습니다 .... 처리로 하겠습니다. 최대 2줄까지만 허용하는 텍스트입니다. 가가가가가ㅏ각ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</span></PopularSubText>
-                            <Link to={"/category1"}>  <PageRouter>레시피 바로 보러가기  {`>`}</PageRouter></Link>
+                            <Link to={"/categoryLayout"}>  <PageRouter>레시피 바로 보러가기  {`>`}</PageRouter></Link>
                         </li>
                         <li>
                             <h5>작성자: <span>홍길동</span></h5>
                             <PopularListIMG><img src="https://recipe1.ezmember.co.kr/cache/data/goods/22/03/13/1000026683/1000026683_detail_089.jpg?w=500" alt=""/></PopularListIMG>
                             <PopularSubText><span>텍스트설명을 적어놓겠습니다 .... 처리로 하겠습니다. 최대 2줄까지만 허용하는 텍스트입니다. 가가가가가ㅏ각ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</span></PopularSubText>
-                            <Link to={"/category1"}>  <PageRouter>레시피 바로 보러가기  {`>`}</PageRouter></Link>
+                            <Link to={"/categoryLayout"}>  <PageRouter>레시피 바로 보러가기  {`>`}</PageRouter></Link>
                         </li>
                         <li>
                             <h5>작성자: <span>홍길동</span></h5>
                             <PopularListIMG><img src="https://recipe1.ezmember.co.kr/cache/data/goods/22/03/13/1000026683/1000026683_detail_089.jpg?w=500" alt=""/></PopularListIMG>
                             <PopularSubText><span>텍스트설명을 적어놓겠습니다 .... 처리로 하겠습니다. 최대 2줄까지만 허용하는 텍스트입니다. 가가가가가ㅏ각ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</span></PopularSubText>
-                            <Link to={"/category1"}>  <PageRouter>레시피 바로 보러가기  {`>`}</PageRouter></Link>
+                            <Link to={"/categoryLayout"}>  <PageRouter>레시피 바로 보러가기  {`>`}</PageRouter></Link>
                         </li>
                     </ul>
                 </PopularListLayout>
