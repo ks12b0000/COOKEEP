@@ -7,24 +7,39 @@ import CommentUpload from "../../comment/CommentUpload";
 import CommentList from "../../comment/CommentList";
 import Layout from "../../layout/Layout";
 import CategoryHttp from "../../../http/categoryHttp";
+import AuthHttp from "../../../http/authHttp";
 import Alert from "../../modal/Alert";
 import useModal from "../../../hooks/useModal";
 import {useNavigate} from "react-router";
 
 function Detail() {
-    const writeHttp = new WriteHttp();
-    const navigate = useNavigate()
     const categoryHttp = new CategoryHttp();
+    const writeHttp = new WriteHttp();
+    const authHttp = new AuthHttp();
+
+    const navigate = useNavigate()
+
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
     const { id } = useParams();
     const [detailPost, setDetailPost] = useState([]);
     const {isOpen,controller} = useModal();
+
     const FetchDelete = async () => {
         try {
             await categoryHttp.deleteCategoryList(id,userId);
             navigate(-1)
         }catch (err){
             alert('유저아이디가 일치하지 않습니다.')
+        }
+    }
+
+    const onLike = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await authHttp.postLike(id);
+            console.log(res);
+        }catch (err){
+            console.log(err.response);
         }
     }
 
@@ -56,7 +71,7 @@ function Detail() {
                     <TopText>
                         <TextTitle>{detailPost.title}</TextTitle>
                         <Text dangerouslySetInnerHTML={{ __html: detailPost.text }}></Text>
-                        <LikeButton>좋아요</LikeButton>
+                        <LikeButton onClick={(e)=>onLike(e)}>좋아요</LikeButton>
                     </TopText>
                 </Top>
                 <ButtonWrap>
@@ -114,7 +129,6 @@ const Text = styled.span`
 `;
 const LikeButton = styled.button`
     cursor: pointer;
-
     background: #222;
     height: 10%;
     width: 100%;
