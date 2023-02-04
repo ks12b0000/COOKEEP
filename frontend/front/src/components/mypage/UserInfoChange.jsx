@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import IdChange from "./IdChange";
 import EmailChange from "./EmailChange";
+import PasswordChange from "./PasswordChange";
 
 const UserInfoChange = (props) => {
     //모달창 ui 변경을 위한 state
@@ -54,25 +55,7 @@ const UserInfoChange = (props) => {
                 {IsEmailChange ? <EmailChange /> : <></>}
 
                 {IsPasswordChange ? (
-                    <ContentsWrap margin="50px auto 0 auto">
-                        <SubTitle>현재 비밀번호</SubTitle>
-                        <InputWrap mb="20px">
-                            <Input />
-                            <InputButton>확인</InputButton>
-                            {/* <MiniText>현재 비밀번호를 확인해주세요</MiniText> */}
-                        </InputWrap>
-                        <SubTitle>새 비밀번호</SubTitle>
-                        <InputWrap mb="5px">
-                            <Input />
-                        </InputWrap>
-                        <SubTitle>새 비밀번호 확인</SubTitle>
-                        <InputWrap mb="20px">
-                            <Input />
-                            {/* <InputButton>중복확인</InputButton> */}
-                            {/* <MiniText>새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.</MiniText> */}
-                        </InputWrap>
-                        <SubmitButton>비밀번호 변경하기</SubmitButton>
-                    </ContentsWrap>
+                    <PasswordChange />
                 ) : (
                     <></>
                 )}
