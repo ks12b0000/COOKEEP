@@ -22,6 +22,9 @@ import Vegan from "./pages/category/vegan/Vegan";
 import Edit from "./components/categoryLayout/edit/Edit";
 import Korean from "./pages/category/korean/Korean";
 import Writing from "./components/categoryLayout/writing/Writing";
+import MyComment from "./pages/myPage/MyPosts";
+import MyPosts from "./pages/myPage/MyPosts";
+import MyLikes from "./pages/myPage/MyLikes";
 
 function App() {
     const user = useSelector((state) => state);
@@ -31,8 +34,9 @@ function App() {
             {/*라우터관리*/}
             <Routes>
                     <Route element={<PrivateRoute />}>
-                        <Route path="/myPage/:userId" element={<MyPage />}></Route>
-
+                        <Route path="/mypage/:userId" element={<MyPage />}></Route>
+                        <Route path="/myposts/:userId" element={<MyPosts />}></Route>
+                        <Route path="/mylikes/:userId" element={<MyLikes />}></Route>
                     </Route>
                     {/*카테고리*/}
                     <Route path="/korea/*" element={<Korean/>}></Route>
@@ -48,8 +52,6 @@ function App() {
                     <Route path=":category/writing" element={<Writing />}></Route>
                     <Route path="/category/:id" element={<Detail />} />
                     <Route path="/:id/edit" element={<Edit />} />
-
-
 
 
 

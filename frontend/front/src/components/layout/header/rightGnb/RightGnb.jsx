@@ -80,7 +80,7 @@ function RightGnb({color}) {
                     <>
                         <List />
                         <li>
-                            <Link to={`/myPage/${userInfo.userId}`}>마이페이지</Link>
+                            <Link to={`/mypage/${userInfo.userId}`}>마이페이지</Link>
                         </li>
                         <li>
                             <Link to="/" onClick={logout} >로그아웃</Link>
