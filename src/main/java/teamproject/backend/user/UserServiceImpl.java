@@ -213,8 +213,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(user.getEmail());
-            mimeMessageHelper.setSubject("[오늘 뭐먹지?] 아이디 찾기 안내");
-            mimeMessageHelper.setText("<div style='text-align: center;'><h1 style='color:blue'>아이디  찾기</h1><br> <h3>안녕하세요. 고객님 오늘 뭐먹지 입니다.</h3><br> <p>귀하께서 요청하신 아이디 찾기 수신을 위해 발송된 메일입니다.</p> <p>유저 아이디는 <Strong>" + user.getUsername() + "</Strong> 입니다.</p> <p>감사합니다.</p></div>", true);
+            mimeMessageHelper.setSubject("[COOKEEP] 아이디 찾기 안내");
+            mimeMessageHelper.setText("<div style='text-align: center;'><h1 style='color:blue'>아이디  찾기</h1><br> <h3>안녕하세요. 고객님 COOKEEP 입니다.</h3><br> <p>귀하께서 요청하신 아이디 찾기 수신을 위해 발송된 메일입니다.</p> <p>유저 아이디는 <Strong>" + user.getUsername() + "</Strong> 입니다.</p> <p>감사합니다.</p></div>", true);
 
             javaMailSender.send(mimeMessage);
             log.info("sent username: {}", user.getUsername());
@@ -280,8 +280,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(user.getEmail());
-            mimeMessageHelper.setSubject("[오늘 뭐먹지?] 비밀번호 찾기 안내");
-            mimeMessageHelper.setText("<div style='text-align: center;'><h1 style='color:blue'>임시  비밀번호  생성</h1><br> <h3>안녕하세요. " + username + "님 <br> 오늘 뭐먹지 입니다.</h3><br> <p>귀하께서 요청하신 비밀번호 찾기 수신을 위해 발송된 메일입니다.</p> <p>유저 임시 비밀번호는 <Strong>" + password + "</Strong> 입니다.</p> <p>임시 비밀번호를 활용하여 <Strong style='color:red'>새로운 비밀번호로 변경</Strong> 해주시고 이용해 주시길 바랍니다.</p> <p>감사합니다.</p></div>", true);
+            mimeMessageHelper.setSubject("[COOKEEP] 비밀번호 찾기 안내");
+            mimeMessageHelper.setText("<div style='text-align: center;'><h1 style='color:blue'>임시  비밀번호  생성</h1><br> <h3>안녕하세요. " + username + "님 <br> COOKEEP 입니다.</h3><br> <p>귀하께서 요청하신 비밀번호 찾기 수신을 위해 발송된 메일입니다.</p> <p>유저 임시 비밀번호는 <Strong>" + password + "</Strong> 입니다.</p> <p>임시 비밀번호를 활용하여 <Strong style='color:red'>새로운 비밀번호로 변경</Strong> 해주시고 이용해 주시길 바랍니다.</p> <p>감사합니다.</p></div>", true);
 
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
