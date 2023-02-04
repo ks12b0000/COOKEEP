@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Pagination from "../pagination/Pagination";
 import { useState, useEffect } from "react";
 import CategoryHttp from "../../../http/categoryHttp";
 import IsNonData from "../../isNonData/IsNonData";
 
 const categoryHttp = new CategoryHttp();
-function CateItem() {
+function CateItem({cateItemName}) {
+
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [showPost, setShowPost] = useState(8);
@@ -26,7 +27,7 @@ function CateItem() {
     useEffect(() => {
         (async () => {
             try {
-                const { result } = await categoryHttp.getCategoryList(true, currentPage, `한식`);
+                const { result } = await categoryHttp.getCategoryPostList(true, currentPage, cateItemName);
                 setPosts(result);
                 setTotalPost(result.length);
             } catch (err) {
@@ -41,19 +42,19 @@ function CateItem() {
 
     return (
         <>
-            <SelectBox>
-                <select onChange={FilterPosts} defaultValue="8">
-                    <option value="8">8개씩보기</option>
-                    <option value="16">16개씩 보기</option>
-                    <option value="100">100개씩 보기</option>
-                </select>
-            </SelectBox>
+            {/*<SelectBox>*/}
+            {/*    <select onChange={FilterPosts} defaultValue="8">*/}
+            {/*        <option value="8">8개씩보기</option>*/}
+            {/*        <option value="16">16개씩 보기</option>*/}
+            {/*        <option value="100">100개씩 보기</option>*/}
+            {/*    </select>*/}
+            {/*</SelectBox>*/}
             <Ul>
                 {
                     posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다." /> :
                         currentPost.map((category, idx) => (
                             <li key={idx + 1}>
-                                <Link to={`/category1/${category.board_id}`}>
+                                <Link to={`/category/${category.board_id}`}>
                                     <Thumbnail>
                                         <img src={category.thumbnail} alt="https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" />
                                     </Thumbnail>

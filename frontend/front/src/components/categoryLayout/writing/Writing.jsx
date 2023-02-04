@@ -1,6 +1,7 @@
 import Header from "../../layout/header/Header";
 import styled from "@emotion/styled";
 import WritingForm from "./writingForm/WritingForm";
+import Layout from "../../layout/Layout";
 
 const Container = styled.div`
     display: flex;
@@ -20,12 +21,13 @@ function Writing(){
 
     return(
         <>
-
+          <Layout>
             <Container>
-                <Contents>
-                    <WritingForm />
-                </Contents>
+              <Contents>
+                <WritingForm />
+              </Contents>
             </Container>
+          </Layout>
         </>
     )
 }
