@@ -23,7 +23,7 @@ function Detail() {
     const { id } = useParams();
     const [detailPost, setDetailPost] = useState([]);
     const {isOpen,controller} = useModal();
-
+    
     const FetchDelete = async () => {
         try {
             await categoryHttp.deleteCategoryList(id,userId);
@@ -129,6 +129,7 @@ const Text = styled.span`
 `;
 const LikeButton = styled.button`
     cursor: pointer;
+
     background: #222;
     height: 10%;
     width: 100%;
