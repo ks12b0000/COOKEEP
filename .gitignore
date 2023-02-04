@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 HELP.md
 .gradle
 build/
@@ -42,6 +44,7 @@ application.yml
 application-dev.yml
 
 
+>>>>>>> 4594c2d8f60be6aa67f38ae6ded566608952cadf
 
 
 
@@ -72,7 +75,14 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea/
+<<<<<<< HEAD
+/front/certificate
+/front/node_modules
+/front/.env
+.idea
+=======
 /frontend/front/certificate
 /frontend/front/node_modules
 /frontend/front/.env
 .idea
+>>>>>>> 4594c2d8f60be6aa67f38ae6ded566608952cadf
