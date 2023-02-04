@@ -30,7 +30,7 @@ public interface BoardService {
 
     void delete(Long userId, Long boardId);
 
-    String updateLikeOfBoard(Long boardId, Long user_id);
+    String updateLikeOfBoard(Long boardId, User user);
 
     void update(Long boardId, BoardWriteRequest boardWriteRequest);
 }
