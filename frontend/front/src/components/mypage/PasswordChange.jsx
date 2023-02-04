@@ -54,7 +54,7 @@ const PasswordChange = () => {
     };
 
     //비밀번호 변경 실행 함수
-    const onChangeEmail = async (e) => {
+    const onChangePassword = async (e) => {
         e.preventDefault();
 
         const body = {
@@ -106,7 +106,7 @@ const PasswordChange = () => {
                 <Input type="password" value={Password2} onChange={(e) => setPassword2(e.currentTarget.value)} ref={PasswordInput} />
                 <MiniText>{PasswordText}</MiniText>
             </InputWrap>
-            <SubmitButton onClick={(e) => onChangeEmail(e)}>비밀번호 변경하기</SubmitButton>
+            <SubmitButton onClick={(e) => onChangePassword(e)}>비밀번호 변경하기</SubmitButton>
         </ContentsWrap>
     );
 };
