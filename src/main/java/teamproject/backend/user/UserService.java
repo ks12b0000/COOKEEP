@@ -18,9 +18,9 @@ public interface UserService {
 
     public User checkUserHasLogin(Cookie[] cookies);
 
-    public void findByUserId(FindIdRequest findIdRequest);
+    public FindIdResponse findByUserId(FindIdRequest findIdRequest);
 
     public boolean checkEmailDuplicate(String email);
 
-    public void findByUserPw(FindPwRequest findPwRequest);
+    public FindPwResponse findByUserPw(FindPwRequest findPwRequest);
 }

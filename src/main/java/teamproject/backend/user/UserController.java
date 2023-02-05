@@ -155,9 +155,9 @@ public class UserController {
     @PostMapping("/user/find/id")
     public BaseResponse findByUserId(@Validated(ValidationSequence.class) @RequestBody FindIdRequest findIdRequest) {
 
-        userService.findByUserId(findIdRequest);
+        FindIdResponse findIdResponse = userService.findByUserId(findIdRequest);
 
-        return new BaseResponse("아이디 찾기에 성공했습니다.");
+        return new BaseResponse("아이디 찾기에 성공했습니다.", findIdResponse);
     }
 
     /**
@@ -185,8 +185,8 @@ public class UserController {
     @PostMapping("/user/find/password")
     public BaseResponse findByUserPw(@Validated(ValidationSequence.class) @RequestBody FindPwRequest findPwRequest) {
 
-        userService.findByUserPw(findPwRequest);
+        FindPwResponse findPwResponse = userService.findByUserPw(findPwRequest);
 
-        return new BaseResponse("비밀번호 찾기에 성공했습니다.");
+        return new BaseResponse("비밀번호 찾기에 성공했습니다.", findPwResponse);
     }
 }
