@@ -7,6 +7,8 @@ import { logoutUser } from '../../redux/reducer/userSlice';
 import AuthHttp from '../../http/authHttp';
 import UserInfoChange from '../../components/mypage/UserInfoChange';
 import Header from '../../components/layout/header/Header';
+import Footer from '../../components/layout/footer/Footer';
+import { Link } from 'react-router-dom';
 
 const authHttp = new AuthHttp();
 
@@ -26,7 +28,6 @@ const MyPage = () => {
 
   useEffect(() => {
     onMypage();
-    console.log(userId);
   }, []);
 
   const onMypage = async () => {
@@ -76,8 +77,9 @@ const MyPage = () => {
 
   return (
     <>
+      <Header />
       {UserInfo ? (
-        <MypageWrap>
+        <Wrap>
           <UserInfoBlock>
             <UserInfoTitle>
               <span>{UserInfo.username}</span> 님 안녕하세요
@@ -95,10 +97,14 @@ const MyPage = () => {
             <UserLogTitle>나의 활동</UserLogTitle>
             <UserLogContentsBlock>
               <UserLogContentsBox>
-                <UserLogText>내가 작성한 게시글 2개</UserLogText>
+                <StyledLink to={`/myposts/${userId}`}>
+                  <UserLogText>내가 작성한 게시글</UserLogText>
+                </StyledLink>
               </UserLogContentsBox>
               <UserLogContentsBox>
-                <UserLogText>내가 쓴 댓글 5개</UserLogText>
+                <StyledLink to={`/mylikes/${userId}`}>
+                  <UserLogText>내가 좋아요한 게시글</UserLogText>
+                </StyledLink>
               </UserLogContentsBox>
             </UserLogContentsBlock>
           </UserLogBlock>
@@ -106,15 +112,20 @@ const MyPage = () => {
             회원 탈퇴
           </UserDeleteButton>
           {IsModal ? <UserInfoChange setIsModal={setIsModal} /> : <></>}
-        </MypageWrap>
+        </Wrap>
       ) : (
         <></>
       )}
+      <Footer />
     </>
   );
 };
 
-const MypageWrap = styled.div`
+export const StyledLink = styled(Link)`
+  text-decoration: none;
+`
+
+export const Wrap = styled.div`
   width: 100%;
   height: 100vh;
   margin: 0 auto;
