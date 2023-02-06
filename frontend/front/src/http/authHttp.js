@@ -70,5 +70,37 @@ class AuthHttp extends Http {
             throw err;
         }
     };
+
+    //좋아요 기능
+    postLike = async (board_id) => {
+        try {
+        const res = await this.axios.post(`auth/board/like/${board_id}`);
+        return res;
+        } catch (err) {
+        throw err;
+        }
+    };
+
+    //내가 쓴 게시글 목록 조회
+    getMyPosts = async (user_id) => {
+        try {
+            const res = await this.axios.get(`auth/user/board/list/${user_id}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+
+    //내가 좋아요한 글 목록 조회
+    getMyLikes = async (user_id) => {
+        try {
+            const res = await this.axios.get(`auth/user/like/list/${user_id}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
 }
 export default AuthHttp;

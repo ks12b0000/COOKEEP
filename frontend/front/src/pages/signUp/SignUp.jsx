@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import UserHttp from "../../http/userHttp";
 import { useNavigate } from "react-router";
 import AgreeForm from "../../components/signUp/AgreeForm";
+import Header from "../../components/layout/header/Header";
+import Footer from "../../components/layout/footer/Footer";
 
 const userHttp = new UserHttp();
 
@@ -90,6 +92,7 @@ function SignUp() {
 
     return (
         <>
+            <Header />
             <SignBackground>
                 <SignWrap>
                     <SignTitle>회원가입</SignTitle>
@@ -147,6 +150,7 @@ function SignUp() {
                     {AgreeModal ? <AgreeForm setAgreeModal={setAgreeModal} setCheckAgree={setCheckAgree} /> : <></>}
                 </SignWrap>
             </SignBackground>
+            <Footer />
         </>
     );
 }
