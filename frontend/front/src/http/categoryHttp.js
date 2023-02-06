@@ -44,6 +44,13 @@ class CategoryHttp extends Http {
     }
 
 
-
+   //글수정
+    patchForm =  async(boardId,requestBody) => {
+        try {
+            return await this.axios.patch(`auth/board/${boardId}`, requestBody);
+        }catch (err){
+            throw  err;
+        }
+    }
 }
 export default CategoryHttp;
