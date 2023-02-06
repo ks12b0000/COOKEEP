@@ -26,13 +26,39 @@ function WritingForm() {
     const navigate = useNavigate();
     const [categoryList,setCategoryList] = useState([]);
     const [categoryValue, setCategoryValue] = useState('한식');
-    const [text, setText] = useState("");
-    const [isError, setIsError] = useState(false);
+
+
+    const [title, setTitle] = useState("");
+    const realTitle = title.length < 5 ? 1:0 ;
+    const [tag,setTag] = useState('');
+    const realTag = tag.length < 5 ? 1:0 ;
+
+
+
+    const [footText,setFootText]  =useState('');
+    const isError = footText.length < 12 ? 1 : 0;
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
 
+    const onChange = (e) =>{
+        console.log(e.target.value);
+        setCategoryValue(e.target.value);
+    }
 
+    //타이틀
+    const TitleOnChange = (e) => {
+        setTitle(e.target.value);
+    }
+    //태그
+    const TagOnChange = (e) => {
+        setTag(e.target.value);
+    }
 
+    //취소
+    const cancel = (e) => {
+        e.preventDefault();
+        navigate(-1)
+    }
 
     useEffect(() => {
         (async () => {
@@ -57,34 +83,41 @@ function WritingForm() {
             alert("파일 크기는 1메가로 지정되어있씁니다.");
         }
     };
-    const onSubmit = async (data) => {
-        console.log(data);
-        data.category = categoryValue;
-        data.user_id = userId;
-        if (text.length < 5) {
-            setIsError(true);
-            return 0;
-        } else {
-            setIsError(false);
+
+    const disableState = () =>{
+        let isData = true;
+        if(title.length >= 5 && tag.length >= 5 && footText.length >= 12 && !error){
+            isData = false;
+            return  isData;
         }
-        data.text = text;
-        data.thumbnail = imagePreview;
+
+        return  isData;
+
+    }
+    const onSubmit = async () => {
+
+        const FormData = {
+            category:categoryValue,
+            title,
+            text:footText,
+            user_id:userId,
+            thumbnail:imagePreview,
+            tags:tag
+        }
+
         if (error) {
             alert("이미지를 업로드해주세요");
             return false;
         }
         try {
-            await writeHttp.submitWritingForm(data, { headers: { "Content-Type": "multipart/form-data" } });
+            await writeHttp.submitWritingForm(FormData, { headers: { "Content-Type": "multipart/form-data" } });
             alert("글 작성이 완료되었습니다.");
             navigate(`/${category}`);
         } catch (err) {
             console.log(err);
         }
     };
-    const onChange = (e) =>{
-        console.log(e.target.value);
-       setCategoryValue(e.target.value);
-    }
+
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -99,17 +132,16 @@ function WritingForm() {
 
                     </select>
                 </InputBox>
-                <InputBox>
+                <TitleInput>
                     <label htmlFor="">제목</label>
-                    <input name="title" type="text" placeholder="제목을 입력해주세요" {...register("title", { required: true, minLength: 5 })} />
-                    {errors.title && <p style={{ color: "red", padding: " 0 20px" }}>최소 5자리를 입력해주세요</p>}
-                </InputBox>
-
-                <InputBox>
-                    <label htmlFor="">태그</label>
-                    <input name="tags" type="tags" placeholder="원하시는 태그를 입력해주세요" {...register("tags", { required: true, minLength: 5 })} />
-                    {errors.tags && <p style={{ color: "red", padding: " 0 20px" }}>태그는 최소  5자리를 입력해주세요</p>}
-                </InputBox>
+                    <input name="title" type="text" placeholder="제목을 입력해주세요"   value={title}  onChange={TitleOnChange}  />
+                    {realTitle ? <ErrorText>최소 5자 이상 입력해주세요 !! </ErrorText> : null}
+                </TitleInput>
+                <TagInput>
+                    <label htmlFor="" >태그</label>
+                    <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="원하시는 태그를 입력해주세요"/>
+                    {realTag ? <ErrorText>최소 5자 이상 입력해주세요!!</ErrorText> : null}
+                </TagInput>
                 <Upload>
                     <label htmlFor="">썸네일</label>
                     <InputFile htmlFor="input-file">파일 선택</InputFile>
@@ -132,24 +164,82 @@ function WritingForm() {
                             }}
                             onChange={(event, editor) => {
                                 const data = editor.getData();
-                                setText(data);
-                                text.length < 5 ? setIsError(true) : setIsError(false);
+                                setFootText(data);
+
                             }}
                             required
                         />
-                        {isError && <p style={{ color: "red", padding: " 10px 20px" }}>최소 5자리를 입력해주세요</p>}
+                        {isError ? <p style={{ color: "red", padding: " 10px 20px" }}>최소 5자리를 입력해주세요</p> :null}
                     </Ckedit>
                 </InputBox>
                 <ButtonsWrap>
-                    <WritingButton onClick={() => navigate(-1)}>취소</WritingButton>
-                    <WritingButton type="submit">등록</WritingButton>
+                    <CancelButton onClick={cancel}>취소</CancelButton>
+                    <WritingButton type="submit"  disabled={disableState()}>등록</WritingButton>
                 </ButtonsWrap>
             </form>
         </>
     );
 }
 
-//스타일
+
+export default WritingForm;
+const ErrorText = styled.span`
+    position: absolute;
+    bottom:-5px;
+    left:20px;
+    width: 100%;
+    display: block;
+    color:red;
+    font-size: 14px;
+`
+const TitleInput = styled.fieldset`
+  position: relative;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  label {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  input {
+    width: 100%;
+    margin: 20px 0;
+    padding: 20px 25px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 10px;
+    &:focus {
+      outline: none;
+    }
+  }
+  
+`
+const TagInput = styled.fieldset`
+  position: relative;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  label {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  input {
+    width: 100%;
+    margin: 20px 0;
+    padding: 20px 25px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 10px;
+    &:focus {
+      outline: none;
+    }
+  }
+  
+`
 const InputBox = styled.fieldset`
     margin-top: 20px;
     display: flex;
@@ -194,6 +284,29 @@ const ButtonsWrap = styled.div`
     gap: 20px;
     justify-content: end;
 `;
+const CancelButton = styled.div`
+    cursor: pointer;
+    text-align: center;
+    min-width: 100px;
+    width: auto;
+    height: 45px;
+    line-height: 45px;
+    border: 1px solid #222222;
+    box-sizing: border-box;
+    background: #fff;
+    &[disabled]{
+      background:#ccc;
+      &:hover{
+        background:#ccc;
+      }
+    }
+    &:hover {
+        background: #35c5f0;
+        border: none;
+       
+    }
+  
+`;
 const WritingButton = styled.button`
     cursor: pointer;
     min-width: 100px;
@@ -202,7 +315,12 @@ const WritingButton = styled.button`
     height: 45px;
     border: 1px solid #222222;
     background: #fff;
-
+    &[disabled]{
+      background:#ccc;
+      &:hover{
+        background:#ccc;
+      }
+    }
     &:hover {
         background: #35c5f0;
         border: none;
@@ -247,4 +365,3 @@ const InputFile = styled.label`
     border-radius: 4px;
     cursor: pointer;
 `;
-export default WritingForm;
