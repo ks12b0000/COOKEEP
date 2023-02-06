@@ -100,7 +100,7 @@ const PopularListIMG = styled.div`
   margin:12px 0 10px;
   width: 100%;
   height: 240px;
-  background:red;
+
   img{
     width: 100%;
     height: 100%;
