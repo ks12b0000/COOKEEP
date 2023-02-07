@@ -3,7 +3,7 @@ package teamproject.backend.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import teamproject.backend.board.dto.BoardReadResponse;
+import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.BoardCommentService;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
@@ -55,8 +55,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/list")
-    public BaseResponse<List<BoardReadResponse>> boardListByCategory(@RequestParam String category){
-        List<BoardReadResponse> pages = boardService.findBoardReadResponseListByFoodCategoryName(category);
+    public BaseResponse<List<BoardResponseInDetailFormat>> boardListByCategory(@RequestParam String category){
+        List<BoardResponseInDetailFormat> pages = boardService.findBoardReadResponseListByFoodCategoryName(category);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -66,8 +66,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/list/{user_id}")
-    public BaseResponse<List<BoardReadResponse>> boardListByUser(@PathVariable Long user_id){
-        List<BoardReadResponse> pages = boardService.findBoardReadResponseListByUserId(user_id);
+    public BaseResponse<List<BoardResponseInDetailFormat>> boardListByUser(@PathVariable Long user_id){
+        List<BoardResponseInDetailFormat> pages = boardService.findBoardReadResponseListByUserId(user_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -78,8 +78,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board")
-    public BaseResponse<BoardReadResponse> searchBoard(@RequestParam Long board_id){
-        BoardReadResponse boardReadResponse = boardService.findBoardReadResponseByBoardId(board_id);
+    public BaseResponse<BoardResponseInDetailFormat> searchBoard(@RequestParam Long board_id){
+        BoardResponseInDetailFormat boardReadResponse = boardService.findBoardReadResponseByBoardId(board_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", boardReadResponse);
     }
 
@@ -186,14 +186,14 @@ public class BoardController {
     }
 
     @GetMapping("/board/list/best/liked")
-    public BaseResponse<List<BoardReadResponse>> boardListOrderByLiked(){
-        List<BoardReadResponse> pages = boardService.findBoardReadResponseOrderByLikedDesc(10);
+    public BaseResponse<List<BoardResponseInDetailFormat>> boardListOrderByLiked(){
+        List<BoardResponseInDetailFormat> pages = boardService.findBoardReadResponseOrderByLikedDesc(10);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
     @GetMapping("/board/list/best/commented")
-    public BaseResponse<List<BoardReadResponse>> boardListOrderByCommented(){
-        List<BoardReadResponse> pages = boardService.findBoardReadResponseOrderByCommentedDesc(10);
+    public BaseResponse<List<BoardResponseInDetailFormat>> boardListOrderByCommented(){
+        List<BoardResponseInDetailFormat> pages = boardService.findBoardReadResponseOrderByCommentedDesc(10);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 }

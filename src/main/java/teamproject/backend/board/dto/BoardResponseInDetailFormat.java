@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardReadResponse {
+public class BoardResponseInDetailFormat {
     private Long board_id;
     private String category;
     private String title;
@@ -22,7 +22,7 @@ public class BoardReadResponse {
     private Integer commented;
     private Integer liked;
 
-    public BoardReadResponse(Board board, String tags){
+    public BoardResponseInDetailFormat(Board board, String tags){
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
