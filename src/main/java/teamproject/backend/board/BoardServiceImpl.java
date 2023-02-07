@@ -3,16 +3,11 @@ package teamproject.backend.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamproject.backend.board.dto.BoardReadResponse;
+import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.BoardCommentRepository;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
-import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
-import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
 import teamproject.backend.boardCommentReply.BoardCommentReplyRepository;
-import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
-import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
-import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
 import teamproject.backend.boardTag.BoardTagService;
 import teamproject.backend.domain.*;
 import teamproject.backend.foodCategory.FoodCategoryService;
@@ -68,10 +63,10 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public BoardReadResponse findBoardReadResponseByBoardId(Long boardId){
+    public BoardResponseInDetailFormat findBoardReadResponseByBoardId(Long boardId){
         Board board = findBoardByBoardId(boardId);
         String tags = boardTagService.findTagsByBoard(board);
-        return new BoardReadResponse(board, tags);
+        return new BoardResponseInDetailFormat(board, tags);
     }
 
     @Override
@@ -82,43 +77,43 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseListByUserId(Long userId) {
+    public List<BoardResponseInDetailFormat> findBoardReadResponseListByUserId(Long userId) {
         List<Board> boards = boardRepository.findByUser_id(userId);
 
-        List<BoardReadResponse> responses = getBoardReadResponses(boards, boards.size());
+        List<BoardResponseInDetailFormat> responses = getBoardReadResponses(boards, boards.size());
 
         return responses;
     }
 
-    private List<BoardReadResponse> getBoardReadResponses(List<Board> boards, int length) {
-        List<BoardReadResponse> responses = new ArrayList<>();
+    private List<BoardResponseInDetailFormat> getBoardReadResponses(List<Board> boards, int length) {
+        List<BoardResponseInDetailFormat> responses = new ArrayList<>();
         int min = Math.min(boards.size(), length);
         for(int i = 0; i < min; i++){
             Board board = boards.get(i);
             String tags = boardTagService.findTagsByBoard(board);
-            responses.add(new BoardReadResponse(board, tags));
+            responses.add(new BoardResponseInDetailFormat(board, tags));
         }
         return responses;
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseListByFoodCategoryName(String categoryName) {
+    public List<BoardResponseInDetailFormat> findBoardReadResponseListByFoodCategoryName(String categoryName) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
         List<Board> boards = boardRepository.findByCategory(foodCategory);
 
-        List<BoardReadResponse> responses = getBoardReadResponses(boards, boards.size());
+        List<BoardResponseInDetailFormat> responses = getBoardReadResponses(boards, boards.size());
 
         return responses;
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseOrderByCommentedDesc(int numberOfBoard) {
+    public List<BoardResponseInDetailFormat> findBoardReadResponseOrderByCommentedDesc(int numberOfBoard) {
         List<Board> boards = boardRepository.findAllByOrderByCommentedDesc();
         return getBoardReadResponses(boards, 10);
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseOrderByLikedDesc(int numberOfBoard) {
+    public List<BoardResponseInDetailFormat> findBoardReadResponseOrderByLikedDesc(int numberOfBoard) {
         List<Board> boards = boardRepository.findAllByOrderByLikedDesc();
         return getBoardReadResponses(boards, 10);
     }
