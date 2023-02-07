@@ -64,13 +64,13 @@ public class MainPageController {
         return new BaseResponse("전체 태그 목록을 가져왔습니다.", tags);
     }
 
-    @GetMapping("/board/list/best/liked")
+    @GetMapping("/main/best/liked/list")
     public BaseResponse<List<BoardResponseInCardFormat>> boardListOrderByLiked(){
         List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByLikedDesc(10);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
-    @GetMapping("/board/list/best/commented")
+    @GetMapping("/main/best/commented/list")
     public BaseResponse<List<BoardResponseInCardFormat>> boardListOrderByCommented(){
         List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByCommentedDesc(10);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
