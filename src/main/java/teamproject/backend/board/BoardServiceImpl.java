@@ -3,6 +3,7 @@ package teamproject.backend.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.BoardCommentRepository;
@@ -63,29 +64,28 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public BoardResponseInDetailFormat findBoardReadResponseByBoardId(Long boardId){
+    public BoardResponseInDetailFormat findBoardById(Long boardId){
         Board board = findBoardByBoardId(boardId);
         String tags = boardTagService.findTagsByBoard(board);
         return new BoardResponseInDetailFormat(board, tags);
     }
 
-    @Override
-    public Board findBoardByBoardId(Long boardId) {
+    private Board findBoardByBoardId(Long boardId) {
         Optional<Board> board = boardRepository.findById(boardId);
         if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
         return board.get();
     }
 
     @Override
-    public List<BoardResponseInDetailFormat> findBoardReadResponseListByUserId(Long userId) {
+    public List<BoardResponseInDetailFormat> findBoardListByUserId(Long userId) {
         List<Board> boards = boardRepository.findByUser_id(userId);
 
-        List<BoardResponseInDetailFormat> responses = getBoardReadResponses(boards, boards.size());
+        List<BoardResponseInDetailFormat> responses = getBoardResponsesInDetailFormat(boards, boards.size());
 
         return responses;
     }
 
-    private List<BoardResponseInDetailFormat> getBoardReadResponses(List<Board> boards, int length) {
+    private List<BoardResponseInDetailFormat> getBoardResponsesInDetailFormat(List<Board> boards, int length) {
         List<BoardResponseInDetailFormat> responses = new ArrayList<>();
         int min = Math.min(boards.size(), length);
         for(int i = 0; i < min; i++){
@@ -96,26 +96,37 @@ public class BoardServiceImpl implements BoardService{
         return responses;
     }
 
+    private List<BoardResponseInCardFormat> getBoardResponsesInCardFormat(List<Board> boards, int length){
+        List<BoardResponseInCardFormat> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i);
+            String tags = boardTagService.findTagsByBoard(board);
+            responses.add(new BoardResponseInCardFormat(board, tags));
+        }
+        return responses;
+    }
+
     @Override
-    public List<BoardResponseInDetailFormat> findBoardReadResponseListByFoodCategoryName(String categoryName) {
+    public List<BoardResponseInDetailFormat> findBoardListByFoodCategoryName(String categoryName) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
         List<Board> boards = boardRepository.findByCategory(foodCategory);
 
-        List<BoardResponseInDetailFormat> responses = getBoardReadResponses(boards, boards.size());
+        List<BoardResponseInDetailFormat> responses = getBoardResponsesInDetailFormat(boards, boards.size());
 
         return responses;
     }
 
     @Override
-    public List<BoardResponseInDetailFormat> findBoardReadResponseOrderByCommentedDesc(int numberOfBoard) {
+    public List<BoardResponseInCardFormat> findBoardListOrderByCommentedDesc(int numberOfBoard) {
         List<Board> boards = boardRepository.findAllByOrderByCommentedDesc();
-        return getBoardReadResponses(boards, 10);
+        return getBoardResponsesInCardFormat(boards, 10);
     }
 
     @Override
-    public List<BoardResponseInDetailFormat> findBoardReadResponseOrderByLikedDesc(int numberOfBoard) {
+    public List<BoardResponseInCardFormat> findBoardListOrderByLikedDesc(int numberOfBoard) {
         List<Board> boards = boardRepository.findAllByOrderByLikedDesc();
-        return getBoardReadResponses(boards, 10);
+        return getBoardResponsesInCardFormat(boards, 10);
     }
 
     @Override
