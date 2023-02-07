@@ -1,8 +1,8 @@
 package teamproject.backend.board;
 
+import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
-import teamproject.backend.domain.Board;
 import teamproject.backend.domain.User;
 
 import java.util.List;
@@ -10,17 +10,15 @@ import java.util.List;
 public interface BoardService {
     Long save(BoardWriteRequest boardWriteRequest);
 
-    BoardResponseInDetailFormat findBoardReadResponseByBoardId(Long boardId);
+    BoardResponseInDetailFormat findBoardById(Long boardId);
 
-    Board findBoardByBoardId(Long boardId);
+    List<BoardResponseInDetailFormat> findBoardListByUserId(Long userId);
 
-    List<BoardResponseInDetailFormat> findBoardReadResponseListByUserId(Long userId);
+    List<BoardResponseInDetailFormat> findBoardListByFoodCategoryName(String categoryName);
 
-    List<BoardResponseInDetailFormat> findBoardReadResponseListByFoodCategoryName(String categoryName);
+    List<BoardResponseInCardFormat> findBoardListOrderByCommentedDesc(int numberOfBoard);
 
-    List<BoardResponseInDetailFormat> findBoardReadResponseOrderByCommentedDesc(int numberOfBoard);
-
-    List<BoardResponseInDetailFormat> findBoardReadResponseOrderByLikedDesc(int numberOfBoard);
+    List<BoardResponseInCardFormat> findBoardListOrderByLikedDesc(int numberOfBoard);
 
     void delete(Long userId, Long boardId);
 

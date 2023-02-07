@@ -56,7 +56,7 @@ public class BoardController {
      */
     @GetMapping("/board/list")
     public BaseResponse<List<BoardResponseInDetailFormat>> boardListByCategory(@RequestParam String category){
-        List<BoardResponseInDetailFormat> pages = boardService.findBoardReadResponseListByFoodCategoryName(category);
+        List<BoardResponseInDetailFormat> pages = boardService.findBoardListByFoodCategoryName(category);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -67,7 +67,7 @@ public class BoardController {
      */
     @GetMapping("/board/list/{user_id}")
     public BaseResponse<List<BoardResponseInDetailFormat>> boardListByUser(@PathVariable Long user_id){
-        List<BoardResponseInDetailFormat> pages = boardService.findBoardReadResponseListByUserId(user_id);
+        List<BoardResponseInDetailFormat> pages = boardService.findBoardListByUserId(user_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -79,7 +79,7 @@ public class BoardController {
      */
     @GetMapping("/board")
     public BaseResponse<BoardResponseInDetailFormat> searchBoard(@RequestParam Long board_id){
-        BoardResponseInDetailFormat boardReadResponse = boardService.findBoardReadResponseByBoardId(board_id);
+        BoardResponseInDetailFormat boardReadResponse = boardService.findBoardById(board_id);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", boardReadResponse);
     }
 
@@ -185,15 +185,4 @@ public class BoardController {
         return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.", list);
     }
 
-    @GetMapping("/board/list/best/liked")
-    public BaseResponse<List<BoardResponseInDetailFormat>> boardListOrderByLiked(){
-        List<BoardResponseInDetailFormat> pages = boardService.findBoardReadResponseOrderByLikedDesc(10);
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
-    }
-
-    @GetMapping("/board/list/best/commented")
-    public BaseResponse<List<BoardResponseInDetailFormat>> boardListOrderByCommented(){
-        List<BoardResponseInDetailFormat> pages = boardService.findBoardReadResponseOrderByCommentedDesc(10);
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
-    }
 }
