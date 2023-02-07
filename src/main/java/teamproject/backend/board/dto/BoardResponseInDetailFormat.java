@@ -16,6 +16,7 @@ public class BoardResponseInDetailFormat {
     private String title;
     private String text;
     private String user_name;
+    private Long user_id;
     private Date create_date;
     private String thumbnail;
     private String tags;
@@ -28,6 +29,7 @@ public class BoardResponseInDetailFormat {
         this.title = board.getTitle();
         this.text = board.getText();
         this.user_name = board.getUser().getUsername();
+        this.user_id = board.getUser().getId();
         this.create_date = board.getCreateDate();
         this.thumbnail = board.getThumbnail();
         this.tags = tags;
