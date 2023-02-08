@@ -66,13 +66,13 @@ public class MainPageController {
 
     @GetMapping("/main/best/liked/list")
     public BaseResponse<List<BoardResponseInCardFormat>> boardListOrderByLiked(){
-        List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByLikedDesc(10);
+        List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByLikedDesc(5);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
     @GetMapping("/main/best/commented/list")
     public BaseResponse<List<BoardResponseInCardFormat>> boardListOrderByCommented(){
-        List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByCommentedDesc(10);
+        List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByCommentedDesc(5);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 }
