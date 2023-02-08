@@ -25,7 +25,6 @@ const ButtonWrap = styled.div`
 function Category({title,categoryName}){
     return(
         <Layout>
-
             <Container>
                 <Category1Title>
                     <h1>{title}</h1>

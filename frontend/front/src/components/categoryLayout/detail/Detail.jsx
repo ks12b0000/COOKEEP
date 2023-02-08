@@ -20,10 +20,11 @@ function Detail() {
     const navigate = useNavigate()
 
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
+    const [detailUserId,setDetailUserId] = useState(null);
     const { id } = useParams();
     const [detailPost, setDetailPost] = useState([]);
     const {isOpen,controller} = useModal();
-    
+
     const FetchDelete = async () => {
         try {
             await categoryHttp.deleteCategoryList(id,userId);
@@ -48,6 +49,7 @@ function Detail() {
             try {
                 const res = await writeHttp.getDetailPost(id);
                 setDetailPost(res.result);
+                setDetailUserId(res.result.user_id);
             } catch (err) {
                 console.log(err);
             }
@@ -74,10 +76,11 @@ function Detail() {
                         <LikeButton onClick={(e)=>onLike(e)}>좋아요</LikeButton>
                     </TopText>
                 </Top>
+                {detailUserId === userId ?
                 <ButtonWrap>
                   <ButtonStyle onClick={controller}>삭제</ButtonStyle>
                   <ButtonStyle onClick={() => navigate(`/${id}/edit`)}>수정</ButtonStyle>
-                </ButtonWrap>
+                </ButtonWrap>  : null}
                 <CommentUpload boardId={id} />
                 <CommentList boardId={id} />
             </Container>

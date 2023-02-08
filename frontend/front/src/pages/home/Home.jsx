@@ -11,15 +11,10 @@ const authHttp = new AuthHttp();
 function Home() {
     //메인페이지에 layout컴포넌트가없는이유는 메인페이지 부분만 header달라서 분기처리를 해주었습니다.
 
-    const headerColor = color.headerColor;
-    const isMain = true;
-    const Props = {
-        color:headerColor,
-        isMain
-    }
+
     return (
         <>
-            <Header {...Props}/>
+            <Header />
             <Main />
             <Footer/>
         </>
