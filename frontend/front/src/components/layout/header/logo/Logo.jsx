@@ -6,9 +6,9 @@ const LogoContainer = styled.div`
     display: flex;
     justify-content: start;
     align-items: center;
-    width: 300px;
+    width: 270px;
     div {
-      width: 180px;
+      width: 100%;
       text-align: center;
       ${mq[0]}{
         text-align: left;
@@ -24,13 +24,13 @@ const LogoContainer = styled.div`
         }
     }
 `;
-function Logo({color}) {
+function Logo() {
 
 
     return (
         <LogoContainer>
             <div>
-                <Link to="/" style={{color:`${color}`}}>오늘 뭐 먹지</Link>
+                <Link to="/" ><img  src={`${process.env.PUBLIC_URL}/image/LOGO.png`} alt ="로고"/></Link>
             </div>
         </LogoContainer>
     );

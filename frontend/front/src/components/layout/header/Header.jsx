@@ -6,47 +6,34 @@ import Search from "./search/Search";
 import {mq} from "../../media/media";
 import MainSearch from "./search/MainSearch";
 import {useState} from "react";
+import Nav from "./nav/Nav";
 
 const HeaderContainer = styled.header`
     width: 100%;
     position: relative;
     top: 0;
     left: 0;
-    z-index: 10;
     background-color: white;
     margin-bottom: 1px;
-     height: 500px;
+    height: 75px;
+    border:1px solid #ccc;
+    box-sizing: border-box;
   
-    &:before {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 0;
-      height: 100%;
-      width: 100%;
-      background-color: rgba(0,0,0,0.3);
-    }
     img{
       width:100%;
       height: 100%;
       object-fit: cover;
      }
 `;
-const Container = styled.div`
-    position: absolute;
-    top:0;
-    display: flex;
-     width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    height: 65px;
-    margin: 0 auto;
 
- 
+
+const Container = styled.div`
+  width:1440px;
+  margin:0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
   ${mq[0]}{
     width: 100vw;
     justify-content: space-around;
@@ -68,7 +55,7 @@ const ContainerFalse = styled.div`
 `
 
 
-function Header({color, isMain}) {
+function Header({color}) {
 
     const [isFocus, setIsFocus] = useState(false);
     const handleFocus = () => {
@@ -100,23 +87,12 @@ const TitleWrap = styled.div`
     }
     return (
        <>
-            {!isMain ? <ContainerFalse>
-                    <Logo color={color}/>
-                    <Search />
-                    <RightGnb color={color}/>
-                </ContainerFalse>
-                :
                 <HeaderContainer>
-                  <img src="https://mp-seoul-image-production-s3.mangoplate.com/0776fea76b4a824ff583128cb51dd45c.jpg" alt=""/>
-                  <Container>
-                    <Logo color={color}/>
-                    <RightGnb color={color}/>
-                  </Container>
-                  <TitleWrap>
-                    <p>솔직한 리뷰 밑을수 있는 평점</p>
-                    <p>오늘뭐먹지?</p>
-                    <MainSearch {...Props}/>
-                  </TitleWrap>
+                    <Container>
+                      <Logo />
+                       <Nav />
+                      <RightGnb color={color}/>
+                    </Container>
                 </HeaderContainer>
             }
         </>
