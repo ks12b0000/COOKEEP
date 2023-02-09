@@ -21,6 +21,7 @@ export default Popularity
 
 const Container = styled.section`
   width:1400px;
+  margin:24px auto 16px;
   ${mq[0]}{
     width: 100vw;
   }
