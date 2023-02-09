@@ -4,18 +4,21 @@ import Pagination from "../pagination/Pagination";
 import { useState, useEffect } from "react";
 import CategoryHttp from "../../../http/categoryHttp";
 import IsNonData from "../../isNonData/IsNonData";
+import Post from "../../post/Post";
+
 
 const categoryHttp = new CategoryHttp();
 function CateItem({cateItemName}) {
 
+
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showPost, setShowPost] = useState(8);
+    const [showPost, setShowPost] = useState(5);
     const [totalPost, setTotalPost] = useState(0);
 
     const LastIndex = currentPage * showPost;
     const FirstIndex = LastIndex - showPost;
-    const currentPost = posts.slice(FirstIndex, LastIndex);
+    const currentPost = posts.reverse().slice(FirstIndex, LastIndex);
     const paginate = (pageNum) => setCurrentPage(pageNum);
     const prevPage = () => setCurrentPage(currentPage - 1);
     const nextPage = () => setCurrentPage(currentPage + 1);
@@ -51,36 +54,25 @@ function CateItem({cateItemName}) {
             {/*</SelectBox>*/}
             <Ul>
                 {
-                    posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다." /> :
-                        currentPost.map((category, idx) => (
-                            <li key={idx + 1}>
-                                <Link to={`/category/${category.board_id}`}>
-                                    <Thumbnail>
-                                        <img src={category.thumbnail} alt="https://pbs.twimg.com/media/Dd9n4k4VMAIiqCs?format=jpg&name=large" />
-                                    </Thumbnail>
-                                    <TextBox>
-                                        <span>{category.title}</span>
-                                        <div dangerouslySetInnerHTML={{ __html: category.text }}></div>
-                                    </TextBox>
-                                </Link>
-                            </li>
-                        ))}
+
+                    posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={currentPost}/>
+                }
+
             </Ul>
             <div>{showPagination()}</div>
         </>
     );
 }
 
+export default CateItem;
 const Ul = styled.ul`
-    margin: 20px 0 30px;
+    margin-top:16px;
     display: flex;
-    gap: 10px;
+    gap: 16px;
     flex-wrap: wrap;
     justify-content: start;
     li {
-        margin-top: 20px;
-        width: 23%;
-        height: 250px;
+        width: 19%;
         cursor: pointer;
     }
 `;
@@ -131,6 +123,6 @@ const SelectBox = styled.div`
             outline: none;
         }
     }
-`;
+`
 
-export default CateItem;
+

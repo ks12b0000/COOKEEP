@@ -4,19 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { loginUser } from "../../../../redux/reducer/userSlice";
 import {mq} from '../../../media/media';
-
+import {color} from "../../../../constants/color";
 import UserHttp from "../../../../http/userHttp";
-import List from "./List";
+
 
 
 
 
 const userHttp = new UserHttp();
 
-function RightGnb({color}) {
+function RightGnb() {
 
   const GnbContainer = styled.ul`
-  width: 300px;
+  width: 225px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,11 +27,12 @@ function RightGnb({color}) {
   li {
     
     a {
-      color:${color};
+      color:#000000;
       cursor: pointer;
+      font-weight: 600;
       font-size: 16px !important;
       &:hover{
-        color:#ff7100;
+        color:${color.main};
       }
    
     }
@@ -68,7 +69,9 @@ function RightGnb({color}) {
             <GnbContainer>
                 {userInfo.isLoggedIn === false ? (
                     <>
-                        <List />
+
+                        <li><img  src={`${process.env.PUBLIC_URL}/image/search.png`} alt ="검색아이콘"/></li>
+
                         <li>
                                 <Link to="/login" > 로그인</Link>
                         </li>
@@ -78,7 +81,9 @@ function RightGnb({color}) {
                     </>
                 ) : (
                     <>
-                        <List />
+
+                        <li><img  src={`${process.env.PUBLIC_URL}/image/search.png`} alt ="검색아이콘"/></li>
+
                         <li>
                             <Link to={`/mypage/${userInfo.userId}`}>마이페이지</Link>
                         </li>
