@@ -2,7 +2,9 @@
 import styled from "@emotion/styled";
 import Logo from "./logo/Logo";
 import RightGnb from "./rightGnb/RightGnb";
+
 import {mq} from "../../media/media";
+
 import {useState} from "react";
 import Nav from "./nav/Nav";
 
@@ -14,6 +16,7 @@ const HeaderContainer = styled.header`
     background-color: white;
     margin-bottom: 1px;
     height: 75px;
+    border:1px solid #ccc;
     box-sizing: border-box;
   
     img{
@@ -52,7 +55,10 @@ const ContainerFalse = styled.div`
 `
 
 
+
 function Header({color,categoryName}) {
+
+
 
     const [isFocus, setIsFocus] = useState(false);
     const handleFocus = () => {
@@ -84,6 +90,7 @@ const TitleWrap = styled.div`
     }
     return (
        <>
+
             <HeaderContainer>
               <Container>
                 <Logo />
@@ -91,6 +98,7 @@ const TitleWrap = styled.div`
                 <RightGnb color={color}/>
               </Container>
             </HeaderContainer>
+
         </>
     );
 }

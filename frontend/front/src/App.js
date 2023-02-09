@@ -49,12 +49,8 @@ function App() {
                     <Route path="/etc" element={<Etc />}></Route>
 
 
-
-
                     <Route path="/category/:id" element={<Detail />} />
                     <Route path="/:id/edit" element={<Edit />} />
-
-
 
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/callback/kakao" element={<KaKaoLogin />}></Route>

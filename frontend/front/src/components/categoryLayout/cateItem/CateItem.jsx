@@ -6,8 +6,10 @@ import CategoryHttp from "../../../http/categoryHttp";
 import IsNonData from "../../isNonData/IsNonData";
 import Post from "../../post/Post";
 
+
 const categoryHttp = new CategoryHttp();
 function CateItem({cateItemName}) {
+
 
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -52,14 +54,17 @@ function CateItem({cateItemName}) {
             {/*</SelectBox>*/}
             <Ul>
                 {
+
                     posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={currentPost}/>
                 }
+
             </Ul>
             <div>{showPagination()}</div>
         </>
     );
 }
 
+export default CateItem;
 const Ul = styled.ul`
     margin-top:16px;
     display: flex;
@@ -118,6 +123,6 @@ const SelectBox = styled.div`
             outline: none;
         }
     }
-`;
+`
 
-export default CateItem;
+

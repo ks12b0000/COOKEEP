@@ -1,14 +1,18 @@
 import styled from "@emotion/styled";
-import {useEffect, useRef, useState} from "react";
+
+
+import { useState } from "react";
 import { NavDada } from "../../../../http/data/nav/navData";
 import { NavLink } from "react-router-dom";
 import {color} from "../../../../constants/color";
-import {useParams} from "react-router";
 
 function Nav({categoryName}) {
 
     const [menus, setMenus] = useState(NavDada);
     const [active,setActive] =useState(false);
+
+
+
 
 
     return (

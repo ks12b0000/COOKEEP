@@ -4,7 +4,10 @@ import {Route, Routes} from "react-router";
 import Writing from "../../../components/categoryLayout/writing/Writing";
 import CateItem from "../../../components/categoryLayout/cateItem/CateItem";
 import {Link} from "react-router-dom";
+
 import Buttons from "../../../components/atomic/buttons/Buttons";
+
+
 import Category from "../Category";
 
 

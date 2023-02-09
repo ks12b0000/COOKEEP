@@ -17,26 +17,24 @@ function Popularity({likeList}) {
         </Container>
     )
 }
-export  default  Popularity
+export default Popularity
 
 const Container = styled.section`
   width:1400px;
-  margin:24px auto 0;
   ${mq[0]}{
     width: 100vw;
   }
 `
 
-const PopularTitle = styled.h1`
-  font-weight: 700;
-  font-size: 24px;
-  color:${color.main}
-`
-const PopularUl = styled.ul`
+const  PopularUl = styled.ul`
   display: flex;
   justify-content: space-around;
   align-items: center;
   gap:16px;
   margin-top:16px;
-
+`
+const PopularTitle = styled.h1`
+  font-weight: 700;
+  font-size: 24px;
+  color:${color.main}
 `

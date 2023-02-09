@@ -33,6 +33,7 @@ class CategoryHttp extends Http {
               throw err;
           }
      }
+
      //좋아요 많은순 조회
     getMainLike =  async () => {
         try {

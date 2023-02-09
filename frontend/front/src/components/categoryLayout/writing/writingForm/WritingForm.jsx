@@ -8,7 +8,6 @@ import WriteHttp from "../../../../http/writeHttp";
 import CategoryHttp from "../../../../http/categoryHttp";
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
-import axios from "axios";
 
 const writeHttp = new WriteHttp();
 const categoryHttp = new CategoryHttp();
@@ -99,6 +98,7 @@ function WritingForm() {
 
     }
     const onSubmit = async () => {
+
         const FormData = {
             category:categoryValue,
             title,
@@ -169,6 +169,9 @@ function WritingForm() {
                             }}
                             onChange={(event, editor) => {
                                 const data = editor.getData();
+
+                                setFootText(data);
+
 
                             }}
                             required

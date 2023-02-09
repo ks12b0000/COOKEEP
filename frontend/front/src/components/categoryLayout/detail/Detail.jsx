@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import WriteHttp from "../../../http/writeHttp";
 import CommentUpload from "../../comment/CommentUpload";
 import CommentList from "../../comment/CommentList";
-import Layout from "../../layout/Layout";
+
 import CategoryHttp from "../../../http/categoryHttp";
 import AuthHttp from "../../../http/authHttp";
 import Alert from "../../modal/Alert";
 import useModal from "../../../hooks/useModal";
 import {useNavigate} from "react-router";
+
 import Header from "../../layout/header/Header";
 import Footer from "../../layout/footer/Footer";
 import Banner from "../../layout/home/banner/Banner";
@@ -67,8 +68,10 @@ function Detail() {
   }
     return (
         <>
+
           <Header categoryName ={detailPost.category}/>
             <Banner />
+
             <Container>
                 <Top>
                     <TopImg>
