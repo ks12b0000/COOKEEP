@@ -8,8 +8,11 @@ import WriteHttp from "../../../../http/writeHttp";
 import CategoryHttp from "../../../../http/categoryHttp";
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
+import axios from "axios";
+
 const writeHttp = new WriteHttp();
 const categoryHttp = new CategoryHttp();
+
 function WritingForm() {
 
 
@@ -76,6 +79,7 @@ function WritingForm() {
 
     const imageChange = async (e) => {
         const files = e.target.files; // FileList 객체
+        console.log(files);
         try {
             const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id:userId  });
             setImagePreview(result.url);
@@ -95,7 +99,6 @@ function WritingForm() {
 
     }
     const onSubmit = async () => {
-
         const FormData = {
             category:categoryValue,
             title,
@@ -158,13 +161,14 @@ function WritingForm() {
                         <CKEditor
                             name="ckeditor"
                             editor={ClassicEditor}
+
                             data=""
                             config={{
-                                placeholder: "글을 입력해보세요!"
+                                placeholder: "글을 입력해보세요!",
+                              
                             }}
                             onChange={(event, editor) => {
                                 const data = editor.getData();
-                                setFootText(data);
 
                             }}
                             required

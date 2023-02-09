@@ -11,6 +11,9 @@ import AuthHttp from "../../../http/authHttp";
 import Alert from "../../modal/Alert";
 import useModal from "../../../hooks/useModal";
 import {useNavigate} from "react-router";
+import Header from "../../layout/header/Header";
+import Footer from "../../layout/footer/Footer";
+import Banner from "../../layout/home/banner/Banner";
 
 function Detail() {
     const categoryHttp = new CategoryHttp();
@@ -64,7 +67,8 @@ function Detail() {
   }
     return (
         <>
-          <Layout>
+          <Header categoryName ={detailPost.category}/>
+            <Banner />
             <Container>
                 <Top>
                     <TopImg>
@@ -85,7 +89,7 @@ function Detail() {
                 <CommentList boardId={id} />
             </Container>
               {isOpen && <Alert {...Props} />}
-          </Layout>
+          <Footer />
         </>
     );
 }

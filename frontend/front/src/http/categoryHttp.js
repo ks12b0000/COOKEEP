@@ -33,6 +33,24 @@ class CategoryHttp extends Http {
               throw err;
           }
      }
+     //좋아요 많은순 조회
+    getMainLike =  async () => {
+        try {
+            const {data} = await this.axios.get(`/main/best/liked/list`)
+            return data;
+        }catch (err){
+            throw err;
+        }
+    }
+    //댓글 많은순 조회
+    getCommented =  async () => {
+        try {
+            const {data} = await this.axios.get(`/main/best/commented/list`)
+            return data;
+        }catch (err){
+            throw err;
+        }
+    }
 
     //카테고리 삭제
     deleteCategoryList = async (boardId,userId) => {

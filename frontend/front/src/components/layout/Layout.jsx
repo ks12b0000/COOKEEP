@@ -6,7 +6,7 @@ function Layout({children }) {
 
     return (
         <>
-            <Header  color={color.falseMainColor} />
+            <Header  color={color.falseMainColor}  />
                 {children}
             <Footer/>
         </>

@@ -69,6 +69,7 @@ function RightGnb() {
             <GnbContainer>
                 {userInfo.isLoggedIn === false ? (
                     <>
+                        <li><img  src={`${process.env.PUBLIC_URL}/image/search.png`} alt ="검색아이콘"/></li>
                         <li>
                                 <Link to="/login" > 로그인</Link>
                         </li>
@@ -78,7 +79,7 @@ function RightGnb() {
                     </>
                 ) : (
                     <>
-
+                        <li><img  src={`${process.env.PUBLIC_URL}/image/search.png`} alt ="검색아이콘"/></li>
                         <li>
                             <Link to={`/mypage/${userInfo.userId}`}>마이페이지</Link>
                         </li>
