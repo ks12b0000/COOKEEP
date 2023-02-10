@@ -27,7 +27,7 @@ function Main() {
             setLikeList(resLike.result);
             setCommented(resComment.result);
         })()
-    },[])
+       },[])
 
     const Props = {
         like:{
