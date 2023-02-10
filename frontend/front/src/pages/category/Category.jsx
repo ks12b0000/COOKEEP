@@ -1,21 +1,23 @@
 import Layout from "../../components/layout/Layout";
-import {Route, Routes} from "react-router";
-import Writing from "../../components/categoryLayout/writing/Writing";
+
+import {color} from "../../constants/color";
 import CateItem from "../../components/categoryLayout/cateItem/CateItem";
 import {Link} from "react-router-dom";
-import Buttons from "../../components/buttons/Buttons";
+import Buttons from "../../components/atomic/buttons/Buttons";
 import styled from "@emotion/styled";
+import Banner from "../../components/layout/home/banner/Banner";
+
 const Container = styled.section`
-  width: 1200px;
-  margin: 100px auto 0;
-
-
+  width: 1440px;
+  margin: 24px auto 16px;
 `;
 const Category1Title = styled.div`
-    padding: 50px;
+
     h1 {
-        font-size: 24px;
-        font-weight: 600;
+      font-weight: 700;
+      font-size: 24px;
+      color: ${color.main}
+
     }
 `;
 const ButtonWrap = styled.div`
@@ -25,7 +27,7 @@ const ButtonWrap = styled.div`
 function Category({title,categoryName}){
     return(
         <Layout>
-
+            <Banner />
             <Container>
                 <Category1Title>
                     <h1>{title}</h1>

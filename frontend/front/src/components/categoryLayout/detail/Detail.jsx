@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import WriteHttp from "../../../http/writeHttp";
 import CommentUpload from "../../comment/CommentUpload";
 import CommentList from "../../comment/CommentList";
-import Layout from "../../layout/Layout";
+
 import CategoryHttp from "../../../http/categoryHttp";
 import AuthHttp from "../../../http/authHttp";
 import Alert from "../../modal/Alert";
 import useModal from "../../../hooks/useModal";
 import {useNavigate} from "react-router";
+
+import Header from "../../layout/header/Header";
+import Footer from "../../layout/footer/Footer";
+import Banner from "../../layout/home/banner/Banner";
 
 function Detail() {
     const categoryHttp = new CategoryHttp();
@@ -20,10 +24,11 @@ function Detail() {
     const navigate = useNavigate()
 
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
+    const [detailUserId,setDetailUserId] = useState(null);
     const { id } = useParams();
     const [detailPost, setDetailPost] = useState([]);
     const {isOpen,controller} = useModal();
-    
+
     const FetchDelete = async () => {
         try {
             await categoryHttp.deleteCategoryList(id,userId);
@@ -48,6 +53,7 @@ function Detail() {
             try {
                 const res = await writeHttp.getDetailPost(id);
                 setDetailPost(res.result);
+                setDetailUserId(res.result.user_id);
             } catch (err) {
                 console.log(err);
             }
@@ -62,7 +68,10 @@ function Detail() {
   }
     return (
         <>
-          <Layout>
+
+          <Header categoryName ={detailPost.category}/>
+            <Banner />
+
             <Container>
                 <Top>
                     <TopImg>
@@ -74,15 +83,16 @@ function Detail() {
                         <LikeButton onClick={(e)=>onLike(e)}>좋아요</LikeButton>
                     </TopText>
                 </Top>
+                {detailUserId === userId ?
                 <ButtonWrap>
                   <ButtonStyle onClick={controller}>삭제</ButtonStyle>
                   <ButtonStyle onClick={() => navigate(`/${id}/edit`)}>수정</ButtonStyle>
-                </ButtonWrap>
+                </ButtonWrap>  : null}
                 <CommentUpload boardId={id} />
                 <CommentList boardId={id} />
             </Container>
               {isOpen && <Alert {...Props} />}
-          </Layout>
+          <Footer />
         </>
     );
 }

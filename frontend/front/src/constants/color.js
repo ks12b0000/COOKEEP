@@ -1,5 +1,6 @@
 export const color= {
-    main:'#ff7100',
+    main:'#ED3419',
+    subColor:'#FF8164',
     headerColor:'#ffffff',
     falseMainColor:'#222'
 }

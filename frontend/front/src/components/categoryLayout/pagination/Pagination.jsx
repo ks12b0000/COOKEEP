@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
 import styled from "@emotion/styled";
+import {color} from "../../../constants/color";
 
 const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, paginate }) => {
     const numbersPage = Math.ceil(totalPost / showPost);
@@ -41,10 +42,11 @@ const PaginationNav = styled.nav`
     display: flex;
     justify-content: center;
     align-items: center;
+    padding:20px;
     gap: 3px;
     li {
         &[aria-current] {
-            border: 1px solid #35c5f0;
+            border: 1px solid ${color.main};
             font-weight: bold;
             cursor: revert;
             transform: revert;
@@ -53,7 +55,7 @@ const PaginationNav = styled.nav`
     button {
         width: 40px;
         height: 40px;
-        background: #35c5f0;
+        background: ${color.main};
         color: #ffffff;
         border: none;
         cursor: pointer;
@@ -67,7 +69,7 @@ const PaginationNav = styled.nav`
         line-height: 40px;
         font-size: 18px;
         &:hover {
-            border: 1px solid #35c5f0;
+            border: 1px solid ${color.main};
         }
     }
 `;

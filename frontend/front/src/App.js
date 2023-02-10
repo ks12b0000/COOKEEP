@@ -37,6 +37,7 @@ function App() {
                         <Route path="/mypage/:userId" element={<MyPage />}></Route>
                         <Route path="/myposts/:userId" element={<MyPosts />}></Route>
                         <Route path="/mylikes/:userId" element={<MyLikes />}></Route>
+                        <Route path=":category/writing" element={<Writing />}></Route>
                     </Route>
                     {/*카테고리*/}
                     <Route path="/korea/*" element={<Korean/>}></Route>
@@ -48,12 +49,8 @@ function App() {
                     <Route path="/etc" element={<Etc />}></Route>
 
 
-
-                    <Route path=":category/writing" element={<Writing />}></Route>
                     <Route path="/category/:id" element={<Detail />} />
                     <Route path="/:id/edit" element={<Edit />} />
-
-
 
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/callback/kakao" element={<KaKaoLogin />}></Route>

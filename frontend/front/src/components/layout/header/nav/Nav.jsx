@@ -1,85 +1,66 @@
 import styled from "@emotion/styled";
+
+
 import { useState } from "react";
 import { NavDada } from "../../../../http/data/nav/navData";
 import { NavLink } from "react-router-dom";
-import {mq} from  '../../../media/media'
+import {color} from "../../../../constants/color";
 
-function Nav() {
+function Nav({categoryName}) {
+
     const [menus, setMenus] = useState(NavDada);
+    const [active,setActive] =useState(false);
+
+
+
+
+
     return (
-        <NavContainer>
+
           <NavList>
             <ul>
               {menus.map((menu) => (
                   <Menu key={menu.id}>
-                    <NavLink to={menu.url}>{menu.name}</NavLink>
+                    <NavLink to={menu.url} className={ categoryName === menu.name ? 'active' : null} >{menu.name}</NavLink>
                   </Menu>
               ))}
             </ul>
           </NavList>
-        </NavContainer>
+
     );
 }
 export default Nav;
-const NavContainer = styled.div`
-  height: 60px;
-  border-bottom:1px solid #333333;
-  ${mq[0]}{
-    height: 50px;
-  }
-`
+
 const NavList = styled.nav`
-    width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 670px;
+    height: 43px;
     margin:0 auto;
-    ${mq[0]}{
-      width: auto;
-      overflow-x: scroll;
-    }
-    > ul {
-        height: 100%;
-        display: flex;
-        ${mq[0]}{
-          width: 150%;
-        } 
-    }
+  
+   ul{
+     display: flex;
+     width: 100%;
+     justify-content: space-around;
+     align-items: center;
+   }
 `;
 
 const Menu = styled.li`
-    flex-grow: 1;
+    width: auto;
     height: 100%;
-    display: flex;
-    position: relative;
-    &:before{
-      position: absolute;
-      top:50%;
-      right:0;
-      transform: translateY(-50%);
-      content:"";
-      display: block;
-      width: 1px;
-      height: 32px;
-      background: #333333;
-    }
-   &:last-of-type {
-     //마지막 마대기 제거
-     &:before{
-       display: none;
-     }
-   }
     a {
-        display: inline-block;
+        display: block;
         width: 100%;
         height: 100%;
-        text-align: center;
-        line-height: 60px;
-        font-size: 16px !important;
-        ${mq[0]}{
-          line-height: 50px;
-         }
+        font-weight: 500;
+        font-size: 18px !important;
+        color:${color.subColor};
       &.active {
-            color: #35c5f0;
-            font-weight: 600;
-        
+           color:${color.main};
+           font-weight: 700;
+      
         }
     }
 `;

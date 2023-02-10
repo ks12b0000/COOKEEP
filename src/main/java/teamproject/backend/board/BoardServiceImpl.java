@@ -3,16 +3,12 @@ package teamproject.backend.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamproject.backend.board.dto.BoardReadResponse;
+import teamproject.backend.board.dto.BoardResponseInCardFormat;
+import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.BoardCommentRepository;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
-import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
-import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
 import teamproject.backend.boardCommentReply.BoardCommentReplyRepository;
-import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
-import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
-import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
 import teamproject.backend.boardTag.BoardTagService;
 import teamproject.backend.domain.*;
 import teamproject.backend.foodCategory.FoodCategoryService;
@@ -68,59 +64,69 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public BoardReadResponse findBoardReadResponseByBoardId(Long boardId){
+    public BoardResponseInDetailFormat findBoardById(Long boardId){
         Board board = findBoardByBoardId(boardId);
         String tags = boardTagService.findTagsByBoard(board);
-        return new BoardReadResponse(board, tags);
+        return new BoardResponseInDetailFormat(board, tags);
     }
 
-    @Override
-    public Board findBoardByBoardId(Long boardId) {
+    private Board findBoardByBoardId(Long boardId) {
         Optional<Board> board = boardRepository.findById(boardId);
         if(board.isEmpty()) throw new BaseException(NOT_EXIST_BOARD);
         return board.get();
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseListByUserId(Long userId) {
+    public List<BoardResponseInDetailFormat> findBoardListByUserId(Long userId) {
         List<Board> boards = boardRepository.findByUser_id(userId);
 
-        List<BoardReadResponse> responses = getBoardReadResponses(boards, boards.size());
+        List<BoardResponseInDetailFormat> responses = getBoardResponsesInDetailFormat(boards, boards.size());
 
         return responses;
     }
 
-    private List<BoardReadResponse> getBoardReadResponses(List<Board> boards, int length) {
-        List<BoardReadResponse> responses = new ArrayList<>();
+    private List<BoardResponseInDetailFormat> getBoardResponsesInDetailFormat(List<Board> boards, int length) {
+        List<BoardResponseInDetailFormat> responses = new ArrayList<>();
         int min = Math.min(boards.size(), length);
         for(int i = 0; i < min; i++){
             Board board = boards.get(i);
             String tags = boardTagService.findTagsByBoard(board);
-            responses.add(new BoardReadResponse(board, tags));
+            responses.add(new BoardResponseInDetailFormat(board, tags));
+        }
+        return responses;
+    }
+
+    private List<BoardResponseInCardFormat> getBoardResponsesInCardFormat(List<Board> boards, int length){
+        List<BoardResponseInCardFormat> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i);
+            String tags = boardTagService.findTagsByBoard(board);
+            responses.add(new BoardResponseInCardFormat(board, tags));
         }
         return responses;
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseListByFoodCategoryName(String categoryName) {
+    public List<BoardResponseInDetailFormat> findBoardListByFoodCategoryName(String categoryName) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
         List<Board> boards = boardRepository.findByCategory(foodCategory);
 
-        List<BoardReadResponse> responses = getBoardReadResponses(boards, boards.size());
+        List<BoardResponseInDetailFormat> responses = getBoardResponsesInDetailFormat(boards, boards.size());
 
         return responses;
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseOrderByCommentedDesc(int numberOfBoard) {
+    public List<BoardResponseInCardFormat> findBoardListOrderByCommentedDesc(int numberOfBoard) {
         List<Board> boards = boardRepository.findAllByOrderByCommentedDesc();
-        return getBoardReadResponses(boards, 10);
+        return getBoardResponsesInCardFormat(boards, 10);
     }
 
     @Override
-    public List<BoardReadResponse> findBoardReadResponseOrderByLikedDesc(int numberOfBoard) {
+    public List<BoardResponseInCardFormat> findBoardListOrderByLikedDesc(int numberOfBoard) {
         List<Board> boards = boardRepository.findAllByOrderByLikedDesc();
-        return getBoardReadResponses(boards, 10);
+        return getBoardResponsesInCardFormat(boards, 10);
     }
 
     @Override
@@ -135,29 +141,7 @@ public class BoardServiceImpl implements BoardService{
         if(!thumbnailExist(boardWriteRequest.getThumbnail())) throw new BaseException(NOT_EXIST_IMAGE_URL);
 
         board.update(boardWriteRequest, foodCategory);
-    }
-
-    @Override
-    @Transactional
-    public Long saveComment(BoardCommentWriteRequest boardCommentWriteRequest) {
-        Board board = findBoardByBoardId(boardCommentWriteRequest.getBoard_id());
-        User user = getUserById(boardCommentWriteRequest.getUser_id());
-
-        BoardComment comment = new BoardComment(user, board, boardCommentWriteRequest.getText());
-        boardCommentRepository.save(comment);
-        board.increaseCommentCount();
-
-        return comment.getBoardCommentId();
-    }
-
-    @Override
-    @Transactional
-    public void updateComment(BoardCommentUpdateRequest request) {
-        BoardComment comment = getBoardComment(request.getBoardComment_id());
-
-        getUserById(request.getUser_id());
-
-        comment.setText(request.getText());
+        boardTagService.updateBoardTags(board, boardWriteRequest.getTags());
     }
 
     private BoardComment getBoardComment(Long request) {
@@ -166,37 +150,11 @@ public class BoardServiceImpl implements BoardService{
         return comment.get();
     }
 
-    @Override
-    @Transactional
-    public void deleteComment(Long commentId, Long deleteUser) {
-        BoardComment comment = getBoardComment(commentId);
-        Board board = comment.getBoard();
-
-        User commentCreateUser = comment.getUser();
-        User commentDeleteUser = getUserById(deleteUser);
-        if(commentCreateUser != commentDeleteUser) throw new BaseException(USER_NOT_EXIST);
-
-        deleteAllReplyOf(comment);
-
-        boardCommentRepository.delete(comment);
-        board.decreaseCommentCount();
-    }
-
     private void deleteAllReplyOf(BoardComment comment) {
         List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(comment);
         for(BoardCommentReply reply : replies){
             boardCommentReplyRepository.delete(reply);
         }
-    }
-
-    @Override
-    public List<BoardCommentResponse> findCommentByBoardId(Long boardId) {
-        Board board = findBoardByBoardId(boardId);
-
-        List<BoardComment> comments = boardCommentRepository.findByBoard(board);
-
-        List<BoardCommentResponse> list = getBoardCommentResponses(comments);
-        return list;
     }
 
     private List<BoardCommentResponse> getBoardCommentResponses(List<BoardComment> comments) {
@@ -207,74 +165,10 @@ public class BoardServiceImpl implements BoardService{
         return list;
     }
 
-    @Override
-    public List<BoardCommentResponse> findCommentByUserId(Long userId) {
-        User user = getUserById(userId);
-
-        List<BoardComment> comments = boardCommentRepository.findByUser(user);
-
-        List<BoardCommentResponse> list = getBoardCommentResponses(comments);
-        return list;
-    }
-
-    @Override
-    @Transactional
-    public Long saveReply(BoardCommentReplyWriteRequest request) {
-        BoardComment comment = getBoardComment(request.getComment_id());
-        User user = getUserById(request.getUser_id());
-
-        BoardCommentReply reply = new BoardCommentReply(user, comment, request.getText());
-
-        boardCommentReplyRepository.save(reply);
-        comment.increaseReplyCount();
-
-        return reply.getBoardCommentReplyId();
-    }
-
-    @Override
-    @Transactional
-    public void updateReply(BoardCommentReplyUpdateRequest request) {
-        BoardCommentReply reply = getBoardCommentReply(request.getReply_id());
-        User requestUser = getUserById(request.getUser_id());
-        User createUser = reply.getUser();
-
-        if(createUser != requestUser) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
-
-        reply.setText(request.getText());
-    }
-
     private BoardCommentReply getBoardCommentReply(Long replyId) {
         Optional<BoardCommentReply> reply = boardCommentReplyRepository.findById(replyId);
         if(reply.isEmpty()) throw new BaseException(NOT_EXIST_REPLY);
         return reply.get();
-    }
-
-    @Override
-    @Transactional
-    public void deleteReply(Long replyId, Long userId) {
-        BoardCommentReply reply = getBoardCommentReply(replyId);
-        User deleteUser = getUserById(userId);
-        User createUser = reply.getUser();
-
-        if(createUser != deleteUser) throw new BaseException(UNAUTHORIZED_USER_ACCESS);
-
-        reply.getBoardComment().decreaseReplyCount();
-
-        boardCommentReplyRepository.delete(reply);
-    }
-
-    @Override
-    public List<BoardCommentReplyResponse> findReplyByCommentId(Long commentId) {
-        BoardComment boardComment = getBoardComment(commentId);
-
-        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(boardComment);
-        System.out.println(replies.size());
-        List<BoardCommentReplyResponse> list = new LinkedList<>();
-        for(BoardCommentReply reply : replies){
-            list.add(new BoardCommentReplyResponse(reply));
-        }
-
-        return list;
     }
 
     @Override
@@ -319,9 +213,8 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public String updateLikeOfBoard(Long boardId, Long user_id) {
+    public String updateLikeOfBoard(Long boardId, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BaseException(NOT_EXIST_BOARD));
-        User user = userRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         if (!hasLikeBoard(board, user)) {
             board.increaseLikeCount();
             return createLikeBoard(board, user);
