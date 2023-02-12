@@ -25,4 +25,10 @@ public interface BoardService {
     String updateLikeOfBoard(Long boardId, User user);
 
     void update(Long boardId, BoardWriteRequest boardWriteRequest);
+
+    List<BoardResponseInCardFormat> findBoarListByAll();
+
+    List<BoardResponseInCardFormat> findBoarListOrderByLikedDescAll();
+
+    List<BoardResponseInCardFormat> findBoarListOrderByCommentedDescAll();
 }

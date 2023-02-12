@@ -3,6 +3,7 @@ package teamproject.backend.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.BoardCommentService;
@@ -183,6 +184,42 @@ public class BoardController {
     public BaseResponse<List<BoardCommentReplyResponse>> listBoardReplies(@RequestParam Long comment_id){
         List<BoardCommentReplyResponse> list = boardCommentReplyService.findReplyByCommentId(comment_id);
         return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.", list);
+    }
+
+    /**
+     * 게시글 전체 리스트 (최신순)
+     * [GET] /board/all/list
+     * @return
+     */
+    @GetMapping("/board/all/list")
+    public BaseResponse findBoarListByAll() {
+        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListByAll();
+
+        return new BaseResponse("성공적으로 조회순 전체 게시글 목록을 조회했습니다.", boarListByAll);
+    }
+
+    /**
+     * 게시글 전체 리스트 (좋아요순)
+     * [GET] /board/all/liked/list
+     * @return
+     */
+    @GetMapping("/board/all/liked/list")
+    public BaseResponse findBoarListOrderByLikedDescAll() {
+        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListOrderByLikedDescAll();
+
+        return new BaseResponse("성공적으로 좋아요순 전체 게시글 목록을 조회했습니다.", boarListByAll);
+    }
+
+    /**
+     * 게시글 전체 리스트 (댓글순)
+     * [GET] /board/all/commented/list
+     * @return
+     */
+    @GetMapping("/board/all/commented/list")
+    public BaseResponse findBoarListOrderByCommentedDescAll() {
+        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListOrderByCommentedDescAll();
+
+        return new BaseResponse("성공적으로 댓글순 전체 게시글 목록을 조회했습니다.", boarListByAll);
     }
 
 }

@@ -248,4 +248,34 @@ public class BoardServiceImpl implements BoardService{
         return "좋아요 취소 성공.";
     }
 
+    /**
+     * 게시글 전체 리스트 (최신순)
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListByAll() {
+        List<Board> boards = boardRepository.findAllByOrderByCreateDateDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    /**
+     * 게시글 전체 리스트 (좋아요순)
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListOrderByLikedDescAll() {
+        List<Board> boards = boardRepository.findAllByOrderByLikedDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    /**
+     * 게시글 전체 리스트 (댓글순)
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListOrderByCommentedDescAll() {
+        List<Board> boards = boardRepository.findAllByOrderByCommentedDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
 }

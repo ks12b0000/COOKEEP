@@ -19,4 +19,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findAllByOrderByCommentedDesc();
 
     List<Board> findAllByOrderByLikedDesc();
+
+    List<Board> findAllByOrderByCreateDateDesc();
 }
