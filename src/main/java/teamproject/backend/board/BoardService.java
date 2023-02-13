@@ -1,6 +1,7 @@
 package teamproject.backend.board;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
@@ -15,7 +16,7 @@ public interface BoardService {
 
     List<BoardResponseInDetailFormat> findBoardListByUserId(Long userId);
 
-    List<BoardResponseInCardFormat> findBoardListByFoodCategoryName(String categoryName, Pageable pageable);
+    List<BoardResponseInCardFormat> findBoardListByFoodCategoryName(String categoryName, Sort sort);
 
     void delete(Long userId, Long boardId);
 
@@ -23,6 +24,8 @@ public interface BoardService {
 
     void update(Long boardId, BoardWriteRequest boardWriteRequest);
 
-    List<BoardResponseInCardFormat> findBoarListByAll(Pageable pageable);
+    List<BoardResponseInCardFormat> findBoarListByAll(Sort sort);
+
+    public List<BoardResponseInCardFormat> findBoarListByLikedCommented(Pageable pageable);
 
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
@@ -115,15 +116,15 @@ public class BoardServiceImpl implements BoardService{
     /**
      * 카테고리별 글 목록
      * @param categoryName
-     * @param pageable
+     * @param sort
      * @return
      */
     @Override
-    public List<BoardResponseInCardFormat> findBoardListByFoodCategoryName(String categoryName, Pageable pageable) {
+    public List<BoardResponseInCardFormat> findBoardListByFoodCategoryName(String categoryName, Sort sort) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
-        Page<Board> boards = boardRepository.findByCategory(foodCategory, pageable);
+        List<Board> boards = boardRepository.findByCategory(foodCategory,sort);
 
-        return getBoardResponsesInCardFormat(boards.toList(), boards.getSize());
+        return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
     @Override
@@ -247,10 +248,16 @@ public class BoardServiceImpl implements BoardService{
 
     /**
      * 게시글 전체 목록
-     * @param pageable
+     * @param sort
      * @return
      */
-    public List<BoardResponseInCardFormat> findBoarListByAll(Pageable pageable) {
+    public List<BoardResponseInCardFormat> findBoarListByAll(Sort sort) {
+        List<Board> boards = boardRepository.findAll(sort);
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    public List<BoardResponseInCardFormat> findBoarListByLikedCommented(Pageable pageable) {
         Page<Board> boards = boardRepository.findAll(pageable);
 
         return getBoardResponsesInCardFormat(boards.toList(), boards.getSize());

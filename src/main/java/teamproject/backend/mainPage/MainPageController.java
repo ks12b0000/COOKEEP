@@ -75,7 +75,7 @@ public class MainPageController {
      */
     @GetMapping("/main/best/liked/list")
     public BaseResponse boardListOrderByLiked(@PageableDefault(size = 5, sort = "liked", direction = Sort.Direction.DESC) Pageable pageable){
-        List<BoardResponseInCardFormat> pages = boardService.findBoarListByAll(pageable);
+        List<BoardResponseInCardFormat> pages = boardService.findBoarListByLikedCommented(pageable);
         return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
 
@@ -87,7 +87,7 @@ public class MainPageController {
      */
     @GetMapping("/main/best/commented/list")
     public BaseResponse boardListOrderByCommented(@PageableDefault(size = 5, sort = "commented", direction = Sort.Direction.DESC) Pageable pageable){
-        List<BoardResponseInCardFormat> pages = boardService.findBoarListByAll(pageable);
+        List<BoardResponseInCardFormat> pages = boardService.findBoarListByLikedCommented(pageable);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 }
