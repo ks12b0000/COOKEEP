@@ -1,6 +1,10 @@
 package teamproject.backend.board;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
@@ -51,14 +55,17 @@ public class BoardController {
 
     /**
      * 카테고리 글 목록 조회
-     * [GET] /board/list
+     * [GET] /board/list?category=&page= 최신순 10개씩 가져오기(기본값)
+     * [GET] /board/list?category=&page=&sort=liked,desc 좋아요순 10개씩 가져오기
+     * [GET] /board/list?category=&page=&sort=commented,desc 댓글순 10개씩 가져오기
      * @param category
+     * @param pageable
      * @return
      */
     @GetMapping("/board/list")
-    public BaseResponse<List<BoardResponseInDetailFormat>> boardListByCategory(@RequestParam String category){
-        List<BoardResponseInDetailFormat> pages = boardService.findBoardListByFoodCategoryName(category);
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    public BaseResponse boardListByCategory(@RequestParam String category, @PageableDefault(size = 10, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable){
+        List<BoardResponseInCardFormat> pages = boardService.findBoardListByFoodCategoryName(category, pageable);
+        return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
 
     /**
@@ -187,39 +194,17 @@ public class BoardController {
     }
 
     /**
-     * 게시글 전체 리스트 (최신순)
-     * [GET] /board/all/list
+     * 게시글 전체 리스트 (정렬)
+     * [GET] /board/all/list?page=  최신순 10개씩 가져오기(기본값)
+     * [GET] /board/all/list?page=&sort=liked,desc 좋아요순 10개씩 가져오기
+     * [GET] /board/all/list?page=&sort=commented,desc 댓글순 10개씩 가져오기
+     * @param pageable
      * @return
      */
     @GetMapping("/board/all/list")
-    public BaseResponse findBoarListByAll() {
-        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListByAll();
+    public BaseResponse findBoarListByAll(@PageableDefault(size = 10, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListByAll(pageable);
 
-        return new BaseResponse("성공적으로 조회순 전체 게시글 목록을 조회했습니다.", boarListByAll);
+        return new BaseResponse("성공적으로 전체 게시글 목록을 조회했습니다.", boarListByAll);
     }
-
-    /**
-     * 게시글 전체 리스트 (좋아요순)
-     * [GET] /board/all/liked/list
-     * @return
-     */
-    @GetMapping("/board/all/liked/list")
-    public BaseResponse findBoarListOrderByLikedDescAll() {
-        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListOrderByLikedDescAll();
-
-        return new BaseResponse("성공적으로 좋아요순 전체 게시글 목록을 조회했습니다.", boarListByAll);
-    }
-
-    /**
-     * 게시글 전체 리스트 (댓글순)
-     * [GET] /board/all/commented/list
-     * @return
-     */
-    @GetMapping("/board/all/commented/list")
-    public BaseResponse findBoarListOrderByCommentedDescAll() {
-        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListOrderByCommentedDescAll();
-
-        return new BaseResponse("성공적으로 댓글순 전체 게시글 목록을 조회했습니다.", boarListByAll);
-    }
-
 }

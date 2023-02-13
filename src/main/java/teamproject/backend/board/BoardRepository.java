@@ -1,5 +1,7 @@
 package teamproject.backend.board;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import teamproject.backend.domain.Board;
@@ -10,15 +12,9 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    List<Board> findByCategory(FoodCategory category);
+    Page<Board> findByCategory(FoodCategory category, Pageable pageable);
 
     List<Board> findByUser_id(Long userId);
 
     List<Board> findByUser(User user);
-
-    List<Board> findAllByOrderByCommentedDesc();
-
-    List<Board> findAllByOrderByLikedDesc();
-
-    List<Board> findAllByOrderByCreateDateDesc();
 }

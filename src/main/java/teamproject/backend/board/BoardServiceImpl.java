@@ -1,6 +1,9 @@
 package teamproject.backend.board;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
@@ -24,6 +27,7 @@ import java.util.Optional;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
@@ -67,6 +71,7 @@ public class BoardServiceImpl implements BoardService{
     public BoardResponseInDetailFormat findBoardById(Long boardId){
         Board board = findBoardByBoardId(boardId);
         String tags = boardTagService.findTagsByBoard(board);
+
         return new BoardResponseInDetailFormat(board, tags);
     }
 
@@ -107,26 +112,18 @@ public class BoardServiceImpl implements BoardService{
         return responses;
     }
 
+    /**
+     * 카테고리별 글 목록
+     * @param categoryName
+     * @param pageable
+     * @return
+     */
     @Override
-    public List<BoardResponseInDetailFormat> findBoardListByFoodCategoryName(String categoryName) {
+    public List<BoardResponseInCardFormat> findBoardListByFoodCategoryName(String categoryName, Pageable pageable) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
-        List<Board> boards = boardRepository.findByCategory(foodCategory);
+        Page<Board> boards = boardRepository.findByCategory(foodCategory, pageable);
 
-        List<BoardResponseInDetailFormat> responses = getBoardResponsesInDetailFormat(boards, boards.size());
-
-        return responses;
-    }
-
-    @Override
-    public List<BoardResponseInCardFormat> findBoardListOrderByCommentedDesc(int numberOfBoard) {
-        List<Board> boards = boardRepository.findAllByOrderByCommentedDesc();
-        return getBoardResponsesInCardFormat(boards, 10);
-    }
-
-    @Override
-    public List<BoardResponseInCardFormat> findBoardListOrderByLikedDesc(int numberOfBoard) {
-        List<Board> boards = boardRepository.findAllByOrderByLikedDesc();
-        return getBoardResponsesInCardFormat(boards, 10);
+        return getBoardResponsesInCardFormat(boards.toList(), boards.getSize());
     }
 
     @Override
@@ -249,33 +246,13 @@ public class BoardServiceImpl implements BoardService{
     }
 
     /**
-     * 게시글 전체 리스트 (최신순)
+     * 게시글 전체 목록
+     * @param pageable
      * @return
      */
-    public List<BoardResponseInCardFormat> findBoarListByAll() {
-        List<Board> boards = boardRepository.findAllByOrderByCreateDateDesc();
+    public List<BoardResponseInCardFormat> findBoarListByAll(Pageable pageable) {
+        Page<Board> boards = boardRepository.findAll(pageable);
 
-        return getBoardResponsesInCardFormat(boards, boards.size());
+        return getBoardResponsesInCardFormat(boards.toList(), boards.getSize());
     }
-
-    /**
-     * 게시글 전체 리스트 (좋아요순)
-     * @return
-     */
-    public List<BoardResponseInCardFormat> findBoarListOrderByLikedDescAll() {
-        List<Board> boards = boardRepository.findAllByOrderByLikedDesc();
-
-        return getBoardResponsesInCardFormat(boards, boards.size());
-    }
-
-    /**
-     * 게시글 전체 리스트 (댓글순)
-     * @return
-     */
-    public List<BoardResponseInCardFormat> findBoarListOrderByCommentedDescAll() {
-        List<Board> boards = boardRepository.findAllByOrderByCommentedDesc();
-
-        return getBoardResponsesInCardFormat(boards, boards.size());
-    }
-
 }
