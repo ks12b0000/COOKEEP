@@ -1,7 +1,5 @@
 package teamproject.backend.board;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -18,4 +16,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByUser_id(Long userId);
 
     List<Board> findByUser(User user);
+
+    List<Board> findTop5ByOrderByLikedDesc();
+
+    List<Board> findTop5ByOrderByCommentedDesc();
 }

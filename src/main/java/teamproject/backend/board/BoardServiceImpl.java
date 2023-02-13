@@ -2,8 +2,6 @@ package teamproject.backend.board;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -257,9 +255,23 @@ public class BoardServiceImpl implements BoardService{
         return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
-    public List<BoardResponseInCardFormat> findBoarListByLikedCommented(Pageable pageable) {
-        Page<Board> boards = boardRepository.findAll(pageable);
+    /**
+     * 좋아요순 5개 가져오기
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListByLiked() {
+        List<Board> boards = boardRepository.findTop5ByOrderByLikedDesc();
 
-        return getBoardResponsesInCardFormat(boards.toList(), boards.getSize());
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    /**
+     * 댓글순 5개 가져오기
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListByCommented() {
+        List<Board> boards = boardRepository.findTop5ByOrderByCommentedDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
     }
 }

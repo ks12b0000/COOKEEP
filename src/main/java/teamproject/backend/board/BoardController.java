@@ -196,7 +196,7 @@ public class BoardController {
 
     /**
      * 게시글 전체 리스트 (정렬)
-     * [GET] /board/all/list?page=  최신순 (기본값)
+     * [GET] /board/all/list 최신순 (기본값)
      * [GET] /board/all/list?sort=liked,desc 좋아요순
      * [GET] /board/all/list?sort=commented,desc 댓글순
      * @param sort
