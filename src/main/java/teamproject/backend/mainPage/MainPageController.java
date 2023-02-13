@@ -2,6 +2,9 @@ package teamproject.backend.mainPage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,15 +67,27 @@ public class MainPageController {
         return new BaseResponse("전체 태그 목록을 가져왔습니다.", tags);
     }
 
+    /**
+     * 좋아요순 5개 가져오기
+     * [GET] /main/best/liked/list
+     * @param pageable
+     * @return
+     */
     @GetMapping("/main/best/liked/list")
-    public BaseResponse<List<BoardResponseInCardFormat>> boardListOrderByLiked(){
-        List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByLikedDesc(5);
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    public BaseResponse boardListOrderByLiked(@PageableDefault(size = 5, sort = "liked", direction = Sort.Direction.DESC) Pageable pageable){
+        List<BoardResponseInCardFormat> pages = boardService.findBoarListByAll(pageable);
+        return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
 
+    /**
+     * 댓글순 5개 가져오기
+     * [GET] /main/best/commented/list
+     * @param pageable
+     * @return
+     */
     @GetMapping("/main/best/commented/list")
-    public BaseResponse<List<BoardResponseInCardFormat>> boardListOrderByCommented(){
-        List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByCommentedDesc(5);
+    public BaseResponse boardListOrderByCommented(@PageableDefault(size = 5, sort = "commented", direction = Sort.Direction.DESC) Pageable pageable){
+        List<BoardResponseInCardFormat> pages = boardService.findBoarListByAll(pageable);
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 }
