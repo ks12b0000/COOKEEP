@@ -1,6 +1,8 @@
 package teamproject.backend.board;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
@@ -24,6 +26,7 @@ import java.util.Optional;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
@@ -67,6 +70,7 @@ public class BoardServiceImpl implements BoardService{
     public BoardResponseInDetailFormat findBoardById(Long boardId){
         Board board = findBoardByBoardId(boardId);
         String tags = boardTagService.findTagsByBoard(board);
+
         return new BoardResponseInDetailFormat(board, tags);
     }
 
@@ -107,26 +111,18 @@ public class BoardServiceImpl implements BoardService{
         return responses;
     }
 
+    /**
+     * 카테고리별 글 목록
+     * @param categoryName
+     * @param sort
+     * @return
+     */
     @Override
-    public List<BoardResponseInDetailFormat> findBoardListByFoodCategoryName(String categoryName) {
+    public List<BoardResponseInCardFormat> findBoardListByFoodCategoryName(String categoryName, Sort sort) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
-        List<Board> boards = boardRepository.findByCategory(foodCategory);
+        List<Board> boards = boardRepository.findByCategory(foodCategory,sort);
 
-        List<BoardResponseInDetailFormat> responses = getBoardResponsesInDetailFormat(boards, boards.size());
-
-        return responses;
-    }
-
-    @Override
-    public List<BoardResponseInCardFormat> findBoardListOrderByCommentedDesc(int numberOfBoard) {
-        List<Board> boards = boardRepository.findAllByOrderByCommentedDesc();
-        return getBoardResponsesInCardFormat(boards, 10);
-    }
-
-    @Override
-    public List<BoardResponseInCardFormat> findBoardListOrderByLikedDesc(int numberOfBoard) {
-        List<Board> boards = boardRepository.findAllByOrderByLikedDesc();
-        return getBoardResponsesInCardFormat(boards, 10);
+        return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
     @Override
@@ -248,4 +244,34 @@ public class BoardServiceImpl implements BoardService{
         return "좋아요 취소 성공.";
     }
 
+    /**
+     * 게시글 전체 목록
+     * @param sort
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListByAll(Sort sort) {
+        List<Board> boards = boardRepository.findAll(sort);
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    /**
+     * 좋아요순 5개 가져오기
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListByLiked() {
+        List<Board> boards = boardRepository.findTop5ByOrderByLikedDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    /**
+     * 댓글순 5개 가져오기
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListByCommented() {
+        List<Board> boards = boardRepository.findTop5ByOrderByCommentedDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
 }

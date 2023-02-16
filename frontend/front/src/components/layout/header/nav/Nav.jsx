@@ -1,18 +1,27 @@
 import styled from "@emotion/styled";
+
+
 import { useState } from "react";
 import { NavDada } from "../../../../http/data/nav/navData";
 import { NavLink } from "react-router-dom";
 import {color} from "../../../../constants/color";
 
-function Nav() {
+function Nav({categoryName}) {
+
     const [menus, setMenus] = useState(NavDada);
+    const [active,setActive] =useState(false);
+
+
+
+
+
     return (
 
           <NavList>
             <ul>
               {menus.map((menu) => (
                   <Menu key={menu.id}>
-                    <NavLink to={menu.url}>{menu.name}</NavLink>
+                    <NavLink to={menu.url} className={ categoryName === menu.name ? 'active' : null} >{menu.name}</NavLink>
                   </Menu>
               ))}
             </ul>

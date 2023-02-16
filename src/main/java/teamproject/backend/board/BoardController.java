@@ -1,8 +1,14 @@
 package teamproject.backend.board;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
 import teamproject.backend.boardComment.BoardCommentService;
@@ -50,14 +56,17 @@ public class BoardController {
 
     /**
      * 카테고리 글 목록 조회
-     * [GET] /board/list
+     * [GET] /board/list?category= 최신순 (기본값)
+     * [GET] /board/list?category=&sort=liked,desc 좋아요순
+     * [GET] /board/list?category=&sort=commented,desc 댓글순
      * @param category
+     * @param sort
      * @return
      */
     @GetMapping("/board/list")
-    public BaseResponse<List<BoardResponseInDetailFormat>> boardListByCategory(@RequestParam String category){
-        List<BoardResponseInDetailFormat> pages = boardService.findBoardListByFoodCategoryName(category);
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    public BaseResponse boardListByCategory(@RequestParam String category, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort){
+        List<BoardResponseInCardFormat> pages = boardService.findBoardListByFoodCategoryName(category, sort);
+        return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
 
     /**
@@ -185,4 +194,18 @@ public class BoardController {
         return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.", list);
     }
 
+    /**
+     * 게시글 전체 리스트 (정렬)
+     * [GET] /board/all/list 최신순 (기본값)
+     * [GET] /board/all/list?sort=liked,desc 좋아요순
+     * [GET] /board/all/list?sort=commented,desc 댓글순
+     * @param sort
+     * @return
+     */
+    @GetMapping("/board/all/list")
+    public BaseResponse findBoarListByAll(@SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
+        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListByAll(sort);
+
+        return new BaseResponse("성공적으로 전체 게시글 목록을 조회했습니다.", boarListByAll);
+    }
 }
