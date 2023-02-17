@@ -46,6 +46,9 @@ public class Board{
     @Column
     private Integer commented;
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private Integer view;
+
     public Board(FoodCategory foodCategory, BoardWriteRequest boardWriteRequest, User user) {
         this.category = foodCategory;
         this.title = boardWriteRequest.getTitle();

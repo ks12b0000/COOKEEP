@@ -20,6 +20,7 @@ public class BoardResponseInCardFormat {
     private String tags;
     private Integer commented;
     private Integer liked;
+    private Integer view;
 
     public BoardResponseInCardFormat(Board board, String tags) {
         this.board_id = board.getBoardId();
@@ -31,5 +32,6 @@ public class BoardResponseInCardFormat {
         this.tags = tags;
         this.commented = board.getCommented();
         this.liked = board.getLiked();
+        this.view = board.getView();
     }
 }

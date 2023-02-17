@@ -22,6 +22,7 @@ public class BoardResponseInDetailFormat {
     private String tags;
     private Integer commented;
     private Integer liked;
+    private Integer view;
 
     public BoardResponseInDetailFormat(Board board, String tags){
         this.board_id = board.getBoardId();
@@ -35,5 +36,6 @@ public class BoardResponseInDetailFormat {
         this.tags = tags;
         this.commented = board.getCommented();
         this.liked = board.getLiked();
+        this.view = board.getView();
     }
 }

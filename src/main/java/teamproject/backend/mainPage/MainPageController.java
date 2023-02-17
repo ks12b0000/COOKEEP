@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import teamproject.backend.board.BoardService;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
-import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.domain.Tag;
 import teamproject.backend.mainPage.dto.GetSearchByResponse;
 import teamproject.backend.response.BaseResponse;
@@ -64,15 +63,25 @@ public class MainPageController {
         return new BaseResponse("전체 태그 목록을 가져왔습니다.", tags);
     }
 
+    /**
+     * 좋아요순 5개 가져오기
+     * [GET] /main/best/liked/list
+     * @return
+     */
     @GetMapping("/main/best/liked/list")
-    public BaseResponse<List<BoardResponseInCardFormat>> boardListOrderByLiked(){
-        List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByLikedDesc(5);
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    public BaseResponse boardListOrderByLiked(){
+        List<BoardResponseInCardFormat> pages = boardService.findBoarListByLiked();
+        return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
 
+    /**
+     * 댓글순 5개 가져오기
+     * [GET] /main/best/commented/list
+     * @return
+     */
     @GetMapping("/main/best/commented/list")
-    public BaseResponse<List<BoardResponseInCardFormat>> boardListOrderByCommented(){
-        List<BoardResponseInCardFormat> pages = boardService.findBoardListOrderByCommentedDesc(5);
+    public BaseResponse boardListOrderByCommented(){
+        List<BoardResponseInCardFormat> pages = boardService.findBoarListByCommented();
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 }

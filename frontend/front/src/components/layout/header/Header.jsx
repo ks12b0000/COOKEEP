@@ -16,7 +16,6 @@ const HeaderContainer = styled.header`
     background-color: white;
     margin-bottom: 1px;
     height: 75px;
-    border:1px solid #ccc;
     box-sizing: border-box;
   
     img{
