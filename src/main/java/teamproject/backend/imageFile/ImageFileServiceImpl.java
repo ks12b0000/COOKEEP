@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.ImageFile;
@@ -18,7 +17,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class ImageFileServiceImpl implements ImageFileService{
 
