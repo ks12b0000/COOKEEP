@@ -70,6 +70,7 @@ public class BoardServiceImpl implements BoardService{
     public BoardResponseInDetailFormat findBoardById(Long boardId){
         Board board = findBoardByBoardId(boardId);
         String tags = boardTagService.findTagsByBoard(board);
+        boardRepository.updateView(board.getBoardId());
 
         return new BoardResponseInDetailFormat(board, tags);
     }
