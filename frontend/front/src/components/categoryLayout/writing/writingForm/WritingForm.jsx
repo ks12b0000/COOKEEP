@@ -1,5 +1,4 @@
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 import { useNavigate } from "react-router";
 import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
@@ -8,7 +7,7 @@ import WriteHttp from "../../../../http/writeHttp";
 import CategoryHttp from "../../../../http/categoryHttp";
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
-import axios from "axios";
+import Quill from "../Quill";
 
 
 
@@ -124,7 +123,11 @@ function WritingForm() {
         }
     };
 
+    const [content, setContent] = useState('');
 
+    const onEditorChange = (evt) => {
+        setContent(evt.editor.getData());
+    };
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -161,25 +164,7 @@ function WritingForm() {
                 {error && <p style={{ color: "red" }}>이미지를 업로드!!!</p>}
                 <InputBox>
                     <label htmlFor="">본문</label>
-                    <Ckedit>
-                        <CKEditor
-                            name="ckeditor"
-                            editor={ClassicEditor}
-                            data=""
-                            config={{
-                                cloudServices: {
-                                    uploadUrl: 'https://ckeditor.com/docs/ckeditor5/latest/support/error-codes.html#error-filerepository-no-upload-adapter  '
-                                },
-                                placeholder: "글을 입력해보세요!",
-                            }}
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setFootText(data);
-                            }}
-                            required
-                        />
-                        {isError ? <p style={{ color: "red", padding: " 10px 20px" }}>최소 5자리를 입력해주세요</p> :null}
-                    </Ckedit>
+                     <Quill />
                 </InputBox>
                 <ButtonsWrap>
                     <CancelButton onClick={cancel}>취소</CancelButton>
