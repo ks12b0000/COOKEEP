@@ -163,46 +163,47 @@ const AgreeXbutton = styled.img`
     height: 20px;
     position: absolute;
     left: 91%;
-    top: 5%;
+    top: 3.5%;
     cursor: pointer;
 `;
 
 const InfoBoxTitle = styled.div`
-    width: 470px;
+    width: 360px;
     margin: 0 0 15px 10px;
     text-align: left;
     color: #2a2a2a;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     margin-top: 30px;
-    color: #35c5f0;
+    color: #FF4122;
 `;
 
 const InfoBox = styled.div`
-    width: 470px;
-    height: 170px;
+    width: 360px;
+    height: 230px;
     border: 1px solid #b0b0b0;
     padding: 20px 30px;
     box-sizing: border-box;
     overflow-y: scroll;
     font-weight: 300;
     line-height: 18px;
+    font-size: 13px;
 `;
 
 const Span1 = styled.div`
     font-weight: 600;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 40px;
 `;
 
 const Span2 = styled.div`
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 35px;
 `;
 
 const CheckBoxBlock = styled.div`
-    width: 470px;
+    width: 360px;
     display: flex;
     margin-top: 15px;
 `;
@@ -218,16 +219,16 @@ const CheckText = styled.div`
 `;
 
 const AgreeButtonBlock = styled.div`
-    width: 470px;
+    width: 360px;
     margin: 0 auto;
 `;
 
 const AgreeButton = styled.div`
-    width: 140px;
-    height: 45px;
-    background-color: #35c5f0;
-    margin-top: 10px;
-    border-radius: 30px;
+    width: 360px;
+    height: 51px;
+    background-color:#FF4122;
+    margin-top: 20px;
+    border-radius: 7px;
     display: flex;
     justify-content: center;
     align-items: center;
