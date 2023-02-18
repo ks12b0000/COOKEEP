@@ -32,16 +32,14 @@ function WritingForm() {
     const [categoryList,setCategoryList] = useState([]);
     const [categoryValue, setCategoryValue] = useState('카테고리');
 
-
+    const [quillValue,setQuillValue] = useState();
     const [title, setTitle] = useState("");
     const realTitle = title.length < 5 ? 1:0 ;
     const [tag,setTag] = useState('');
     const realTag = tag.length < 5 ? 1:0 ;
 
 
-
-    const [footText,setFootText]  =useState('');
-    const isError = footText.length < 12 ? 1 : 0;
+    const [content, setContent] = useState('');
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
 
@@ -90,27 +88,18 @@ function WritingForm() {
         }
     };
 
-    const disableState = () =>{
-        let isData = true;
-        if(title.length >= 5 && tag.length >= 5 && footText.length >= 12 && !error){
-            isData = false;
-            return  isData;
-        }
 
-        return  isData;
-
-    }
     const onSubmit = async () => {
 
         const FormData = {
             category:categoryValue,
             title,
-            text:footText,
+            text:quillValue,
             user_id:userId,
             thumbnail:imagePreview,
             tags:tag
         }
-
+        console.log(FormData.text);
         if (error) {
             alert("이미지를 업로드해주세요");
             return false;
@@ -124,18 +113,19 @@ function WritingForm() {
         }
     };
 
-    const [content, setContent] = useState('');
 
-    const onEditorChange = (evt) => {
-        setContent(evt.editor.getData());
-    };
+
+    const Props = {
+        quillValue,
+        setQuillValue
+    }
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                  <Title>글쓰기</Title>
                 <InputBox>
                     <select name="category" value={categoryValue} onChange={onChange} >
-                        <option value="카테고리" disabled selected>카테고리</option>
+                        <option value="카테고리" disabled >카테고리</option>
                         {categoryList.map((categoryName,index) => {
                             return(
                                 <option value={categoryName.name} key={index} >{categoryName.name}</option>
@@ -148,7 +138,7 @@ function WritingForm() {
                      </TitleInput>
                 </InputBox>
                 <QuillBox>
-                    <Quill />
+                    <Quill  {...Props}/>
                 </QuillBox>
                 <TagInput>
                     <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
@@ -158,16 +148,14 @@ function WritingForm() {
                  
                     <InputFile htmlFor="input-file">썸네일을 등록해주세요</InputFile>
                     <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
-                    {/*<IMGBOX>*/}
-                    {/*    <img src={imagePreview} alt={imagePreview} />*/}
-                    {/*</IMGBOX>*/}
+
                     {error && <ErrorText style={{ color: "red" }}>이미지를 업로드!!!</ErrorText>}
                 </Upload>
 
 
                 <ButtonsWrap>
                     <CancelButton onClick={cancel}>취소</CancelButton>
-                    <WritingButton type="submit"  disabled={disableState()}>등록</WritingButton>
+                    <WritingButton >등록</WritingButton>
                 </ButtonsWrap>
             </form>
         </>

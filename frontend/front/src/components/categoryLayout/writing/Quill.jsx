@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import WriteHttp from "../../../http/writeHttp";
 import {useSelector} from "react-redux";
 import styled from "@emotion/styled";
-const Quill = () => {
+const Quill = ({quillValue,setQuillValue}) => {
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
     const writeHttp = new WriteHttp();
 
@@ -82,8 +82,8 @@ const Quill = () => {
         'image',
     ];
   const quillRef= useRef();
-  const [value,setValue] = useState();
-   console.log(value);
+
+
 
 
     return (
@@ -92,8 +92,8 @@ const Quill = () => {
                 ref={quillRef}
                 theme="snow"
                 placeholder="플레이스 홀더"
-                value={value}
-                onChange={setValue}
+                value={quillValue}
+                onChange={setQuillValue}
                 modules={modules}
                 formats={formats}
             />
