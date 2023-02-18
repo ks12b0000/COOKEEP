@@ -5,13 +5,15 @@ import Layout from "../../layout/Layout";
 
 const Container = styled.div`
     display: flex;
-    width: 1200px;
+    width: 1440px;
+    border:1px solid #FFA590;
+    border-radius: 10px;
     height: 100%;
-    margin: 50px auto 0 auto;
+    margin: 24px auto ;
 `;
 const Contents = styled.div`
     width: 100%;
-    padding:30px 50px 50px;
+    padding:24px;
 
 
 `
