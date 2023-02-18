@@ -20,7 +20,7 @@ public class ImageDeleteScheduling {
     @Scheduled(cron = "0 0 2 1/1 * ? *") // 매일 새벽 2시
     public void deleteUnusedImages(){
         System.out.println("시작");
-        Date ago6Hours = getAgoHours(0);
+        Date ago6Hours = getAgoHours(6);
         //생성일로부터 6시간 이상 경과했으면서 동시에 board_id가 null인 이미지를 모두 찾음
         List<ImageFile> unmanagedImages = imageFileRepository.findByBoardIdIsNullAndCreateDateBefore(ago6Hours);
 
