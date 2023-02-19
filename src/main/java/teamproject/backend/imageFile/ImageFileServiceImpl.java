@@ -1,79 +1,65 @@
 package teamproject.backend.imageFile;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import teamproject.backend.board.BoardRepository;
+import teamproject.backend.domain.Board;
 import teamproject.backend.domain.ImageFile;
 import teamproject.backend.domain.User;
+import teamproject.backend.imageFile.S3.S3DAO;
 import teamproject.backend.imageFile.dto.ImageFileResponse;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ImageFileServiceImpl implements ImageFileService{
-
-    private final AmazonS3 amazonS3;
+    private final S3DAO s3DAO;
     private final ImageFileRepository imageFileRepository;
     private final UserRepository userRepository;
-    @Value("${cloud.aws.s3.bucket}")
-    public String bucket;
+    private final BoardRepository boardRepository;
 
     @Override
-    @Transactional
     public ImageFileResponse save(MultipartFile multipartFile, Long userId) throws IOException {
-        //유저 검증
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()) throw new BaseException(BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS);
 
-        //파일 이름 변경(중복 방지)
-        String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+        String s3FileName = s3DAO.upload(multipartFile);
 
-        //사진 변환
-        ObjectMetadata objMeta = new ObjectMetadata();
-        objMeta.setContentLength(multipartFile.getInputStream().available());
-
-        //s3에 사진 저장
-        amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
-
-        //DB에 사진 정보 저장
-        ImageFile imageFile = new ImageFile(s3FileName, amazonS3.getUrl(bucket, s3FileName).toString(), user.get());
+        String url = s3DAO.getURL(s3FileName);
+        ImageFile imageFile = new ImageFile(s3FileName, url, user.get());
         imageFileRepository.save(imageFile);
 
-        return new ImageFileResponse(true, s3FileName, amazonS3.getUrl(bucket, s3FileName).toString());
+        return new ImageFileResponse(true, s3FileName, url);
     }
 
     @Override
-    public ImageFileResponse findById(Long imageId) {
-        Optional<ImageFile> imageFile = imageFileRepository.findById(imageId);
-        if(imageFile.isEmpty()) throw new BaseException(BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS);// 존재하지 않는 사진입니다. 새로 만들기
-        return new ImageFileResponse(true, imageFile.get().getFileName(), imageFile.get().getUrl());
+    public void delete(String name) {
+        s3DAO.delete(name);
+
+        ImageFile imageFile = imageFileRepository.findByFileName(name);
+        imageFileRepository.delete(imageFile);
     }
 
     @Override
-    @Transactional
-    public void delete(String url) {
-        //DB 삭제
-        ImageFile imageFile = imageFileRepository.findByUrl(url);
-        if(imageFile != null) {
-            imageFileRepository.delete(imageFile);
-            return;
+    public Board getUsedBoard(ImageFile imageFile) {
+        User user = imageFile.getUser();
+        Board usedImage = null;
+
+        List<Board> boards = boardRepository.findByUser(user);
+        for(Board board : boards){
+            if(board.getThumbnail().equals(imageFile.getUrl())){
+                usedImage = board;
+                break;
+            }
         }
 
-        //이름추출
-        int index = url.lastIndexOf("/");
-        String name = url.substring(index + 1);
-
-        //s3 삭제
-        amazonS3.deleteObject(bucket, name);
+        return usedImage;
     }
 }

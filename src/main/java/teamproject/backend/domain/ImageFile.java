@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Entity
@@ -21,6 +22,12 @@ public class ImageFile {
     @Column
     private String url;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @Column
+    private Long boardId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -30,5 +37,14 @@ public class ImageFile {
         this.fileName = fileName;
         this.url = url;
         this.user = user;
+        this.createDate = new Date(System.currentTimeMillis());
+    }
+
+    public Long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
     }
 }

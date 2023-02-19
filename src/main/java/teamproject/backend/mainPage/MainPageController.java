@@ -69,7 +69,7 @@ public class MainPageController {
      * @return
      */
     @GetMapping("/main/best/liked/list")
-    public BaseResponse boardListOrderByLiked(){
+    public BaseResponse boardListOrderByLiked() {
         List<BoardResponseInCardFormat> pages = boardService.findBoarListByLiked();
         return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
