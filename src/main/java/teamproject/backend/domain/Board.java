@@ -30,7 +30,7 @@ public class Board{
     private String title;
 
     //글 내용
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String text;
 
     //글 작성 시간

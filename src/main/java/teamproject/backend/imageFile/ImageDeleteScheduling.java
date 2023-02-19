@@ -17,7 +17,7 @@ public class ImageDeleteScheduling {
     private final ImageFileService imageFileService;
 
     //@Scheduled(cron = "0 0/3 * 1/1 * ?")// 매 3분마다 - 테스트 시 사용
-    @Scheduled(cron = "0 0 2 1/1 * ? *") // 매일 새벽 2시
+    @Scheduled(cron = "0 0 2 1/1 * ?") // 매일 새벽 2시
     public void deleteUnusedImages(){
         Date ago6Hours = getAgoHours(6);
         //생성일로부터 6시간 이상 경과했으면서 동시에 board_id가 null인 이미지를 모두 찾음
