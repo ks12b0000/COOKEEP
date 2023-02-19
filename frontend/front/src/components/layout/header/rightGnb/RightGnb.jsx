@@ -27,6 +27,7 @@ const RightGnb = () => {
         console.log(res);
     } catch (err) {
         dispatch(logoutUser());
+        console.log(err.response);
     }
   }
 
