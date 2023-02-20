@@ -1,8 +1,19 @@
 import styled from "@emotion/styled";
+import {useSelector} from "react-redux";
+import * as React from 'react';
+import DetailBtn from "../detail/detailBtn/DetailBtn";
+import categoryHttp from "../../../http/categoryHttp";
+import {useNavigate} from "react-router";
+
 
 function TopContent({detailPost}) {
+
     const dt = new Date(detailPost?.create_date);
     const DateString =dt.toLocaleDateString()
+    const {userId} = useSelector(state => state.persistedReducer.userReducer);
+    const {board_id} = detailPost;
+
+
     return(
         <TopContainer>
             <TopHeader>
@@ -13,14 +24,20 @@ function TopContent({detailPost}) {
                 </div>
                 <h3>{detailPost.user_name}</h3>
                 <TopHeaderIconWrap>
-                    <li>
-                        <p><img src={`${process.env.PUBLIC_URL}/image/like.png`} alt=""/></p>
-                        <p>{detailPost.liked}</p>
-                    </li>
-                    <li>
-                        <p><img src={`${process.env.PUBLIC_URL}/image/message-dots-circle.png`} alt=""/></p>
-                        <p>{detailPost.commented}</p>
-                    </li>
+                    {detailPost.user_id === userId ?
+                        <DetailBtn board_id={board_id} />:
+                        <>
+                          <li>
+                          <p><img src={`${process.env.PUBLIC_URL}/image/like.png`} alt=""/></p>
+                          <p>{detailPost.liked}</p>
+                          </li>
+                          <li>
+                          <p><img src={`${process.env.PUBLIC_URL}/image/message-dots-circle.png`} alt=""/></p>
+                          <p>{detailPost.commented}</p>
+                         </li>
+                        </>
+                    }
+
 
                 </TopHeaderIconWrap>
 

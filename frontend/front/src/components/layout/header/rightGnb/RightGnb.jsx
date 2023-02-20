@@ -24,7 +24,7 @@ const RightGnb = () => {
   const LoginCheck = async () => {
     try {
         const res = await authHttp.getIsLoggedIn();
-        console.log(res);
+
     } catch (err) {
         dispatch(logoutUser());
         console.log(err.response);
