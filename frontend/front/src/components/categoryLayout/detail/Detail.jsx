@@ -17,6 +17,7 @@ import Footer from "../../layout/footer/Footer";
 import Banner from "../../layout/home/banner/Banner";
 import TopContent from "../cateItem/top-content";
 
+
 function Detail() {
     const categoryHttp = new CategoryHttp();
     const writeHttp = new WriteHttp();
@@ -31,7 +32,7 @@ function Detail() {
     const [detailPost, setDetailPost] = useState([]);
 
     const {isOpen,controller} = useModal();
-     console.log(detailPost);
+
     const FetchDelete = async () => {
         try {
             await categoryHttp.deleteCategoryList(id,userId);
@@ -78,11 +79,7 @@ function Detail() {
             <Container>
 
                 <TopContent detailPost={detailPost} />
-                {/*{detailUserId === userId ?*/}
-                {/*<ButtonWrap>*/}
-                {/*  <ButtonStyle onClick={controller}>삭제</ButtonStyle>*/}
-                {/*  <ButtonStyle onClick={() => navigate(`/${id}/edit`)}>수정</ButtonStyle>*/}
-                {/*</ButtonWrap>  : null}*/}
+
                 <CommentUpload boardId={id} />
                 <CommentList boardId={id} />
             </Container>

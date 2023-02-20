@@ -26,7 +26,7 @@ const Quill = ({quillValue,setQuillValue}) => {
         input.addEventListener('change', async () => {
 
             const file = input.files[0];
-            console.log(file.length);
+
 
             // multer에 맞는 형식으로 데이터 만들어준다.
             const formData = new FormData();

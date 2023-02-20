@@ -44,7 +44,7 @@ function WritingForm() {
     const [error, setError] = useState(false);
 
     const onChange = (e) =>{
-        console.log(e.target.value);
+
         setCategoryValue(e.target.value);
     }
 
