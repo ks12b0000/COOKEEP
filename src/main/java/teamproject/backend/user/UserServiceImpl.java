@@ -166,13 +166,22 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     public User checkUserHasLogin(Cookie[] cookies){
         Cookie accessCookie = cookieService.findCookie("accessToken", cookies);
+        Cookie refreshCookie = cookieService.findCookie("refreshToken", cookies);
 
-        if (accessCookie == null) {
+        if (accessCookie == null && refreshCookie == null) {
             throw new BaseException(JWT_TOKEN_INVALID);
         }
 
-        String token = accessCookie.getValue();
-        String username = jwtService.getUsernameByJwt(token);
+        String username = null;
+        String token;
+        if(accessCookie != null){
+            token = accessCookie.getValue();
+            username = jwtService.getUsernameByJwt(token);
+        }
+        else if(refreshCookie != null){
+            token = refreshCookie.getValue();
+            username = jwtService.getUsernameByJwt(token);
+        }
 
         User user = userRepository.findByUsername(username);
         if(user == null){
