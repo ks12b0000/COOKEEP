@@ -2,14 +2,17 @@ package teamproject.backend.mypage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardLike;
+import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mypage.dto.*;
+import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.utils.SHA256;
 
@@ -32,6 +35,7 @@ public class MyPageServiceImpl implements MyPageService {
     private final MyPageRepository myPageRepository;
     private final LikeBoardRepository likeBoardRepository;
     private final BoardRepository boardRepository;
+    private final NotificationRepository notificationRepository;
 
     /**
      * 마이페이지 조회
@@ -189,6 +193,21 @@ public class MyPageServiceImpl implements MyPageService {
         GetBoardByUserResponse getBoardByUserResponse = GetBoardByUserResponse.builder().boardList(userBoards).build();
 
         return getBoardByUserResponse;
+    }
+
+    /**
+     * 알림 목록 가져오기
+     * @param user_id
+     * @return
+     */
+    @Override
+    public GetNotificationResponse notificationByUser(Long user_id) {
+        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        List<NotificationResponse> notificationList = notificationRepository.findByUser(user).stream().map(Notification::toDto).collect(Collectors.toList());
+
+        GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder().notificationList(notificationList).build();
+
+        return getNotificationResponse;
     }
 
 }

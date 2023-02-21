@@ -46,7 +46,7 @@ public class Board{
     @Column
     private Integer commented;
 
-    @Column(columnDefinition = "integer default 0", nullable = false)
+    @Column
     private Integer view;
 
     public Board(FoodCategory foodCategory, BoardWriteRequest boardWriteRequest, User user) {
@@ -58,6 +58,7 @@ public class Board{
         this.thumbnail = boardWriteRequest.getThumbnail();
         this.liked = 0;
         this.commented = 0;
+        this.view = 0;
     }
 
     public void update(BoardWriteRequest boardWriteRequest, FoodCategory foodCategory){
