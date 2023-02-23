@@ -43,10 +43,10 @@ public class ImageFileServiceImpl implements ImageFileService{
 
     @Override
     @Transactional
-    public void delete(String name) {
-        s3DAO.delete(name);
+    public void delete(String fileName) {
+        s3DAO.delete(fileName);
 
-        ImageFile imageFile = imageFileRepository.findByFileName(name);
+        ImageFile imageFile = imageFileRepository.findByFileName(fileName);
         imageFileRepository.delete(imageFile);
     }
 

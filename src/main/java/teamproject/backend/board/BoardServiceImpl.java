@@ -15,6 +15,7 @@ import teamproject.backend.boardTag.BoardTagService;
 import teamproject.backend.domain.*;
 import teamproject.backend.foodCategory.FoodCategoryService;
 import teamproject.backend.imageFile.ImageFileRepository;
+import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
@@ -39,6 +40,8 @@ public class BoardServiceImpl implements BoardService{
     private final BoardCommentRepository boardCommentRepository;
     private final BoardCommentReplyRepository boardCommentReplyRepository;
     private final BoardTagService boardTagService;
+    private final ImageFileService imageFileService;
+
     private static final String DEFAULT_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
     @Override
     @Transactional
@@ -199,7 +202,7 @@ public class BoardServiceImpl implements BoardService{
     private void deleteImageAll(Board board){
         List<ImageFile> imageFiles = imageFileRepository.findByBoardId(board.getBoardId());
         for(ImageFile imageFile : imageFiles){
-            imageFileRepository.delete(imageFile);
+            imageFileService.delete(imageFile.getFileName());
         }
     }
 
