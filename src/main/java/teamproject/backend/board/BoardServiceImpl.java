@@ -196,16 +196,12 @@ public class BoardServiceImpl implements BoardService{
         }
     }
 
-    @Transactional
     private void deleteImageAll(Board board){
-        //글삭제 알고리즘
+        List<ImageFile> imageFiles = imageFileRepository.findByBoardId(board.getBoardId());
+        for(ImageFile imageFile : imageFiles){
+            imageFileRepository.delete(imageFile);
+        }
     }
-
-    /*private List<String> getImageUrlInText(String text){
-        List<String> urls = new LinkedList<>();
-
-        return null;
-    }*/
 
 
     @Override
