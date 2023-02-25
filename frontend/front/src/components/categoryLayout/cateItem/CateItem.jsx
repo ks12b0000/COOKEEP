@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import {Link, useParams} from "react-router-dom";
+
 import Pagination from "../pagination/Pagination";
 import { useState, useEffect } from "react";
 import CategoryHttp from "../../../http/categoryHttp";
@@ -18,7 +18,7 @@ function CateItem({cateItemName}) {
 
     const LastIndex = currentPage * showPost;
     const FirstIndex = LastIndex - showPost;
-    const currentPost = posts.reverse().slice(FirstIndex, LastIndex);
+    const currentPost = posts.slice(FirstIndex, LastIndex);
     const paginate = (pageNum) => setCurrentPage(pageNum);
     const prevPage = () => setCurrentPage(currentPage - 1);
     const nextPage = () => setCurrentPage(currentPage + 1);

@@ -15,6 +15,7 @@ import teamproject.backend.boardTag.BoardTagService;
 import teamproject.backend.domain.*;
 import teamproject.backend.foodCategory.FoodCategoryService;
 import teamproject.backend.imageFile.ImageFileRepository;
+import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
@@ -39,6 +40,8 @@ public class BoardServiceImpl implements BoardService{
     private final BoardCommentRepository boardCommentRepository;
     private final BoardCommentReplyRepository boardCommentReplyRepository;
     private final BoardTagService boardTagService;
+    private final ImageFileService imageFileService;
+
     private static final String DEFAULT_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
     @Override
     @Transactional
@@ -196,16 +199,12 @@ public class BoardServiceImpl implements BoardService{
         }
     }
 
-    @Transactional
     private void deleteImageAll(Board board){
-        //글삭제 알고리즘
+        List<ImageFile> imageFiles = imageFileRepository.findByBoardId(board.getBoardId());
+        for(ImageFile imageFile : imageFiles){
+            imageFileService.delete(imageFile.getFileName());
+        }
     }
-
-    /*private List<String> getImageUrlInText(String text){
-        List<String> urls = new LinkedList<>();
-
-        return null;
-    }*/
 
 
     @Override

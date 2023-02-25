@@ -2,6 +2,8 @@ package teamproject.backend.mypage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.mypage.dto.*;
@@ -131,5 +133,18 @@ public class MyPageController {
         GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(user_id);
 
         return new BaseResponse("내가 쓴 글 목록을 불러왔습니다.", getBoardByUserResponse);
+    }
+
+    /**
+     * 알림 목록 가져오기
+     * [GET] /auth/user/notification/list/{user_id}
+     * @param user_id
+     * @return
+     */
+    @GetMapping("/auth/user/notification/list/{user_id}")
+    public BaseResponse notificationList(@PathVariable Long user_id) {
+        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id);
+
+        return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }
 }

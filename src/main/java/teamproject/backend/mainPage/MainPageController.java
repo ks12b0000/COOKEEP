@@ -2,13 +2,17 @@ package teamproject.backend.mainPage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import teamproject.backend.board.BoardService;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.domain.Tag;
 import teamproject.backend.mainPage.dto.GetSearchByResponse;
+import teamproject.backend.mypage.dto.GetNotificationResponse;
 import teamproject.backend.response.BaseResponse;
 
 import java.util.List;
@@ -69,7 +73,7 @@ public class MainPageController {
      * @return
      */
     @GetMapping("/main/best/liked/list")
-    public BaseResponse boardListOrderByLiked(){
+    public BaseResponse boardListOrderByLiked() {
         List<BoardResponseInCardFormat> pages = boardService.findBoarListByLiked();
         return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
@@ -83,5 +87,18 @@ public class MainPageController {
     public BaseResponse boardListOrderByCommented(){
         List<BoardResponseInCardFormat> pages = boardService.findBoarListByCommented();
         return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+    }
+
+    /**
+     * 알림 목록 가져오기
+     * [GET] /auth/main/user/notification/list/{user_id}
+     * @param user_id
+     * @return
+     */
+    @GetMapping("/auth/main/user/notification/list/{user_id}")
+    public BaseResponse notificationList(@PathVariable Long user_id) {
+        GetNotificationResponse getNotificationResponse = mainPageService.notificationByUser(user_id);
+
+        return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }
 }

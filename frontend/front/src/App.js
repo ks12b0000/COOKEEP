@@ -7,12 +7,10 @@ import Login from "./pages/login/Login";
 import MyPage from "./pages/myPage/MyPage";
 import SignUp from "./pages/signUp/SignUp";
 import Japanese from "./pages/category/japanese/Japanese";
-
 import PrivateRoute from "./until/PrivateRoute";
 import KaKaoLogin from "./pages/login/KakaoLogin";
 import GoogleLogin from "./pages/login/GoogleLogin";
 import NaverLogin from "./pages/login/NaverLogin";
-import Layout from "./components/layout/Layout";
 import Detail from "./components/categoryLayout/detail/Detail";
 import Chinese from "./pages/category/ chinese/ Chinese";
 import Western from "./pages/category/ western/ Western";
@@ -22,7 +20,6 @@ import Vegan from "./pages/category/vegan/Vegan";
 import Edit from "./components/categoryLayout/edit/Edit";
 import Korean from "./pages/category/korean/Korean";
 import Writing from "./components/categoryLayout/writing/Writing";
-import MyComment from "./pages/myPage/MyPosts";
 import MyPosts from "./pages/myPage/MyPosts";
 import MyLikes from "./pages/myPage/MyLikes";
 
@@ -37,9 +34,10 @@ function App() {
                         <Route path="/mypage/:userId" element={<MyPage />}></Route>
                         <Route path="/myposts/:userId" element={<MyPosts />}></Route>
                         <Route path="/mylikes/:userId" element={<MyLikes />}></Route>
-                        <Route path=":category/writing" element={<Writing />}></Route>
+
                     </Route>
                     {/*카테고리*/}
+                    <Route path=":category/writing" element={<Writing />}></Route>
                     <Route path="/korea/*" element={<Korean/>}></Route>
                     <Route path="/western" element={<Western />}></Route>
                     <Route path="/chinese" element={<Chinese />}></Route>

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import Category from "../Category";
+import Quill from "../../../components/categoryLayout/writing/Quill";
 
 
 const Container = styled.section`
@@ -28,6 +29,7 @@ function Vegan() {
     }
     return (
         <>
+
             <Category {...Props} />
         </>
     );

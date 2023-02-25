@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+
 import {Link, useParams} from "react-router-dom";
 function Post({data}) {
     return(
@@ -6,12 +7,14 @@ function Post({data}) {
         { data.map((item,index) =>{
                 const dt = new Date(item.create_date);
                 const DateString =dt.toLocaleDateString()
+
           return(
             <PopularList key ={index}>
               <Link to  ={`/category/${item.board_id}`}>
                 <PopularListImg><img src={item.thumbnail} alt="썸네일"/></PopularListImg>
                   <PopularTextBox>
                     <TextBoxLeft>
+                        <h2>{item.category}</h2>
                       <LeftYear><span>{DateString}</span></LeftYear>
                       <LeftTitle><span>{item.title}</span></LeftTitle>
                       <LeftTag>
@@ -76,6 +79,12 @@ const PopularTextBox = styled.div`
 
 const TextBoxLeft = styled.div`
   width: 65%;
+  h2{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #CBCBCB;
+  }
 `
 
 const LeftYear = styled.p`
@@ -86,7 +95,7 @@ const LeftYear = styled.p`
     color: #CBCBCB;
   
   }
-  padding-bottom:2px;
+  padding:4px 0;
   margin:0;
 `
 const LeftTitle = styled.p`
