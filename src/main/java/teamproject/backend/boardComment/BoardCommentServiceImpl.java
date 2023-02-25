@@ -47,7 +47,9 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         BoardComment comment = new BoardComment(user, board, writeRequest.getText());
         boardCommentRepository.save(comment);
         board.increaseCommentCount();
-        notificationSave(user, board);
+        if (board.getUser().getId() != user.getId()) {
+            notificationSave(user, board);
+        }
 
         return comment.getBoardCommentId();
     }
@@ -138,9 +140,7 @@ public class BoardCommentServiceImpl implements BoardCommentService{
     private void notificationSave(User user, Board board) {
         String message = "내가 작성한 글 " + "[" + board.getTitle() + "] 에 " + user.getUsername() + "님이 댓글을 달았습니다.";
         String url = "https://www.teamprojectvv.shop/category/" + board.getBoardId();
-        if (board.getUser().getId() != user.getId()) {
-            Notification notification = new Notification(board.getUser(), message, url, board);
-            notificationRepository.save(notification);
-        }
+        Notification notification = new Notification(board.getUser(), message, url, board);
+        notificationRepository.save(notification);
     }
 }
