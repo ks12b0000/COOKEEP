@@ -201,9 +201,9 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetNotificationResponse notificationByUser(Long user_id) {
+    public GetNotificationResponse notificationByUser(Long user_id, Sort sort) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        List<NotificationResponse> notificationList = notificationRepository.findByUser(user).stream().map(Notification::toDto).collect(Collectors.toList());
+        List<NotificationResponse> notificationList = notificationRepository.findByUser(user, sort).stream().map(Notification::toDto).collect(Collectors.toList());
 
         GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder().notificationList(notificationList).build();
 

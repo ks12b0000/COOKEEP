@@ -138,7 +138,9 @@ public class BoardCommentServiceImpl implements BoardCommentService{
     private void notificationSave(User user, Board board) {
         String message = "내가 작성한 글 " + "[" + board.getTitle() + "] 에 " + user.getUsername() + "님이 댓글을 달았습니다.";
         String url = "https://www.teamprojectvv.shop/category/" + board.getBoardId();
-        Notification notification = new Notification(board.getUser(), message, url, board);
-        notificationRepository.save(notification);
+        if (board.getUser().getId() != user.getId()) {
+            Notification notification = new Notification(board.getUser(), message, url, board);
+            notificationRepository.save(notification);
+        }
     }
 }

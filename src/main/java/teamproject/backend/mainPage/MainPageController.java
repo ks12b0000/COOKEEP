@@ -96,8 +96,8 @@ public class MainPageController {
      * @return
      */
     @GetMapping("/auth/main/user/notification/list/{user_id}")
-    public BaseResponse notificationList(@PathVariable Long user_id) {
-        GetNotificationResponse getNotificationResponse = mainPageService.notificationByUser(user_id);
+    public BaseResponse notificationList(@PathVariable Long user_id, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
+        GetNotificationResponse getNotificationResponse = mainPageService.notificationByUser(user_id, sort);
 
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }
