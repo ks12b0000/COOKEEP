@@ -57,6 +57,14 @@ function Login() {
     //focus 색상 구분
     const [IsError, setIsError] = useState(false);
 
+    //모달창 통신 완료 후 UI변경용 state
+    const [FoundId, setFoundId] = useState(false);
+    const [FoundPassword, setFoundPassword] = useState(false);
+
+    //서버에서 받은 찾은 아이디와 비번 저장용 state
+    const [FoundIdText, setFoundIdText] = useState("");
+    const [FoundPasswordText, setFoundPasswordText] = useState("");
+
 
     // 일반 로그인 동작 수행 함수
     const onLogin = async (e) => {
@@ -112,8 +120,27 @@ function Login() {
     const onPasswordModal = (e)=>{
         e.preventDefault();
 
+        setFindId(false);
         setIsModal(true);
         setFindPassword(true);
+        setFindId(false);
+        setFoundId(false);
+        setEmailForFindId("");
+    }
+
+    // 아이디 찾은 후 로그인 화면 이동
+    const onLoginUI = (e)=>{
+        e.preventDefault();
+
+        setIsModal(false);
+        setFindPassword(false);
+        setFindId(false);
+        setFindId(false);
+        setFoundId(false);
+        setFoundPassword(false);
+        setEmailForFindId("");
+        setEmailForFindPassword("");
+        setUsernameForFindPassword("");
     }
 
     // 아이디 모달창 X버튼
@@ -135,6 +162,7 @@ function Login() {
     // 아이디 찾기 동작 실행 함수
     const onFindId = async (e) => {
         e.preventDefault();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         const body = {
             email: EmailForFindId
@@ -142,52 +170,92 @@ function Login() {
 
         if(EmailForFindId===''){
             setIsError(true);
-            idRef.current.focus();
-            setIdText("이메일을 입력하세요");
+            emailRef.current.focus();
+            setEmailText("이메일을 입력하세요");
             setTimeout(() => {
-                setIdText("");
+                setEmailText("");
+                setIsError(false);
+            }, 5000);
+        }else if(emailRegex.test(EmailForFindId) === false){
+            setIsError(true);
+            emailRef.current.focus();
+            setEmailText("이메일 형식으로 입력해주세요");
+            setTimeout(() => {
+                setEmailText("");
                 setIsError(false);
             }, 5000);
         }else{
             try {
                 const res = await userHttp.postFindId(body);
                 console.log(res);
+                if(res.data.code===1000){
+                    setFoundId(true);
+                    setFoundIdText(res.data.result.username);
+                }
             } catch (err) {
-                console.log(err);
-                setIdText(err.response.data.message);
+                setIsError(true);
+                emailRef.current.focus();
+                setEmailText(err.response.data.message);
+                setTimeout(() => {
+                    setEmailText("");
+                    setIsError(false);
+                }, 5000);
             }
         }
-
-        // console.log(EmailForFindId);
-        // setTimeout(() => {
-        //     setEmailForFindId("");
-        //     setMailText("");
-        // }, 5000);
     };
 
     // 비밀번호 찾기 동작 실행 함수
     const onFindPassword = async (e) => {
         e.preventDefault();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         const body = {
             username: UsernameForFindPassword,
             email: EmailForFindPassword
         };
 
-        try {
-            const res = await userHttp.postFindPassword(body);
-            console.log(res);
-            //새로운 모달창으로 넘어가야함
-        } catch (err) {
-            console.log(err);
-            setPasswordText(err.response.data.message);
+        if(UsernameForFindPassword===""){
+            setIsError(true);
+            idRef.current.focus();
+            setIdText("아이디를 입력하세요");
+            setTimeout(() => {
+                setIdText("");
+                setIsError(false);
+            }, 5000);
+        }else if(EmailForFindPassword===""){
+            setIsError(true);
+            emailRef.current.focus();
+            setEmailText("이메일을 입력하세요");
+            setTimeout(() => {
+                setEmailText("");
+                setIsError(false);
+            }, 5000);
+        }else if(emailRegex.test(EmailForFindPassword) === false){
+            setIsError(true);
+            emailRef.current.focus();
+            setEmailText("이메일 형식으로 입력해주세요");
+            setTimeout(() => {
+                setEmailText("");
+                setIsError(false);
+            }, 5000);
         }
-
-        // setTimeout(() => {
-        //     setUsernameForFindPassword("");
-        //     setEmailForFindPassword("");
-        //     setMailText("");
-        // }, 5000);
+        else{
+            try {
+                const res = await userHttp.postFindPassword(body);
+                console.log(res);
+                if(res.data.code===1000){
+                    setFoundPassword(true);
+                    setFoundPasswordText(res.data.result.password);
+                }
+            } catch (err) {
+                console.log(err);
+                setEmailText(err.response.data.message);
+                setTimeout(() => {
+                    setEmailText("");
+                    setIsError(false);
+                }, 5000);
+            }
+        }
     };
 
     //패스워드 표시 여부 토글
@@ -264,21 +332,36 @@ function Login() {
                 {FindId ? (
                     <>
                         <ModalWrap height="327px">
-                            <ModalTitle>아이디 찾기</ModalTitle>
-                            <XButton onClick={(e) => idXButton(e) } top="7%" />
-                            <ModalText>이메일</ModalText>
-                            <InputWrap>
-                                <LoginInput 
-                                    value={EmailForFindId} 
-                                    type="email" 
-                                    placeholder="email" 
-                                    onChange={(e) => setEmailForFindId(e.currentTarget.value)} 
-                                    ref={idRef}
-                                    isError={IsError}
-                                />
-                                <ErrorMessage>{IdText}</ErrorMessage>
-                            </InputWrap>
-                            <LoginButton onClick={(e) => onFindId(e)}>확 인</LoginButton>
+                            {FoundId
+                                ?   
+                                    <>
+                                        <CheckImg />
+                                        <DoneTitle>아이디 찾기 완료</DoneTitle>
+                                        <DoneText marginTop="28px" width="241px">{`고객님 아이디는 ${FoundIdText} 입니다.`}</DoneText>
+                                        <IdButtonWrap>
+                                            <DoneIdButton color="#FF4122" Backcolor="#FFFFFF" onClick={(e)=>onPasswordModal(e)}>비밀번호 찾기</DoneIdButton>
+                                            <DoneIdButton color="#FFFFFF" Backcolor="#FF4122" onClick={(e)=>{onLoginUI(e)}}>로그인 하기</DoneIdButton>
+                                        </IdButtonWrap>
+                                    </>
+                                :
+                                    <>
+                                        <ModalTitle>아이디 찾기</ModalTitle>
+                                        <XButton onClick={(e) => idXButton(e) } top="7%" />
+                                        <ModalText>이메일</ModalText>
+                                        <InputWrap>
+                                            <LoginInput 
+                                                value={EmailForFindId} 
+                                                type="email" 
+                                                placeholder="email" 
+                                                onChange={(e) => setEmailForFindId(e.currentTarget.value)} 
+                                                ref={emailRef}
+                                                isError={IsError}
+                                            />
+                                            <ErrorMessage>{EmailText}</ErrorMessage>
+                                        </InputWrap>
+                                        <LoginButton onClick={(e) => onFindId(e)}>확 인</LoginButton>
+                                    </>
+                            }
                         </ModalWrap>
                     </>
                 ) : (
@@ -288,34 +371,47 @@ function Login() {
                 {FindPassword ? (
                     <>
                         <ModalWrap height="430px">
-                            <ModalTitle>비밀번호 찾기</ModalTitle>
-                            <XButton onClick={(e) => passwordXButton(e)} top="5%" />
-                            <ModalText>아이디를 입력해 주세요</ModalText>
-                            <InputWrap>
-                                <LoginInput 
-                                    value={UsernameForFindPassword} 
-                                    type="id" placeholder="id" 
-                                    onChange={(e) => setUsernameForFindPassword(e.currentTarget.value)} 
-                                    marginBottom="24px" 
-                                    ref={emailRef}
-                                    isError={IsError}
-                                />
-                                <ErrorMessage>{EmailText}</ErrorMessage>
-                            </InputWrap>
-                            <ModalText>이메일 주소를 입력해 주세요</ModalText>
-                            <InputWrap>
-                                <LoginInput 
-                                    value={EmailForFindPassword} 
-                                    type="email" placeholder="email" 
-                                    onChange={(e) => setEmailForFindPassword(e.currentTarget.value)} 
-                                    marginBottom="48px" 
-                                    ref={passwordRef}
-                                    isError={IsError}
-                                />
-                                <ErrorMessage>{EmailText}</ErrorMessage>
-                            </InputWrap>
-                            <ErrorMessage>{PasswordText}</ErrorMessage>
-                            <LoginButton onClick={(e) => onFindPassword(e)}>확 인</LoginButton>
+                            {FoundPassword
+                                ?
+                                <>
+                                    <CheckImg />
+                                    <DoneTitle>임시 비밀번호 발급</DoneTitle>
+                                    <DoneText marginTop="44px" width="240px">{`고객님의 임시 비밀번호는 ${FoundPasswordText} 입니다.`}</DoneText>
+                                    <DoneText marginTop="16px" width="300px">비밀번호는 마이페이지에서 변경 가능합니다.</DoneText>
+                                    <DonePasswordButton onClick={(e)=>{onLoginUI(e)}}>로그인 하기</DonePasswordButton>
+                                </>
+                                :
+                                    <>
+                                        <ModalTitle>비밀번호 찾기</ModalTitle>
+                                        <XButton onClick={(e) => passwordXButton(e)} top="5%" />
+                                        <ModalText>아이디를 입력해 주세요</ModalText>
+                                        <InputWrap>
+                                            <LoginInput 
+                                                value={UsernameForFindPassword} 
+                                                type="id" placeholder="id" 
+                                                onChange={(e) => setUsernameForFindPassword(e.currentTarget.value)} 
+                                                marginBottom="24px" 
+                                                ref={idRef}
+                                                isError={IsError}
+                                            />
+                                            <ErrorMessage>{IdText}</ErrorMessage>
+                                        </InputWrap>
+                                        <ModalText>이메일 주소를 입력해 주세요</ModalText>
+                                        <InputWrap>
+                                            <LoginInput 
+                                                value={EmailForFindPassword} 
+                                                type="email" placeholder="email" 
+                                                onChange={(e) => setEmailForFindPassword(e.currentTarget.value)} 
+                                                marginBottom="48px" 
+                                                ref={emailRef}
+                                                isError={IsError}
+                                            />
+                                            <ErrorMessage>{EmailText}</ErrorMessage>
+                                        </InputWrap>
+                                        <ErrorMessage>{PasswordText}</ErrorMessage>
+                                        <LoginButton onClick={(e) => onFindPassword(e)}>확 인</LoginButton>     
+                                    </>
+                            }
                         </ModalWrap>
                     </>
                 ) : (
@@ -620,5 +716,69 @@ const ModalText = styled.div`
     text-align: left;
 `;
 
+const CheckImg = styled.div`
+    width: 45px;
+    height: 45px;
+    background-size: 44px;
+    background: url(image/check-mark.png);
+`
+
+const DoneTitle = styled.div`
+    color: #FF4122;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    margin-top: 30px;
+`
+
+const DoneText = styled.div`
+    width: ${props=>props.width};
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    text-align: center;
+    color: #000000;
+    margin-top: ${props=>props.marginTop}
+`
+
+const IdButtonWrap = styled.div`
+    display: grid;
+    grid-template-columns: 48% 48%;
+    justify-content: space-between;
+    width: 343px;
+    height: 51px;
+    margin-bottom: 30px;
+`
+
+const DoneIdButton = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 51px;
+    border-radius: 5px;
+    margin-top: 28px;
+    background-color: ${props=>props.Backcolor};
+    cursor: pointer;
+    color: ${props=>props.color};
+    font-weight: 600;
+    font-size: 16px;
+    border: 1px solid #FF4122;
+`
+
+const DonePasswordButton = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 343px;
+    height: 51px;
+    border-radius: 5px;
+    margin-top: 44px;
+    background-color: #FF4122;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+`
 
 export default Login;
