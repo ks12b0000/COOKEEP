@@ -9,7 +9,6 @@ import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -131,5 +130,11 @@ public class MyPageController {
         GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(user_id);
 
         return new BaseResponse("내가 쓴 글 목록을 불러왔습니다.", getBoardByUserResponse);
+    }
+
+    @DeleteMapping("/auth/user/like/list/{user_id}")
+    public BaseResponse deleteBoardLikesByUser(@RequestBody DeleteBoardLikesRequest request, @PathVariable Long user_id) {
+        myPageService.deleteBoardLikes(request, user_id);
+        return new BaseResponse("선택한 유저의 좋아요를 삭제했습니다.");
     }
 }
