@@ -24,5 +24,5 @@ public interface MyPageService {
 
     public GetBoardByUserResponse boardByUser(Long user_id);
 
-    public GetNotificationResponse notificationByUser(Long user_id);
+    public GetNotificationResponse notificationByUser(Long user_id, Sort sort);
 }

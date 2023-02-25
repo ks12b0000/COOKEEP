@@ -34,7 +34,7 @@ public class Notification {
     private String message;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date notification_time;
+    private Date createDate;
 
     @Column
     private String notification_url;
@@ -43,14 +43,14 @@ public class Notification {
     public Notification(User user, String message, String notification_url) {
         this.user = user;
         this.message = message;
-        this.notification_time = new Date(System.currentTimeMillis());
+        this.createDate = new Date(System.currentTimeMillis());
         this.notification_url = notification_url;
     }
 
     public Notification (User user, String message, String notification_url, Board board) {
         this.user = user;
         this.message = message;
-        this.notification_time = new Date(System.currentTimeMillis());
+        this.createDate = new Date(System.currentTimeMillis());
         this.notification_url = notification_url;
         this.board = board;
     }
@@ -58,10 +58,10 @@ public class Notification {
     public NotificationResponse toDto(){
         return NotificationResponse.builder()
                 .notification_id(id)
-                .user(user)
-                .board(board)
+                .user_id(user.getId())
+                .board_id(board.getBoardId())
                 .message(message)
-                .notification_time(notification_time)
+                .createDate(createDate)
                 .notification_url(notification_url)
                 .build();
     }
