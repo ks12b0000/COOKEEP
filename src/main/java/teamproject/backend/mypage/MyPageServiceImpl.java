@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
+import teamproject.backend.board.BoardService;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardLike;
 import teamproject.backend.domain.User;
@@ -15,8 +16,6 @@ import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,6 +31,7 @@ public class MyPageServiceImpl implements MyPageService {
     private final MyPageRepository myPageRepository;
     private final LikeBoardRepository likeBoardRepository;
     private final BoardRepository boardRepository;
+    private final BoardService boardService;
 
     /**
      * 마이페이지 조회
@@ -191,4 +191,17 @@ public class MyPageServiceImpl implements MyPageService {
         return getBoardByUserResponse;
     }
 
+    @Override
+    public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId){
+        User user = myPageRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+
+        for(Long boardId : request.getBoardIdList()){
+            Optional<Board> board = boardRepository.findById(boardId);
+            if(board.isPresent()){
+                if(likeBoardRepository.existsByBoardAndUser(board.get(), user)){
+                    boardService.updateLikeOfBoard(boardId, user);
+                }
+            }
+        }
+    }
 }
