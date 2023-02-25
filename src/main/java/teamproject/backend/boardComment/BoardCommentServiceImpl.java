@@ -47,7 +47,9 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         BoardComment comment = new BoardComment(user, board, writeRequest.getText());
         boardCommentRepository.save(comment);
         board.increaseCommentCount();
-        notificationSave(user, board);
+        if (board.getUser().getId() != user.getId()) {
+            notificationSave(user, board);
+        }
 
         return comment.getBoardCommentId();
     }
