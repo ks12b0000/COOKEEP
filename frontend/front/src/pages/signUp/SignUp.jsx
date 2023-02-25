@@ -61,11 +61,14 @@ function SignUp() {
     const [EmailText, setEmailText] = useState("");
     const [PasswordText, setPasswordText] = useState("");
 
+    //focus 색상 구분
+    const [IsError, setIsError] = useState(false);
 
     //function
     //회원가입 실행 함수
     const onSignUp = async (e) => {
         e.preventDefault();
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{5,}$/;
 
         const body = {
             username: Username,
@@ -75,23 +78,37 @@ function SignUp() {
 
         if (!(Username && Email && Password && CheckPassword)) {
             return alert("모든 값을 입력해주세요");
-        } else if (Password !== CheckPassword) {
+        } else if (passwordRegex.test(Password)===false){
+            setIsError(true);
+            passwordRef.current.focus();
+            setPasswordText("영문, 숫자 조합 5자리 이상으로 입력해주세요");
+            setTimeout(() => {
+                setPasswordText("");
+                setIsError(false);
+            }, 5000);
+        }else if (Password !== CheckPassword) {
+            setIsError(true);
             passwordRef.current.focus();
             setPasswordText("비밀번호와 비밀번호 확인 값이 일치하지 않습니다");
             setTimeout(() => {
                 setPasswordText("");
+                setIsError(false);
             }, 5000);
         } else if (!CheckUsername) {
+            setIsError(true);
             idRef.current.focus();
             setIdText("아이디 중복검사를 진행해 주세요");
             setTimeout(() => {
                 setIdText("");
+                setIsError(false);
             }, 5000);
         } else if (!CheckEmail) {
+            setIsError(true);
             emailRef.current.focus();
             setEmailText("이메일 중복검사를 진행해 주세요");
             setTimeout(() => {
                 setEmailText("");
+                setIsError(false);
             }, 5000);
         } else if (!CheckAgree) {
             return alert("회원가입 약관동의를 진행해 주세요");
@@ -109,36 +126,75 @@ function SignUp() {
     //아이디 중복체크 실행 함수
     const onCheckUsername = async (e) => {
         e.preventDefault();
+        const idRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{5,}$/;
 
-        try {
-            const res = await userHttp.getCheckUsername(Username);
-            console.log(res);
-
-            if (!res.data.result.isDuplicate) {
-                setCheckUsername(true);
-                alert(res.data.message);
+        if(Username === ""){
+            setIsError(true);
+            idRef.current.focus();
+            setIdText("아이디를 입력해 주세요");
+            setTimeout(() => {
+                setIdText("");
+                setIsError(false);
+            }, 5000);
+        } else if (idRegex.test(Username)===false){
+            setIsError(true);
+            idRef.current.focus();
+            setIdText("영문, 숫자 조합 5자리 이상으로 입력해주세요");
+            setTimeout(() => {
+                setIdText("");
+                setIsError(false);
+            }, 5000);
+        } else {
+            try {
+                const res = await userHttp.getCheckUsername(Username);
+                console.log(res);
+    
+                if (!res.data.result.isDuplicate) {
+                    setCheckUsername(true);
+                    alert(res.data.message);
+                }
+            } catch (err) {
+                console.log(err);
+                alert(err.response.data.message);
             }
-        } catch (err) {
-            console.log(err);
-            alert(err.response.data.message);
         }
     };
 
     //이메일 중복체크 실행 함수
     const onCheckEmail = async (e) => {
         e.preventDefault();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        try {
-            const res = await userHttp.getCheckEmail(Email);
-            console.log(res);
-
-            if (!res.data.result.isDuplicate) {
-                setCheckEmail(true);
-                alert(res.data.message);
+        if(Email===''){
+            console.log();
+            setIsError(true);
+            emailRef.current.focus();
+            setEmailText("이메일을 입력해 주세요");
+            setTimeout(() => {
+                setEmailText("");
+                setIsError(false);
+            }, 5000);
+        } else if(emailRegex.test(Email) === false){
+            setIsError(true);
+            emailRef.current.focus();
+            setEmailText("이메일 형식으로 입력해주세요");
+            setTimeout(() => {
+                setEmailText("");
+                setIsError(false);
+            }, 5000);
+        }else{
+            try {
+                const res = await userHttp.getCheckEmail(Email);
+                console.log(res);
+    
+                if (!res.data.result.isDuplicate) {
+                    setCheckEmail(true);
+                    alert(res.data.message);
+                }
+            } catch (err) {
+                console.log(err);
+                alert(err.response.data.message);
             }
-        } catch (err) {
-            console.log(err);
-            alert(err.response.data.message);
         }
     };
 
@@ -189,6 +245,7 @@ function SignUp() {
                             onChange={(e) => {
                                 setUsername(e.currentTarget.value);
                             }}
+                            isError={IsError}
                         />
                         <IdButton onClick={(e) => onCheckUsername(e)} isFilled={Username!==''}>중복확인</IdButton>
                         <SignError>{IdText}</SignError>
@@ -204,6 +261,7 @@ function SignUp() {
                             onChange={(e) => {
                                 setEmail(e.currentTarget.value);
                             }}
+                            isError={IsError}
                         />
                         <IdButton onClick={(e) => onCheckEmail(e)} isFilled={Email!==''}>중복확인</IdButton>
                         <SignError>{EmailText}</SignError>
@@ -219,8 +277,9 @@ function SignUp() {
                             onChange={(e) => {
                                 setPassword(e.currentTarget.value);
                             }}
+                            isError={IsError}
                         />
-                        <EyeImg onClick={e=>eye1Toggle(e)}/>
+                        <EyeImg onClick={e=>eye1Toggle(e)} EyeVisible={EyeVisible1}/>
                         <SignError>{PasswordText}</SignError>
                     </SignInputWrap>
 
@@ -234,12 +293,13 @@ function SignUp() {
                             onChange={(e) => {
                                 setCheckPassword(e.currentTarget.value);
                             }}
+                            isError={IsError}
                         />
-                        <EyeImg onClick={e=>eye2Toggle(e)}/>
+                        <EyeImg onClick={e=>eye2Toggle(e)} EyeVisible={EyeVisible2}/>
                     </SignInputWrap>
                     <AgreeText onClick={() => setAgreeModal(true)}>
-                        회원가입 약관동의
                         {CheckAgree ? <img src="image/check.png" alt="checked" /> : <img src="image/check-x.png" alt="checked" />}
+                        회원가입 약관동의
                     </AgreeText>
                     <SignButton onClick={(e) => onSignUp(e)}>가입하기</SignButton>
                     <OtherTextWrap>
@@ -293,7 +353,8 @@ const SignBackground = styled.div`
     justify-content: center;
     align-items: center;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-    padding: 50px 0;
+    padding: ${props=>props.IsDone?'0 0 50px 0':'50px 0 100px 0'};
+    box-sizing: ${props=>props.IsDone?'border-box':''};
 `;
 
 const Logo = styled.div`
@@ -349,6 +410,7 @@ const SignError = styled.div`
     font-weight: 400;
     margin-left: 5px;
     margin-top: 3px;
+    width: 343px;
 `
 
 const SignInputWrap = styled.div`
@@ -376,18 +438,19 @@ const SignInput = styled.input`
         color: #CED4DA;
     }
 
-    :focus {
-        border: 1px solid #FF4122;
-        background-color: #FFEAE4;
+    &:focus {
+        border: ${({ isError }) => (isError ? '1px solid #FF4122' : '1px solid #FFA590')};
+        background-color: ${({ isError }) => (isError ? '#FFEAE4' : 'white')};
     }
 `;
 
 const EyeImg = styled.div`
     width: 22px;
-    height: 20px;
-    background: url(image/eye.png);
+    height: 22px;
+    background: ${props=>props.EyeVisible ? 'url(image/eye-open.png)':'url(image/eye.png)'};
     position: absolute;
-    top: 29.5%;
+    background-repeat: no-repeat;
+    top: ${props=>props.EyeVisible ? '33%':'29.5%'};
     left: 88%;
     cursor: pointer;
 `
@@ -420,10 +483,11 @@ const IdInput = styled.input`
         color: #CED4DA;
     }
 
-    :focus {
-        border: 1px solid #FF4122;
-        background-color: #FFEAE4;
+    &:focus {
+        border: ${({ isError }) => (isError ? '1px solid #FF4122' : '1px solid#FFA590')};
+        background-color: ${({ isError }) => (isError ? '#FFEAE4' : 'white')};
     }
+
 `
 
 const IdButton = styled.button`
@@ -455,9 +519,9 @@ const AgreeText = styled.div`
     font-weight: 400;
 
     img {
-        width: 20px;
-        height: 20px;
-        margin-left: 3px;
+        width: 18px;
+        height: 18px;
+        margin-right: 5px;
         margin-bottom: 4px;
         opacity: 0.8;
     }
@@ -479,7 +543,7 @@ const SignButton = styled.button`
 
 const OtherTextWrap = styled.div`
     display: grid;
-    width: 320px;
+    width: 340px;
     height: 30px;
     grid-template-columns: 33% 27% 33%;
     justify-content: space-between;
@@ -521,7 +585,7 @@ const OtherLogin = styled.div`
     }
     div {
         text-align: center;
-        margin-top: 15px;
+        margin-top: 10px;
         color: #5A5C5F;
         font-weight: 300;
         font-size: 12px;
@@ -533,7 +597,7 @@ const LoginAskWrap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 25px;
 `
 
 const LoginAskText = styled.div`
