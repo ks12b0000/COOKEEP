@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public interface ImageFileService {
     ImageFileResponse save(MultipartFile imageFile, Long userId) throws IOException;
-    void delete(String name);
+    void delete(String fileName);
 
     Board getUsedBoard(ImageFile imageFile);
 }

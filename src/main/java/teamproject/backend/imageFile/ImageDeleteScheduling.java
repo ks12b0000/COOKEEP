@@ -3,6 +3,7 @@ package teamproject.backend.imageFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.ImageFile;
 
@@ -16,7 +17,8 @@ public class ImageDeleteScheduling {
     private final ImageFileRepository imageFileRepository;
     private final ImageFileService imageFileService;
 
-    //@Scheduled(cron = "0 0/3 * 1/1 * ?")// 매 3분마다 - 테스트 시 사용
+    //@Scheduled(cron = "0 0/1 * 1/1 * ?")// 매 3분마다 - 테스트 시 사용
+    @Transactional
     @Scheduled(cron = "0 0 2 1/1 * ?") // 매일 새벽 2시
     public void deleteUnusedImages(){
         Date ago6Hours = getAgoHours(6);
@@ -42,7 +44,7 @@ public class ImageDeleteScheduling {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.HOUR_OF_DAY, -6);
+        calendar.add(Calendar.HOUR_OF_DAY, (-1) * hour);
         return now;
     }
 }
