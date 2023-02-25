@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
+import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final CookieService cookieService;
+    private final NotificationRepository notificationRepository;
 
     /**
      * 회원가입
@@ -46,6 +49,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
         User user = new User(username, email, password, salt);
         userRepository.save(user);
+        notificationSave(user);
 
         return user.getId();
     }
@@ -62,6 +66,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         userRepository.save(user);
 
         SocialUserInfo userInfo = new SocialUserInfo(user.getId(), user.getUsername(), user.getEmail());
+        notificationSave(user);
 
         return userInfo;
     }
@@ -267,4 +272,10 @@ public class UserServiceImpl implements UserService, SocialUserService {
         return findPwResponse;
     }
 
+    private void notificationSave(User user) {
+        String message = "마이페이지에서 새로운 닉네임을 설정해주세요!";
+        String url = "https://www.teamprojectvv.shop/mypage/" + user.getId();
+        Notification notification = new Notification(user, message, url);
+        notificationRepository.save(notification);
+    }
 }
