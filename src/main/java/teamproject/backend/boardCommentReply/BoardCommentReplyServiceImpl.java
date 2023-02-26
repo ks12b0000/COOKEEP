@@ -8,9 +8,8 @@ import teamproject.backend.boardComment.BoardCommentService;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
-import teamproject.backend.domain.BoardComment;
-import teamproject.backend.domain.BoardCommentReply;
-import teamproject.backend.domain.User;
+import teamproject.backend.domain.*;
+import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
 
@@ -27,6 +26,7 @@ public class BoardCommentReplyServiceImpl implements BoardCommentReplyService{
     private final BoardCommentRepository boardCommentRepository;
     private final BoardCommentReplyRepository boardCommentReplyRepository;
     private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -38,6 +38,9 @@ public class BoardCommentReplyServiceImpl implements BoardCommentReplyService{
 
         boardCommentReplyRepository.save(reply);
         comment.increaseReplyCount();
+        if (comment.getBoard().getUser().getId() != user.getId()) {
+            notificationSave(user, comment.getBoard());
+        }
         return reply.getBoardCommentReplyId();
     }
 
@@ -94,5 +97,12 @@ public class BoardCommentReplyServiceImpl implements BoardCommentReplyService{
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
         return user.get();
+    }
+
+    private void notificationSave(User user, Board board) {
+        String message = "내가 작성한 글 " + "[" + board.getTitle() + "] 에 " + user.getUsername() + "님이 대댓글을 달았습니다.";
+        String url = "https://www.teamprojectvv.shop/category/" + board.getBoardId();
+        Notification notification = new Notification(board.getUser(), message, url, board);
+        notificationRepository.save(notification);
     }
 }
