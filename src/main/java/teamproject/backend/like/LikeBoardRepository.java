@@ -14,4 +14,6 @@ public interface LikeBoardRepository extends JpaRepository<BoardLike, Long> {
     List<BoardLike> findByUser(User user);
 
     List<BoardLike> findByBoard(Board board); // 글 삭제 시 좋아요 일괄 삭제를 위함
+
+    boolean existsByBoardAndUser(Board board, User user);
 }
