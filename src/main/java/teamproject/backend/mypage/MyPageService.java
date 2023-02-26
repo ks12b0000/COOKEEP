@@ -4,7 +4,6 @@ import org.springframework.data.domain.Sort;
 import teamproject.backend.mypage.dto.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public interface MyPageService {
 
@@ -24,5 +23,9 @@ public interface MyPageService {
 
     public GetBoardByUserResponse boardByUser(Long user_id);
 
+
+    public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId);
+
     public GetNotificationResponse notificationByUser(Long user_id, Sort sort);
+
 }
