@@ -139,6 +139,7 @@ public class MyPageController {
     public BaseResponse deleteBoardLikesByUser(@RequestBody DeleteBoardLikesRequest request, @PathVariable Long user_id) {
         myPageService.deleteBoardLikes(request, user_id);
         return new BaseResponse("선택한 유저의 좋아요를 삭제했습니다.");
+    }
 
     /**
      * 알림 목록 가져오기
