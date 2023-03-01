@@ -245,7 +245,7 @@ function SignUp() {
                             isError={IsError}
                         />
                         <IdButton onClick={(e) => onCheckUsername(e)} isFilled={Username!==''}>중복확인</IdButton>
-                        <SignError>{IdText}</SignError>
+                        {IdText&&<SignError><ErrorMark/>{IdText}</SignError>}
                     </IdWrap>
                     {/* 이메일 입력 */}
                     <SignName>이메일</SignName>
@@ -261,7 +261,7 @@ function SignUp() {
                             isError={IsError}
                         />
                         <IdButton onClick={(e) => onCheckEmail(e)} isFilled={Email!==''}>중복확인</IdButton>
-                        <SignError>{EmailText}</SignError>
+                        {EmailText&&<SignError><ErrorMark/>{EmailText}</SignError>}
                     </IdWrap>
                     {/* 비밀번호 입력 */}
                     <SignName>비밀번호</SignName>
@@ -277,7 +277,7 @@ function SignUp() {
                             isError={IsError}
                         />
                         <EyeImg onClick={e=>eye1Toggle(e)} EyeVisible={EyeVisible1}/>
-                        <SignError>{PasswordText}</SignError>
+                        {PasswordText&&<SignError><ErrorMark/>{PasswordText}</SignError>}
                     </SignInputWrap>
 
                     {/* 비밀번호확인 입력 */}
@@ -405,9 +405,19 @@ const SignError = styled.div`
     color: #E52F2F;
     font-size: 12px;
     font-weight: 400;
-    margin-left: 5px;
     margin-top: 3px;
     width: 343px;
+    display: flex;
+    align-items: center;
+`
+
+const ErrorMark = styled.div`
+    background: url(image/caution.png);
+    width: 12px;
+    height: 12px;
+    margin-right: 3px;
+    background-repeat: no-repeat;
+    margin-bottom: 1px;
 `
 
 const SignInputWrap = styled.div`
