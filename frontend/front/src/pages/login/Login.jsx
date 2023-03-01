@@ -12,15 +12,14 @@ const userHttp = new UserHttp();
 
 function Login() {
     //카카오 로그인 요청 주소
-    const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_KEY}&redirect_uri=https://localhost:3000/callback/kakao&response_type=code
-    `;
+    const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=7c7c8648e57e3b651c5125b11996d35b&redirect_uri=https://www.teamprojectvv.shop/callback/kakao&response_type=code`;
 
     //구글 로그인 요청 주소
-    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${process.env.REACT_APP_GOOGLE_REST_KEY}&redirect_uri=https://localhost:3000/callback/google&response_type=code&scope=email`;
+    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=79582605278-52s8lmhreqecgap848deg5hls42gkpdc.apps.googleusercontent.com&redirect_uri=https://www.teamprojectvv.shop/callback/google&response_type=code&scope=email`;
 
     //네이버 로그인 요청 주소
     const state = Math.floor(new Date().getTime() + Math.random() * 1000);
-    const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.REACT_APP_NAVER_REST_KEY}&response_type=code&redirect_uri=https://localhost:3000/callback/naver&state=${state}`;
+    const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=92iO7IYduFlBEHoQfTkR&response_type=code&redirect_uri=https://www.teamprojectvv.shop/callback/naver&state=${state}`;
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -76,9 +75,24 @@ function Login() {
             autoLogin: AutoLogin
         };
 
-        if (!(Username && Password)) {
-            alert("모든 값을 채워주세요.");
+        if(Username === ""){
+            setIsError(true);
+            idRef.current.focus();
+            setIdText("아이디를 입력하세요");
+            setTimeout(() => {
+                setIdText("");
+                setIsError(false);
+            }, 5000);
+        } else if(Password === ""){
+            setIsError(true);
+            passwordRef.current.focus();
+            setPasswordText("비밀번호를 입력하세요");
+            setTimeout(() => {
+                setPasswordText("");
+                setIsError(false);
+            }, 5000);
         } else {
+
             try {
                 const res = await userHttp.postLogin(body);
                 console.log(res);
@@ -99,13 +113,15 @@ function Login() {
                 }
             } catch (err) {
                 console.log(err);
-                alert("로그인에 실패하셨습니다.");
+                setIsError(true);
+                passwordRef.current.focus();
+                setPasswordText(err.response.data.message);
+                setTimeout(() => {
+                    setPasswordText('');
+                    setIsError(false);
+                }, 5000);
             }
         }
-
-        setUsername("");
-        setPassword("");
-        setAutoLogin(false);
     };
 
     //아이디 찾기 모달창 켜기
@@ -275,7 +291,15 @@ function Login() {
                 <LoginWrap IsModal={IsModal}>
                     <LoginTitle>Login</LoginTitle>
                     <InputWrap>
-                        <LoginInput value={Username} type="id" placeholder="id" onChange={(e) => setUsername(e.currentTarget.value)} />
+                        <LoginInput 
+                            value={Username} 
+                            type="id" 
+                            placeholder="id" 
+                            onChange={(e) => setUsername(e.currentTarget.value)} 
+                            ref={idRef}
+                            isError={IsError}
+                        />
+                        {IdText&&<ErrorMessage><ErrorMark/>{IdText}</ErrorMessage>}
                     </InputWrap>
                     <InputWrap>
                         <LoginInput 
@@ -283,7 +307,10 @@ function Login() {
                             type={EyeVisible ? "text" : "password"} 
                             placeholder="password" 
                             onChange={(e) => setPassword(e.currentTarget.value)} 
+                            ref={passwordRef}
+                            isError={IsError}
                         />
+                        {PasswordText&&<ErrorMessage><ErrorMark/>{PasswordText}</ErrorMessage>}
                         <EyeImg onClick={e=>eyeToggle(e)} EyeVisible={EyeVisible}/>
                     </InputWrap>
                     <LoginButton onClick={(e) => onLogin(e)}>로그인</LoginButton>
@@ -357,7 +384,7 @@ function Login() {
                                                 ref={emailRef}
                                                 isError={IsError}
                                             />
-                                            <ErrorMessage>{EmailText}</ErrorMessage>
+                                            {EmailText&&<ErrorMessage><ErrorMark/>{EmailText}</ErrorMessage>}
                                         </InputWrap>
                                         <LoginButton onClick={(e) => onFindId(e)}>확 인</LoginButton>
                                     </>
@@ -384,7 +411,7 @@ function Login() {
                                     <>
                                         <ModalTitle>비밀번호 찾기</ModalTitle>
                                         <XButton onClick={(e) => passwordXButton(e)} top="5%" />
-                                        <ModalText>아이디를 입력해 주세요</ModalText>
+                                        <ModalText>아이디</ModalText>
                                         <InputWrap>
                                             <LoginInput 
                                                 value={UsernameForFindPassword} 
@@ -394,9 +421,9 @@ function Login() {
                                                 ref={idRef}
                                                 isError={IsError}
                                             />
-                                            <ErrorMessage>{IdText}</ErrorMessage>
+                                            {IdText&&<ErrorMessage><ErrorMark/>{IdText}</ErrorMessage>}
                                         </InputWrap>
-                                        <ModalText>이메일 주소를 입력해 주세요</ModalText>
+                                        <ModalText>이메일</ModalText>
                                         <InputWrap>
                                             <LoginInput 
                                                 value={EmailForFindPassword} 
@@ -406,9 +433,9 @@ function Login() {
                                                 ref={emailRef}
                                                 isError={IsError}
                                             />
-                                            <ErrorMessage>{EmailText}</ErrorMessage>
+                                            {EmailText&&<ErrorMessage><ErrorMark/>{EmailText}</ErrorMessage>}
                                         </InputWrap>
-                                        <ErrorMessage>{PasswordText}</ErrorMessage>
+                                        {PasswordText&&<ErrorMessage><ErrorMark/>{PasswordText}</ErrorMessage>}
                                         <LoginButton onClick={(e) => onFindPassword(e)}>확 인</LoginButton>     
                                     </>
                             }
@@ -510,10 +537,20 @@ const ErrorMessage = styled.div`
     color: #E52F2F;
     font-size: 12px;
     font-weight: 400;
-    margin-left: 5px;
     margin-top: 3px;
     text-align: left;
-`
+    display: flex;
+    align-items: center;
+`;
+
+const ErrorMark = styled.div`
+    background: url(image/caution.png);
+    width: 12px;
+    height: 12px;
+    margin-right: 3px;
+    background-repeat: no-repeat;
+    margin-bottom: 1px;
+`;
 
 const EyeImg = styled.div`
     width: 22px;
@@ -721,7 +758,7 @@ const CheckImg = styled.div`
     height: 45px;
     background-size: 44px;
     background: url(image/check-mark.png);
-`
+`;
 
 const DoneTitle = styled.div`
     color: #FF4122;
@@ -730,7 +767,7 @@ const DoneTitle = styled.div`
     font-size: 24px;
     line-height: 29px;
     margin-top: 30px;
-`
+`;
 
 const DoneText = styled.div`
     width: ${props=>props.width};
@@ -739,8 +776,8 @@ const DoneText = styled.div`
     line-height: 23px;
     text-align: center;
     color: #000000;
-    margin-top: ${props=>props.marginTop}
-`
+    margin-top: ${props=>props.marginTop};
+`;
 
 const IdButtonWrap = styled.div`
     display: grid;
@@ -749,7 +786,7 @@ const IdButtonWrap = styled.div`
     width: 343px;
     height: 51px;
     margin-bottom: 30px;
-`
+`;
 
 const DoneIdButton = styled.div`
     display: flex;
@@ -764,7 +801,7 @@ const DoneIdButton = styled.div`
     font-weight: 600;
     font-size: 16px;
     border: 1px solid #FF4122;
-`
+`;
 
 const DonePasswordButton = styled.div`
     display: flex;
@@ -779,6 +816,6 @@ const DonePasswordButton = styled.div`
     color: white;
     font-weight: 600;
     font-size: 16px;
-`
+`;
 
 export default Login;

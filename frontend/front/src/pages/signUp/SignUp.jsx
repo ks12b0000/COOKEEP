@@ -15,18 +15,15 @@ function SignUp() {
     const emailRef = useRef();
     const passwordRef = useRef();
 
-
     //카카오 로그인 요청 주소
-    const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_KEY}&redirect_uri=https://localhost:3000/callback/kakao&response_type=code
-    `;
+    const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=7c7c8648e57e3b651c5125b11996d35b&redirect_uri=https://www.teamprojectvv.shop/callback/kakao&response_type=code`;
 
     //구글 로그인 요청 주소
-    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${process.env.REACT_APP_GOOGLE_REST_KEY}&redirect_uri=https://localhost:3000/callback/google&response_type=code&scope=email`;
+    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=79582605278-52s8lmhreqecgap848deg5hls42gkpdc.apps.googleusercontent.com&redirect_uri=https://www.teamprojectvv.shop/callback/google&response_type=code&scope=email`;
 
     //네이버 로그인 요청 주소
     const state = Math.floor(new Date().getTime() + Math.random() * 1000);
-    const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.REACT_APP_NAVER_REST_KEY}&response_type=code&redirect_uri=https://localhost:3000/callback/naver&state=${state}`;
-
+    const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=92iO7IYduFlBEHoQfTkR&response_type=code&redirect_uri=https://www.teamprojectvv.shop/callback/naver&state=${state}`;
 
     //state
     //회원가입 시 서버 body에 보낼 정보
@@ -248,7 +245,7 @@ function SignUp() {
                             isError={IsError}
                         />
                         <IdButton onClick={(e) => onCheckUsername(e)} isFilled={Username!==''}>중복확인</IdButton>
-                        <SignError>{IdText}</SignError>
+                        {IdText&&<SignError><ErrorMark/>{IdText}</SignError>}
                     </IdWrap>
                     {/* 이메일 입력 */}
                     <SignName>이메일</SignName>
@@ -264,7 +261,7 @@ function SignUp() {
                             isError={IsError}
                         />
                         <IdButton onClick={(e) => onCheckEmail(e)} isFilled={Email!==''}>중복확인</IdButton>
-                        <SignError>{EmailText}</SignError>
+                        {EmailText&&<SignError><ErrorMark/>{EmailText}</SignError>}
                     </IdWrap>
                     {/* 비밀번호 입력 */}
                     <SignName>비밀번호</SignName>
@@ -280,7 +277,7 @@ function SignUp() {
                             isError={IsError}
                         />
                         <EyeImg onClick={e=>eye1Toggle(e)} EyeVisible={EyeVisible1}/>
-                        <SignError>{PasswordText}</SignError>
+                        {PasswordText&&<SignError><ErrorMark/>{PasswordText}</SignError>}
                     </SignInputWrap>
 
                     {/* 비밀번호확인 입력 */}
@@ -408,9 +405,19 @@ const SignError = styled.div`
     color: #E52F2F;
     font-size: 12px;
     font-weight: 400;
-    margin-left: 5px;
     margin-top: 3px;
     width: 343px;
+    display: flex;
+    align-items: center;
+`
+
+const ErrorMark = styled.div`
+    background: url(image/caution.png);
+    width: 12px;
+    height: 12px;
+    margin-right: 3px;
+    background-repeat: no-repeat;
+    margin-bottom: 1px;
 `
 
 const SignInputWrap = styled.div`
