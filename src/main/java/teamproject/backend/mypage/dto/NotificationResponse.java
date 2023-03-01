@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class NotificationResponse {
 
     private Long notification_id;
@@ -22,17 +21,17 @@ public class NotificationResponse {
 
     private String message;
 
-    private Date notification_time;
+    private Date createDate;
 
     private String notification_url;
 
     @Builder
-    public NotificationResponse(Long notification_id, User user, Board board, String message, Date notification_time, String notification_url) {
+    public NotificationResponse(Long notification_id, Long user_id, Long board_id, String message, Date createDate, String notification_url) {
         this.notification_id = notification_id;
-        this.user_id = user.getId();
-        this.board_id = board.getBoardId();
+        this.user_id = user_id;
+        this.board_id = board_id;
         this.message = message;
-        this.notification_time = notification_time;
+        this.createDate = createDate;
         this.notification_url = notification_url;
     }
 }

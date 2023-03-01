@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
+import teamproject.backend.board.BoardService;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardLike;
 import teamproject.backend.domain.Notification;
@@ -18,8 +19,6 @@ import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,7 +34,11 @@ public class MyPageServiceImpl implements MyPageService {
     private final MyPageRepository myPageRepository;
     private final LikeBoardRepository likeBoardRepository;
     private final BoardRepository boardRepository;
+
+    private final BoardService boardService;
+
     private final NotificationRepository notificationRepository;
+
 
     /**
      * 마이페이지 조회
@@ -195,19 +198,35 @@ public class MyPageServiceImpl implements MyPageService {
         return getBoardByUserResponse;
     }
 
+
+    @Override
+    public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId){
+        User user = myPageRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+
+        for(Long boardId : request.getBoardIdList()){
+            Optional<Board> board = boardRepository.findById(boardId);
+            if(board.isPresent()){
+                if(likeBoardRepository.existsByBoardAndUser(board.get(), user)){
+                    boardService.updateLikeOfBoard(boardId, user);
+                }
+            }
+        }
+    }
+
     /**
      * 알림 목록 가져오기
      * @param user_id
      * @return
      */
     @Override
-    public GetNotificationResponse notificationByUser(Long user_id) {
+    public GetNotificationResponse notificationByUser(Long user_id, Sort sort) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        List<NotificationResponse> notificationList = notificationRepository.findByUser(user).stream().map(Notification::toDto).collect(Collectors.toList());
+        List<NotificationResponse> notificationList = notificationRepository.findByUser(user, sort).stream().map(Notification::toDto).collect(Collectors.toList());
 
         GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder().notificationList(notificationList).build();
 
         return getNotificationResponse;
     }
+
 
 }
