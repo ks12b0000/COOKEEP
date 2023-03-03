@@ -37,6 +37,14 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Board> board_list = new LinkedList<>();
 
+    public User(String username, String nickname, String email, String password, String salt) {
+        this.username = username;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.salt = salt;
+    }
+
     public User(String username, String email, String password, String salt) {
         this.username = username;
         this.email = email;

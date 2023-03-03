@@ -42,5 +42,5 @@ public final class RandomNickName {
         }
 
         return null;
-}
+    }
 }
