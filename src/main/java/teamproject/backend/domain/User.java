@@ -68,6 +68,10 @@ public class User {
         this.username = updateUsername;
     }
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     // 이메일 변경
     public void updateEmail(String updateEmail) {
         this.email = updateEmail;
