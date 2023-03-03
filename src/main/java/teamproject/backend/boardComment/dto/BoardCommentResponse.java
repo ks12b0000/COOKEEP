@@ -22,7 +22,7 @@ public class BoardCommentResponse {
 
     public BoardCommentResponse(BoardComment comment) {
         this.comment_id = comment.getBoardCommentId();
-        this.user_name = comment.getUser().getUsername();
+        this.user_name = comment.getUser().getNickname();
         this.create_date = asString(comment.getCreateDate());
         this.text = comment.getText();
         this.replyCount = comment.getReplyCnt();
