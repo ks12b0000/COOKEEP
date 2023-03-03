@@ -20,6 +20,9 @@ public class User {
     @Column(length = 50, nullable = false, unique = true)
     private String username;
 
+    @Column(length = 50, nullable = false, unique = true)
+    private String nickname;
+
     // 유저 이메일
     @Column(length = 30, nullable = false, unique = true)
     private String email;
