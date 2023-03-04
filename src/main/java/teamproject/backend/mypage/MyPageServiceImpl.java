@@ -49,9 +49,9 @@ public class MyPageServiceImpl implements MyPageService {
      */
     @Override
     public GetUserResponse userInfo(Long user_id, Cookie[] cookies) {
-        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
-            throw new BaseException(MY_PAGE_ERROR);
-        }
+//        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
+//            throw new BaseException(MY_PAGE_ERROR);
+//        }
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         return new GetUserResponse(user);
     }
@@ -179,9 +179,9 @@ public class MyPageServiceImpl implements MyPageService {
      */
     @Override
     public GetLikeByUserResponse likeByUser(Long user_id, Cookie[] cookies) {
-        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
-            throw new BaseException(MY_PAGE_ERROR);
-        }
+//        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
+//            throw new BaseException(MY_PAGE_ERROR);
+//        }
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         List<LikeByUserResponse> likeBoards = likeBoardRepository.findByUser(user).stream().map(BoardLike::toDto).collect(Collectors.toList());     // map으로 매핑 후  리스트로 변환
 
@@ -197,9 +197,9 @@ public class MyPageServiceImpl implements MyPageService {
      */
     @Override
     public GetBoardByUserResponse boardByUser(Long user_id, Cookie[] cookies) {
-        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
-            throw new BaseException(MY_PAGE_ERROR);
-        }
+//        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
+//            throw new BaseException(MY_PAGE_ERROR);
+//        }
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         List<BoardByUserResponse> userBoards = boardRepository.findByUser(user).stream().map(Board::toDto).collect(Collectors.toList());
 
@@ -230,9 +230,9 @@ public class MyPageServiceImpl implements MyPageService {
      */
     @Override
     public GetNotificationResponse notificationByUser(Long user_id, Sort sort, Cookie[] cookies) {
-        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
-            throw new BaseException(MY_PAGE_ERROR);
-        }
+//        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
+//            throw new BaseException(MY_PAGE_ERROR);
+//        }
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         List<NotificationResponse> notificationList = notificationRepository.findByUser(user, sort).stream().map(Notification::toDto).collect(Collectors.toList());
 
