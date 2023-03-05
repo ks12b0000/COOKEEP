@@ -10,6 +10,8 @@ import teamproject.backend.mypage.dto.*;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -27,8 +29,9 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/mypage")
-    public BaseResponse<GetUserResponse> myPageUserInfo(@RequestParam Long user_id) {
-        GetUserResponse user = myPageService.userInfo(user_id);
+    public BaseResponse<GetUserResponse> myPageUserInfo(HttpServletRequest request, @RequestParam Long user_id) {
+        Cookie[] cookies = request.getCookies();
+        GetUserResponse user = myPageService.userInfo(user_id, cookies);
 
         return new BaseResponse("유저 정보를 성공적으로 가져왔습니다.", user);
     }
@@ -131,8 +134,9 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/like/list/{user_id}")
-    public BaseResponse likeByUser(@PathVariable Long user_id) {
-        GetLikeByUserResponse getLikeByUserResponse = myPageService.likeByUser(user_id);
+    public BaseResponse likeByUser(HttpServletRequest request, @PathVariable Long user_id) {
+        Cookie[] cookies = request.getCookies();
+        GetLikeByUserResponse getLikeByUserResponse = myPageService.likeByUser(user_id, cookies);
 
         return new BaseResponse("좋아요 누른 글 목록을 불러왔습니다.", getLikeByUserResponse);
     }
@@ -144,8 +148,9 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/board/list/{user_id}")
-    public BaseResponse boardByUser(@PathVariable Long user_id) {
-        GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(user_id);
+    public BaseResponse boardByUser(HttpServletRequest request, @PathVariable Long user_id) {
+        Cookie[] cookies = request.getCookies();
+        GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(user_id, cookies);
 
         return new BaseResponse("내가 쓴 글 목록을 불러왔습니다.", getBoardByUserResponse);
     }
@@ -164,8 +169,9 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/notification/list/{user_id}")
-    public BaseResponse notificationList(@PathVariable Long user_id, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
-        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, sort);
+    public BaseResponse notificationList(HttpServletRequest request, @PathVariable Long user_id, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
+        Cookie[] cookies = request.getCookies();
+        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, sort, cookies);
 
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }
