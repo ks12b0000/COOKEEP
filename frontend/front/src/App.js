@@ -22,6 +22,7 @@ import Korean from "./pages/category/korean/Korean";
 import Writing from "./components/categoryLayout/writing/Writing";
 import MyPosts from "./pages/myPage/MyPosts";
 import MyLikes from "./pages/myPage/MyLikes";
+import AllCategory from "./pages/category/all/AllCategory";
 
 function App() {
     const user = useSelector((state) => state);
@@ -45,6 +46,8 @@ function App() {
                     <Route path="/diet" element={<Diet />}></Route>
                     <Route path="/vegan" element={<Vegan />}></Route>
                     <Route path="/etc" element={<Etc />}></Route>
+                    <Route path="/all" element={<AllCategory />}></Route>
+
 
 
                     <Route path="/category/:id" element={<Detail />} />

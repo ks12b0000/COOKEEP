@@ -9,10 +9,11 @@ import Banner from "../../components/layout/home/banner/Banner";
 
 const Container = styled.section`
   width: 1440px;
+  min-height: 800px;
   margin: 24px auto 16px;
 `;
 const Category1Title = styled.div`
-
+  padding-top:10px;
     h1 {
       font-weight: 700;
       font-size: 24px;
@@ -27,7 +28,6 @@ const ButtonWrap = styled.div`
 function Category({title,categoryName}){
     return(
         <Layout>
-            <Banner />
             <Container>
                 <Category1Title>
                     <h1>{title}</h1>

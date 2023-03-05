@@ -13,7 +13,7 @@ function CateItem({cateItemName}) {
 
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showPost, setShowPost] = useState(5);
+    const [showPost, setShowPost] = useState(10);
     const [totalPost, setTotalPost] = useState(0);
 
     const LastIndex = currentPage * showPost;
@@ -67,6 +67,7 @@ function CateItem({cateItemName}) {
 export default CateItem;
 const Ul = styled.ul`
     margin-top:16px;
+  min-height: 800px;
     display: flex;
     gap: 16px;
     flex-wrap: wrap;

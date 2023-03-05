@@ -1,5 +1,5 @@
 export const NavDada = [
-    { id: 1, name: "전체", url: "/" },
+    { id: 1, name: "전체", url: "/all" },
     { id: 2, name: "한식", url: "/korea" },
     { id: 3, name: "양식", url: "/western" },
     { id: 4, name: "중식", url: "/chinese" },

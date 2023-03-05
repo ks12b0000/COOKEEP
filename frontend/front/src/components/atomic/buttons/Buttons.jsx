@@ -4,21 +4,21 @@ import styled from "@emotion/styled";
 const Button = styled.button`
     cursor: pointer;
     min-width: 100px;
-    width: auto;
     padding: 10px;
-    height: 45px;
-    border: 1px solid #222222;
-    background: #fff;
+    width: 130px;
+    height: 48px;
+    background: #FF4122;
+    border-radius: 5px;
+    border: none;
+
 
     &:hover {
-        background: #35c5f0;
-        border: none;
-        span {
-            color: #fff;
-        }
+      background: #ff2704;
+    
+       
     }
     span {
-        color: #222222;
+        color: #ffffff;
         font-size: 16px;
         font-weight: 600;
         letter-spacing: 0.7px;
