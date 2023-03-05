@@ -13,6 +13,7 @@ import teamproject.backend.response.ValidationSequence;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -97,12 +98,27 @@ public class MyPageController {
         return new BaseResponse("이메일 변경에 성공했습니다.");
     }
 
-    /**
-     * 회원 탈퇴
-     * [DELETE] /auth/user/delete/{user_id}
-     * @param user_id
-     * @return
-     */
+    @PutMapping("/auth/user/update/nickname/{user_id}")
+    public BaseResponse updateNickname(@PathVariable Long user_id, @Validated(ValidationSequence.class) @RequestBody UpdateNicknameRequest request) {
+
+        myPageService.updateNickname(user_id, request);
+
+        return new BaseResponse("닉네임 변경에 성공했습니다.");
+    }
+
+    @GetMapping("/auth/user/suggest/nickname")
+    public BaseResponse updateNickname() {
+        List<String> suggestNicknames = myPageService.suggestNickname(5);
+
+        return new BaseResponse("닉네임 추천 목록을 불러왔습니다.", suggestNicknames);
+    }
+
+        /**
+         * 회원 탈퇴
+         * [DELETE] /auth/user/delete/{user_id}
+         * @param user_id
+         * @return
+         */
     @DeleteMapping("/auth/user/delete/{user_id}")
     public BaseResponse userDelete(@PathVariable Long user_id, HttpServletResponse response) {
 

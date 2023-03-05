@@ -15,11 +15,13 @@ import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mypage.dto.*;
 import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
+import teamproject.backend.user.RandomNickName;
 import teamproject.backend.user.UserService;
 import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -239,5 +241,33 @@ public class MyPageServiceImpl implements MyPageService {
         GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder().notificationList(notificationList).build();
 
         return getNotificationResponse;
+    }
+
+    @Override
+    @Transactional
+    public void updateNickname(Long user_id, UpdateNicknameRequest request){
+        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        String newNickname = request.getNickname();
+
+        if(myPageRepository.existsUserByNickname(newNickname)){
+            new BaseException(DUPLICATE_NICKNAME);
+        }
+
+        user.updateNickname(newNickname);
+    }
+
+    @Override
+    public List<String> suggestNickname(int size){
+        List<String> nicknames = new ArrayList<>();
+
+        for(int i = 0; i < 100; i++){
+            String random = RandomNickName.get(15);
+            if(nicknames.size() >= size) break;
+            if (!myPageRepository.existsUserByNickname(random)){
+                nicknames.add(random);
+            }
+        }
+
+        return nicknames;
     }
 }

@@ -29,7 +29,7 @@ public class BoardResponseInDetailFormat {
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
         this.text = board.getText();
-        this.user_name = board.getUser().getUsername();
+        this.user_name = board.getUser().getNickname();
         this.user_id = board.getUser().getId();
         this.create_date = board.getCreateDate();
         this.thumbnail = board.getThumbnail();

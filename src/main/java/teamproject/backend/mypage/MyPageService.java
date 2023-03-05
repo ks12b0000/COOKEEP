@@ -5,6 +5,7 @@ import teamproject.backend.mypage.dto.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface MyPageService {
 
@@ -18,6 +19,8 @@ public interface MyPageService {
 
     public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response);
 
+    public void updateNickname(Long user_id, UpdateNicknameRequest request);
+
     public void userDelete(Long user_id, HttpServletResponse response);
 
     public GetLikeByUserResponse likeByUser(Long user_id, Cookie[] cookies);
@@ -29,4 +32,5 @@ public interface MyPageService {
 
     public GetNotificationResponse notificationByUser(Long user_id, Sort sort, Cookie[] cookies);
 
+    public List<String> suggestNickname(int size);
 }
