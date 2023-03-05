@@ -12,4 +12,5 @@ public interface ImageFileRepository extends JpaRepository<ImageFile, Long> {
     ImageFile findByUrl(String url);
     ImageFile findByFileName(String fileName);
     List<ImageFile> findByBoardIdIsNullAndCreateDateBefore(Date time);
+    List<ImageFile> findByBoardId(Long boardId);
 }

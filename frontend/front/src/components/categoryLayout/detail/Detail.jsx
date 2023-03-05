@@ -80,7 +80,6 @@ function Detail() {
 
                 <TopContent detailPost={detailPost} />
 
-                <CommentUpload boardId={id} />
                 <CommentList boardId={id} />
             </Container>
               {isOpen && <Alert {...Props} />}

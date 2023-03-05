@@ -10,7 +10,9 @@ import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
 import teamproject.backend.boardCommentReply.BoardCommentReplyService;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardComment;
+import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
+import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseExceptionStatus;
 import teamproject.backend.user.UserRepository;
@@ -34,6 +36,8 @@ public class BoardCommentServiceImpl implements BoardCommentService{
 
     private final BoardCommentReplyService boardCommentReplyService;
 
+    private final NotificationRepository notificationRepository;
+
     @Override
     @Transactional
     public Long save(BoardCommentWriteRequest writeRequest) {
@@ -43,6 +47,9 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         BoardComment comment = new BoardComment(user, board, writeRequest.getText());
         boardCommentRepository.save(comment);
         board.increaseCommentCount();
+        if (board.getUser().getId() != user.getId()) {
+            notificationSave(user, board);
+        }
 
         return comment.getBoardCommentId();
     }
@@ -129,4 +136,15 @@ public class BoardCommentServiceImpl implements BoardCommentService{
             boardCommentReplyRepository.delete(reply);
         }
     }*/
+
+    private void notificationSave(User user, Board board) {
+        String message = "내가 작성한 글 " + "[" + board.getTitle() + "] 에 " + user.getUsername() + "님이 댓글을 달았습니다.";
+        String url = "https://www.teamprojectvv.shop/category/" + board.getBoardId();
+        if (board.getUser().getId() != user.getId()) {
+            Notification notification = new Notification(board.getUser(), message, url, board);
+            notificationRepository.save(notification);
+        }
+    }
 }
+
+

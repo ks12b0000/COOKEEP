@@ -2,21 +2,24 @@ package teamproject.backend.mypage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
+import teamproject.backend.board.BoardService;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardLike;
+import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mypage.dto.*;
+import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
+import teamproject.backend.user.UserService;
 import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,15 +36,23 @@ public class MyPageServiceImpl implements MyPageService {
     private final LikeBoardRepository likeBoardRepository;
     private final BoardRepository boardRepository;
 
+    private final BoardService boardService;
+
+    private final NotificationRepository notificationRepository;
+    private final UserService userService;
+
+
     /**
      * 마이페이지 조회
      * @param user_id
      * @return
      */
     @Override
-    public GetUserResponse userInfo(Long user_id) {
+    public GetUserResponse userInfo(Long user_id, Cookie[] cookies) {
+//        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
+//            throw new BaseException(MY_PAGE_ERROR);
+//        }
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-
         return new GetUserResponse(user);
     }
 
@@ -167,7 +178,10 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetLikeByUserResponse likeByUser(Long user_id) {
+    public GetLikeByUserResponse likeByUser(Long user_id, Cookie[] cookies) {
+//        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
+//            throw new BaseException(MY_PAGE_ERROR);
+//        }
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         List<LikeByUserResponse> likeBoards = likeBoardRepository.findByUser(user).stream().map(BoardLike::toDto).collect(Collectors.toList());     // map으로 매핑 후  리스트로 변환
 
@@ -182,7 +196,10 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetBoardByUserResponse boardByUser(Long user_id) {
+    public GetBoardByUserResponse boardByUser(Long user_id, Cookie[] cookies) {
+//        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
+//            throw new BaseException(MY_PAGE_ERROR);
+//        }
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         List<BoardByUserResponse> userBoards = boardRepository.findByUser(user).stream().map(Board::toDto).collect(Collectors.toList());
 
@@ -191,4 +208,36 @@ public class MyPageServiceImpl implements MyPageService {
         return getBoardByUserResponse;
     }
 
+
+    @Override
+    public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId){
+        User user = myPageRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+
+        for(Long boardId : request.getBoardIdList()){
+            Optional<Board> board = boardRepository.findById(boardId);
+            if(board.isPresent()){
+                if(likeBoardRepository.existsByBoardAndUser(board.get(), user)){
+                    boardService.updateLikeOfBoard(boardId, user);
+                }
+            }
+        }
+    }
+
+    /**
+     * 알림 목록 가져오기
+     * @param user_id
+     * @return
+     */
+    @Override
+    public GetNotificationResponse notificationByUser(Long user_id, Sort sort, Cookie[] cookies) {
+//        if (userService.checkUserHasLogin(cookies).getId() != user_id) {
+//            throw new BaseException(MY_PAGE_ERROR);
+//        }
+        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        List<NotificationResponse> notificationList = notificationRepository.findByUser(user, sort).stream().map(Notification::toDto).collect(Collectors.toList());
+
+        GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder().notificationList(notificationList).build();
+
+        return getNotificationResponse;
+    }
 }
