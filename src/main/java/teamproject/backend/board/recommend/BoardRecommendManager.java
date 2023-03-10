@@ -48,7 +48,7 @@ public class BoardRecommendManager implements RecommendManager<Board> {
     }
 
     @Override
-    @Scheduled(cron = "0 0 2 1/1 * ?")
+    @Scheduled(cron = "0 0 12 ? * FRI")
     @Transactional
     public void updateAll() {
         store.clear();
