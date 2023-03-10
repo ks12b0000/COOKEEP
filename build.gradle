@@ -51,7 +51,7 @@ jar {
 test.onlyIf {
 	!project.hasProperty('test')
 }
-
+/*
 node {
 	version = '16.19.0'
 	download = true
@@ -92,7 +92,8 @@ task buildReact(type: Exec) {
 		commandLine "npm", "run-script", "build"
 	}
 }
-
+*/
+/*
 task installReact(type: Exec) {
 	workingDir "$webappDir"
 	inputs.dir "$webappDir"
@@ -104,4 +105,4 @@ task installReact(type: Exec) {
 		commandLine "npm", "audit", "fix"
 		commandLine 'npm', 'install'
 	}
-}
+}*/

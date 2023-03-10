@@ -34,6 +34,9 @@ public class User {
     @Column
     private String salt;
 
+    @Column
+    private String imageURL;
+
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Board> board_list = new LinkedList<>();
 
