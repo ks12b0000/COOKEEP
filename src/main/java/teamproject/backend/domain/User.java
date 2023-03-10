@@ -20,6 +20,9 @@ public class User {
     @Column(length = 50, nullable = false, unique = true)
     private String username;
 
+    @Column(length = 50, nullable = false, unique = true)
+    private String nickname;
+
     // 유저 이메일
     @Column(length = 30, nullable = false, unique = true)
     private String email;
@@ -33,6 +36,14 @@ public class User {
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Board> board_list = new LinkedList<>();
+
+    public User(String username, String nickname, String email, String password, String salt) {
+        this.username = username;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.salt = salt;
+    }
 
     public User(String username, String email, String password, String salt) {
         this.username = username;
@@ -55,6 +66,10 @@ public class User {
     // 아이디 변경
     public void updateUsername(String updateUsername) {
         this.username = updateUsername;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     // 이메일 변경

@@ -42,12 +42,15 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String email = joinRequest.getEmail();
         String password = joinRequest.getPassword();
         String salt = SHA256.getSalt();
+        String nickname = getRandomNickname();
+        if(nickname == null) nickname = username;
 
         password = SHA256.encrypt(password, salt);
 
         if (checkIdDuplicate(username)){}
 
-        User user = new User(username, email, password, salt);
+        User user = new User(username, nickname, email, password, salt);
+
         userRepository.save(user);
         notificationSave(user);
 
@@ -277,5 +280,19 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String url = "https://www.teamprojectvv.shop/mypage/" + user.getId();
         Notification notification = new Notification(user, message, url);
         notificationRepository.save(notification);
+    }
+
+    private String getRandomNickname(){
+        String nickname = null;
+
+        for(int i = 0; i < 100; i++){
+            String random = RandomNickName.get(15);
+            if (!userRepository.existsUserByNickname(random)){
+                nickname = random;
+                break;
+            }
+        }
+
+        return nickname;
     }
 }
