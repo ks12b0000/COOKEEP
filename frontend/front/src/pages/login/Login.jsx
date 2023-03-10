@@ -311,7 +311,21 @@ function Login() {
                             isError={IsError}
                         />
                         {PasswordText&&<ErrorMessage><ErrorMark/>{PasswordText}</ErrorMessage>}
-                        <EyeImg onClick={e=>eyeToggle(e)} EyeVisible={EyeVisible}/>
+                        {EyeVisible ? (
+                            <EyeImg
+                            onClick={e => eyeToggle(e)}
+                            EyeVisible={EyeVisible}
+                            src='/image/eye-open.png'
+                            alt='eye open'
+                            />
+                        ) : (
+                            <EyeImg
+                            onClick={e => eyeToggle(e)}
+                            EyeVisible={EyeVisible}
+                            src='/image/eye.png'
+                            alt='eye close'
+                            />
+                        )}
                     </InputWrap>
                     <LoginButton onClick={(e) => onLogin(e)}>로그인</LoginButton>
                     <CheckBoxWrap>
@@ -454,7 +468,7 @@ const LoginBackground = styled.div`
     left: 0;
     width: 100%;
     height: 100vh;
-    background: url(image/login-back.jpg);
+    background: url(/image/login-back.jpg);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -466,7 +480,7 @@ const LoginBackground = styled.div`
 
 const Logo = styled.div`
     margin-top: 50px;
-    background: url(image/LOGO.png);
+    background: url(/image/LOGO.png);
     width: 260px;
     height: 50px;
     background-size: 260px;
@@ -544,7 +558,7 @@ const ErrorMessage = styled.div`
 `;
 
 const ErrorMark = styled.div`
-    background: url(image/caution.png);
+    background: url(/image/caution.png);
     width: 12px;
     height: 12px;
     margin-right: 3px;
@@ -552,16 +566,12 @@ const ErrorMark = styled.div`
     margin-bottom: 1px;
 `;
 
-const EyeImg = styled.div`
-    width: 22px;
-    height: 22px;
-    background: ${props=>props.EyeVisible ? 'url(image/eye-open.png)':'url(image/eye.png)'};
-    position: absolute;
-    background-repeat: no-repeat;
-    top: ${props=>props.EyeVisible ? '33%':'29.5%'};
-    left: 88%;
-    cursor: pointer;
-`
+const EyeImg = styled.img`
+  position: absolute;
+  top: ${props => (props.EyeVisible ? '33%' : '30%')};
+  left: 88%;
+  cursor: pointer;
+`;
 
 const LoginButton = styled.button`
     width: 343px;
@@ -587,7 +597,7 @@ const Checkbox = styled.input`
   appearance: none;
   width: 12px;
   height: 12px;
-  background: url(image/check-x.png);
+  background: url(/image/check-x.png);
   background-size: 11px;
   background-repeat: no-repeat;
   
@@ -595,7 +605,7 @@ const Checkbox = styled.input`
     appearance: none;
     width: 12px;
     height: 12px;
-    background: url(image/check.png);
+    background: url(/image/check.png);
     background-size: 11px;
     background-repeat: no-repeat;
   }
@@ -725,7 +735,7 @@ const ModalWrap = styled.div`
 const XButton = styled.div`
     width: 17px;
     height: 17px;
-    background-image: url(image/xbutton.png);
+    background-image: url(/image/xbutton.png);
     background-size: 17px;
     position: absolute;
     left: 92%;
@@ -757,7 +767,7 @@ const CheckImg = styled.div`
     width: 45px;
     height: 45px;
     background-size: 44px;
-    background: url(image/check-mark.png);
+    background: url(/image/check-mark.png);
 `;
 
 const DoneTitle = styled.div`
