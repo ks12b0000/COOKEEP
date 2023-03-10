@@ -20,6 +20,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
@@ -303,9 +304,14 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
     @Override
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
+
         if(s3DAO.isExist(""+userId)){
             s3DAO.delete(""+userId);
         }
         s3DAO.upload(""+userId, image);
+
+        user.get().setImageURL(s3DAO.getURL("" + userId));
     }
 }

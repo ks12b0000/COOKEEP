@@ -79,4 +79,8 @@ public class User {
     public void updateEmail(String updateEmail) {
         this.email = updateEmail;
     }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 }
