@@ -28,5 +28,5 @@ public interface RecommendService<E, T> {
     /**
      * 특정 이유로 객체 추천 전체를 교체할 경우 사용되는 메서드이다.
      */
-    void updateAll();
+    List<Long> updateAll();
 }

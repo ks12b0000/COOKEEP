@@ -24,7 +24,7 @@ public interface RecommendManager<E> {
      * @param id 삭제된 객체 E의 id
      * @return 업데이트 후 추가된 id의 목록
      */
-    List<Long> update(Long id);
+    void update(Long id);
 
 
     /**
