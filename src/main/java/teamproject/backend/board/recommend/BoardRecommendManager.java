@@ -55,6 +55,11 @@ public class BoardRecommendManager implements RecommendManager<Board> {
         }
     }
 
+    @Override
+    public boolean isContains(Long id) {
+        return store.containsKey(id);
+    }
+
     private void insertStore(List<Long> idList, RecommendService<Board, ?> service){
         for(Long id : idList){
             if(store.containsKey(id)){

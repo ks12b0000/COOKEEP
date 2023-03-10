@@ -26,8 +26,11 @@ public interface RecommendManager<E> {
      */
     List<Long> update(Long id);
 
+
     /**
      * Manager가 관리하는 모든 Service를 updateAll 한다. 사용과 관리에 유의해야 한다.
      */
     void updateAll();
+
+    boolean isContains(Long id);
 }
