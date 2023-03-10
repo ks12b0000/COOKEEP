@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.board.dto.UserBoardResponseInListFormat;
 import teamproject.backend.boardComment.BoardCommentService;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
@@ -204,5 +205,11 @@ public class BoardController {
         List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListByAll(sort);
 
         return new BaseResponse("성공적으로 전체 게시글 목록을 조회했습니다.", boarListByAll);
+    }
+
+    @GetMapping("/board/{userId}/list")
+    public BaseResponse findBoardListByUser(@PathVariable Long userId){
+        UserBoardResponseInListFormat listFormat = boardService.findBoardListByUser(userId);
+        return new BaseResponse("성공적으로 유저 글 목록을 불러왔습니다.", listFormat);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.board.dto.UserBoardResponseInListFormat;
 import teamproject.backend.boardComment.BoardCommentRepository;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardCommentReply.BoardCommentReplyRepository;
@@ -273,5 +274,11 @@ public class BoardServiceImpl implements BoardService{
         List<Board> boards = boardRepository.findTop5ByOrderByCommentedDesc();
 
         return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    public UserBoardResponseInListFormat findBoardListByUser(Long userId){
+        User user = getUserById(userId);
+        List<Board> boards = boardRepository.findByUser(user);
+        return new UserBoardResponseInListFormat(boards, user);
     }
 }
