@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.boardTag.BoardTagRepository;
 import teamproject.backend.domain.*;
 import teamproject.backend.mainPage.dto.GetSearchByResponse;
+import teamproject.backend.mainPage.dto.GetTop10TagList;
 import teamproject.backend.mainPage.dto.SearchByResponse;
+import teamproject.backend.mainPage.dto.Top10TagList;
 import teamproject.backend.mypage.MyPageRepository;
 import teamproject.backend.mypage.dto.GetNotificationResponse;
 import teamproject.backend.mypage.dto.NotificationResponse;
@@ -69,14 +71,16 @@ public class MainPageServiceImpl implements MainPageService {
     }
 
     /**
-     * 전체 태그 가져오기
+     * Top10 태그 사용순 리스트 가져오기
      * @return
      */
     @Override
-    public List<Tag> allTagList() {
-        List<Tag> tagList = tagRepository.findAll();
+    public GetTop10TagList top10TagList() {
+        List<Top10TagList> tagList = tagRepository.TOP_10_TAG_LISTS().stream().map(Tag::top10TagList).collect(Collectors.toList());
 
-        return tagList;
+        GetTop10TagList getTop10TagList = GetTop10TagList.builder().top10TagLists(tagList).build();
+
+        return getTop10TagList;
     }
 
     /**
