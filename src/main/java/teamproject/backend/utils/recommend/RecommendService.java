@@ -5,12 +5,12 @@ import java.util.List;
 /**
  * 객체 E를 특정 로직을 사용하여 추천하는 서비스이다.
  */
-public interface RecommendService<E> {
+public interface RecommendService<E, T> {
     /**
-     * 추천된 객체를 리턴하는 메서드이다.
+     * 추천된 E객체를 T타입으로 리턴하는 메서드이다.
      * @return 추천된 객체 리스트
      */
-    List<E> getRecommend();
+    List<T> getRecommend();
 
     /**
      * 추천된 객체의 id 목록을 리턴하는 메서드이다.
