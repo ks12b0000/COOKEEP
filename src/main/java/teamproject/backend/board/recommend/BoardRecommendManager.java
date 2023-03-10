@@ -2,7 +2,9 @@ package teamproject.backend.board.recommend;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.domain.Board;
 import teamproject.backend.utils.recommend.RecommendManager;
 import teamproject.backend.utils.recommend.RecommendService;
@@ -32,25 +34,27 @@ public class BoardRecommendManager implements RecommendManager<Board> {
     }
 
     @Override
-    public List<Long> update(Long id) {
-        List<Long> updateList = new ArrayList<>();
-
-        if(store.containsKey(id)){
-            List<RecommendService<Board, ?>> serviceList = store.get(id);
+    @Transactional
+    public void update(Long deleteId) {
+        if(store.containsKey(deleteId)){
+            List<RecommendService<Board, ?>> serviceList = store.get(deleteId);
 
             for(RecommendService<Board, ?> service : serviceList){
-                Long updateId = service.update(id);
-                updateList.add(updateId);
+                Long updateId = service.update(deleteId);
+                deleteStore(deleteId, service);
+                insertStore(updateId, service);
             }
         }
-
-        return updateList;
     }
 
     @Override
+    @Scheduled(cron = "0 0 2 1/1 * ?")
+    @Transactional
     public void updateAll() {
+        store.clear();
+
         for(RecommendService<Board, ?> service : this.serviceList){
-            List<Long> commentIdList = service.getIdList();
+            List<Long> commentIdList = service.updateAll();
             insertStore(commentIdList, service);
         }
     }
@@ -60,15 +64,32 @@ public class BoardRecommendManager implements RecommendManager<Board> {
         return store.containsKey(id);
     }
 
+
     private void insertStore(List<Long> idList, RecommendService<Board, ?> service){
         for(Long id : idList){
-            if(store.containsKey(id)){
-                store.get(id).add(service);
-            }
-            else{
-                List<RecommendService<Board, ?>> list = new ArrayList<>();
-                list.add(service);
-                store.put(id, list);
+            insertStore(id, service);
+        }
+    }
+
+    private void insertStore(Long id, RecommendService<Board, ?> service){
+        if(store.containsKey(id)){
+            store.get(id).add(service);
+        }
+        else{
+            List<RecommendService<Board, ?>> list = new ArrayList<>();
+            list.add(service);
+            store.put(id, list);
+        }
+    }
+
+    private void deleteStore(Long id, RecommendService<Board, ?> targetService){
+        if(store.containsKey(id)){
+            List<RecommendService<Board, ?>> list = store.get(id);
+            for(int i = 0 ; i < list.size(); i++){
+                if (list.get(i).equals(targetService)){
+                    list.remove(i);
+                    return;
+                }
             }
         }
     }
