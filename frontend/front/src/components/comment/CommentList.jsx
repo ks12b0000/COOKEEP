@@ -110,35 +110,37 @@ const CommentList = props => {
 
   return (
     <>
+      <CommentTitle>{`댓글 (${Comments.length})`}</CommentTitle>
       {Comments.slice(offset, offset + Limit)?.map(comment => (
         <CommentWrap key={comment.comment_id}>
+          <Profile />
           <CommentBlock>
-            <TextWrap>
-              <TextBlock>
-                <UsernameText>{comment.user_name}</UsernameText>
-                <DateText>{comment.create_date}</DateText>
-              </TextBlock>
-              {username === comment.user_name ? (
-                <TextBlock>
-                  <ButtonText
-                    onClick={() => onEdit(comment.comment_id, comment.text)}
-                  >
-                    수정
-                  </ButtonText>
-                  <ButtonText
-                    marginLeft
-                    onClick={e => onDelete(e, comment.comment_id)}
-                  >
-                    삭제
-                  </ButtonText>
-                </TextBlock>
-              ) : (
-                <></>
-              )}
-            </TextWrap>
+            {/* 상단 작성자 이름 */}
+            <UserNameWrap>
+              <UsernameText>{comment.user_name}</UsernameText>
+              <Author>작성자</Author>
+            </UserNameWrap>
+
+            {/* {username === comment.user_name && (
+              <>
+                <ButtonText
+                  onClick={() => onEdit(comment.comment_id, comment.text)}
+                >
+                  수정
+                </ButtonText>
+                <ButtonText
+                  marginLeft
+                  onClick={e => onDelete(e, comment.comment_id)}
+                >
+                  삭제
+                </ButtonText>
+              </>
+            )} */}
+
             <ContentBlock>
               <ContentText>{comment.text}</ContentText>
-              {comment.edit_selected ? (
+
+              {comment.edit_selected && (
                 <>
                   <EditBlock
                     value={EditComment}
@@ -160,32 +162,30 @@ const CommentList = props => {
                     취소
                   </EditButton>
                 </>
-              ) : (
-                <></>
               )}
             </ContentBlock>
             {comment.reply_selected ? (
               <ReplyText onClick={() => offReply(comment.comment_id)}>
-                답글 닫기
+                대댓글 닫기
               </ReplyText>
             ) : (
               <ReplyText onClick={() => onReply(comment.comment_id)}>
-                답글 보기
+                대댓글 보기
               </ReplyText>
             )}
+
+            {comment.reply_selected && (
+              <ReplyWrap>
+                <ReplyList commentId={comment.comment_id} />
+                <ReplyUpload commentId={comment.comment_id} />
+              </ReplyWrap>
+            )}
           </CommentBlock>
-          {comment.reply_selected ? (
-            <ReplyWrap>
-              <ReplyList commentId={comment.comment_id} />
-              <ReplyUpload commentId={comment.comment_id} />
-            </ReplyWrap>
-          ) : (
-            <></>
-          )}
         </CommentWrap>
       ))}
 
-     <CommentUpload boardId={props.boardId} />
+      <Line />
+      <CommentUpload boardId={props.boardId} />
 
       <footer>
         <Pagination
@@ -199,19 +199,38 @@ const CommentList = props => {
   );
 };
 
+const CommentTitle = styled.div`
+  color: #ff4122;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 34.5px;
+`;
+
 const CommentWrap = styled.div`
-  width: 1100px;
+  width: 1440px;
   height: auto;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 6% 93%;
+  justify-content: space-between;
+  margin: 20px 0;
+`;
+
+const Profile = styled.div`
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
+  background-color: #ced4da;
 `;
 
 const CommentBlock = styled.div`
   width: 100%;
   height: auto;
-  padding: 20px 0;
   box-sizing: border-box;
-  margin: 10px 0;
-  border-bottom: 0.5px solid #929292;
+`;
+
+const UserNameWrap = styled.div`
+  display: flex;
 `;
 
 const UsernameText = styled.div`
@@ -219,47 +238,38 @@ const UsernameText = styled.div`
   font-weight: 700;
   color: black;
   display: inline;
+  margin-right: 6px;
 `;
 
-const TextWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-`;
-
-const TextBlock = styled.div`
-  display: flex;
-`;
-
-const DateText = styled.div`
-  font-size: 11px;
-  color: #878787;
-  margin-left: 10px;
-  margin-top: auto;
-`;
-
-const ButtonText = styled.div`
+const Author = styled.div`
+  color: #ff4122;
+  border: 1px solid #ff4122;
   font-size: 12px;
-  color: #878787;
-  margin-left: ${props => (props.marginLeft ? '10px' : '')};
-  cursor: pointer;
-
-  &:hover {
-    color: #35c5f0;
-  }
+  width: 45px;
+  height: 20px;
+  border-radius: 20px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ContentBlock = styled.div`
-  width: 100%;
   height: auto;
   position: relative;
   padding: 20px 0;
+  display: block;
+  width: 100%;
 `;
 
 const ContentText = styled.div`
   font-size: 15px;
-  margin-top: 10px;
   display: block;
+  border: 2px solid #f0f0f0;
+  width: 100%;
+  padding: 24px 16px;
+  border-radius: 10px;
+  box-sizing: border-box;
 `;
 
 const ReplyText = styled.div`
@@ -269,6 +279,8 @@ const ReplyText = styled.div`
   display: block;
   cursor: pointer;
 `;
+
+const ButtonText = styled.div``;
 
 const EditBlock = styled.input`
   width: 100%;
@@ -317,6 +329,13 @@ const ReplyWrap = styled.div`
   width: 100%;
   padding-left: 40px;
   box-sizing: border-box;
+`;
+
+const Line = styled.div`
+  width: 100%;
+  height: 0.1px;
+  background-color: #ffa590;
+  margin: 40px 0;
 `;
 
 export default CommentList;
