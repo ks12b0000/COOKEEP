@@ -2,6 +2,7 @@ package teamproject.backend.board;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
+import teamproject.backend.utils.recommend.RecommendManager;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -42,6 +44,9 @@ public class BoardServiceImpl implements BoardService{
     private final BoardCommentReplyRepository boardCommentReplyRepository;
     private final BoardTagService boardTagService;
     private final ImageFileService imageFileService;
+
+    @Qualifier("boardRecommendManager")
+    private final RecommendManager boardRecommendManager;
 
     private static final String DEFAULT_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
     @Override
@@ -182,6 +187,8 @@ public class BoardServiceImpl implements BoardService{
         deleteImageAll(board);
         deleteBoardLikes(board);
         deleteBoardComments(board);
+
+        if(boardRecommendManager.isContains(boardId)) boardRecommendManager.update(boardId);
 
         boardRepository.delete(board);
     }

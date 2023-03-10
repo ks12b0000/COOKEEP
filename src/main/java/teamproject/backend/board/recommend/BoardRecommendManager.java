@@ -2,6 +2,7 @@ package teamproject.backend.board.recommend;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
+@Qualifier("boardRecommendManager")
 public class BoardRecommendManager implements RecommendManager<Board> {
     Map<Long, List<RecommendService<Board, ?>>> store;
     List<RecommendService<Board, ?>> serviceList;
