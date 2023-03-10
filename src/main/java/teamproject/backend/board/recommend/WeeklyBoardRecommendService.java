@@ -1,6 +1,7 @@
 package teamproject.backend.board.recommend;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import teamproject.backend.board.BoardRepository;
 import teamproject.backend.domain.Board;
@@ -9,13 +10,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class WeeklyRecommendService extends BoardBannerRecommendService{
+@Qualifier("weeklyBoard")
+public class WeeklyBoardRecommendService extends BoardBannerRecommendService{
 
     private final BoardRepository boardRepository;
     private final int size = 4;
 
     @Autowired
-    public WeeklyRecommendService(BoardRepository boardRepository) {
+    public WeeklyBoardRecommendService(BoardRepository boardRepository) {
         super();
         this.boardRepository = boardRepository;
     }

@@ -2,6 +2,7 @@ package teamproject.backend.mainPage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import teamproject.backend.board.BoardService;
+import teamproject.backend.board.dto.BoardResponseInBannerFormat;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.domain.Tag;
 import teamproject.backend.mainPage.dto.GetSearchByResponse;
 import teamproject.backend.mypage.dto.GetNotificationResponse;
 import teamproject.backend.response.BaseResponse;
+import teamproject.backend.utils.recommend.RecommendService;
 
 import java.util.List;
 
@@ -24,6 +27,9 @@ public class MainPageController {
 
     private final MainPageService mainPageService;
     private final BoardService boardService;
+
+    @Qualifier("weeklyBoard")
+    private final RecommendService weeklyRecommendService;
 
 
     /**
@@ -100,5 +106,11 @@ public class MainPageController {
         GetNotificationResponse getNotificationResponse = mainPageService.notificationByUser(user_id, sort);
 
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
+    }
+
+    @GetMapping("/main/recommend/board/weekly/list")
+    public BaseResponse weeklyBoardRecommend(){
+        List<BoardResponseInBannerFormat> list = weeklyRecommendService.getRecommend();
+        return new BaseResponse("추천 목록을 불러왔습니다.", list);
     }
 }
