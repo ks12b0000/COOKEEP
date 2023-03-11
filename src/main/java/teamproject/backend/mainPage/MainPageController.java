@@ -5,15 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.BoardService;
 import teamproject.backend.board.dto.BoardResponseInBannerFormat;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
-import teamproject.backend.domain.Tag;
-import teamproject.backend.mainPage.dto.GetSearchByResponse;
+import teamproject.backend.mainPage.dto.*;
 import teamproject.backend.mypage.dto.GetNotificationResponse;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.utils.recommend.RecommendService;
@@ -62,15 +58,27 @@ public class MainPageController {
     }
 
     /**
-     * 전체 태그 가져오기
-     * [GET] /main/all/tag/list
+     * Top10 태그 사용순 리스트 가져오기
+     * [GET] /main/top10/tag/list
      * @return
      */
-    @GetMapping("/main/all/tag/list")
-    public BaseResponse allTagList() {
-        List<Tag> tags = mainPageService.allTagList();
+    @GetMapping("/main/top10/tag/list")
+    public BaseResponse top10TagList() {
+        GetTop10TagList tags = mainPageService.top10TagList();
 
-        return new BaseResponse("전체 태그 목록을 가져왔습니다.", tags);
+        return new BaseResponse("Top10 태그 사용순 리스트를 불러오는데 성공했습니다.", tags);
+    }
+
+    /**
+     * Top10 인기 검색어 리스트 가져오기
+     * [GET] /main/top10/search/list
+     * @return
+     */
+    @GetMapping("/main/top10/search/list")
+    public BaseResponse top10SearchList() {
+        GetTop10SearchList searchList = mainPageService.top10SearchList();
+
+        return new BaseResponse("Top10 인기 검색어 리스트를 불러오는데 성공했습니다.", searchList);
     }
 
     /**
@@ -108,9 +116,23 @@ public class MainPageController {
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }
 
+
     @GetMapping("/main/recommend/board/weekly/list")
     public BaseResponse weeklyBoardRecommend(){
         List<BoardResponseInBannerFormat> list = weeklyRecommendService.getRecommend();
         return new BaseResponse("추천 목록을 불러왔습니다.", list);
     }
+        
+    /**
+     * 검색어 자동완성 기능
+     * @param keyword
+     * @return
+     */
+    @GetMapping("/main/auto/search/list")
+    public BaseResponse autoSearchList(@RequestBody AutoSearchRequest keyword) {
+        GetAutoSearchList getAutoSearchList = mainPageService.autoSearchList(keyword);
+
+        return new BaseResponse("검색어 자동완성 리스트를 불러오는데 성공했습니다.", getAutoSearchList);
+    }
+    
 }
