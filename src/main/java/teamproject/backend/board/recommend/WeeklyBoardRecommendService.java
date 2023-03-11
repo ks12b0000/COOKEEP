@@ -52,7 +52,7 @@ public class WeeklyBoardRecommendService extends BoardBannerRecommendService{
         if(allId.size() < this.size) return allId;
         else{
             while (randomId.size() < this.size){
-                int randomIndex = random.nextInt(0, max);
+                int randomIndex = random.nextInt(max);
                 randomId.add(allId.get(randomIndex));
             }
         }
@@ -66,9 +66,9 @@ public class WeeklyBoardRecommendService extends BoardBannerRecommendService{
 
         if(allIdList.size() < this.size + 1) return null;
 
-        Long randomId = allIdList.get(random.nextInt(0,allIdList.size() - 1));
+        Long randomId = allIdList.get(random.nextInt(allIdList.size() - 1));
         while (!recommendBanners.containsKey(randomId)){
-            randomId = allIdList.get(random.nextInt(0,allIdList.size() - 1));
+            randomId = allIdList.get(random.nextInt(allIdList.size() - 1));
         }
 
         return randomId;
