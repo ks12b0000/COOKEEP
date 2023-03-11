@@ -307,6 +307,12 @@ public class UserServiceImpl implements UserService, SocialUserService {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
 
+        if(image == null && user.get().getImageURL() != null){
+            user.get().setImageURL(null);
+            s3DAO.delete(""+userId);
+            return;
+        }
+
         if(s3DAO.isExist(""+userId)){
             s3DAO.delete(""+userId);
         }
