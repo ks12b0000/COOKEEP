@@ -2,14 +2,17 @@ package teamproject.backend.mainPage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.BoardService;
+import teamproject.backend.board.dto.BoardResponseInBannerFormat;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.mainPage.dto.*;
 import teamproject.backend.mypage.dto.GetNotificationResponse;
 import teamproject.backend.response.BaseResponse;
+import teamproject.backend.utils.recommend.RecommendService;
 
 import java.util.List;
 
@@ -20,6 +23,9 @@ public class MainPageController {
 
     private final MainPageService mainPageService;
     private final BoardService boardService;
+
+    @Qualifier("weeklyBoard")
+    private final RecommendService weeklyRecommendService;
 
 
     /**
@@ -110,6 +116,13 @@ public class MainPageController {
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }
 
+
+    @GetMapping("/main/recommend/board/weekly/list")
+    public BaseResponse weeklyBoardRecommend(){
+        List<BoardResponseInBannerFormat> list = weeklyRecommendService.getRecommend();
+        return new BaseResponse("추천 목록을 불러왔습니다.", list);
+    }
+        
     /**
      * 검색어 자동완성 기능
      * @param keyword
@@ -121,4 +134,5 @@ public class MainPageController {
 
         return new BaseResponse("검색어 자동완성 리스트를 불러오는데 성공했습니다.", getAutoSearchList);
     }
+    
 }

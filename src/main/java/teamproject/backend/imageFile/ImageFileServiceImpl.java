@@ -8,7 +8,7 @@ import teamproject.backend.board.BoardRepository;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.ImageFile;
 import teamproject.backend.domain.User;
-import teamproject.backend.imageFile.S3.S3DAO;
+import teamproject.backend.utils.S3.S3DAO;
 import teamproject.backend.imageFile.dto.ImageFileResponse;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseExceptionStatus;
@@ -17,6 +17,7 @@ import teamproject.backend.user.UserRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,9 +33,10 @@ public class ImageFileServiceImpl implements ImageFileService{
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()) throw new BaseException(BaseExceptionStatus.UNAUTHORIZED_USER_ACCESS);
 
-        String s3FileName = s3DAO.upload(multipartFile);
-
+        String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+        s3DAO.upload(s3FileName, multipartFile);
         String url = s3DAO.getURL(s3FileName);
+
         ImageFile imageFile = new ImageFile(s3FileName, url, user.get());
         imageFileRepository.save(imageFile);
 

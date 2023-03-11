@@ -4,6 +4,7 @@ import org.springframework.data.domain.Sort;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
 import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.board.dto.UserBoardResponseInListFormat;
 import teamproject.backend.domain.User;
 
 import java.util.List;
@@ -29,4 +30,5 @@ public interface BoardService {
 
     public List<BoardResponseInCardFormat> findBoarListByCommented();
 
+    UserBoardResponseInListFormat findBoardListByUser(Long userId);
 }

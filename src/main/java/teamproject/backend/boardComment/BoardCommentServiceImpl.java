@@ -96,7 +96,7 @@ public class BoardCommentServiceImpl implements BoardCommentService{
     public List<BoardCommentResponse> findCommentListByBoard(Long boardId) {
         Board board = getBoardBy(boardId);
 
-        List<BoardComment> comments = boardCommentRepository.findByBoard(board);
+        List<BoardComment> comments = boardCommentRepository.findByBoardOrderByCreateDateDesc(board);
         List<BoardCommentResponse> list = getBoardCommentResponses(comments);
         return list;
     }

@@ -1,10 +1,12 @@
 package teamproject.backend.user;
 
+import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.User;
 import teamproject.backend.user.dto.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public interface UserService {
 
@@ -23,4 +25,6 @@ public interface UserService {
     public boolean checkEmailDuplicate(String email);
 
     public FindPwResponse findByUserPw(FindPwRequest findPwRequest);
+
+    void uploadImage(Long userId, MultipartFile image) throws IOException;
 }
