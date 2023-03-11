@@ -19,6 +19,7 @@ public class BoardCommentResponse {
     private Integer replyCount;
     private boolean edit_selected = false;
     private boolean reply_selected = false;
+    private boolean icon_selected = false;
 
     public BoardCommentResponse(BoardComment comment) {
         this.comment_id = comment.getBoardCommentId();

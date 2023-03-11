@@ -17,6 +17,7 @@ import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.RandomNickName;
 import teamproject.backend.user.UserService;
+import teamproject.backend.utils.S3.S3DAO;
 import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
@@ -42,6 +43,8 @@ public class MyPageServiceImpl implements MyPageService {
 
     private final NotificationRepository notificationRepository;
     private final UserService userService;
+
+    private final S3DAO s3DAO;
 
 
     /**
@@ -171,6 +174,7 @@ public class MyPageServiceImpl implements MyPageService {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
         myPageRepository.delete(user);
+        s3DAO.delete(""+user_id);
         logout(response);
     }
 
