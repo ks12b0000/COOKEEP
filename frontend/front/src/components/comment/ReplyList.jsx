@@ -118,7 +118,10 @@ const ReplyList = props => {
               )} */}
             </TextWrap>
             <ContentBlock>
-              <ContentText>{reply.text}</ContentText>
+              <ContentTextWrap>
+                <ContentText>{reply.text}</ContentText>
+                <EditButton src='/image/edit-icon.png' alt='edit-button' />
+              </ContentTextWrap>
               {reply.edit_selected ? (
                 <>
                   <EditBlock
@@ -154,7 +157,7 @@ const ReplyList = props => {
 const CommentWrap = styled.div`
   width: 100%;
   height: auto;
-  margin: 0 auto;
+  margin: 10px auto;
   display: grid;
   grid-template-columns: 6% 93%;
   justify-content: space-between;
@@ -218,29 +221,35 @@ const TextBlock = styled.div`
   display: flex;
 `;
 
-const DateText = styled.div`
-  font-size: 11px;
-  color: #878787;
-  margin-left: 10px;
-  margin-top: auto;
-`;
+// const DateText = styled.div`
+//   font-size: 11px;
+//   color: #878787;
+//   margin-left: 10px;
+//   margin-top: auto;
+// `;
 
-const ButtonText = styled.div`
-  font-size: 12px;
-  color: #878787;
-  margin-left: ${props => (props.marginLeft ? '10px' : '')};
-  cursor: pointer;
+// const ButtonText = styled.div`
+//   font-size: 12px;
+//   color: #878787;
+//   margin-left: ${props => (props.marginLeft ? '10px' : '')};
+//   cursor: pointer;
 
-  &:hover {
-    color: #35c5f0;
-  }
-`;
+//   &:hover {
+//     color: #35c5f0;
+//   }
+// `;
 
 const ContentBlock = styled.div`
   width: 100%;
   height: auto;
   position: relative;
-  padding: 20px 0;
+  padding: 10px 0;
+`;
+
+const ContentTextWrap = styled.div`
+  display: grid;
+  grid-template-columns: 98% 1%;
+  justify-content: space-between;
 `;
 
 const ContentText = styled.div`
@@ -251,6 +260,12 @@ const ContentText = styled.div`
   padding: 24px 16px;
   border-radius: 10px;
   box-sizing: border-box;
+`;
+
+const EditButton = styled.img`
+  margin-left: 10px;
+  margin-top: 3px;
+  cursor: pointer;
 `;
 
 const EditBlock = styled.input`
@@ -278,23 +293,23 @@ const EditBlock = styled.input`
   }
 `;
 
-const EditButton = styled.div`
-  background-color: #949494;
-  color: white;
-  font-size: 11px;
-  font-weight: 500;
-  position: absolute;
-  top: 58%;
-  left: ${props => props.left};
-  padding: 3px 10px;
-  border-radius: 5px;
-  transition: 0.2s;
-  cursor: pointer;
+// const EditButton = styled.div`
+//   background-color: #949494;
+//   color: white;
+//   font-size: 11px;
+//   font-weight: 500;
+//   position: absolute;
+//   top: 58%;
+//   left: ${props => props.left};
+//   padding: 3px 10px;
+//   border-radius: 5px;
+//   transition: 0.2s;
+//   cursor: pointer;
 
-  &:hover {
-    background-color: #35c5f0;
-  }
-`;
+//   &:hover {
+//     background-color: #35c5f0;
+//   }
+// `;
 
 const Line = styled.div`
   width: 100%;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
@@ -6,6 +6,7 @@ import ReplyList from './ReplyList';
 import ReplyUpload from './ReplyUpload';
 import Pagination from './Pagination';
 import CommentUpload from './CommentUpload';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const commentHttp = new CommentHttp();
 
@@ -108,6 +109,15 @@ const CommentList = props => {
     }
   };
 
+  //복사기능
+  const textCopy = useRef();
+
+  const copy = () => {
+    const el = textCopy.current;
+    el.select();
+    document.execCommand('copy');
+  };
+
   return (
     <>
       <CommentTitle>{`댓글 (${Comments.length})`}</CommentTitle>
@@ -117,7 +127,7 @@ const CommentList = props => {
           <CommentBlock>
             {/* 상단 작성자 이름 */}
             <UserNameWrap>
-              <UsernameText>{comment.user_name}</UsernameText>
+              <UsernameText ref={textCopy}>{comment.user_name}</UsernameText>
               <Author>작성자</Author>
             </UserNameWrap>
 
@@ -138,7 +148,40 @@ const CommentList = props => {
             )} */}
 
             <ContentBlock>
-              <ContentText>{comment.text}</ContentText>
+              <ContentTextWrap>
+                <ContentText>{comment.text}</ContentText>
+                <EditButton src='/image/edit-icon.png' alt='edit-button' />
+                {username === comment.user_name ? (
+                  <EditBox>
+                    <CopyToClipboard
+                      text={comment.text}
+                      onCopy={() => alert('댓글이 복사되었습니다.')}
+                    >
+                      <div>복사하기</div>
+                    </CopyToClipboard>
+                    <div>작성글 보기</div>
+                    <div
+                      onClick={() => onEdit(comment.comment_id, comment.text)}
+                    >
+                      수정하기
+                    </div>
+                    <div onClick={e => onDelete(e, comment.comment_id)}>
+                      삭제하기
+                    </div>
+                  </EditBox>
+                ) : (
+                  <EditBox>
+                    <div
+                      onClick={e => {
+                        copy(e, comment.text);
+                      }}
+                    >
+                      복사하기
+                    </div>
+                    <div>작성글 보기</div>
+                  </EditBox>
+                )}
+              </ContentTextWrap>
 
               {comment.edit_selected && (
                 <>
@@ -147,30 +190,31 @@ const CommentList = props => {
                     type='text'
                     onChange={e => setEditComment(e.currentTarget.value)}
                   />
-                  <EditButton
-                    left='91%'
+                  <Edit2Button
+                    left='86.5%'
                     onClick={e =>
                       submitEdit(e, comment.comment_id, comment.text)
                     }
                   >
                     확인
-                  </EditButton>
-                  <EditButton
-                    left='95%'
+                  </Edit2Button>
+                  <Edit2Button
+                    left='91%'
                     onClick={() => offEdit(comment.comment_id)}
                   >
                     취소
-                  </EditButton>
+                  </Edit2Button>
                 </>
               )}
             </ContentBlock>
+
             {comment.reply_selected ? (
               <ReplyText onClick={() => offReply(comment.comment_id)}>
-                대댓글 닫기
+                {`대댓글 닫기 (${comment.replyCount})`}
               </ReplyText>
             ) : (
               <ReplyText onClick={() => onReply(comment.comment_id)}>
-                대댓글 보기
+                {`대댓글 보기 (${comment.replyCount})`}
               </ReplyText>
             )}
 
@@ -184,9 +228,6 @@ const CommentList = props => {
         </CommentWrap>
       ))}
 
-      <Line />
-      <CommentUpload boardId={props.boardId} />
-
       <footer>
         <Pagination
           total={Comments.length}
@@ -195,6 +236,9 @@ const CommentList = props => {
           setPage={setPage}
         />
       </footer>
+
+      <Line />
+      <CommentUpload boardId={props.boardId} />
     </>
   );
 };
@@ -213,7 +257,7 @@ const CommentWrap = styled.div`
   display: grid;
   grid-template-columns: 6% 93%;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: 20px 0 40px 0;
 `;
 
 const Profile = styled.div`
@@ -257,19 +301,59 @@ const Author = styled.div`
 const ContentBlock = styled.div`
   height: auto;
   position: relative;
-  padding: 20px 0;
+  padding: 10px 0;
   display: block;
   width: 100%;
+`;
+
+const ContentTextWrap = styled.div`
+  display: grid;
+  grid-template-columns: 98% 1%;
+  justify-content: space-between;
+  position: relative;
 `;
 
 const ContentText = styled.div`
   font-size: 15px;
   display: block;
   border: 2px solid #f0f0f0;
-  width: 100%;
+  width: 1286px;
   padding: 24px 16px;
   border-radius: 10px;
   box-sizing: border-box;
+`;
+
+const EditButton = styled.img`
+  margin-left: 10px;
+  margin-top: 3px;
+  cursor: pointer;
+`;
+
+const EditBox = styled.div`
+  height: auto;
+  width: 100px;
+  border: 1px solid #ff4122;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 97%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  box-sizing: border-box;
+  background-color: white;
+
+  div {
+    font-size: 15px;
+    font-weight: 400;
+    text-align: center;
+    height: 33px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
 `;
 
 const ReplyText = styled.div`
@@ -280,48 +364,47 @@ const ReplyText = styled.div`
   cursor: pointer;
 `;
 
-const ButtonText = styled.div``;
-
 const EditBlock = styled.input`
   width: 100%;
-  height: 100%;
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 0;
-  border-radius: 15px;
-  border: 1px solid #8b8b8b;
-  font-size: 16px;
-  padding: 0 20px;
+  border-radius: 10px;
+  border: 1px solid #ff4122;
+  font-size: 15px;
+  padding: 24px 16px;
   box-sizing: border-box;
+  width: 1286px;
+  font-family: 400;
 
   :focus {
     outline: none;
-    border: 2px solid #949494;
   }
 
   ::placeholder {
-    font-size: 16px;
-    font-weight: 300;
+    font-size: 15px;
+    font-weight: 400;
     letter-spacing: 2px;
     color: #aaaaaa;
   }
 `;
 
-const EditButton = styled.div`
-  background-color: #949494;
-  color: white;
+const Edit2Button = styled.div`
+  background-color: #ff4122;
+  color: #ffffff;
   font-size: 11px;
   font-weight: 500;
   position: absolute;
-  top: 58%;
+  top: 55%;
   left: ${props => props.left};
-  padding: 3px 10px;
+  padding: 5px 14px;
   border-radius: 5px;
   transition: 0.2s;
   cursor: pointer;
+  transition: 0.2s;
 
   &:hover {
-    background-color: #35c5f0;
+    top: 53%;
   }
 `;
 
