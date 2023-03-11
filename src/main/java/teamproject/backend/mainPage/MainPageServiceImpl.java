@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
 @Service
-@Transactional(readOnly = false)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class MainPageServiceImpl implements MainPageService {
@@ -39,6 +39,7 @@ public class MainPageServiceImpl implements MainPageService {
      * @param keyword
      * @return
      */
+    @Transactional
     @Override
     public GetSearchByResponse searchList(String keyword) {
         List<SearchByResponse> searchList = mainPageRepository.findByTitleContaining(keyword).stream().map(Board::toSearchDto).collect(Collectors.toList());

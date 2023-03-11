@@ -7,8 +7,6 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.BoardService;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
-import teamproject.backend.domain.BoardTag;
-import teamproject.backend.domain.Tag;
 import teamproject.backend.mainPage.dto.*;
 import teamproject.backend.mypage.dto.GetNotificationResponse;
 import teamproject.backend.response.BaseResponse;
