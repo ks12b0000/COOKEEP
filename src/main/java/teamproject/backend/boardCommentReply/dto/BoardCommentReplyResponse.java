@@ -17,6 +17,7 @@ public class BoardCommentReplyResponse {
     private String create_date;
     private String text;
     private boolean edit_selected;
+    private boolean icon_selected = false;
 
     public BoardCommentReplyResponse(BoardCommentReply reply) {
         this.reply_id = reply.getBoardCommentReplyId();
