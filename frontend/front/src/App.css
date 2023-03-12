@@ -1,0 +1,14 @@
+
+.swiper-pagination{
+    bottom:24px !important;
+}
+.swiper-pagination-bullet{
+    width:15px !important;
+    height: 15px !important;
+    background: #CBCBCB !important;
+    opacity: 1 !important;
+}
+.swiper-pagination-bullet-active {
+    background-color: #FF4122 !important;
+}
+input:focus { outline: none !important; border-color: #FF4122; box-shadow: 0 0 12px rgba(255,64,34,0.3); }

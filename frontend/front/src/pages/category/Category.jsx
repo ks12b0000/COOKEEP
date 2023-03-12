@@ -3,7 +3,7 @@ import Layout from "../../components/layout/Layout";
 import {color} from "../../constants/color";
 import CateItem from "../../components/categoryLayout/cateItem/CateItem";
 import {Link} from "react-router-dom";
-import Buttons from "../../components/atomic/buttons/Buttons";
+import Buttons from "../../components/atomic/Buttons";
 import styled from "@emotion/styled";
 import Banner from "../../components/layout/home/banner/Banner";
 
