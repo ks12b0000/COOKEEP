@@ -17,10 +17,11 @@ public class BoardCommentReplyResponse {
     private String create_date;
     private String text;
     private boolean edit_selected;
+    private boolean icon_selected = false;
 
     public BoardCommentReplyResponse(BoardCommentReply reply) {
         this.reply_id = reply.getBoardCommentReplyId();
-        this.user_name = reply.getUser().getUsername();
+        this.user_name = reply.getUser().getNickname();
         this.create_date = asString(reply.getCreateDate());
         this.text = reply.getText();
         this.edit_selected = false;

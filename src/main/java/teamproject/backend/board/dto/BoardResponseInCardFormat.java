@@ -26,7 +26,7 @@ public class BoardResponseInCardFormat {
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
-        this.user_name = board.getUser().getUsername();
+        this.user_name = board.getUser().getNickname();
         this.create_date = board.getCreateDate();
         this.thumbnail = board.getThumbnail();
         this.tags = tags;

@@ -8,7 +8,7 @@ import teamproject.backend.domain.User;
 import java.util.List;
 
 public interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
+    List<BoardComment> findByBoardOrderByCreateDateDesc(Board board);
     List<BoardComment> findByBoard(Board board);
-
     List<BoardComment> findByUser(User user);
 }

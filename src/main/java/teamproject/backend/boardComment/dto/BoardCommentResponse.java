@@ -19,10 +19,11 @@ public class BoardCommentResponse {
     private Integer replyCount;
     private boolean edit_selected = false;
     private boolean reply_selected = false;
+    private boolean icon_selected = false;
 
     public BoardCommentResponse(BoardComment comment) {
         this.comment_id = comment.getBoardCommentId();
-        this.user_name = comment.getUser().getUsername();
+        this.user_name = comment.getUser().getNickname();
         this.create_date = asString(comment.getCreateDate());
         this.text = comment.getText();
         this.replyCount = comment.getReplyCnt();

@@ -6,13 +6,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.mypage.dto.*;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
+import teamproject.backend.user.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final UserService userService;
 
     /**
      * 마이페이지 조회
@@ -97,12 +102,27 @@ public class MyPageController {
         return new BaseResponse("이메일 변경에 성공했습니다.");
     }
 
-    /**
-     * 회원 탈퇴
-     * [DELETE] /auth/user/delete/{user_id}
-     * @param user_id
-     * @return
-     */
+    @PutMapping("/auth/user/update/nickname/{user_id}")
+    public BaseResponse updateNickname(@PathVariable Long user_id, @Validated(ValidationSequence.class) @RequestBody UpdateNicknameRequest request) {
+
+        myPageService.updateNickname(user_id, request);
+
+        return new BaseResponse("닉네임 변경에 성공했습니다.");
+    }
+
+    @GetMapping("/auth/user/suggest/nickname")
+    public BaseResponse updateNickname() {
+        List<String> suggestNicknames = myPageService.suggestNickname(5);
+
+        return new BaseResponse("닉네임 추천 목록을 불러왔습니다.", suggestNicknames);
+    }
+
+        /**
+         * 회원 탈퇴
+         * [DELETE] /auth/user/delete/{user_id}
+         * @param user_id
+         * @return
+         */
     @DeleteMapping("/auth/user/delete/{user_id}")
     public BaseResponse userDelete(@PathVariable Long user_id, HttpServletResponse response) {
 
@@ -158,5 +178,12 @@ public class MyPageController {
         GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, sort, cookies);
 
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
+    }
+
+    @PostMapping("/auth/user/image/{user_id}")
+    public BaseResponse uploadUserImage(@PathVariable Long user_id, MultipartFile image) throws IOException {
+        userService.uploadImage(user_id, image);
+
+        return new BaseResponse("유저 사진을 교체했습니다.");
     }
 }

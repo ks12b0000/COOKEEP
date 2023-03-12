@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
 import teamproject.backend.notification.NotificationRepository;
@@ -12,10 +13,14 @@ import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
 import teamproject.backend.utils.JwtService;
+import teamproject.backend.utils.S3.S3DAO;
 import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.Optional;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
@@ -29,6 +34,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final JwtService jwtService;
     private final CookieService cookieService;
     private final NotificationRepository notificationRepository;
+    private final S3DAO s3DAO;
 
     /**
      * 회원가입
@@ -42,12 +48,15 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String email = joinRequest.getEmail();
         String password = joinRequest.getPassword();
         String salt = SHA256.getSalt();
+        String nickname = getRandomNickname();
+        if(nickname == null) nickname = username;
 
         password = SHA256.encrypt(password, salt);
 
         if (checkIdDuplicate(username)){}
 
-        User user = new User(username, email, password, salt);
+        User user = new User(username, nickname, email, password, salt);
+
         userRepository.save(user);
         notificationSave(user);
 
@@ -277,5 +286,38 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String url = "https://www.teamprojectvv.shop/mypage/" + user.getId();
         Notification notification = new Notification(user, message, url);
         notificationRepository.save(notification);
+    }
+
+    private String getRandomNickname(){
+        String nickname = null;
+
+        for(int i = 0; i < 100; i++){
+            String random = RandomNickName.get(15);
+            if (!userRepository.existsUserByNickname(random)){
+                nickname = random;
+                break;
+            }
+        }
+
+        return nickname;
+    }
+
+    @Override
+    public void uploadImage(Long userId, MultipartFile image) throws IOException {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
+
+        if(image == null && user.get().getImageURL() != null){
+            user.get().setImageURL(null);
+            s3DAO.delete(""+userId);
+            return;
+        }
+
+        if(s3DAO.isExist(""+userId)){
+            s3DAO.delete(""+userId);
+        }
+        s3DAO.upload(""+userId, image);
+
+        user.get().setImageURL(s3DAO.getURL("" + userId));
     }
 }
