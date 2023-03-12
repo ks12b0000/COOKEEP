@@ -250,6 +250,7 @@ const ContentTextWrap = styled.div`
   display: grid;
   grid-template-columns: 98% 1%;
   justify-content: space-between;
+  position: relative;
 `;
 
 const ContentText = styled.div`

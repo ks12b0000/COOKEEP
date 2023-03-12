@@ -63,6 +63,21 @@ const CommentList = props => {
     }
   };
 
+  //아이콘창 켜기 기능
+  const onIcon = (e, id) => {
+    e.stopPropagation();
+    const copyList = [...Comments];
+    copyList.find(comment => comment.comment_id === id).icon_selected = true;
+    setComments(copyList);
+  };
+
+  //답글창 닫기 기능
+  const offIcon = id => {
+    const copyList = [...Comments];
+    copyList.find(comment => comment.comment_id === id).icon_selected = false;
+    setComments(copyList);
+  };
+
   //답글창 켜기 기능
   const onReply = id => {
     const copyList = [...Comments];
@@ -109,77 +124,65 @@ const CommentList = props => {
     }
   };
 
-  //복사기능
-  const textCopy = useRef();
-
-  const copy = () => {
-    const el = textCopy.current;
-    el.select();
-    document.execCommand('copy');
-  };
-
   return (
     <>
       <CommentTitle>{`댓글 (${Comments.length})`}</CommentTitle>
       {Comments.slice(offset, offset + Limit)?.map(comment => (
-        <CommentWrap key={comment.comment_id}>
+        <CommentWrap
+          key={comment.comment_id}
+          onClick={() => offIcon(comment.comment_id)}
+        >
           <Profile />
           <CommentBlock>
             {/* 상단 작성자 이름 */}
             <UserNameWrap>
-              <UsernameText ref={textCopy}>{comment.user_name}</UsernameText>
+              <UsernameText>{comment.user_name}</UsernameText>
               <Author>작성자</Author>
             </UserNameWrap>
-
-            {/* {username === comment.user_name && (
-              <>
-                <ButtonText
-                  onClick={() => onEdit(comment.comment_id, comment.text)}
-                >
-                  수정
-                </ButtonText>
-                <ButtonText
-                  marginLeft
-                  onClick={e => onDelete(e, comment.comment_id)}
-                >
-                  삭제
-                </ButtonText>
-              </>
-            )} */}
 
             <ContentBlock>
               <ContentTextWrap>
                 <ContentText>{comment.text}</ContentText>
-                <EditButton src='/image/edit-icon.png' alt='edit-button' />
-                {username === comment.user_name ? (
-                  <EditBox>
-                    <CopyToClipboard
-                      text={comment.text}
-                      onCopy={() => alert('댓글이 복사되었습니다.')}
-                    >
-                      <div>복사하기</div>
-                    </CopyToClipboard>
-                    <div>작성글 보기</div>
-                    <div
-                      onClick={() => onEdit(comment.comment_id, comment.text)}
-                    >
-                      수정하기
-                    </div>
-                    <div onClick={e => onDelete(e, comment.comment_id)}>
-                      삭제하기
-                    </div>
-                  </EditBox>
-                ) : (
-                  <EditBox>
-                    <div
-                      onClick={e => {
-                        copy(e, comment.text);
-                      }}
-                    >
-                      복사하기
-                    </div>
-                    <div>작성글 보기</div>
-                  </EditBox>
+                <EditButton
+                  src='/image/edit-icon.png'
+                  alt='edit-button'
+                  onClick={e => onIcon(e, comment.comment_id)}
+                />
+
+                {comment.icon_selected && (
+                  <>
+                    {username === comment.user_name ? (
+                      <EditBox>
+                        <CopyToClipboard
+                          text={comment.text}
+                          onCopy={() => alert('댓글이 복사되었습니다.')}
+                        >
+                          <div>복사하기</div>
+                        </CopyToClipboard>
+                        <div>작성글 보기</div>
+                        <div
+                          onClick={() =>
+                            onEdit(comment.comment_id, comment.text)
+                          }
+                        >
+                          수정하기
+                        </div>
+                        <div onClick={e => onDelete(e, comment.comment_id)}>
+                          삭제하기
+                        </div>
+                      </EditBox>
+                    ) : (
+                      <EditBox>
+                        <CopyToClipboard
+                          text={comment.text}
+                          onCopy={() => alert('댓글이 복사되었습니다.')}
+                        >
+                          <div>복사하기</div>
+                        </CopyToClipboard>
+                        <div>작성글 보기</div>
+                      </EditBox>
+                    )}
+                  </>
                 )}
               </ContentTextWrap>
 
@@ -343,6 +346,7 @@ const EditBox = styled.div`
   padding: 10px 0;
   box-sizing: border-box;
   background-color: white;
+  z-index: 100;
 
   div {
     font-size: 15px;
@@ -376,6 +380,7 @@ const EditBlock = styled.input`
   box-sizing: border-box;
   width: 1286px;
   font-family: 400;
+  background-color: white;
 
   :focus {
     outline: none;

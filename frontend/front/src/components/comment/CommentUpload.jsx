@@ -7,7 +7,6 @@ import CommentHttp from '../../http/commentHttp';
 const commentHttp = new CommentHttp();
 
 const CommentUpload = props => {
-  const modalRef = useRef();
   const navigate = useNavigate();
 
   const [Text, setText] = useState('');
@@ -74,7 +73,7 @@ const CommentUpload = props => {
       {IsModal && (
         <>
           <ModalBack />
-          <ModalWrap ref={modalRef}>
+          <ModalWrap>
             <ModalIcon src='/image/modal-icon.png' />
             <ModalText>로그인 후 이용 가능합니다.</ModalText>
             <Line1 />
