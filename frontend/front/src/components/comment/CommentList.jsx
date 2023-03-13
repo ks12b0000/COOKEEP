@@ -11,6 +11,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 const commentHttp = new CommentHttp();
 
 const CommentList = props => {
+  const modalRef = useRef();
+
   const username = useSelector(
     state => state.persistedReducer.userReducer.username
   );
@@ -27,18 +29,54 @@ const CommentList = props => {
   const offset = (Page - 1) * Limit;
 
   useEffect(() => {
+    const getList = async () => {
+      try {
+        const res = await commentHttp.getCommentList(props.boardId);
+        setComments(res.data.result);
+
+        function handleClickOutside(e) {
+          if (modalRef.current && !modalRef.current.contains(e.target)) {
+            console.log(Comments.length);
+            if (Comments.length !== 0) {
+              offIcon();
+            }
+          }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+        };
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     getList();
   }, []);
 
-  const getList = async () => {
-    try {
-      const res = await commentHttp.getCommentList(props.boardId);
-      setComments(res.data.result);
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // useEffect(() => {
+  //   function handleClickOutside(e) {
+  //     if (modalRef.current && !modalRef.current.contains(e.target)) {
+  //       console.log(Comments.length);
+  //       if (Comments.length !== 0) {
+  //         offIcon();
+  //       }
+  //     }
+  //   }
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [modalRef]);
+
+  // const getList = async () => {
+  //   try {
+  //     const res = await commentHttp.getCommentList(props.boardId);
+  //     setComments(res.data.result);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // 댓글 수정 기능
   const submitEdit = async (e, commentId, text) => {
@@ -71,10 +109,14 @@ const CommentList = props => {
     setComments(copyList);
   };
 
-  //답글창 닫기 기능
-  const offIcon = id => {
+  //아이콘창 닫기 기능(모든 값을 false로 만들어버리기)
+  const offIcon = () => {
     const copyList = [...Comments];
-    copyList.find(comment => comment.comment_id === id).icon_selected = false;
+
+    copyList.forEach(item => {
+      item.icon_selected = false;
+    });
+
     setComments(copyList);
   };
 
@@ -128,16 +170,13 @@ const CommentList = props => {
     <>
       <CommentTitle>{`댓글 (${Comments.length})`}</CommentTitle>
       {Comments.slice(offset, offset + Limit)?.map(comment => (
-        <CommentWrap
-          key={comment.comment_id}
-          onClick={() => offIcon(comment.comment_id)}
-        >
+        <CommentWrap key={comment.comment_id}>
           <Profile />
           <CommentBlock>
             {/* 상단 작성자 이름 */}
             <UserNameWrap>
               <UsernameText>{comment.user_name}</UsernameText>
-              <Author>작성자</Author>
+              {props.userName === comment.user_name && <Author>작성자</Author>}
             </UserNameWrap>
 
             <ContentBlock>
@@ -152,7 +191,7 @@ const CommentList = props => {
                 {comment.icon_selected && (
                   <>
                     {username === comment.user_name ? (
-                      <EditBox>
+                      <EditBox ref={modalRef}>
                         <CopyToClipboard
                           text={comment.text}
                           onCopy={() => alert('댓글이 복사되었습니다.')}
@@ -172,7 +211,7 @@ const CommentList = props => {
                         </div>
                       </EditBox>
                     ) : (
-                      <EditBox>
+                      <EditBox ref={modalRef}>
                         <CopyToClipboard
                           text={comment.text}
                           onCopy={() => alert('댓글이 복사되었습니다.')}
@@ -223,7 +262,10 @@ const CommentList = props => {
 
             {comment.reply_selected && (
               <ReplyWrap>
-                <ReplyList commentId={comment.comment_id} />
+                <ReplyList
+                  commentId={comment.comment_id}
+                  userName={props.userName}
+                />
                 <ReplyUpload commentId={comment.comment_id} />
               </ReplyWrap>
             )}
@@ -339,7 +381,7 @@ const EditBox = styled.div`
   border-radius: 5px;
   position: absolute;
   top: 0;
-  left: 97%;
+  left: 101%;
   display: grid;
   justify-content: center;
   align-items: center;

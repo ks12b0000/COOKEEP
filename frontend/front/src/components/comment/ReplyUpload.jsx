@@ -94,7 +94,7 @@ const RepleWrap = styled.div`
   height: auto;
   margin: 30px 0 30px 0;
   display: grid;
-  grid-template-columns: 7% 83% 10%;
+  grid-template-columns: 8% 82% 10%;
   justify-content: space-between;
 `;
 
