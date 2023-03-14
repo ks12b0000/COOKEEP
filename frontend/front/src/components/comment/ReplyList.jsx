@@ -64,15 +64,10 @@ const ReplyList = props => {
     setReplys(copyList);
   };
 
-  //아이콘창 닫기 기능(모든 값을 false로 만들어버리기)
-  const offIcon = () => {
+  //아이콘창 닫기 기능
+  const offIcon = id => {
     const copyList = [...Replys];
-    console.log('copyList1', copyList);
-
-    copyList.forEach(item => {
-      item.icon_selected = false;
-    });
-
+    copyList.find(reply => reply.reply_id === id).icon_selected = false;
     setReplys(copyList);
   };
 
@@ -108,21 +103,6 @@ const ReplyList = props => {
     }
   };
 
-  // 박스 외부 누르면 닫히게 만들기
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        if (Replys.length !== 0) {
-          offIcon();
-        }
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [modalRef]);
-
   return (
     <>
       {Replys?.map(reply => (
@@ -152,31 +132,39 @@ const ReplyList = props => {
                 {reply.icon_selected && (
                   <>
                     {username === reply.user_name ? (
-                      <EditBox ref={modalRef}>
-                        <CopyToClipboard
-                          text={reply.text}
-                          onCopy={() => alert('댓글이 복사되었습니다.')}
-                        >
-                          <div>복사하기</div>
-                        </CopyToClipboard>
-                        <div>작성글 보기</div>
-                        <div onClick={() => onEdit(reply.reply_id, reply.text)}>
-                          수정하기
-                        </div>
-                        <div onClick={e => onDelete(e, reply.reply_id)}>
-                          삭제하기
-                        </div>
-                      </EditBox>
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={reply.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div>작성글 보기</div>
+                          <div
+                            onClick={() => onEdit(reply.reply_id, reply.text)}
+                          >
+                            수정하기
+                          </div>
+                          <div onClick={e => onDelete(e, reply.reply_id)}>
+                            삭제하기
+                          </div>
+                        </EditBox>
+                        <EditBoxBack onClick={() => offIcon(reply.reply_id)} />
+                      </>
                     ) : (
-                      <EditBox ref={modalRef}>
-                        <CopyToClipboard
-                          text={reply.text}
-                          onCopy={() => alert('댓글이 복사되었습니다.')}
-                        >
-                          <div>복사하기</div>
-                        </CopyToClipboard>
-                        <div>작성글 보기</div>
-                      </EditBox>
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={reply.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div>작성글 보기</div>
+                        </EditBox>
+                        <EditBoxBack onClick={() => offIcon(reply.reply_id)} />
+                      </>
                     )}
                   </>
                 )}
@@ -310,6 +298,14 @@ const EditButton = styled.img`
   margin-left: auto;
   position: absolute;
   left: 100%;
+`;
+
+const EditBoxBack = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 `;
 
 const EditBox = styled.div`

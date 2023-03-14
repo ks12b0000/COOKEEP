@@ -29,54 +29,17 @@ const CommentList = props => {
   const offset = (Page - 1) * Limit;
 
   useEffect(() => {
-    const getList = async () => {
-      try {
-        const res = await commentHttp.getCommentList(props.boardId);
-        setComments(res.data.result);
-
-        function handleClickOutside(e) {
-          if (modalRef.current && !modalRef.current.contains(e.target)) {
-            console.log(Comments.length);
-            if (Comments.length !== 0) {
-              offIcon();
-            }
-          }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     getList();
   }, []);
 
-  // useEffect(() => {
-  //   function handleClickOutside(e) {
-  //     if (modalRef.current && !modalRef.current.contains(e.target)) {
-  //       console.log(Comments.length);
-  //       if (Comments.length !== 0) {
-  //         offIcon();
-  //       }
-  //     }
-  //   }
-  //   document.addEventListener('mousedown', handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, [modalRef]);
-
-  // const getList = async () => {
-  //   try {
-  //     const res = await commentHttp.getCommentList(props.boardId);
-  //     setComments(res.data.result);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const getList = async () => {
+    try {
+      const res = await commentHttp.getCommentList(props.boardId);
+      setComments(res.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // 댓글 수정 기능
   const submitEdit = async (e, commentId, text) => {
@@ -109,14 +72,10 @@ const CommentList = props => {
     setComments(copyList);
   };
 
-  //아이콘창 닫기 기능(모든 값을 false로 만들어버리기)
-  const offIcon = () => {
+  //답글창 닫기 기능
+  const offIcon = id => {
     const copyList = [...Comments];
-
-    copyList.forEach(item => {
-      item.icon_selected = false;
-    });
-
+    copyList.find(comment => comment.comment_id === id).icon_selected = false;
     setComments(copyList);
   };
 
@@ -191,35 +150,45 @@ const CommentList = props => {
                 {comment.icon_selected && (
                   <>
                     {username === comment.user_name ? (
-                      <EditBox ref={modalRef}>
-                        <CopyToClipboard
-                          text={comment.text}
-                          onCopy={() => alert('댓글이 복사되었습니다.')}
-                        >
-                          <div>복사하기</div>
-                        </CopyToClipboard>
-                        <div>작성글 보기</div>
-                        <div
-                          onClick={() =>
-                            onEdit(comment.comment_id, comment.text)
-                          }
-                        >
-                          수정하기
-                        </div>
-                        <div onClick={e => onDelete(e, comment.comment_id)}>
-                          삭제하기
-                        </div>
-                      </EditBox>
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={comment.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div>작성글 보기</div>
+                          <div
+                            onClick={() =>
+                              onEdit(comment.comment_id, comment.text)
+                            }
+                          >
+                            수정하기
+                          </div>
+                          <div onClick={e => onDelete(e, comment.comment_id)}>
+                            삭제하기
+                          </div>
+                        </EditBox>
+                        <EditBoxBack
+                          onClick={() => offIcon(comment.comment_id)}
+                        />
+                      </>
                     ) : (
-                      <EditBox ref={modalRef}>
-                        <CopyToClipboard
-                          text={comment.text}
-                          onCopy={() => alert('댓글이 복사되었습니다.')}
-                        >
-                          <div>복사하기</div>
-                        </CopyToClipboard>
-                        <div>작성글 보기</div>
-                      </EditBox>
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={comment.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div>작성글 보기</div>
+                        </EditBox>
+                        <EditBoxBack
+                          onClick={() => offIcon(comment.comment_id)}
+                        />
+                      </>
                     )}
                   </>
                 )}
@@ -372,6 +341,14 @@ const EditButton = styled.img`
   margin-left: 10px;
   margin-top: 3px;
   cursor: pointer;
+`;
+
+const EditBoxBack = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 `;
 
 const EditBox = styled.div`
