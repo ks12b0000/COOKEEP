@@ -113,12 +113,12 @@ public class MyPageController {
         return new BaseResponse("닉네임 추천 목록을 불러왔습니다.", suggestNicknames);
     }
 
-        /**
-         * 회원 탈퇴
-         * [DELETE] /auth/user/delete/{user_id}
-         * @param user_id
-         * @return
-         */
+    /**
+     * 회원 탈퇴
+     * [DELETE] /auth/user/delete/{user_id}
+     * @param user_id
+     * @return
+     */
     @DeleteMapping("/auth/user/delete/{user_id}")
     public BaseResponse userDelete(@PathVariable Long user_id, HttpServletResponse response) {
 
