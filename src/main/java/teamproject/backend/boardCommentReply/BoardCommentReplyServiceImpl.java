@@ -1,10 +1,12 @@
 package teamproject.backend.boardCommentReply;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.boardComment.BoardCommentRepository;
-import teamproject.backend.boardComment.BoardCommentService;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyListResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
@@ -13,7 +15,6 @@ import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,24 +74,17 @@ public class BoardCommentReplyServiceImpl implements BoardCommentReplyService{
     @Override
     @Transactional
     public void deleteAllReplyOf(BoardComment comment) {
-        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(comment);
+        List<BoardCommentReply> replies = boardCommentReplyRepository.findAllByBoardComment(comment);
         for(BoardCommentReply reply : replies){
             delete(reply.getBoardCommentReplyId(), reply.getUser().getId());
         }
     }
 
     @Override
-    public List<BoardCommentReplyResponse> findReplyByCommentId(Long commentId) {
+    public BoardCommentReplyListResponse findReplyByCommentId(Pageable pageable, Long commentId) {
         BoardComment boardComment = boardCommentRepository.findById(commentId).get();
-
-        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(boardComment);
-        System.out.println(replies.size());
-        List<BoardCommentReplyResponse> list = new LinkedList<>();
-        for(BoardCommentReply reply : replies){
-            list.add(new BoardCommentReplyResponse(reply));
-        }
-
-        return list;
+        Page<BoardCommentReplyResponse> replies = boardCommentReplyRepository.findByBoardComment(pageable, boardComment);
+        return new BoardCommentReplyListResponse(replies.getContent(), replies.getTotalPages());
     }
 
     private User getUserById(Long userId) {

@@ -3,7 +3,6 @@ package teamproject.backend.boardTag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamproject.backend.board.BoardService;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardTag;
 import teamproject.backend.domain.Tag;
