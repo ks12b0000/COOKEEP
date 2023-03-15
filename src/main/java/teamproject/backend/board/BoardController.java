@@ -9,11 +9,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.dto.*;
 import teamproject.backend.boardComment.BoardCommentService;
-import teamproject.backend.boardComment.dto.BoardCommentResponse;
+import teamproject.backend.boardComment.dto.BoardCommentListResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
 import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
 import teamproject.backend.boardCommentReply.BoardCommentReplyService;
-import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyListResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
 import teamproject.backend.domain.User;
@@ -57,7 +57,6 @@ public class BoardController {
      * [GET] /board/list?category=&sort=liked,desc 좋아요순
      * [GET] /board/list?category=&sort=commented,desc 댓글순
      * @param category
-     * @param sort
      * @return
      */
     @GetMapping("/board/list")
@@ -151,8 +150,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/comment/list")
-    public BaseResponse listBoardComments(@RequestParam Long board_id){
-        List<BoardCommentResponse> comments = boardCommentService.findCommentListByBoard(board_id);
+    public BaseResponse listBoardComments(@PageableDefault(size = 10) Pageable pageable, @RequestParam Long board_id){
+        BoardCommentListResponse comments = boardCommentService.findCommentListByBoard(pageable, board_id);
         return new BaseResponse("성공적으로 글의 댓글들을 가져왔습니다.", comments);
     }
 
@@ -175,8 +174,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/comment/reply/list")
-    public BaseResponse<List<BoardCommentReplyResponse>> listBoardReplies(@RequestParam Long comment_id){
-        List<BoardCommentReplyResponse> list = boardCommentReplyService.findReplyByCommentId(comment_id);
+    public BaseResponse listBoardReplies(@PageableDefault(size = 10) Pageable pageable, @RequestParam Long comment_id){
+        BoardCommentReplyListResponse list = boardCommentReplyService.findReplyByCommentId(pageable, comment_id);
         return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.", list);
     }
 

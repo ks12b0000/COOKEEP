@@ -21,6 +21,14 @@ public class BoardCommentResponse {
     private boolean reply_selected = false;
     private boolean icon_selected = false;
 
+    public BoardCommentResponse(Long comment_id, String user_name, Date create_date, String text, Integer replyCount) {
+        this.comment_id = comment_id;
+        this.user_name = user_name;
+        this.create_date = asString(create_date);
+        this.text = text;
+        this.replyCount = replyCount;
+    }
+
     public BoardCommentResponse(BoardComment comment) {
         this.comment_id = comment.getBoardCommentId();
         this.user_name = comment.getUser().getNickname();

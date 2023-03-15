@@ -142,7 +142,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     private void deleteAllReplyOf(BoardComment comment) {
-        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(comment);
+        List<BoardCommentReply> replies = boardCommentReplyRepository.findAllByBoardComment(comment);
         for(BoardCommentReply reply : replies){
             boardCommentReplyRepository.delete(reply);
         }

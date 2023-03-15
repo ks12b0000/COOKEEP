@@ -1,11 +1,11 @@
 package teamproject.backend.boardComment;
 
+import org.springframework.data.domain.Pageable;
+import teamproject.backend.boardComment.dto.BoardCommentListResponse;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
 import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
-import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardComment;
-import teamproject.backend.domain.User;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface BoardCommentService {
 
     void delete(Long commentId, Long userId);
 
-    List<BoardCommentResponse> findCommentListByBoard(Long boardId);
+    BoardCommentListResponse findCommentListByBoard(Pageable pageable, Long boardId);
 
     List<BoardCommentResponse> findCommentListByUser(Long userId);
 }
