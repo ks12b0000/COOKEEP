@@ -1,11 +1,14 @@
 package teamproject.backend.board;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import teamproject.backend.board.dto.BoardResponseInBannerFormat;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
@@ -19,6 +22,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByUser_id(Long userId);
 
     List<Board> findByUser(User user);
+
+    @Query("select new teamproject.backend.board.dto.BoardResponseInBannerFormat(b.boardId, b.title, b.thumbnail) from Board b where b.user.id = :userId")
+    Page<BoardResponseInBannerFormat> findBannerByUserId(Pageable pageable, Long userId);
 
     List<Board> findTop5ByOrderByLikedDesc();
 

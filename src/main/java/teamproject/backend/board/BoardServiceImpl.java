@@ -3,13 +3,12 @@ package teamproject.backend.board;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamproject.backend.board.dto.BoardResponseInCardFormat;
-import teamproject.backend.board.dto.BoardResponseInDetailFormat;
-import teamproject.backend.board.dto.BoardWriteRequest;
-import teamproject.backend.board.dto.UserBoardResponseInListFormat;
+import teamproject.backend.board.dto.*;
 import teamproject.backend.boardComment.BoardCommentRepository;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardCommentReply.BoardCommentReplyRepository;
@@ -283,9 +282,9 @@ public class BoardServiceImpl implements BoardService{
         return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
-    public UserBoardResponseInListFormat findBoardListByUser(Long userId){
+    public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
-        List<Board> boards = boardRepository.findByUser(user);
-        return new UserBoardResponseInListFormat(boards, user);
+        Page<BoardResponseInBannerFormat> boards = boardRepository.findBannerByUserId(pageable, userId);
+        return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalElements());
     }
 }

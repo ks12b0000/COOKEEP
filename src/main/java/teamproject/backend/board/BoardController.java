@@ -1,7 +1,9 @@
 package teamproject.backend.board;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -208,8 +210,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/{userId}/list")
-    public BaseResponse findBoardListByUser(@PathVariable Long userId){
-        UserBoardResponseInListFormat listFormat = boardService.findBoardListByUser(userId);
+    public BaseResponse findBoardListByUser(@PathVariable Long userId, @PageableDefault(size = 10) Pageable pageable){
+        UserBoardResponseInListFormat listFormat = boardService.findBoardListByUser(pageable, userId);
         return new BaseResponse("성공적으로 유저 글 목록을 불러왔습니다.", listFormat);
     }
 }

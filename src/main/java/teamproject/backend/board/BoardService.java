@@ -1,5 +1,6 @@
 package teamproject.backend.board;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.board.dto.BoardResponseInDetailFormat;
@@ -30,5 +31,5 @@ public interface BoardService {
 
     public List<BoardResponseInCardFormat> findBoarListByCommented();
 
-    UserBoardResponseInListFormat findBoardListByUser(Long userId);
+    UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId);
 }
