@@ -34,6 +34,9 @@ public class User {
     @Column
     private String salt;
 
+    @Column
+    private String imageURL;
+
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Board> board_list = new LinkedList<>();
 
@@ -75,5 +78,9 @@ public class User {
     // 이메일 변경
     public void updateEmail(String updateEmail) {
         this.email = updateEmail;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

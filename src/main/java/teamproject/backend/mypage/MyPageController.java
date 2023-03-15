@@ -6,13 +6,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.mypage.dto.*;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
+import teamproject.backend.user.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,6 +24,7 @@ import java.util.List;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final UserService userService;
 
     /**
      * 마이페이지 조회
@@ -174,5 +178,12 @@ public class MyPageController {
         GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, sort, cookies);
 
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
+    }
+
+    @PostMapping("/auth/user/image/{user_id}")
+    public BaseResponse uploadUserImage(@PathVariable Long user_id, MultipartFile image) throws IOException {
+        userService.uploadImage(user_id, image);
+
+        return new BaseResponse("유저 사진을 교체했습니다.");
     }
 }

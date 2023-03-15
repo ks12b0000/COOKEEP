@@ -1,19 +1,19 @@
 package teamproject.backend.board;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import teamproject.backend.board.dto.BoardResponseInCardFormat;
-import teamproject.backend.board.dto.BoardResponseInDetailFormat;
-import teamproject.backend.board.dto.BoardWriteRequest;
+import teamproject.backend.board.dto.*;
 import teamproject.backend.boardComment.BoardCommentService;
-import teamproject.backend.boardComment.dto.BoardCommentResponse;
+import teamproject.backend.boardComment.dto.BoardCommentListResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
 import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
 import teamproject.backend.boardCommentReply.BoardCommentReplyService;
-import teamproject.backend.boardCommentReply.dto.BoardCommentReplyResponse;
+import teamproject.backend.boardCommentReply.dto.BoardCommentReplyListResponse;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyUpdateRequest;
 import teamproject.backend.boardCommentReply.dto.BoardCommentReplyWriteRequest;
 import teamproject.backend.domain.User;
@@ -57,24 +57,12 @@ public class BoardController {
      * [GET] /board/list?category=&sort=liked,desc 좋아요순
      * [GET] /board/list?category=&sort=commented,desc 댓글순
      * @param category
-     * @param sort
      * @return
      */
     @GetMapping("/board/list")
-    public BaseResponse boardListByCategory(@RequestParam String category, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort){
-        List<BoardResponseInCardFormat> pages = boardService.findBoardListByFoodCategoryName(category, sort);
+    public BaseResponse boardListByCategory(@PageableDefault(size = 10, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, @RequestParam String category){
+        BoardListResponseByCategory pages = boardService.findBoardListByFoodCategoryName(pageable, category);
         return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
-    }
-
-    /**
-     * 회원 글 목록 조회
-     * @param user_id
-     * @return
-     */
-    @GetMapping("/board/list/{user_id}")
-    public BaseResponse<List<BoardResponseInDetailFormat>> boardListByUser(@PathVariable Long user_id){
-        List<BoardResponseInDetailFormat> pages = boardService.findBoardListByUserId(user_id);
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
     /**
@@ -162,8 +150,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/comment/list")
-    public BaseResponse listBoardComments(@RequestParam Long board_id){
-        List<BoardCommentResponse> comments = boardCommentService.findCommentListByBoard(board_id);
+    public BaseResponse listBoardComments(@PageableDefault(size = 10) Pageable pageable, @RequestParam Long board_id){
+        BoardCommentListResponse comments = boardCommentService.findCommentListByBoard(pageable, board_id);
         return new BaseResponse("성공적으로 글의 댓글들을 가져왔습니다.", comments);
     }
 
@@ -186,8 +174,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/comment/reply/list")
-    public BaseResponse<List<BoardCommentReplyResponse>> listBoardReplies(@RequestParam Long comment_id){
-        List<BoardCommentReplyResponse> list = boardCommentReplyService.findReplyByCommentId(comment_id);
+    public BaseResponse listBoardReplies(@PageableDefault(size = 10) Pageable pageable, @RequestParam Long comment_id){
+        BoardCommentReplyListResponse list = boardCommentReplyService.findReplyByCommentId(pageable, comment_id);
         return new BaseResponse("성공적으로 대댓글 목록을 조회했습니다.", list);
     }
 
@@ -204,5 +192,11 @@ public class BoardController {
         List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListByAll(sort);
 
         return new BaseResponse("성공적으로 전체 게시글 목록을 조회했습니다.", boarListByAll);
+    }
+
+    @GetMapping("/board/{userId}/list")
+    public BaseResponse findBoardListByUser(@PathVariable Long userId, @PageableDefault(size = 10) Pageable pageable){
+        UserBoardResponseInListFormat listFormat = boardService.findBoardListByUser(pageable, userId);
+        return new BaseResponse("성공적으로 유저 글 목록을 불러왔습니다.", listFormat);
     }
 }

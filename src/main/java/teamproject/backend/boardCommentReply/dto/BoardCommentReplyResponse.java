@@ -16,14 +16,21 @@ public class BoardCommentReplyResponse {
     private String user_name;
     private String create_date;
     private String text;
-    private boolean edit_selected;
+    private boolean edit_selected = false;
+    private boolean icon_selected = false;
 
     public BoardCommentReplyResponse(BoardCommentReply reply) {
         this.reply_id = reply.getBoardCommentReplyId();
         this.user_name = reply.getUser().getNickname();
         this.create_date = asString(reply.getCreateDate());
         this.text = reply.getText();
-        this.edit_selected = false;
+    }
+
+    public BoardCommentReplyResponse(Long reply_id, String user_name, Date create_date, String text) {
+        this.reply_id = reply_id;
+        this.user_name = user_name;
+        this.create_date = asString(create_date);
+        this.text = text;
     }
 
     private String asString(Date date){

@@ -1,9 +1,12 @@
 package teamproject.backend.boardComment;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
+import teamproject.backend.boardComment.dto.BoardCommentListResponse;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
 import teamproject.backend.boardComment.dto.BoardCommentWriteRequest;
@@ -93,12 +96,10 @@ public class BoardCommentServiceImpl implements BoardCommentService{
     }
 
     @Override
-    public List<BoardCommentResponse> findCommentListByBoard(Long boardId) {
+    public BoardCommentListResponse findCommentListByBoard(Pageable pageable, Long boardId) {
         Board board = getBoardBy(boardId);
-
-        List<BoardComment> comments = boardCommentRepository.findByBoard(board);
-        List<BoardCommentResponse> list = getBoardCommentResponses(comments);
-        return list;
+        Page<BoardCommentResponse> comments = boardCommentRepository.findByBoardOrderByCreateDateDesc(pageable, board);
+        return new BoardCommentListResponse(comments.getContent(), comments.getTotalPages());
     }
 
     @Override

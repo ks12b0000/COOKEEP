@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
 import teamproject.backend.notification.NotificationRepository;
@@ -12,10 +13,14 @@ import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
 import teamproject.backend.utils.JwtService;
+import teamproject.backend.utils.S3.S3DAO;
 import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.Optional;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
@@ -29,6 +34,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final JwtService jwtService;
     private final CookieService cookieService;
     private final NotificationRepository notificationRepository;
+    private final S3DAO s3DAO;
+    private static final String DEFAULT_USER_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/default_user_image.png";
 
     /**
      * 회원가입
@@ -50,6 +57,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         if (checkIdDuplicate(username)){}
 
         User user = new User(username, nickname, email, password, salt);
+        user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
         notificationSave(user);
@@ -61,10 +69,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     @Transactional
     public SocialUserInfo joinBySocial(String username, String email){
-        
         checkEmailDuplicate(email);
 
         User user = new User(username, email, username);
+        String nickname = getRandomNickname();
+        if(nickname == null) nickname = username;
+        user.updateNickname(nickname);
+        user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
 
@@ -294,5 +305,24 @@ public class UserServiceImpl implements UserService, SocialUserService {
         }
 
         return nickname;
+    }
+
+    @Override
+    public void uploadImage(Long userId, MultipartFile image) throws IOException {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
+
+        if(image == null && !user.get().getImageURL().equals(DEFAULT_USER_IMAGE_URL)){
+            user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
+            s3DAO.delete(""+userId);
+            return;
+        }
+
+        if(s3DAO.isExist(""+userId)){
+            s3DAO.delete(""+userId);
+        }
+        s3DAO.upload(""+userId, image);
+
+        user.get().setImageURL(s3DAO.getURL("" + userId));
     }
 }

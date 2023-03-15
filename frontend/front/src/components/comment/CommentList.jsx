@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
@@ -6,10 +6,13 @@ import ReplyList from './ReplyList';
 import ReplyUpload from './ReplyUpload';
 import Pagination from './Pagination';
 import CommentUpload from './CommentUpload';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const commentHttp = new CommentHttp();
 
 const CommentList = props => {
+  const modalRef = useRef();
+
   const username = useSelector(
     state => state.persistedReducer.userReducer.username
   );
@@ -33,7 +36,6 @@ const CommentList = props => {
     try {
       const res = await commentHttp.getCommentList(props.boardId);
       setComments(res.data.result);
-      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -60,6 +62,21 @@ const CommentList = props => {
         alert(err.response.data.message);
       }
     }
+  };
+
+  //아이콘창 켜기 기능
+  const onIcon = (e, id) => {
+    e.stopPropagation();
+    const copyList = [...Comments];
+    copyList.find(comment => comment.comment_id === id).icon_selected = true;
+    setComments(copyList);
+  };
+
+  //답글창 닫기 기능
+  const offIcon = id => {
+    const copyList = [...Comments];
+    copyList.find(comment => comment.comment_id === id).icon_selected = false;
+    setComments(copyList);
   };
 
   //답글창 켜기 기능
@@ -110,82 +127,120 @@ const CommentList = props => {
 
   return (
     <>
+      <CommentTitle>{`댓글 (${Comments.length})`}</CommentTitle>
       {Comments.slice(offset, offset + Limit)?.map(comment => (
         <CommentWrap key={comment.comment_id}>
+          <Profile />
           <CommentBlock>
-            <TextWrap>
-              <TextBlock>
-                <UsernameText>{comment.user_name}</UsernameText>
-                <DateText>{comment.create_date}</DateText>
-              </TextBlock>
-              {username === comment.user_name ? (
-                <TextBlock>
-                  <ButtonText
-                    onClick={() => onEdit(comment.comment_id, comment.text)}
-                  >
-                    수정
-                  </ButtonText>
-                  <ButtonText
-                    marginLeft
-                    onClick={e => onDelete(e, comment.comment_id)}
-                  >
-                    삭제
-                  </ButtonText>
-                </TextBlock>
-              ) : (
-                <></>
-              )}
-            </TextWrap>
+            {/* 상단 작성자 이름 */}
+            <UserNameWrap>
+              <UsernameText>{comment.user_name}</UsernameText>
+              {props.userName === comment.user_name && <Author>작성자</Author>}
+            </UserNameWrap>
+
             <ContentBlock>
-              <ContentText>{comment.text}</ContentText>
-              {comment.edit_selected ? (
+              <ContentTextWrap>
+                <ContentText>{comment.text}</ContentText>
+                <EditButton
+                  src='/image/edit-icon.png'
+                  alt='edit-button'
+                  onClick={e => onIcon(e, comment.comment_id)}
+                />
+
+                {comment.icon_selected && (
+                  <>
+                    {username === comment.user_name ? (
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={comment.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div>작성글 보기</div>
+                          <div
+                            onClick={() =>
+                              onEdit(comment.comment_id, comment.text)
+                            }
+                          >
+                            수정하기
+                          </div>
+                          <div onClick={e => onDelete(e, comment.comment_id)}>
+                            삭제하기
+                          </div>
+                        </EditBox>
+                        <EditBoxBack
+                          onClick={() => offIcon(comment.comment_id)}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={comment.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div>작성글 보기</div>
+                        </EditBox>
+                        <EditBoxBack
+                          onClick={() => offIcon(comment.comment_id)}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+              </ContentTextWrap>
+
+              {comment.edit_selected && (
                 <>
                   <EditBlock
                     value={EditComment}
                     type='text'
                     onChange={e => setEditComment(e.currentTarget.value)}
                   />
-                  <EditButton
-                    left='91%'
+                  <Edit2Button
+                    left='86.5%'
                     onClick={e =>
                       submitEdit(e, comment.comment_id, comment.text)
                     }
                   >
                     확인
-                  </EditButton>
-                  <EditButton
-                    left='95%'
+                  </Edit2Button>
+                  <Edit2Button
+                    left='91%'
                     onClick={() => offEdit(comment.comment_id)}
                   >
                     취소
-                  </EditButton>
+                  </Edit2Button>
                 </>
-              ) : (
-                <></>
               )}
             </ContentBlock>
+
             {comment.reply_selected ? (
               <ReplyText onClick={() => offReply(comment.comment_id)}>
-                답글 닫기
+                {`대댓글 닫기 (${comment.replyCount})`}
               </ReplyText>
             ) : (
               <ReplyText onClick={() => onReply(comment.comment_id)}>
-                답글 보기
+                {`대댓글 보기 (${comment.replyCount})`}
               </ReplyText>
             )}
+
+            {comment.reply_selected && (
+              <ReplyWrap>
+                <ReplyList
+                  commentId={comment.comment_id}
+                  userName={props.userName}
+                />
+                <ReplyUpload commentId={comment.comment_id} />
+              </ReplyWrap>
+            )}
           </CommentBlock>
-          {comment.reply_selected ? (
-            <ReplyWrap>
-              <ReplyList commentId={comment.comment_id} />
-              <ReplyUpload commentId={comment.comment_id} />
-            </ReplyWrap>
-          ) : (
-            <></>
-          )}
         </CommentWrap>
       ))}
-
-     <CommentUpload boardId={props.boardId} />
 
       <footer>
         <Pagination
@@ -195,23 +250,45 @@ const CommentList = props => {
           setPage={setPage}
         />
       </footer>
+
+      <Line />
+      <CommentUpload boardId={props.boardId} />
     </>
   );
 };
 
+const CommentTitle = styled.div`
+  color: #ff4122;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 34.5px;
+`;
+
 const CommentWrap = styled.div`
-  width: 1100px;
+  width: 1440px;
   height: auto;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 6% 93%;
+  justify-content: space-between;
+  margin: 20px 0 40px 0;
+`;
+
+const Profile = styled.div`
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
+  background-color: #ced4da;
 `;
 
 const CommentBlock = styled.div`
   width: 100%;
   height: auto;
-  padding: 20px 0;
   box-sizing: border-box;
-  margin: 10px 0;
-  border-bottom: 0.5px solid #929292;
+`;
+
+const UserNameWrap = styled.div`
+  display: flex;
 `;
 
 const UsernameText = styled.div`
@@ -219,47 +296,87 @@ const UsernameText = styled.div`
   font-weight: 700;
   color: black;
   display: inline;
+  margin-right: 6px;
 `;
 
-const TextWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-`;
-
-const TextBlock = styled.div`
-  display: flex;
-`;
-
-const DateText = styled.div`
-  font-size: 11px;
-  color: #878787;
-  margin-left: 10px;
-  margin-top: auto;
-`;
-
-const ButtonText = styled.div`
+const Author = styled.div`
+  color: #ff4122;
+  border: 1px solid #ff4122;
   font-size: 12px;
-  color: #878787;
-  margin-left: ${props => (props.marginLeft ? '10px' : '')};
-  cursor: pointer;
-
-  &:hover {
-    color: #35c5f0;
-  }
+  width: 45px;
+  height: 20px;
+  border-radius: 20px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ContentBlock = styled.div`
-  width: 100%;
   height: auto;
   position: relative;
-  padding: 20px 0;
+  padding: 10px 0;
+  display: block;
+  width: 100%;
+`;
+
+const ContentTextWrap = styled.div`
+  display: grid;
+  grid-template-columns: 98% 1%;
+  justify-content: space-between;
+  position: relative;
 `;
 
 const ContentText = styled.div`
   font-size: 15px;
-  margin-top: 10px;
   display: block;
+  border: 2px solid #f0f0f0;
+  width: 1286px;
+  padding: 24px 16px;
+  border-radius: 10px;
+  box-sizing: border-box;
+`;
+
+const EditButton = styled.img`
+  margin-left: 10px;
+  margin-top: 3px;
+  cursor: pointer;
+`;
+
+const EditBoxBack = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+`;
+
+const EditBox = styled.div`
+  height: auto;
+  width: 100px;
+  border: 1px solid #ff4122;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 101%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  box-sizing: border-box;
+  background-color: white;
+  z-index: 100;
+
+  div {
+    font-size: 15px;
+    font-weight: 400;
+    text-align: center;
+    height: 33px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
 `;
 
 const ReplyText = styled.div`
@@ -272,44 +389,46 @@ const ReplyText = styled.div`
 
 const EditBlock = styled.input`
   width: 100%;
-  height: 100%;
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 0;
-  border-radius: 15px;
-  border: 1px solid #8b8b8b;
-  font-size: 16px;
-  padding: 0 20px;
+  border-radius: 10px;
+  border: 1px solid #ff4122;
+  font-size: 15px;
+  padding: 24px 16px;
   box-sizing: border-box;
+  width: 1286px;
+  font-family: 400;
+  background-color: white;
 
   :focus {
     outline: none;
-    border: 2px solid #949494;
   }
 
   ::placeholder {
-    font-size: 16px;
-    font-weight: 300;
+    font-size: 15px;
+    font-weight: 400;
     letter-spacing: 2px;
     color: #aaaaaa;
   }
 `;
 
-const EditButton = styled.div`
-  background-color: #949494;
-  color: white;
+const Edit2Button = styled.div`
+  background-color: #ff4122;
+  color: #ffffff;
   font-size: 11px;
   font-weight: 500;
   position: absolute;
-  top: 58%;
+  top: 55%;
   left: ${props => props.left};
-  padding: 3px 10px;
+  padding: 5px 14px;
   border-radius: 5px;
   transition: 0.2s;
   cursor: pointer;
+  transition: 0.2s;
 
   &:hover {
-    background-color: #35c5f0;
+    top: 53%;
   }
 `;
 
@@ -317,6 +436,13 @@ const ReplyWrap = styled.div`
   width: 100%;
   padding-left: 40px;
   box-sizing: border-box;
+`;
+
+const Line = styled.div`
+  width: 100%;
+  height: 0.1px;
+  background-color: #ffa590;
+  margin: 40px 0;
 `;
 
 export default CommentList;
