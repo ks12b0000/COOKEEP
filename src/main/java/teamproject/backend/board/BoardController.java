@@ -7,10 +7,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import teamproject.backend.board.dto.BoardResponseInCardFormat;
-import teamproject.backend.board.dto.BoardResponseInDetailFormat;
-import teamproject.backend.board.dto.BoardWriteRequest;
-import teamproject.backend.board.dto.UserBoardResponseInListFormat;
+import teamproject.backend.board.dto.*;
 import teamproject.backend.boardComment.BoardCommentService;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardComment.dto.BoardCommentUpdateRequest;
@@ -64,20 +61,9 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/list")
-    public BaseResponse boardListByCategory(@RequestParam String category, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort){
-        List<BoardResponseInCardFormat> pages = boardService.findBoardListByFoodCategoryName(category, sort);
+    public BaseResponse boardListByCategory(@PageableDefault(size = 10, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, @RequestParam String category){
+        BoardListResponseByCategory pages = boardService.findBoardListByFoodCategoryName(pageable, category);
         return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
-    }
-
-    /**
-     * 회원 글 목록 조회
-     * @param user_id
-     * @return
-     */
-    @GetMapping("/board/list/{user_id}")
-    public BaseResponse<List<BoardResponseInDetailFormat>> boardListByUser(@PathVariable Long user_id){
-        List<BoardResponseInDetailFormat> pages = boardService.findBoardListByUserId(user_id);
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
     }
 
     /**

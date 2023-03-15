@@ -89,24 +89,12 @@ public class BoardServiceImpl implements BoardService{
         return board.get();
     }
 
-    @Override
-    public List<BoardResponseInDetailFormat> findBoardListByUserId(Long userId) {
-        List<Board> boards = boardRepository.findByUser_id(userId);
-
-        List<BoardResponseInDetailFormat> responses = getBoardResponsesInDetailFormat(boards, boards.size());
-
-        return responses;
-    }
-
-    private List<BoardResponseInDetailFormat> getBoardResponsesInDetailFormat(List<Board> boards, int length) {
-        List<BoardResponseInDetailFormat> responses = new ArrayList<>();
-        int min = Math.min(boards.size(), length);
-        for(int i = 0; i < min; i++){
-            Board board = boards.get(i);
-            String tags = boardTagService.findTagsByBoard(board);
-            responses.add(new BoardResponseInDetailFormat(board, tags));
+    private void inputTags(List<BoardResponseInCardFormat> boards) {
+        for(BoardResponseInCardFormat board : boards){
+            Board board1 = findBoardByBoardId(board.getBoard_id());
+            String tags = boardTagService.findTagsByBoard(board1);
+            board.setTags(tags);
         }
-        return responses;
     }
 
     private List<BoardResponseInCardFormat> getBoardResponsesInCardFormat(List<Board> boards, int length){
@@ -123,15 +111,13 @@ public class BoardServiceImpl implements BoardService{
     /**
      * 카테고리별 글 목록
      * @param categoryName
-     * @param sort
      * @return
      */
     @Override
-    public List<BoardResponseInCardFormat> findBoardListByFoodCategoryName(String categoryName, Sort sort) {
+    public BoardListResponseByCategory findBoardListByFoodCategoryName(Pageable pageable, String categoryName) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
-        List<Board> boards = boardRepository.findByCategory(foodCategory,sort);
-
-        return getBoardResponsesInCardFormat(boards, boards.size());
+        Page<BoardResponseInCardFormat> boards = boardRepository.findByCategory(pageable, foodCategory);
+        return new BoardListResponseByCategory(boards.getContent(), boards.getTotalPages());
     }
 
     @Override
