@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final CookieService cookieService;
     private final NotificationRepository notificationRepository;
     private final S3DAO s3DAO;
+    private static final String DEFAULT_USER_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/default_user_image.png";
 
     /**
      * 회원가입
@@ -56,6 +57,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         if (checkIdDuplicate(username)){}
 
         User user = new User(username, nickname, email, password, salt);
+        user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
         notificationSave(user);
@@ -67,10 +69,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     @Transactional
     public SocialUserInfo joinBySocial(String username, String email){
-        
         checkEmailDuplicate(email);
 
         User user = new User(username, email, username);
+        String nickname = getRandomNickname();
+        if(nickname == null) nickname = username;
+        user.updateNickname(nickname);
+        user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
 
@@ -307,8 +312,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
 
-        if(image == null && user.get().getImageURL() != null){
-            user.get().setImageURL(null);
+        if(image == null && !user.get().getImageURL().equals(DEFAULT_USER_IMAGE_URL)){
+            user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
             s3DAO.delete(""+userId);
             return;
         }
