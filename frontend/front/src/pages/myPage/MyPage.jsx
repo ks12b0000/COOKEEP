@@ -23,6 +23,10 @@ const MyPage = () => {
     state => state.persistedReducer.userReducer.isSocialLogin
   );
 
+  const username = useSelector(
+    state => state.persistedReducer.userReducer.username
+  );
+
   const [UserInfo, setUserInfo] = useState([]);
   const [IsModal, setIsModal] = useState(false);
 
@@ -78,7 +82,7 @@ const MyPage = () => {
   return (
     <>
       <Header />
-      {UserInfo ? (
+      {username === UserInfo.username ? (
         <Wrap>
           <UserInfoBlock>
             <UserInfoTitle>
@@ -113,28 +117,52 @@ const MyPage = () => {
           </UserDeleteButton>
           {IsModal ? <UserInfoChange setIsModal={setIsModal} /> : <></>}
         </Wrap>
-      ) : (
-        <></>
+      ) : 
+      (
+        navigate('/notfound')
       )}
-      <Footer />
+      {/* ) : (
+        <></>
+      )} */}
     </>
   );
 };
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
-`
+`;
 
 export const Wrap = styled.div`
   width: 100%;
   height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -10;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #f2f2f2;
-  position: relative;
+`;
+
+const ErrorMessage = styled.div`
+  font-size: 27px;
+`;
+
+const MoveButton = styled.div`
+  width: 320px;
+  height: 60px;
+  background-color: #ff4122;
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  border-radius: 10px;
+  cursor: pointer;
 `;
 
 const UserInfoBlock = styled.div`

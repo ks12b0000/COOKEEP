@@ -118,12 +118,17 @@ const ReplyList = props => {
                     <Author>작성자</Author>
                   )}
                 </UserNameWrap>
+                <Time>{reply.create_date}</Time>
               </TextBlock>
             </TextWrap>
 
             <ContentBlock>
               <ContentTextWrap>
-                <ContentText>{reply.text}</ContentText>
+                {username === reply.user_name ? (
+                  <ContentText backColor>{reply.text}</ContentText>
+                ) : (
+                  <ContentText>{reply.text}</ContentText>
+                )}
                 <EditButton
                   src='/image/edit-icon.png'
                   alt='edit-button'
@@ -257,20 +262,26 @@ const Author = styled.div`
   align-items: center;
 `;
 
+const Time = styled.div`
+  font-size: 12px;
+  color: #cbcbcb;
+  font-weight: 400;
+  margin: 6px 0 9px 0;
+`;
+
 const TextWrap = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
 const TextBlock = styled.div`
-  display: flex;
+  display: block;
 `;
 
 const ContentBlock = styled.div`
   width: 100%;
   height: auto;
   position: relative;
-  padding: 10px 0;
 `;
 
 const ContentTextWrap = styled.div`
@@ -289,6 +300,7 @@ const ContentText = styled.div`
   padding: 24px 16px;
   border-radius: 10px;
   box-sizing: border-box;
+  background-color: ${props => (props.backColor ? '#F8F9FA' : 'white')};
 `;
 
 const EditButton = styled.img`
@@ -319,7 +331,7 @@ const EditBox = styled.div`
   display: grid;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
+  padding: 5px 0;
   box-sizing: border-box;
   background-color: white;
   z-index: 100;
@@ -333,12 +345,19 @@ const EditBox = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    width: 85px;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: #ff4122;
+      color: white;
+    }
   }
 `;
 
 const EditBlock = styled.input`
   position: absolute;
-  top: 11px;
+  top: 1px;
   left: 0;
   border-radius: 10px;
   border: 1px solid #ff4122;
@@ -363,11 +382,12 @@ const EditBlock = styled.input`
 
 const Edit2Button = styled.div`
   background-color: #ff4122;
+  width: 20px;
   color: #ffffff;
   font-size: 11px;
   font-weight: 500;
   position: absolute;
-  top: 55%;
+  top: 57%;
   left: ${props => props.left};
   padding: 5px 14px;
   border-radius: 5px;
@@ -376,7 +396,7 @@ const Edit2Button = styled.div`
   transition: 0.2s;
 
   &:hover {
-    top: 53%;
+    top: 52%;
   }
 `;
 
