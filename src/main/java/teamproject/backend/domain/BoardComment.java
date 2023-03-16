@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import teamproject.backend.mypage.dto.CommentByUserResponse;
+import teamproject.backend.mypage.dto.LikeByUserResponse;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -58,5 +60,11 @@ public class BoardComment {
 
     public void decreaseReplyCount(){
         replyCnt--;
+    }
+
+    public CommentByUserResponse toDto(){
+        return CommentByUserResponse.builder()
+                .board(board)
+                .build();
     }
 }
