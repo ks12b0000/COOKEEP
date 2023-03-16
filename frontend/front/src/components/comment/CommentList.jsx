@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
 import ReplyList from './ReplyList';
@@ -12,6 +13,7 @@ const commentHttp = new CommentHttp();
 
 const CommentList = props => {
   const modalRef = useRef();
+  const navigate = useNavigate();
 
   const username = useSelector(
     state => state.persistedReducer.userReducer.username
@@ -36,6 +38,7 @@ const CommentList = props => {
     try {
       const res = await commentHttp.getCommentList(props.boardId);
       setComments(res.data.result);
+      console.log(res.data.result);
     } catch (err) {
       console.log(err);
     }
@@ -72,7 +75,7 @@ const CommentList = props => {
     setComments(copyList);
   };
 
-  //답글창 닫기 기능
+  //아이콘창 닫기 기능
   const offIcon = id => {
     const copyList = [...Comments];
     copyList.find(comment => comment.comment_id === id).icon_selected = false;
@@ -137,10 +140,15 @@ const CommentList = props => {
               <UsernameText>{comment.user_name}</UsernameText>
               {props.userName === comment.user_name && <Author>작성자</Author>}
             </UserNameWrap>
+            <Time>{comment.create_date}</Time>
 
             <ContentBlock>
               <ContentTextWrap>
-                <ContentText>{comment.text}</ContentText>
+                {username === comment.user_name ? (
+                  <ContentText backColor>{comment.text}</ContentText>
+                ) : (
+                  <ContentText>{comment.text}</ContentText>
+                )}
                 <EditButton
                   src='/image/edit-icon.png'
                   alt='edit-button'
@@ -158,7 +166,13 @@ const CommentList = props => {
                           >
                             <div>복사하기</div>
                           </CopyToClipboard>
-                          <div>작성글 보기</div>
+                          <div
+                            onClick={() => {
+                              navigate('/written');
+                            }}
+                          >
+                            작성글 보기
+                          </div>
                           <div
                             onClick={() =>
                               onEdit(comment.comment_id, comment.text)
@@ -183,7 +197,13 @@ const CommentList = props => {
                           >
                             <div>복사하기</div>
                           </CopyToClipboard>
-                          <div>작성글 보기</div>
+                          <div
+                            onClick={() => {
+                              navigate(`/written/${comment.comment_id}`);
+                            }}
+                          >
+                            작성글 보기
+                          </div>
                         </EditBox>
                         <EditBoxBack
                           onClick={() => offIcon(comment.comment_id)}
@@ -312,12 +332,19 @@ const Author = styled.div`
   align-items: center;
 `;
 
+const Time = styled.div`
+  font-size: 12px;
+  color: #cbcbcb;
+  font-weight: 400;
+  margin: 6px 0 9px 0;
+`;
+
 const ContentBlock = styled.div`
   height: auto;
   position: relative;
-  padding: 10px 0;
   display: block;
   width: 100%;
+  padding-bottom: 10px;
 `;
 
 const ContentTextWrap = styled.div`
@@ -335,6 +362,7 @@ const ContentText = styled.div`
   padding: 24px 16px;
   border-radius: 10px;
   box-sizing: border-box;
+  background-color: ${props => (props.backColor ? '#F8F9FA' : 'white')};
 `;
 
 const EditButton = styled.img`
@@ -362,7 +390,7 @@ const EditBox = styled.div`
   display: grid;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
+  padding: 5px 0;
   box-sizing: border-box;
   background-color: white;
   z-index: 100;
@@ -376,12 +404,19 @@ const EditBox = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    width: 85px;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: #ff4122;
+      color: white;
+    }
   }
 `;
 
 const ReplyText = styled.div`
   font-size: 11px;
-  margin-left: 1px;
+  margin-left: 4px;
   color: #878787;
   display: block;
   cursor: pointer;
@@ -390,7 +425,7 @@ const ReplyText = styled.div`
 const EditBlock = styled.input`
   width: 100%;
   position: absolute;
-  top: 10px;
+  top: 1px;
   left: 0;
   border-radius: 10px;
   border: 1px solid #ff4122;
@@ -415,11 +450,12 @@ const EditBlock = styled.input`
 
 const Edit2Button = styled.div`
   background-color: #ff4122;
+  width: 20px;
   color: #ffffff;
   font-size: 11px;
   font-weight: 500;
   position: absolute;
-  top: 55%;
+  top: 49%;
   left: ${props => props.left};
   padding: 5px 14px;
   border-radius: 5px;
@@ -428,7 +464,7 @@ const Edit2Button = styled.div`
   transition: 0.2s;
 
   &:hover {
-    top: 53%;
+    top: 45%;
   }
 `;
 
