@@ -18,18 +18,45 @@ const ReplyList = props => {
 
   const [Replys, setReplys] = useState([]);
   const [EditComment, setEditComment] = useState('');
+  const [Page, setPage] = useState([]);
+  const [SelectedButton, setSelectedButton] = useState(0);
 
   useEffect(() => {
     getList();
-  }, []);
+  }, [SelectedButton]);
 
   const getList = async () => {
     try {
-      const res = await commentHttp.getReplyList(props.commentId);
-      setReplys(res.data.result);
-      console.log(res.data.result);
+      const res = await commentHttp.getReplyList(
+        props.commentId,
+        SelectedButton
+      );
+      console.log(res);
+      setReplys(res.data.result.list);
+      const arrayLength = res.data.result.total;
+      const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
+      setPage(newArray);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  //넘버 버튼으로 페이지 불러오기
+  const pageList = async pageNum => {
+    setSelectedButton(pageNum);
+  };
+
+  //left arrow 버튼으로 페이지 불러오기
+  const leftList = async () => {
+    if (SelectedButton > 0) {
+      setSelectedButton(prev => prev - 1);
+    }
+  };
+
+  //right arrow 버튼으로 페이지 불러오기
+  const rightList = async () => {
+    if (SelectedButton < Page.length - 1) {
+      setSelectedButton(prev => prev + 1);
     }
   };
 
@@ -107,7 +134,7 @@ const ReplyList = props => {
     <>
       {Replys?.map(reply => (
         <CommentWrap key={reply.reply_id}>
-          <Arrow src='/image/reply-arrow.png' />
+          <ReplyArrow src='/image/reply-arrow.png' />
           <Profile />
           <CommentBlock>
             <TextWrap>
@@ -200,6 +227,26 @@ const ReplyList = props => {
           </CommentBlock>
         </CommentWrap>
       ))}
+
+      {/* 페이지 네이션 */}
+      <Nav>
+        <Button onClick={() => leftList()}>
+          <Arrow url='/image/arrow-left.png' />
+        </Button>
+        {Page.map((page, i) => (
+          <Button
+            key={i}
+            onClick={() => pageList(page)}
+            aria-current={page === SelectedButton ? 'true' : null}
+          >
+            {page + 1}
+          </Button>
+        ))}
+        <Button onClick={() => rightList()}>
+          <Arrow url='/image/arrow-right.png' />
+        </Button>
+      </Nav>
+
       {Replys.length !== 0 && <Line />}
     </>
   );
@@ -215,7 +262,7 @@ const CommentWrap = styled.div`
   margin: 10px 0 0 0;
 `;
 
-const Arrow = styled.img`
+const ReplyArrow = styled.img`
   position: absolute;
   top: 35px;
   left: -60px;
@@ -398,6 +445,59 @@ const Edit2Button = styled.div`
   &:hover {
     top: 52%;
   }
+`;
+
+//페이지 네이션
+const Nav = styled.nav`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 16px;
+`;
+
+const Button = styled.button`
+  border: 1px solid #cbcbcb;
+  position: relative;
+  top: 0;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  background: white;
+  color: #cbcbcb;
+  font-size: 1rem;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-3px);
+  }
+
+  &[disabled] {
+    background: white;
+    border: 1px solid #cbcbcb;
+    cursor: revert;
+    transform: revert;
+  }
+
+  &[aria-current] {
+    background: #ff4122;
+    border: 1px solid #ff4122;
+    color: white;
+    font-weight: bold;
+    cursor: revert;
+    transform: revert;
+  }
+`;
+
+const Arrow = styled.div`
+  width: 8px;
+  height: 14px;
+  background: url(${props => props.url});
+  background-size: 8px;
 `;
 
 const Line = styled.div`
