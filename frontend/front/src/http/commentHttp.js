@@ -11,9 +11,11 @@ class CommentHttp extends Http {
     };
 
     // 댓글 리스트 불러오기
-    getCommentList = async (boardId) => {
+    getCommentList = async (boardId, pageNum) => {
         try {
-            const res = await this.axios.get(`board/comment/list?board_id=${boardId}`);
+            const res = await this.axios.get(
+              `board/comment/list?board_id=${boardId}&page=${pageNum}`
+            );
             return res;
         } catch (err) {
             throw err;
