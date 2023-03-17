@@ -2,10 +2,8 @@ package teamproject.backend.mypage.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import teamproject.backend.domain.Board;
 
-import java.util.Date;
 
 @Getter
 public class CommentByUserResponse {

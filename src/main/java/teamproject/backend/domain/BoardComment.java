@@ -61,10 +61,4 @@ public class BoardComment {
     public void decreaseReplyCount(){
         replyCnt--;
     }
-
-    public CommentByUserResponse toDto(){
-        return CommentByUserResponse.builder()
-                .board(board)
-                .build();
-    }
 }

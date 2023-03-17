@@ -8,6 +8,7 @@ import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.BoardComment;
 import teamproject.backend.domain.User;
+import teamproject.backend.mypage.dto.CommentByUserResponse;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Long
     Page<BoardCommentResponse> findByBoardOrderByCreateDateDesc(Pageable pageable, Board board);
     List<BoardComment> findByBoard(Board board);
     List<BoardComment> findByUser(User user);
+    @Query("select new teamproject.backend.mypage.dto.CommentByUserResponse(d.board) from BoardComment d where d.user = :user group by d.board")
+    List<CommentByUserResponse> findByUserDistinctBoard(User user);
 }
