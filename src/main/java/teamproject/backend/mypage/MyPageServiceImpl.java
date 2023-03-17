@@ -269,7 +269,8 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public GetCommentByUserResponse commentByUser(Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        List<CommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUser(user).stream().map(BoardComment::toDto).collect(Collectors.toList());
+
+        List<CommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUserDistinctBoard(user);
 
         GetCommentByUserResponse getCommentByUserResponse = GetCommentByUserResponse.builder().commentList(commentByUserResponses).build();
 
