@@ -14,6 +14,7 @@ import java.util.Date;
 public class BoardCommentReplyResponse {
     private Long reply_id;
     private String user_name;
+    private Long user_id;
     private String create_date;
     private String text;
     private boolean edit_selected = false;
@@ -26,9 +27,10 @@ public class BoardCommentReplyResponse {
         this.text = reply.getText();
     }
 
-    public BoardCommentReplyResponse(Long reply_id, String user_name, Date create_date, String text) {
+    public BoardCommentReplyResponse(Long reply_id, String user_name, Long user_id, Date create_date, String text) {
         this.reply_id = reply_id;
         this.user_name = user_name;
+        this.user_id = user_id;
         this.create_date = asString(create_date);
         this.text = text;
     }
