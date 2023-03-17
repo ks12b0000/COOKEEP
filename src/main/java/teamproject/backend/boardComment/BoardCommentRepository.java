@@ -12,7 +12,7 @@ import teamproject.backend.domain.User;
 import java.util.List;
 
 public interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
-    @Query("select new teamproject.backend.boardComment.dto.BoardCommentResponse(b.boardCommentId, b.user.nickname, b.createDate, b.text, b.replyCnt) from BoardComment b where b.board =:board ORDER BY b.createDate desc")
+    @Query("select new teamproject.backend.boardComment.dto.BoardCommentResponse(b.boardCommentId, b.user.nickname, b.user.id, b.createDate, b.text, b.replyCnt) from BoardComment b where b.board =:board ORDER BY b.createDate desc")
     Page<BoardCommentResponse> findByBoardOrderByCreateDateDesc(Pageable pageable, Board board);
     List<BoardComment> findByBoard(Board board);
     List<BoardComment> findByUser(User user);

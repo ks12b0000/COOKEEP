@@ -199,4 +199,10 @@ public class BoardController {
         UserBoardResponseInListFormat listFormat = boardService.findBoardListByUser(pageable, userId);
         return new BaseResponse("성공적으로 유저 글 목록을 불러왔습니다.", listFormat);
     }
+
+    @GetMapping("/board/{boardId}/like/{userId}")
+    public BaseResponse checkLiked(@PathVariable Long boardId, @PathVariable Long userId){
+        CheckUserLikeBoard check = boardService.checkLiked(userId, boardId);
+        return new BaseResponse("유저 좋아요 여부를 조회했습니다.", check);
+    }
 }

@@ -27,4 +27,6 @@ public interface BoardService {
     public List<BoardResponseInCardFormat> findBoarListByCommented();
 
     UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId);
+
+    CheckUserLikeBoard checkLiked(Long userId, Long BoardId);
 }
