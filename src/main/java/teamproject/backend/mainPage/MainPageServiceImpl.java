@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamproject.backend.board.dto.BoardListResponseByCategory;
+import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.boardTag.BoardTagRepository;
+import teamproject.backend.boardTag.BoardTagService;
 import teamproject.backend.domain.*;
 import teamproject.backend.mainPage.dto.*;
 import teamproject.backend.mypage.MyPageRepository;
@@ -15,6 +18,7 @@ import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.tag.TagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +36,7 @@ public class MainPageServiceImpl implements MainPageService {
     private final MyPageRepository myPageRepository;
     private final NotificationRepository notificationRepository;
     private final SearchRepository searchRepository;
+    private final BoardTagService boardTagService;
 
 
     /**
@@ -41,19 +46,17 @@ public class MainPageServiceImpl implements MainPageService {
      */
     @Transactional
     @Override
-    public GetSearchByResponse searchList(String keyword) {
-        List<SearchByResponse> searchList = mainPageRepository.findByTitleContaining(keyword).stream().map(Board::toSearchDto).collect(Collectors.toList());
-
-        GetSearchByResponse getSearchByResponse = GetSearchByResponse.builder().searchList(searchList).build();
+    public List<BoardResponseInCardFormat> searchList(String keyword) {
+        List<Board> searchList = mainPageRepository.findByTitleContaining(keyword);
 
         if (hasKeywordSearch(keyword)) {
             SearchKeyword searchKeyword = searchRepository.findByKeyword(keyword).get();
             searchKeyword.increaseSearchCount();
-            return getSearchByResponse;
+            return getBoardResponsesInCardFormat(searchList, searchList.size());
         }
         searchSave(keyword);
 
-        return getSearchByResponse;
+        return getBoardResponsesInCardFormat(searchList, searchList.size());
     }
 
     /**
@@ -64,10 +67,6 @@ public class MainPageServiceImpl implements MainPageService {
     @Override
     public GetSearchByResponse searchTagList(String keyword) {
         Tag tag = tagRepository.findByTagName(keyword);
-
-        if (tag == null) {
-            throw new BaseException(NOT_EXIST_TAG);
-        }
 
         List<SearchByResponse> boardTagList = boardTagRepository.findByTag(tag).stream().map(BoardTag::toSearchDto).collect(Collectors.toList());
 
@@ -137,5 +136,16 @@ public class MainPageServiceImpl implements MainPageService {
     }
     public boolean hasKeywordSearch(String keyword) {
         return searchRepository.findByKeyword(keyword).isPresent();
+    }
+
+    private List<BoardResponseInCardFormat> getBoardResponsesInCardFormat(List<Board> boards, int length){
+        List<BoardResponseInCardFormat> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i);
+            String tags = boardTagService.findTagsByBoard(board);
+            responses.add(new BoardResponseInCardFormat(board, tags));
+        }
+        return responses;
     }
 }

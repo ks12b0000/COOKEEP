@@ -12,8 +12,6 @@ import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
 import teamproject.backend.user.UserService;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -138,9 +136,9 @@ public class MyPageController {
      */
     @GetMapping("/auth/user/like/list/{user_id}")
     public BaseResponse likeByUser(@PathVariable Long user_id) {
-        GetLikeByUserResponse getLikeByUserResponse = myPageService.likeByUser(user_id);
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.likeByUser(user_id);
 
-        return new BaseResponse("좋아요 누른 글 목록을 불러왔습니다.", getLikeByUserResponse);
+        return new BaseResponse("좋아요 누른 글 목록을 불러왔습니다.", getCommentByUserResponse);
     }
 
     /**
@@ -191,7 +189,7 @@ public class MyPageController {
      */
     @GetMapping("/auth/user/comment/list/{user_id}")
     public BaseResponse commentByUser(@PathVariable Long user_id) {
-        GetCommentByUserResponse getCommentByUserResponse = myPageService.commentByUser(user_id);
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.commentByUser(user_id);
 
         return new BaseResponse("내가 댓글 단 글 목록을 불러왔습니다.", getCommentByUserResponse);
     }

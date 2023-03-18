@@ -12,6 +12,7 @@ import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.FoodCategory;
 import teamproject.backend.domain.User;
+import teamproject.backend.mypage.dto.BoardByUserResponse;
 
 import java.util.List;
 
@@ -25,8 +26,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findByUser(User user);
 
-    @Query("select new teamproject.backend.board.dto.BoardResponseInBannerFormat(b.boardId, b.title, b.thumbnail) from Board b where b.user.id = :userId")
-    Page<BoardResponseInBannerFormat> findBannerByUserId(Pageable pageable, Long userId);
+    @Query("select new teamproject.backend.mypage.dto.BoardByUserResponse(b.boardId, b.title, b.commented) from Board b where b.user.id = :userId")
+    Page<BoardByUserResponse> findBannerByUserId(Pageable pageable, Long userId);
 
     List<Board> findTop5ByOrderByLikedDesc();
 

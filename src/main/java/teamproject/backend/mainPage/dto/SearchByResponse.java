@@ -4,21 +4,31 @@ import lombok.Builder;
 import lombok.Getter;
 import teamproject.backend.domain.Board;
 
+import java.util.Date;
+
 @Getter
 public class SearchByResponse {
 
     private Long board_id;
-    private Long category_id;
+    private String category;
     private String title;
-    private Long user_id;
+    private String user_name;
+    private Date create_date;
     private String thumbnail;
+    private String tags;
+    private Integer commented;
+    private Integer liked;
 
     @Builder
-    public SearchByResponse(Long board_id, Long category_id, String title, Long user_id, String thumbnail) {
-        this.board_id = board_id;
-        this.category_id = category_id;
-        this.title = title;
-        this.user_id = user_id;
-        this.thumbnail = thumbnail;
+    public SearchByResponse(Board board, String tags) {
+        this.board_id = board.getBoardId();
+        this.category = board.getCategory().getCategoryName();
+        this.title = board.getTitle();
+        this.user_name = board.getUser().getNickname();
+        this.create_date = board.getCreateDate();
+        this.thumbnail = board.getThumbnail();
+        this.tags = tags;
+        this.commented = board.getCommented();
+        this.liked = board.getLiked();
     }
 }
