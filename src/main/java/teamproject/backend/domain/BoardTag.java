@@ -32,11 +32,8 @@ public class BoardTag {
 
     public SearchByResponse toSearchDto(){
         return SearchByResponse.builder()
-                .board_id(board.getBoardId())
-                .category_id(board.getCategory().getCategoryId())
-                .title(board.getTitle())
-                .user_id(board.getUser().getId())
-                .thumbnail(board.getThumbnail())
+                .board(board)
+                .tags(tag.getTagName())
                 .build();
     }
 }

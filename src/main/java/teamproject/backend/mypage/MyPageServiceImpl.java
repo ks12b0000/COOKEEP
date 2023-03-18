@@ -14,7 +14,6 @@ import teamproject.backend.mypage.dto.*;
 import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.RandomNickName;
-import teamproject.backend.user.UserService;
 import teamproject.backend.utils.S3.S3DAO;
 import teamproject.backend.utils.SHA256;
 
@@ -179,13 +178,13 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetLikeByUserResponse likeByUser(Long user_id) {
+    public GetLikeAndCommentByUserResponse likeByUser(Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        List<LikeByUserResponse> likeBoards = likeBoardRepository.findByUser(user).stream().map(BoardLike::toDto).collect(Collectors.toList());     // map으로 매핑 후  리스트로 변환
+        List<LikeAndCommentByUserResponse> likeBoards = likeBoardRepository.findByUser(user).stream().map(BoardLike::toDto).collect(Collectors.toList());     // map으로 매핑 후  리스트로 변환
 
-        GetLikeByUserResponse getLikeByUserResponse = GetLikeByUserResponse.builder().likeList(likeBoards).build();
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder().commentList(likeBoards).build();
 
-        return getLikeByUserResponse;
+        return getCommentByUserResponse;
     }
 
     /**
@@ -267,12 +266,12 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetCommentByUserResponse commentByUser(Long user_id) {
+    public GetLikeAndCommentByUserResponse commentByUser(Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
-        List<CommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUserDistinctBoard(user);
+        List<LikeAndCommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUserDistinctBoard(user);
 
-        GetCommentByUserResponse getCommentByUserResponse = GetCommentByUserResponse.builder().commentList(commentByUserResponses).build();
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder().commentList(commentByUserResponses).build();
 
         return getCommentByUserResponse;
     }

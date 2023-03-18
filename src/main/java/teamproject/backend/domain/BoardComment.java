@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import teamproject.backend.mypage.dto.CommentByUserResponse;
-import teamproject.backend.mypage.dto.LikeByUserResponse;
 
 import javax.persistence.*;
 import java.util.Date;

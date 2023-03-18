@@ -12,4 +12,5 @@ import java.util.List;
 public interface BoardTagRepository extends JpaRepository<BoardTag, Long> {
     List<BoardTag> findByBoard(Board board);
     List<BoardTag> findByTag(Tag tag);
+    List<BoardTag> findByTagContaining(String keyword);
 }

@@ -87,20 +87,8 @@ public class Board{
     public BoardByUserResponse toDto(){
         return BoardByUserResponse.builder()
                 .board_id(boardId)
-                .category_id(category.getCategoryId())
                 .title(title)
-                .user_id(user.getId())
-                .thumbnail(thumbnail)
-                .build();
-    }
-
-    public SearchByResponse toSearchDto(){
-        return SearchByResponse.builder()
-                .board_id(boardId)
-                .category_id(category.getCategoryId())
-                .title(title)
-                .user_id(user.getId())
-                .thumbnail(thumbnail)
+                .commented(commented)
                 .build();
     }
 }
