@@ -22,21 +22,26 @@ import Korean from "./pages/category/korean/Korean";
 import Writing from "./components/categoryLayout/writing/Writing";
 import MyPosts from "./pages/myPage/MyPosts";
 import MyLikes from "./pages/myPage/MyLikes";
+import Written from "./pages/written/Written";
+import NotFound from "./pages/notFound/NotFound";
 import AllCategory from "./pages/category/all/AllCategory";
 
 function App() {
     const user = useSelector((state) => state);
 
     return (
-        <>
-            {/*라우터관리*/}
-            <Routes>
-                    <Route element={<PrivateRoute />}>
-                        <Route path="/mypage/:userId" element={<MyPage />}></Route>
-                        <Route path="/myposts/:userId" element={<MyPosts />}></Route>
-                        <Route path="/mylikes/:userId" element={<MyLikes />}></Route>
+      <>
+        {/*라우터관리*/}
+        <Routes>
+          <Route element={<PrivateRoute />}>
+            <Route path='/mypage/:userId' element={<MyPage />}></Route>
+            <Route path='/myposts/:userId' element={<MyPosts />}></Route>
+            <Route path='/mylikes/:userId' element={<MyLikes />}></Route>
+          </Route>
+          {/*카테고리*/}
 
-                    </Route>
+
+
                     {/*카테고리*/}
                     <Route path=":category/writing" element={<Writing />}></Route>
                     <Route path="/korea/*" element={<Korean/>}></Route>
@@ -49,18 +54,22 @@ function App() {
                     <Route path="/all" element={<AllCategory />}></Route>
 
 
+          <Route path='/category/:id' element={<Detail />} />
+          <Route path='/:id/edit' element={<Edit />} />
+          <Route path='/written/:id' element={<Written />} />
 
-                    <Route path="/category/:id" element={<Detail />} />
-                    <Route path="/:id/edit" element={<Edit />} />
 
-                    <Route path="/login" element={<Login />}></Route>
-                    <Route path="/callback/kakao" element={<KaKaoLogin />}></Route>
-                    <Route path="/callback/google" element={<GoogleLogin />}></Route>
-                    <Route path="/callback/naver" element={<NaverLogin />}></Route>
-                    <Route path="/sign" element={<SignUp />}></Route>
-                    <Route path="/" element={<Home />}></Route>
-            </Routes>
-        </>
+          <Route path='/login' element={<Login />}></Route>
+          <Route path='/callback/kakao' element={<KaKaoLogin />}></Route>
+          <Route path='/callback/google' element={<GoogleLogin />}></Route>
+          <Route path='/callback/naver' element={<NaverLogin />}></Route>
+          <Route path='/sign' element={<SignUp />}></Route>
+          <Route path='/notfound' element={<NotFound />} />
+          <Route path='/' element={<Home />}></Route>
+
+          <Route path={'*'} element={<NotFound />} />
+        </Routes>
+      </>
     );
 }
 

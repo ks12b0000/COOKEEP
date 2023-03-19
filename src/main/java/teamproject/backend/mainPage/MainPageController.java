@@ -37,7 +37,7 @@ public class MainPageController {
     @GetMapping("/main/search/list")
     public BaseResponse searchList(@RequestParam String keyword) {
 
-        GetSearchByResponse getSearchByResponse = mainPageService.searchList(keyword);
+        List<BoardResponseInCardFormat> getSearchByResponse = mainPageService.searchList(keyword);
 
         return new BaseResponse("검색 결과를 가져오는데 성공했습니다.", getSearchByResponse);
     }

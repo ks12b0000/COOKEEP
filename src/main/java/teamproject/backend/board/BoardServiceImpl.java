@@ -3,13 +3,12 @@ package teamproject.backend.board;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamproject.backend.board.dto.BoardResponseInCardFormat;
-import teamproject.backend.board.dto.BoardResponseInDetailFormat;
-import teamproject.backend.board.dto.BoardWriteRequest;
-import teamproject.backend.board.dto.UserBoardResponseInListFormat;
+import teamproject.backend.board.dto.*;
 import teamproject.backend.boardComment.BoardCommentRepository;
 import teamproject.backend.boardComment.dto.BoardCommentResponse;
 import teamproject.backend.boardCommentReply.BoardCommentReplyRepository;
@@ -19,6 +18,7 @@ import teamproject.backend.foodCategory.FoodCategoryService;
 import teamproject.backend.imageFile.ImageFileRepository;
 import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
+import teamproject.backend.mypage.dto.BoardByUserResponse;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
 import teamproject.backend.utils.recommend.RecommendManager;
@@ -90,24 +90,12 @@ public class BoardServiceImpl implements BoardService{
         return board.get();
     }
 
-    @Override
-    public List<BoardResponseInDetailFormat> findBoardListByUserId(Long userId) {
-        List<Board> boards = boardRepository.findByUser_id(userId);
-
-        List<BoardResponseInDetailFormat> responses = getBoardResponsesInDetailFormat(boards, boards.size());
-
-        return responses;
-    }
-
-    private List<BoardResponseInDetailFormat> getBoardResponsesInDetailFormat(List<Board> boards, int length) {
-        List<BoardResponseInDetailFormat> responses = new ArrayList<>();
-        int min = Math.min(boards.size(), length);
-        for(int i = 0; i < min; i++){
-            Board board = boards.get(i);
-            String tags = boardTagService.findTagsByBoard(board);
-            responses.add(new BoardResponseInDetailFormat(board, tags));
+    private void inputTags(List<BoardResponseInCardFormat> boards) {
+        for(BoardResponseInCardFormat board : boards){
+            Board board1 = findBoardByBoardId(board.getBoard_id());
+            String tags = boardTagService.findTagsByBoard(board1);
+            board.setTags(tags);
         }
-        return responses;
     }
 
     private List<BoardResponseInCardFormat> getBoardResponsesInCardFormat(List<Board> boards, int length){
@@ -124,15 +112,13 @@ public class BoardServiceImpl implements BoardService{
     /**
      * 카테고리별 글 목록
      * @param categoryName
-     * @param sort
      * @return
      */
     @Override
-    public List<BoardResponseInCardFormat> findBoardListByFoodCategoryName(String categoryName, Sort sort) {
+    public BoardListResponseByCategory findBoardListByFoodCategoryName(Pageable pageable, String categoryName) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
-        List<Board> boards = boardRepository.findByCategory(foodCategory,sort);
-
-        return getBoardResponsesInCardFormat(boards, boards.size());
+        Page<BoardResponseInCardFormat> boards = boardRepository.findByCategory(pageable, foodCategory);
+        return new BoardListResponseByCategory(boards.getContent(), boards.getTotalPages());
     }
 
     @Override
@@ -157,7 +143,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     private void deleteAllReplyOf(BoardComment comment) {
-        List<BoardCommentReply> replies = boardCommentReplyRepository.findByBoardComment(comment);
+        List<BoardCommentReply> replies = boardCommentReplyRepository.findAllByBoardComment(comment);
         for(BoardCommentReply reply : replies){
             boardCommentReplyRepository.delete(reply);
         }
@@ -283,9 +269,16 @@ public class BoardServiceImpl implements BoardService{
         return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
-    public UserBoardResponseInListFormat findBoardListByUser(Long userId){
+    public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
-        List<Board> boards = boardRepository.findByUser(user);
-        return new UserBoardResponseInListFormat(boards, user);
+        Page<BoardByUserResponse> boards = boardRepository.findBannerByUserId(pageable, userId);
+        return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalElements());
+    }
+
+    public CheckUserLikeBoard checkLiked(Long userId, Long boardId){
+        User user = getUserById(userId);
+        Board board = findBoardByBoardId(boardId);
+        boolean check = likeBoardRepository.existsByBoardAndUser(board, user);
+        return new CheckUserLikeBoard(check);
     }
 }

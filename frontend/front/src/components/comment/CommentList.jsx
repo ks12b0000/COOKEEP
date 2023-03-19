@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
 import ReplyList from './ReplyList';
@@ -11,6 +12,9 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 const commentHttp = new CommentHttp();
 
 const CommentList = props => {
+  const modalRef = useRef();
+  const navigate = useNavigate();
+
   const username = useSelector(
     state => state.persistedReducer.userReducer.username
   );
@@ -20,23 +24,44 @@ const CommentList = props => {
 
   const [Comments, setComments] = useState([]);
   const [EditComment, setEditComment] = useState('');
-
-  //페이지 네이션 용 state
-  const [Limit, setLimit] = useState(5);
-  const [Page, setPage] = useState(1);
-  const offset = (Page - 1) * Limit;
+  const [Page, setPage] = useState([]);
+  const [SelectedButton, setSelectedButton] = useState(0);
 
   useEffect(() => {
     getList();
-  }, []);
+  }, [SelectedButton]);
 
   const getList = async () => {
     try {
-      const res = await commentHttp.getCommentList(props.boardId);
-      setComments(res.data.result);
-      console.log(res);
+      const res = await commentHttp.getCommentList(
+        props.boardId,
+        SelectedButton
+      );
+      setComments(res.data.result.list);
+      const arrayLength = res.data.result.total;
+      const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
+      setPage(newArray);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  //넘버 버튼으로 페이지 불러오기
+  const pageList = async pageNum => {
+    setSelectedButton(pageNum);
+  };
+
+  //left arrow 버튼으로 페이지 불러오기
+  const leftList = async() => {
+    if (SelectedButton > 0) {
+      setSelectedButton(prev => prev - 1);
+    }
+  };
+
+  //right arrow 버튼으로 페이지 불러오기
+  const rightList = async()=> {
+    if (SelectedButton < Page.length - 1) {
+      setSelectedButton(prev => prev + 1);
     }
   };
 
@@ -61,6 +86,22 @@ const CommentList = props => {
         alert(err.response.data.message);
       }
     }
+  };
+
+  //아이콘창 켜기 기능
+  const onIcon = (e, id) => {
+    e.stopPropagation();
+    const copyList = [...Comments];
+    copyList.find(comment => comment.comment_id === id).icon_selected = true;
+    setComments(copyList);
+    console.log('Page', Page.length);
+  };
+
+  //아이콘창 닫기 기능
+  const offIcon = id => {
+    const copyList = [...Comments];
+    copyList.find(comment => comment.comment_id === id).icon_selected = false;
+    setComments(copyList);
   };
 
   //답글창 켜기 기능
@@ -109,77 +150,89 @@ const CommentList = props => {
     }
   };
 
-  //복사기능
-  const textCopy = useRef();
-
-  const copy = () => {
-    const el = textCopy.current;
-    el.select();
-    document.execCommand('copy');
-  };
-
   return (
     <>
-      <CommentTitle>{`댓글 (${Comments.length})`}</CommentTitle>
-      {Comments.slice(offset, offset + Limit)?.map(comment => (
+      <CommentTitle>{`댓글 (${Page.length * 10})`}</CommentTitle>
+      {Comments?.map(comment => (
         <CommentWrap key={comment.comment_id}>
           <Profile />
           <CommentBlock>
             {/* 상단 작성자 이름 */}
             <UserNameWrap>
-              <UsernameText ref={textCopy}>{comment.user_name}</UsernameText>
-              <Author>작성자</Author>
+              <UsernameText>{comment.user_name}</UsernameText>
+              {props.userName === comment.user_name && <Author>작성자</Author>}
             </UserNameWrap>
-
-            {/* {username === comment.user_name && (
-              <>
-                <ButtonText
-                  onClick={() => onEdit(comment.comment_id, comment.text)}
-                >
-                  수정
-                </ButtonText>
-                <ButtonText
-                  marginLeft
-                  onClick={e => onDelete(e, comment.comment_id)}
-                >
-                  삭제
-                </ButtonText>
-              </>
-            )} */}
+            <Time>{comment.create_date}</Time>
 
             <ContentBlock>
               <ContentTextWrap>
-                <ContentText>{comment.text}</ContentText>
-                <EditButton src='/image/edit-icon.png' alt='edit-button' />
                 {username === comment.user_name ? (
-                  <EditBox>
-                    <CopyToClipboard
-                      text={comment.text}
-                      onCopy={() => alert('댓글이 복사되었습니다.')}
-                    >
-                      <div>복사하기</div>
-                    </CopyToClipboard>
-                    <div>작성글 보기</div>
-                    <div
-                      onClick={() => onEdit(comment.comment_id, comment.text)}
-                    >
-                      수정하기
-                    </div>
-                    <div onClick={e => onDelete(e, comment.comment_id)}>
-                      삭제하기
-                    </div>
-                  </EditBox>
+                  <ContentText backColor>{comment.text}</ContentText>
                 ) : (
-                  <EditBox>
-                    <div
-                      onClick={e => {
-                        copy(e, comment.text);
-                      }}
-                    >
-                      복사하기
-                    </div>
-                    <div>작성글 보기</div>
-                  </EditBox>
+                  <ContentText>{comment.text}</ContentText>
+                )}
+                <EditButton
+                  src='/image/edit-icon.png'
+                  alt='edit-button'
+                  onClick={e => onIcon(e, comment.comment_id)}
+                />
+
+                {comment.icon_selected && (
+                  <>
+                    {username === comment.user_name ? (
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={comment.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div
+                            onClick={() => {
+                              navigate('/written');
+                            }}
+                          >
+                            작성글 보기
+                          </div>
+                          <div
+                            onClick={() =>
+                              onEdit(comment.comment_id, comment.text)
+                            }
+                          >
+                            수정하기
+                          </div>
+                          <div onClick={e => onDelete(e, comment.comment_id)}>
+                            삭제하기
+                          </div>
+                        </EditBox>
+                        <EditBoxBack
+                          onClick={() => offIcon(comment.comment_id)}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={comment.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div
+                            onClick={() => {
+                              navigate(`/written/${comment.comment_id}`);
+                            }}
+                          >
+                            작성글 보기
+                          </div>
+                        </EditBox>
+                        <EditBoxBack
+                          onClick={() => offIcon(comment.comment_id)}
+                        />
+                      </>
+                    )}
+                  </>
                 )}
               </ContentTextWrap>
 
@@ -220,7 +273,10 @@ const CommentList = props => {
 
             {comment.reply_selected && (
               <ReplyWrap>
-                <ReplyList commentId={comment.comment_id} />
+                <ReplyList
+                  commentId={comment.comment_id}
+                  userName={props.userName}
+                />
                 <ReplyUpload commentId={comment.comment_id} />
               </ReplyWrap>
             )}
@@ -228,15 +284,28 @@ const CommentList = props => {
         </CommentWrap>
       ))}
 
-      <footer>
-        <Pagination
-          total={Comments.length}
-          limit={Limit}
-          page={Page}
-          setPage={setPage}
-        />
-      </footer>
+      {}
 
+      {/* 페이지 네이션 */}
+      <Nav>
+        <Button onClick={() => leftList()}>
+          <Arrow url='/image/arrow-left.png' />
+        </Button>
+        {Page.map((page, i) => (
+          <Button
+            key={i}
+            onClick={() => pageList(page)}
+            aria-current={page === SelectedButton ? 'true' : null}
+          >
+            {page + 1}
+          </Button>
+        ))}
+        <Button onClick={() => rightList()}>
+          <Arrow url='/image/arrow-right.png' />
+        </Button>
+      </Nav>
+
+      {/* 댓글 작성 컴포넌트 */}
       <Line />
       <CommentUpload boardId={props.boardId} />
     </>
@@ -298,12 +367,19 @@ const Author = styled.div`
   align-items: center;
 `;
 
+const Time = styled.div`
+  font-size: 12px;
+  color: #cbcbcb;
+  font-weight: 400;
+  margin: 6px 0 9px 0;
+`;
+
 const ContentBlock = styled.div`
   height: auto;
   position: relative;
-  padding: 10px 0;
   display: block;
   width: 100%;
+  padding-bottom: 10px;
 `;
 
 const ContentTextWrap = styled.div`
@@ -321,12 +397,21 @@ const ContentText = styled.div`
   padding: 24px 16px;
   border-radius: 10px;
   box-sizing: border-box;
+  background-color: ${props => (props.backColor ? '#F8F9FA' : 'white')};
 `;
 
 const EditButton = styled.img`
   margin-left: 10px;
   margin-top: 3px;
   cursor: pointer;
+`;
+
+const EditBoxBack = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 `;
 
 const EditBox = styled.div`
@@ -336,13 +421,14 @@ const EditBox = styled.div`
   border-radius: 5px;
   position: absolute;
   top: 0;
-  left: 97%;
+  left: 101%;
   display: grid;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
+  padding: 5px 0;
   box-sizing: border-box;
   background-color: white;
+  z-index: 100;
 
   div {
     font-size: 15px;
@@ -353,12 +439,19 @@ const EditBox = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    width: 85px;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: #ff4122;
+      color: white;
+    }
   }
 `;
 
 const ReplyText = styled.div`
   font-size: 11px;
-  margin-left: 1px;
+  margin-left: 4px;
   color: #878787;
   display: block;
   cursor: pointer;
@@ -367,7 +460,7 @@ const ReplyText = styled.div`
 const EditBlock = styled.input`
   width: 100%;
   position: absolute;
-  top: 10px;
+  top: 1px;
   left: 0;
   border-radius: 10px;
   border: 1px solid #ff4122;
@@ -376,6 +469,7 @@ const EditBlock = styled.input`
   box-sizing: border-box;
   width: 1286px;
   font-family: 400;
+  background-color: white;
 
   :focus {
     outline: none;
@@ -391,11 +485,12 @@ const EditBlock = styled.input`
 
 const Edit2Button = styled.div`
   background-color: #ff4122;
+  width: 20px;
   color: #ffffff;
   font-size: 11px;
   font-weight: 500;
   position: absolute;
-  top: 55%;
+  top: 49%;
   left: ${props => props.left};
   padding: 5px 14px;
   border-radius: 5px;
@@ -404,7 +499,7 @@ const Edit2Button = styled.div`
   transition: 0.2s;
 
   &:hover {
-    top: 53%;
+    top: 45%;
   }
 `;
 
@@ -419,6 +514,59 @@ const Line = styled.div`
   height: 0.1px;
   background-color: #ffa590;
   margin: 40px 0;
+`;
+
+//페이지 네이션
+const Nav = styled.nav`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 16px;
+`;
+
+const Button = styled.button`
+  border: 1px solid #cbcbcb;
+  position: relative;
+  top: 0;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  background: white;
+  color: #cbcbcb;
+  font-size: 1rem;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-3px);
+  }
+
+  &[disabled] {
+    background: white;
+    border: 1px solid #cbcbcb;
+    cursor: revert;
+    transform: revert;
+  }
+
+  &[aria-current] {
+    background: #ff4122;
+    border: 1px solid #ff4122;
+    color: white;
+    font-weight: bold;
+    cursor: revert;
+    transform: revert;
+  }
+`;
+
+const Arrow = styled.div`
+  width: 8px;
+  height: 14px;
+  background: url(${props => props.url});
+  background-size: 8px;
 `;
 
 export default CommentList;

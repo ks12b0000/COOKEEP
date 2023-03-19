@@ -12,8 +12,6 @@ import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
 import teamproject.backend.user.UserService;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -33,9 +31,8 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/mypage")
-    public BaseResponse<GetUserResponse> myPageUserInfo(HttpServletRequest request, @RequestParam Long user_id) {
-        Cookie[] cookies = request.getCookies();
-        GetUserResponse user = myPageService.userInfo(user_id, cookies);
+    public BaseResponse<GetUserResponse> myPageUserInfo(@RequestParam Long user_id) {
+        GetUserResponse user = myPageService.userInfo(user_id);
 
         return new BaseResponse("유저 정보를 성공적으로 가져왔습니다.", user);
     }
@@ -117,12 +114,12 @@ public class MyPageController {
         return new BaseResponse("닉네임 추천 목록을 불러왔습니다.", suggestNicknames);
     }
 
-        /**
-         * 회원 탈퇴
-         * [DELETE] /auth/user/delete/{user_id}
-         * @param user_id
-         * @return
-         */
+    /**
+     * 회원 탈퇴
+     * [DELETE] /auth/user/delete/{user_id}
+     * @param user_id
+     * @return
+     */
     @DeleteMapping("/auth/user/delete/{user_id}")
     public BaseResponse userDelete(@PathVariable Long user_id, HttpServletResponse response) {
 
@@ -138,11 +135,10 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/like/list/{user_id}")
-    public BaseResponse likeByUser(HttpServletRequest request, @PathVariable Long user_id) {
-        Cookie[] cookies = request.getCookies();
-        GetLikeByUserResponse getLikeByUserResponse = myPageService.likeByUser(user_id, cookies);
+    public BaseResponse likeByUser(@PathVariable Long user_id) {
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.likeByUser(user_id);
 
-        return new BaseResponse("좋아요 누른 글 목록을 불러왔습니다.", getLikeByUserResponse);
+        return new BaseResponse("좋아요 누른 글 목록을 불러왔습니다.", getCommentByUserResponse);
     }
 
     /**
@@ -152,9 +148,8 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/board/list/{user_id}")
-    public BaseResponse boardByUser(HttpServletRequest request, @PathVariable Long user_id) {
-        Cookie[] cookies = request.getCookies();
-        GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(user_id, cookies);
+    public BaseResponse boardByUser(@PathVariable Long user_id) {
+        GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(user_id);
 
         return new BaseResponse("내가 쓴 글 목록을 불러왔습니다.", getBoardByUserResponse);
     }
@@ -173,9 +168,8 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/notification/list/{user_id}")
-    public BaseResponse notificationList(HttpServletRequest request, @PathVariable Long user_id, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
-        Cookie[] cookies = request.getCookies();
-        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, sort, cookies);
+    public BaseResponse notificationList(@PathVariable Long user_id, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
+        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, sort);
 
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }
@@ -185,5 +179,18 @@ public class MyPageController {
         userService.uploadImage(user_id, image);
 
         return new BaseResponse("유저 사진을 교체했습니다.");
+    }
+
+    /**
+     * 내가 댓글 단 글 목록 가져오기
+     * [GET] /auth/user/comment/list/{user_id}
+     * @param user_id
+     * @return
+     */
+    @GetMapping("/auth/user/comment/list/{user_id}")
+    public BaseResponse commentByUser(@PathVariable Long user_id) {
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.commentByUser(user_id);
+
+        return new BaseResponse("내가 댓글 단 글 목록을 불러왔습니다.", getCommentByUserResponse);
     }
 }

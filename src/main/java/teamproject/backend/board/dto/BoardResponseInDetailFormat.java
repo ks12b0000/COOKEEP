@@ -18,8 +18,6 @@ public class BoardResponseInDetailFormat {
     private String user_name;
     private Long user_id;
     private Date create_date;
-    private String thumbnail;
-    private String tags;
     private Integer commented;
     private Integer liked;
     private Integer view;
@@ -32,8 +30,6 @@ public class BoardResponseInDetailFormat {
         this.user_name = board.getUser().getNickname();
         this.user_id = board.getUser().getId();
         this.create_date = board.getCreateDate();
-        this.thumbnail = board.getThumbnail();
-        this.tags = tags;
         this.commented = board.getCommented();
         this.liked = board.getLiked();
         this.view = board.getView();

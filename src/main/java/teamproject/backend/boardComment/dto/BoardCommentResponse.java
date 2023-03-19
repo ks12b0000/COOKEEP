@@ -14,12 +14,22 @@ import java.util.Date;
 public class BoardCommentResponse {
     private Long comment_id;
     private String user_name;
+    private Long user_id;
     private String create_date;
     private String text;
     private Integer replyCount;
     private boolean edit_selected = false;
     private boolean reply_selected = false;
     private boolean icon_selected = false;
+
+    public BoardCommentResponse(Long comment_id, String user_name, Long user_id, Date create_date, String text, Integer replyCount) {
+        this.comment_id = comment_id;
+        this.user_name = user_name;
+        this.user_id = user_id;
+        this.create_date = asString(create_date);
+        this.text = text;
+        this.replyCount = replyCount;
+    }
 
     public BoardCommentResponse(BoardComment comment) {
         this.comment_id = comment.getBoardCommentId();

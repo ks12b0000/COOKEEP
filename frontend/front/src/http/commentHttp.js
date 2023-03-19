@@ -11,9 +11,11 @@ class CommentHttp extends Http {
     };
 
     // 댓글 리스트 불러오기
-    getCommentList = async (boardId) => {
+    getCommentList = async (boardId, pageNum) => {
         try {
-            const res = await this.axios.get(`board/comment/list?board_id=${boardId}`);
+            const res = await this.axios.get(
+              `board/comment/list?board_id=${boardId}&page=${pageNum}`
+            );
             return res;
         } catch (err) {
             throw err;
@@ -51,9 +53,11 @@ class CommentHttp extends Http {
     };
 
     // 대댓글 리스트 불러오기
-    getReplyList = async (commentId) => {
+    getReplyList = async (commentId, pageNum) => {
         try {
-            const res = await this.axios.get(`board/comment/reply/list?comment_id=${commentId}`);
+            const res = await this.axios.get(
+              `board/comment/reply/list?comment_id=${commentId}&page=${pageNum}`
+            );
             return res;
         } catch (err) {
             throw err;

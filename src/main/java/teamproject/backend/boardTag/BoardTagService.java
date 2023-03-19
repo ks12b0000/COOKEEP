@@ -13,4 +13,5 @@ public interface BoardTagService {
     List<BoardTag> findBoardTagByTagName(String tagName);
     List<Board> findBoardByTagName(String tagName);
     void updateBoardTags(Board board, String tags);
+
 }

@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
 
 const commentHttp = new CommentHttp();
 
 const ReplyList = props => {
+  const modalRef = useRef();
+
   const username = useSelector(
     state => state.persistedReducer.userReducer.username
   );
@@ -15,18 +18,45 @@ const ReplyList = props => {
 
   const [Replys, setReplys] = useState([]);
   const [EditComment, setEditComment] = useState('');
+  const [Page, setPage] = useState([]);
+  const [SelectedButton, setSelectedButton] = useState(0);
 
   useEffect(() => {
     getList();
-  }, []);
+  }, [SelectedButton]);
 
   const getList = async () => {
     try {
-      const res = await commentHttp.getReplyList(props.commentId);
-      setReplys(res.data.result);
-      console.log(res.data.result);
+      const res = await commentHttp.getReplyList(
+        props.commentId,
+        SelectedButton
+      );
+      console.log(res);
+      setReplys(res.data.result.list);
+      const arrayLength = res.data.result.total;
+      const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
+      setPage(newArray);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  //넘버 버튼으로 페이지 불러오기
+  const pageList = async pageNum => {
+    setSelectedButton(pageNum);
+  };
+
+  //left arrow 버튼으로 페이지 불러오기
+  const leftList = async () => {
+    if (SelectedButton > 0) {
+      setSelectedButton(prev => prev - 1);
+    }
+  };
+
+  //right arrow 버튼으로 페이지 불러오기
+  const rightList = async () => {
+    if (SelectedButton < Page.length - 1) {
+      setSelectedButton(prev => prev + 1);
     }
   };
 
@@ -51,6 +81,21 @@ const ReplyList = props => {
         alert(err.response.data.message);
       }
     }
+  };
+
+  //아이콘창 켜기 기능
+  const onIcon = (e, id) => {
+    e.stopPropagation();
+    const copyList = [...Replys];
+    copyList.find(reply => reply.reply_id === id).icon_selected = true;
+    setReplys(copyList);
+  };
+
+  //아이콘창 닫기 기능
+  const offIcon = id => {
+    const copyList = [...Replys];
+    copyList.find(reply => reply.reply_id === id).icon_selected = false;
+    setReplys(copyList);
   };
 
   //대댓글 수정창 켜기 기능
@@ -89,83 +134,135 @@ const ReplyList = props => {
     <>
       {Replys?.map(reply => (
         <CommentWrap key={reply.reply_id}>
-          <Arrow src='/image/reply-arrow.png' />
+          <ReplyArrow src='/image/reply-arrow.png' />
           <Profile />
           <CommentBlock>
             <TextWrap>
               <TextBlock>
                 <UserNameWrap>
                   <UsernameText>{reply.user_name}</UsernameText>
-                  <Author>작성자</Author>
+                  {props.userName === reply.user_name && (
+                    <Author>작성자</Author>
+                  )}
                 </UserNameWrap>
+                <Time>{reply.create_date}</Time>
               </TextBlock>
-              {/* {username === reply.user_name ? (
-                <TextBlock>
-                  <ButtonText
-                    onClick={() => onEdit(reply.reply_id, reply.text)}
-                  >
-                    수정
-                  </ButtonText>
-                  <ButtonText
-                    marginLeft
-                    onClick={e => onDelete(e, reply.reply_id)}
-                  >
-                    삭제
-                  </ButtonText>
-                </TextBlock>
-              ) : (
-                <></>
-              )} */}
             </TextWrap>
+
             <ContentBlock>
               <ContentTextWrap>
-                <ContentText>{reply.text}</ContentText>
-                <EditButton src='/image/edit-icon.png' alt='edit-button' />
+                {username === reply.user_name ? (
+                  <ContentText backColor>{reply.text}</ContentText>
+                ) : (
+                  <ContentText>{reply.text}</ContentText>
+                )}
+                <EditButton
+                  src='/image/edit-icon.png'
+                  alt='edit-button'
+                  onClick={e => onIcon(e, reply.reply_id)}
+                />
+                {reply.icon_selected && (
+                  <>
+                    {username === reply.user_name ? (
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={reply.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div>작성글 보기</div>
+                          <div
+                            onClick={() => onEdit(reply.reply_id, reply.text)}
+                          >
+                            수정하기
+                          </div>
+                          <div onClick={e => onDelete(e, reply.reply_id)}>
+                            삭제하기
+                          </div>
+                        </EditBox>
+                        <EditBoxBack onClick={() => offIcon(reply.reply_id)} />
+                      </>
+                    ) : (
+                      <>
+                        <EditBox ref={modalRef}>
+                          <CopyToClipboard
+                            text={reply.text}
+                            onCopy={() => alert('댓글이 복사되었습니다.')}
+                          >
+                            <div>복사하기</div>
+                          </CopyToClipboard>
+                          <div>작성글 보기</div>
+                        </EditBox>
+                        <EditBoxBack onClick={() => offIcon(reply.reply_id)} />
+                      </>
+                    )}
+                  </>
+                )}
               </ContentTextWrap>
-              {reply.edit_selected ? (
+
+              {reply.edit_selected && (
                 <>
                   <EditBlock
                     value={EditComment}
                     type='text'
                     onChange={e => setEditComment(e.currentTarget.value)}
                   />
-                  <EditButton
-                    left='91%'
+                  <Edit2Button
+                    left='87%'
                     onClick={e => submitEdit(e, reply.reply_id, reply.text)}
                   >
                     확인
-                  </EditButton>
-                  <EditButton
-                    left='95%'
+                  </Edit2Button>
+                  <Edit2Button
+                    left='92%'
                     onClick={() => offEdit(reply.reply_id)}
                   >
                     취소
-                  </EditButton>
+                  </Edit2Button>
                 </>
-              ) : (
-                <></>
               )}
             </ContentBlock>
           </CommentBlock>
         </CommentWrap>
       ))}
+
+      {/* 페이지 네이션 */}
+      <Nav>
+        <Button onClick={() => leftList()}>
+          <Arrow url='/image/arrow-left.png' />
+        </Button>
+        {Page.map((page, i) => (
+          <Button
+            key={i}
+            onClick={() => pageList(page)}
+            aria-current={page === SelectedButton ? 'true' : null}
+          >
+            {page + 1}
+          </Button>
+        ))}
+        <Button onClick={() => rightList()}>
+          <Arrow url='/image/arrow-right.png' />
+        </Button>
+      </Nav>
+
       {Replys.length !== 0 && <Line />}
     </>
   );
 };
 
 const CommentWrap = styled.div`
-  width: 100%;
+  width: 1270px;
   height: auto;
-  margin: 10px auto;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 6% 93%;
+  grid-template-columns: 8% 92%;
   justify-content: space-between;
-  box-sizing: border-box;
-  position: relative;
+  margin: 10px 0 0 0;
 `;
 
-const Arrow = styled.img`
+const ReplyArrow = styled.img`
   position: absolute;
   top: 35px;
   left: -60px;
@@ -212,44 +309,34 @@ const Author = styled.div`
   align-items: center;
 `;
 
+const Time = styled.div`
+  font-size: 12px;
+  color: #cbcbcb;
+  font-weight: 400;
+  margin: 6px 0 9px 0;
+`;
+
 const TextWrap = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
 const TextBlock = styled.div`
-  display: flex;
+  display: block;
 `;
-
-// const DateText = styled.div`
-//   font-size: 11px;
-//   color: #878787;
-//   margin-left: 10px;
-//   margin-top: auto;
-// `;
-
-// const ButtonText = styled.div`
-//   font-size: 12px;
-//   color: #878787;
-//   margin-left: ${props => (props.marginLeft ? '10px' : '')};
-//   cursor: pointer;
-
-//   &:hover {
-//     color: #35c5f0;
-//   }
-// `;
 
 const ContentBlock = styled.div`
   width: 100%;
   height: auto;
   position: relative;
-  padding: 10px 0;
 `;
 
 const ContentTextWrap = styled.div`
   display: grid;
-  grid-template-columns: 98% 1%;
+  width: 1194px;
+  grid-template-columns: 96% 1%;
   justify-content: space-between;
+  position: relative;
 `;
 
 const ContentText = styled.div`
@@ -260,56 +347,158 @@ const ContentText = styled.div`
   padding: 24px 16px;
   border-radius: 10px;
   box-sizing: border-box;
+  background-color: ${props => (props.backColor ? '#F8F9FA' : 'white')};
 `;
 
 const EditButton = styled.img`
   margin-left: 10px;
   margin-top: 3px;
   cursor: pointer;
+  margin-left: auto;
+  position: absolute;
+  left: 100%;
+`;
+
+const EditBoxBack = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+`;
+
+const EditBox = styled.div`
+  height: auto;
+  width: 100px;
+  border: 1px solid #ff4122;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 101.5%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+  box-sizing: border-box;
+  background-color: white;
+  z-index: 100;
+
+  div {
+    font-size: 15px;
+    font-weight: 400;
+    text-align: center;
+    height: 33px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 85px;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: #ff4122;
+      color: white;
+    }
+  }
 `;
 
 const EditBlock = styled.input`
-  width: 100%;
-  height: 80%;
   position: absolute;
-  top: 17%;
+  top: 1px;
   left: 0;
-  border-radius: 15px;
-  border: 1px solid #8b8b8b;
+  border-radius: 10px;
+  border: 1px solid #ff4122;
   font-size: 15px;
-  padding: 0 20px;
+  padding: 24px 16px;
   box-sizing: border-box;
+  width: 1146px;
+  font-family: 400;
+  background-color: white;
 
   :focus {
     outline: none;
-    border: 2px solid #949494;
   }
 
   ::placeholder {
     font-size: 15px;
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 2px;
     color: #aaaaaa;
   }
 `;
 
-// const EditButton = styled.div`
-//   background-color: #949494;
-//   color: white;
-//   font-size: 11px;
-//   font-weight: 500;
-//   position: absolute;
-//   top: 58%;
-//   left: ${props => props.left};
-//   padding: 3px 10px;
-//   border-radius: 5px;
-//   transition: 0.2s;
-//   cursor: pointer;
+const Edit2Button = styled.div`
+  background-color: #ff4122;
+  width: 20px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  position: absolute;
+  top: 57%;
+  left: ${props => props.left};
+  padding: 5px 14px;
+  border-radius: 5px;
+  transition: 0.2s;
+  cursor: pointer;
+  transition: 0.2s;
 
-//   &:hover {
-//     background-color: #35c5f0;
-//   }
-// `;
+  &:hover {
+    top: 52%;
+  }
+`;
+
+//페이지 네이션
+const Nav = styled.nav`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 16px;
+`;
+
+const Button = styled.button`
+  border: 1px solid #cbcbcb;
+  position: relative;
+  top: 0;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  background: white;
+  color: #cbcbcb;
+  font-size: 1rem;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-3px);
+  }
+
+  &[disabled] {
+    background: white;
+    border: 1px solid #cbcbcb;
+    cursor: revert;
+    transform: revert;
+  }
+
+  &[aria-current] {
+    background: #ff4122;
+    border: 1px solid #ff4122;
+    color: white;
+    font-weight: bold;
+    cursor: revert;
+    transform: revert;
+  }
+`;
+
+const Arrow = styled.div`
+  width: 8px;
+  height: 14px;
+  background: url(${props => props.url});
+  background-size: 8px;
+`;
 
 const Line = styled.div`
   width: 100%;

@@ -21,7 +21,6 @@ public enum BaseExceptionStatus {
     NAVER_GET_USER_INFO_FAIL(3104, "예상치 못한 이유로 네이버 사용자 정보 가져오기에 실패했습니다"),
     GOOGLE_GET_TOKEN_FAIL(3105, "예상치 못한 이유로 구글 토큰 받기에 실패했습니다"),
     GOOGLE_GET_USER_INFO_FAIL(3106, "예상치 못한 이유로 구글 사용자 정보 가져오기에 실패했습니다"),
-    MY_PAGE_ERROR(3107, "잘못된 요청입니다."),
 
     //[4000 ~] Board 관련 에러코드// 생성 관련 에러코드
     SHORT_TITLE_LENGTH(4001, "글의 제목이 짧습니다."),
