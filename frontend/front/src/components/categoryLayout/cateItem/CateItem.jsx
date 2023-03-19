@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import Pagination from "../pagination/Pagination";
 import { useState, useEffect } from "react";
 import CategoryHttp from "../../../http/categoryHttp";
-import IsNonData from "../../isNonData/IsNonData";
+import IsNonData from "../../atomic/isNonData/IsNonData";
 import Post from "../../post/Post";
 
 
@@ -13,12 +13,12 @@ function CateItem({cateItemName}) {
 
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showPost, setShowPost] = useState(10);
+    const [showPost, setShowPost] = useState(1);
     const [totalPost, setTotalPost] = useState(0);
 
     const LastIndex = currentPage * showPost;
     const FirstIndex = LastIndex - showPost;
-    const currentPost = posts.slice(FirstIndex, LastIndex);
+    const currentPost = posts?.slice(FirstIndex, LastIndex);
     const paginate = (pageNum) => setCurrentPage(pageNum);
     const prevPage = () => setCurrentPage(currentPage - 1);
     const nextPage = () => setCurrentPage(currentPage + 1);

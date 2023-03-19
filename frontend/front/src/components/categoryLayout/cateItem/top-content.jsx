@@ -20,7 +20,7 @@ function TopContent({detailPost}) {
                 <h1>{detailPost.category}</h1>
                 <h2>{detailPost.title}</h2>
                 <div>
-                    <span>{DateString}</span><span>View 111</span>
+                    <span>{DateString}</span><span>{detailPost.view}</span>
                 </div>
                 <h3>{detailPost.user_name}</h3>
                 <TopHeaderIconWrap>
@@ -37,8 +37,6 @@ function TopContent({detailPost}) {
                          </li>
                         </>
                     }
-
-
                 </TopHeaderIconWrap>
 
             </TopHeader>

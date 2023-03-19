@@ -13,7 +13,6 @@ function Home() {
 
             <Layout>
               <Main />
-              <SearchView/>
             </Layout>
 
         </>

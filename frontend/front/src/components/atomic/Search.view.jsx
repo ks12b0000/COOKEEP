@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
-import {Button} from "@mui/material";
-import {useEffect, useState} from "react";
-import SearchHttp from "../../http/searchHttp";
+
+import TabMenu from "./tabMenu/TabMenu";
+import OnChangeMenu from "./tabMenu/OnChageMenu";
 
 const SearchContainer = styled.div`
-  width: 1400px;
   margin:0 auto;
   display: flex;
   gap:10px;
   justify-content: center;
+ 
   
   button{
     width: 120px;
@@ -22,14 +22,7 @@ const SearchContainer = styled.div`
 `
 const InputWrap = styled.div`
   position: relative;
-  span{
-    position: absolute;
-    right:16px;
-    top:50%;
-    transform: translateY(-50%);
-    color: #FFC9BB;
-    cursor: pointer;
-  }
+ 
   input{
     padding:12px 16px;
     width: 534px;
@@ -43,30 +36,30 @@ const InputWrap = styled.div`
  
 
 `
-const client = new SearchHttp();
-function SearchView() {
-    const [data,setData] = useState();
-    const body ={   keyword: "김치"}
-    useEffect(() => {
-        ( async () =>{
-            try {
-                const res = await client.getTopList();
-                console.log(res);
 
-            }
-            catch (err){
-                throw err;
-            }
-        })()
-    })
+const Tag = styled.span`
+
+    position: absolute;
+    right:16px;
+    top:50%;
+    transform: translateY(-50%);
+    color: #FFC9BB;
+    cursor: pointer;
+  `
+
+function SearchView({bottom,onFocus}) {
+
     return (
         <>
             <SearchContainer>
                 <InputWrap>
-                    <input type="text"/>
-                    <span>#</span>
+                    <input type="text" onFocus={onFocus}/>
+                    <Tag>#</Tag>
+                    {bottom && <TabMenu /> }
+                    <OnChangeMenu />
                 </InputWrap>
                 <button>검색</button>
+
             </SearchContainer>
         </>
     )

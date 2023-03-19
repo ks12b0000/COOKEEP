@@ -8,7 +8,7 @@ import CommentList from "../../comment/CommentList";
 
 import CategoryHttp from "../../../http/categoryHttp";
 import AuthHttp from "../../../http/authHttp";
-import Alert from "../../modal/Alert";
+import Alert from "../../atomic/modal/Alert";
 import useModal from "../../../hooks/useModal";
 import {useNavigate} from "react-router";
 
@@ -27,7 +27,6 @@ function Detail() {
 
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
     const [detailUserId,setDetailUserId] = useState(null);
-
     const { id } = useParams();
     const [detailPost, setDetailPost] = useState([]);
 
@@ -42,21 +41,22 @@ function Detail() {
         }
     }
 
-    const onLike = async (e) => {
-        e.preventDefault();
-        try {
-            const res = await authHttp.postLike(id);
-            console.log(res);
-        }catch (err){
-            console.log(err.response);
-        }
-    }
+    // const onLike = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const res = await authHttp.postLike(id);
+    //         console.log(res);
+    //     }catch (err){
+    //         console.log(err.response);
+    //     }
+    // }
 
     useEffect(() => {
         (async () => {
             try {
                 const res = await writeHttp.getDetailPost(id);
                 setDetailPost(res.result);
+
                 setDetailUserId(res.result.user_id);
             } catch (err) {
                 console.log(err);
@@ -75,12 +75,9 @@ function Detail() {
 
           <Header categoryName ={detailPost.category}/>
             <Banner />
-
             <Container>
-
                 <TopContent detailPost={detailPost} />
-
-                <CommentList boardId={id} />
+                {/*<CommentList boardId={id} />*/}
             </Container>
               {isOpen && <Alert {...Props} />}
           <Footer />

@@ -4,7 +4,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import styled from '@emotion/styled';
 import * as React from "react";
 import {useState} from "react";
-import Alert from "../../../modal/Alert";
+import Alert from "../../../atomic/modal/Alert";
 
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router";

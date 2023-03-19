@@ -3,19 +3,19 @@
 import Http from "./http";
 
 class SearchHttp extends Http {
-    //자동완성 리스트
-    getAutoList = async (params) => {
+    //메인 탑 태그 검색
+    getTopTag = async () => {
         try{
-            return await  this.axios.get('main/auto/search/list',params)
+            return await  this.axios.get('/main/top10/tag/list')
         }
         catch (err) {
             throw  err;
         }
     }
      //메인탑 10검색 카테괼
-    getTopList = async (params) => {
+    getTopList = async () => {
         try{
-            return await  this.axios.get('main/auto/search/list',params)
+                return await  this.axios.get('/main/top10/search/list')
         }
         catch (err) {
             throw  err;

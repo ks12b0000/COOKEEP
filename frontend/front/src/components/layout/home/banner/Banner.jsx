@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import {mq} from "../../../media/media";
+import {mq} from "../../../../constants/media/media";
 import { Swiper, SwiperSlide } from "swiper/react"; // basic
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import "swiper/css"; //basic

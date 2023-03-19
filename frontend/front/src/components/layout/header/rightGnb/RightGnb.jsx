@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { logoutUser } from '../../../../redux/reducer/userSlice';
-import { mq } from '../../../media/media';
+import { mq } from '../../../../constants/media/media';
 import { color } from '../../../../constants/color';
 import UserHttp from '../../../../http/userHttp';
 import AuthHttp from '../../../../http/authHttp';
@@ -11,7 +11,7 @@ import AuthHttp from '../../../../http/authHttp';
 const userHttp = new UserHttp();
 const authHttp = new AuthHttp();
 
-const RightGnb = () => {
+const RightGnb = ({HandleSearch,searchOn}) => {
 
   const userInfo = useSelector(state => state.persistedReducer.userReducer);
   const dispatch = useDispatch();
@@ -50,13 +50,8 @@ const RightGnb = () => {
       <GnbContainer>
         {userInfo.isLoggedIn === false ? (
           <>
-            <li>
-              <img
-                src={`${process.env.PUBLIC_URL}/image/search.png`}
-                alt='검색아이콘'
-              />
-            </li>
-
+              {searchOn ?  <li><img src={`${process.env.PUBLIC_URL}/image/search-active.png`} alt='검색아이콘'/></li> :
+                  <li><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt='검색아이콘'/></li>}
             <li>
               <Link to='/login'> 로그인</Link>
             </li>
@@ -66,19 +61,19 @@ const RightGnb = () => {
           </>
         ) : (
           <>
-            <li>
-              <img
-                src={`${process.env.PUBLIC_URL}/image/search.png`}
-                alt='검색아이콘'
-              />
-            </li>
+              {searchOn ?
+                  <li onClick={HandleSearch}><img src={`${process.env.PUBLIC_URL}/image/search-active.png`} alt='검색아이콘'/></li> :
+                  <li onClick={HandleSearch}><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt='검색아이콘'/></li>
+              }
 
             <li>
-              <Link to={`/mypage/${userInfo.userId}`}>마이페이지</Link>
+              <Link to={`/mypage/${userInfo.userId}`}>
+                  <img src={`${process.env.PUBLIC_URL}/image/mypage.png`} alt='마이페이지'/>
+              </Link>
             </li>
             <li>
               <Link to='/' onClick={logout}>
-                로그아웃
+                  <img src={`${process.env.PUBLIC_URL}/image/user.png`} alt='로그아웃'/>
               </Link>
             </li>
           </>
@@ -117,6 +112,9 @@ const GnbContainer = styled.ul`
         }
       }
     }
+  img{
+    cursor: pointer;
+  }
   `;
 
 export default RightGnb;

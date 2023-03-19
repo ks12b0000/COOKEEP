@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
 
 import Pagination from "../../../components/categoryLayout/pagination/Pagination";
-import IsNonData from "../../../components/isNonData/IsNonData";
+import IsNonData from "../../../components/atomic/isNonData/IsNonData";
 import CategoryHttp from "../../../http/categoryHttp";
 import Post from "../../../components/post/Post";
 

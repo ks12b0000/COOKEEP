@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import {mq} from '../../../media/media'
+import {mq} from '../../../../constants/media/media'
 function Search() {
     return(
         <SearchWrap>
