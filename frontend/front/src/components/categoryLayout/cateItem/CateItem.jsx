@@ -1,47 +1,37 @@
 import styled from "@emotion/styled";
 
-import Pagination from "../pagination/Pagination";
+
 import { useState, useEffect } from "react";
 import CategoryHttp from "../../../http/categoryHttp";
-import IsNonData from "../../atomic/isNonData/IsNonData";
+import {Pagination} from "@mui/material";
 import Post from "../../post/Post";
+import IsNonData from "../../atomic/isNonData/IsNonData";
 
 
 const categoryHttp = new CategoryHttp();
 function CateItem({cateItemName}) {
-
-
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showPost, setShowPost] = useState(1);
-    const [totalPost, setTotalPost] = useState(0);
 
-    const LastIndex = currentPage * showPost;
-    const FirstIndex = LastIndex - showPost;
-    const currentPost = posts?.slice(FirstIndex, LastIndex);
-    const paginate = (pageNum) => setCurrentPage(pageNum);
-    const prevPage = () => setCurrentPage(currentPage - 1);
-    const nextPage = () => setCurrentPage(currentPage + 1);
+    const [totalCount, setTotalCount] = useState(0);
+    const onChangePagination = (e,p)=> {
+        setCurrentPage(p)
 
-    const showPagination = () => {
-        return <Pagination showPost={showPost} totalPost={totalPost} currentPage={currentPage} paginate={paginate} prevPage={prevPage} nextPage={nextPage} />;
     };
+
 
     useEffect(() => {
         (async () => {
             try {
                 const { result } = await categoryHttp.getCategoryPostList(true, currentPage, cateItemName);
-                setPosts(result);
-                setTotalPost(result.length);
+                setPosts(result.boards);
+                setTotalCount(result.total);
             } catch (err) {
                 console.log(err);
             }
         })();
-    }, []);
+    }, [currentPage]);
 
-    const FilterPosts = (e) => {
-        setShowPost(parseInt(e.target.value));
-    };
 
     return (
         <>
@@ -55,11 +45,10 @@ function CateItem({cateItemName}) {
             <Ul>
                 {
 
-                    posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={currentPost}/>
+                    posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts}/>
                 }
-
             </Ul>
-            <div>{showPagination()}</div>
+         <Pagination  count={totalCount}  page={currentPage}   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton />
         </>
     );
 }

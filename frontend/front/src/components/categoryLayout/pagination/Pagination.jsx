@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import styled from "@emotion/styled";
 import {color} from "../../../constants/color";
 
-const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, paginate }) => {
+const AllPagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, paginate }) => {
     const numbersPage = Math.ceil(totalPost / showPost);
 
     const numberCalculator = useCallback(
@@ -92,4 +92,4 @@ const PaginationNav = styled.nav`
         }
     }
 `;
-export default Pagination;
+export default AllPagination;

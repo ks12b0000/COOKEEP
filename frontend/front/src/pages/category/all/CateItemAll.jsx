@@ -8,6 +8,7 @@ import Pagination from "../../../components/categoryLayout/pagination/Pagination
 import IsNonData from "../../../components/atomic/isNonData/IsNonData";
 import CategoryHttp from "../../../http/categoryHttp";
 import Post from "../../../components/post/Post";
+import AllPagination from "../../../components/categoryLayout/pagination/Pagination";
 
 
 const categoryHttp = new CategoryHttp();
@@ -28,7 +29,7 @@ function CateItemAll() {
         const nextPage = () => setCurrentPage(currentPage + 1);
 
         const showPagination = () => {
-            return <Pagination showPost={showPost} totalPost={totalPost} currentPage={currentPage} paginate={paginate} prevPage={prevPage} nextPage={nextPage} />;
+            return <AllPagination showPost={showPost} totalPost={totalPost} currentPage={currentPage} paginate={paginate} prevPage={prevPage} nextPage={nextPage} />;
         };
 
         useEffect(() => {
