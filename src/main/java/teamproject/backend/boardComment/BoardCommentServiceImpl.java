@@ -99,7 +99,7 @@ public class BoardCommentServiceImpl implements BoardCommentService{
     public BoardCommentListResponse findCommentListByBoard(Pageable pageable, Long boardId) {
         Board board = getBoardBy(boardId);
         Page<BoardCommentResponse> comments = boardCommentRepository.findByBoardOrderByCreateDateDesc(pageable, board);
-        return new BoardCommentListResponse(comments.getContent(), comments.getTotalPages());
+        return new BoardCommentListResponse(comments.getContent(), comments.getTotalPages(), board.getCommented());
     }
 
     @Override

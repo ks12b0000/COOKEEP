@@ -12,4 +12,5 @@ import java.util.List;
 public class BoardCommentListResponse {
     private List<BoardCommentResponse> list;
     private int total;
+    private int cnt;
 }
