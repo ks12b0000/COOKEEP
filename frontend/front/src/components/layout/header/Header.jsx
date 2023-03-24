@@ -3,10 +3,11 @@ import styled from "@emotion/styled";
 import Logo from "./logo/Logo";
 import RightGnb from "./rightGnb/RightGnb";
 
-import {mq} from "../../media/media";
+import {mq} from "../../../constants/media/media";
 
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Nav from "./nav/Nav";
+import SearchView from "../../atomic/Search.view";
 
 const HeaderContainer = styled.header`
     width: 100%;
@@ -60,11 +61,21 @@ function Header({color,categoryName}) {
 
 
     const [isFocus, setIsFocus] = useState(false);
+    const [searchOn,setSearchOn] =useState(false);
+    const [bottom,setBottom] =useState(false);
+
+
     const handleFocus = () => {
         setIsFocus(true)
     }
     const handleClick = () => {
         setIsFocus(false);
+    }
+    const HandleSearch  = () => {
+        setSearchOn(!searchOn);
+    }
+    const onFocus = () => {
+        setBottom(true)
     }
     //css 변수로 제어
 const TitleWrap = styled.div`
@@ -93,8 +104,8 @@ const TitleWrap = styled.div`
             <HeaderContainer>
               <Container>
                 <Logo />
-                <Nav  categoryName = {categoryName}/>
-                <RightGnb color={color}/>
+                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}/> :    <Nav  categoryName = {categoryName} />}
+                <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn}/>
               </Container>
             </HeaderContainer>
 

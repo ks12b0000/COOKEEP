@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import styled from "@emotion/styled";
 import {color} from "../../../constants/color";
 
-const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, paginate }) => {
+const AllPagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, paginate }) => {
     const numbersPage = Math.ceil(totalPost / showPost);
 
     const numberCalculator = useCallback(
@@ -25,9 +25,9 @@ const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, pagi
                 </li>
             )}
             {pageCount.map((num, idx) => (
-                <li key={num} aria-current={currentPage === idx + 1 ? "page" : null}>
+                <Num key={num} aria-current={currentPage === idx + 1 ? "page" : null}>
                     <a onClick={() => paginate(num)}>{num}</a>
-                </li>
+                </Num>
             ))}
             {pageCount.length !== currentPage && (
                 <li>
@@ -37,6 +37,16 @@ const Pagination = ({ showPost, totalPost, currentPage, prevPage, nextPage, pagi
         </PaginationNav>
     );
 };
+const Num = styled.li`
+  border: 1px solid  #CBCBCB;
+
+  border-radius: 5px;
+  a{
+    color: #CBCBCB;
+  }
+  
+  
+`
 
 const PaginationNav = styled.nav`
     display: flex;
@@ -50,12 +60,18 @@ const PaginationNav = styled.nav`
             font-weight: bold;
             cursor: revert;
             transform: revert;
+            background: #FF4122;
+            border-radius: 5px;
+             a{
+               color: #ffffff;
+             }
         }
     }
     button {
         width: 40px;
         height: 40px;
-        background: ${color.main};
+        background: #FF4122;
+        border-radius: 5px;
         color: #ffffff;
         border: none;
         cursor: pointer;
@@ -67,10 +83,13 @@ const PaginationNav = styled.nav`
         cursor: pointer;
         text-align: center;
         line-height: 40px;
-        font-size: 18px;
+        font-size: 14px;
+      
         &:hover {
-            border: 1px solid ${color.main};
+          background: #FF4122;
+          color:#ffffff;
+        
         }
     }
 `;
-export default Pagination;
+export default AllPagination;

@@ -37,7 +37,7 @@ public class MainPageController {
     @GetMapping("/main/search/list")
     public BaseResponse searchList(@RequestParam String keyword) {
 
-        GetSearchByResponse getSearchByResponse = mainPageService.searchList(keyword);
+        List<BoardResponseInCardFormat> getSearchByResponse = mainPageService.searchList(keyword);
 
         return new BaseResponse("검색 결과를 가져오는데 성공했습니다.", getSearchByResponse);
     }
@@ -125,11 +125,12 @@ public class MainPageController {
         
     /**
      * 검색어 자동완성 기능
+     * [GET] /main/auto/search/list?keyword=
      * @param keyword
      * @return
      */
     @GetMapping("/main/auto/search/list")
-    public BaseResponse autoSearchList(@RequestBody AutoSearchRequest keyword) {
+    public BaseResponse autoSearchList(@RequestParam String keyword) {
         GetAutoSearchList getAutoSearchList = mainPageService.autoSearchList(keyword);
 
         return new BaseResponse("검색어 자동완성 리스트를 불러오는데 성공했습니다.", getAutoSearchList);

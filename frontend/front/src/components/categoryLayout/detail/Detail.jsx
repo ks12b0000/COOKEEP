@@ -3,19 +3,17 @@ import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 import WriteHttp from '../../../http/writeHttp';
-import CommentUpload from '../../comment/CommentUpload';
 import CommentList from '../../comment/CommentList';
-
 import CategoryHttp from '../../../http/categoryHttp';
 import AuthHttp from '../../../http/authHttp';
-import Alert from '../../modal/Alert';
+
 import useModal from '../../../hooks/useModal';
 import { useNavigate } from 'react-router';
-
 import Header from '../../layout/header/Header';
 import Footer from '../../layout/footer/Footer';
 import Banner from '../../layout/home/banner/Banner';
 import TopContent from '../cateItem/top-content';
+import Alert from "../../atomic/modal/Alert";
 
 function Detail() {
   const categoryHttp = new CategoryHttp();
@@ -24,11 +22,13 @@ function Detail() {
 
   const navigate = useNavigate();
 
+
   const { userId } = useSelector(state => state.persistedReducer.userReducer);
   const [detailUserId, setDetailUserId] = useState(null);
 
   const { id } = useParams();
   const [detailPost, setDetailPost] = useState([]);
+
 
   const { isOpen, controller } = useModal();
 
@@ -40,6 +40,7 @@ function Detail() {
       alert('유저아이디가 일치하지 않습니다.');
     }
   };
+
 
   const onLike = async e => {
     e.preventDefault();
@@ -63,6 +64,7 @@ function Detail() {
     })();
   }, []);
 
+
   const Props = {
     text: '해당 게시물을 삭제를 원하십니까?',
     setOpenModal: controller,
@@ -73,6 +75,7 @@ function Detail() {
       <Header categoryName={detailPost.category} />
       <Banner />
 
+
       <Container>
         <TopContent detailPost={detailPost} />
 
@@ -82,6 +85,7 @@ function Detail() {
       <Footer />
     </>
   );
+
 }
 export default Detail;
 

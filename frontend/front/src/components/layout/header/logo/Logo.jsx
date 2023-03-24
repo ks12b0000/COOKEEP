@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-import {mq} from "../../../media/media";
+import {mq} from "../../../../constants/media/media";
 
 const LogoContainer = styled.div`
     display: flex;

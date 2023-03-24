@@ -34,6 +34,17 @@ class CategoryHttp extends Http {
           }
      }
 
+     //전제글 목록조회
+
+    getAllBoard = async (text) => {
+        try {
+            const {data} = await this.axios.get(`board/all/list?${text}`)
+            return data;
+        }catch (err){
+            throw err;
+        }
+    }
+
      //좋아요 많은순 조회
     getMainLike =  async () => {
         try {

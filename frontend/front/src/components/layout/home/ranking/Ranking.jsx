@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import {color} from "../../../../constants/color";
-import IsNonData from "../../../isNonData/IsNonData";
+import IsNonData from "../../../atomic/isNonData/IsNonData";
 import Post from "../../../post/Post";
 
 function Ranking({commented}) {

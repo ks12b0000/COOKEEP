@@ -18,6 +18,7 @@ import teamproject.backend.foodCategory.FoodCategoryService;
 import teamproject.backend.imageFile.ImageFileRepository;
 import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
+import teamproject.backend.mypage.dto.BoardByUserResponse;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
 import teamproject.backend.utils.recommend.RecommendManager;
@@ -270,7 +271,14 @@ public class BoardServiceImpl implements BoardService{
 
     public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
-        Page<BoardResponseInBannerFormat> boards = boardRepository.findBannerByUserId(pageable, userId);
+        Page<BoardByUserResponse> boards = boardRepository.findBannerByUserId(pageable, userId);
         return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalElements());
+    }
+
+    public CheckUserLikeBoard checkLiked(Long userId, Long boardId){
+        User user = getUserById(userId);
+        Board board = findBoardByBoardId(boardId);
+        boolean check = likeBoardRepository.existsByBoardAndUser(board, user);
+        return new CheckUserLikeBoard(check);
     }
 }

@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import {color} from "../../../../constants/color";
-import {mq} from '../../../media/media'
+import {mq} from '../../../../constants/media/media'
 import Post from "../../../post/Post";
-import IsNonData from "../../../isNonData/IsNonData";
+import IsNonData from "../../../atomic/isNonData/IsNonData";
 
 
 

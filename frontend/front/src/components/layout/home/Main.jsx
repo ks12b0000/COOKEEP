@@ -43,6 +43,7 @@ function Main() {
            <Banner />
            <Popularity {...Props.like} />
            <Ranking   {...Props.comment}/>
+
        </>
    )
 }

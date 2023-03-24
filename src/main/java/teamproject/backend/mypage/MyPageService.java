@@ -3,7 +3,6 @@ package teamproject.backend.mypage;
 import org.springframework.data.domain.Sort;
 import teamproject.backend.mypage.dto.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public interface MyPageService {
 
     public void userDelete(Long user_id, HttpServletResponse response);
 
-    public GetLikeByUserResponse likeByUser(Long user_id);
+    public GetLikeAndCommentByUserResponse likeByUser(Long user_id);
 
     public GetBoardByUserResponse boardByUser(Long user_id);
 
@@ -34,5 +33,5 @@ public interface MyPageService {
 
     public List<String> suggestNickname(int size);
 
-    public GetCommentByUserResponse commentByUser(Long user_id);
+    public GetLikeAndCommentByUserResponse commentByUser(Long user_id);
 }

@@ -8,17 +8,13 @@ import teamproject.backend.domain.Board;
 public class BoardByUserResponse {
 
     private Long board_id;
-    private Long category_id;
     private String title;
-    private Long user_id;
-    private String thumbnail;
+    private Integer commented;
 
     @Builder
-    public BoardByUserResponse(Long board_id, Long category_id, String title, Long user_id, String thumbnail) {
+    public BoardByUserResponse(Long board_id, String title, Integer commented) {
         this.board_id = board_id;
-        this.category_id = category_id;
         this.title = title;
-        this.user_id = user_id;
-        this.thumbnail = thumbnail;
+        this.commented = commented;
     }
 }
