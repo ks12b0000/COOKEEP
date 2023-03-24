@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
@@ -8,6 +9,7 @@ const commentHttp = new CommentHttp();
 
 const ReplyList = props => {
   const modalRef = useRef();
+  const navigate = useNavigate();
 
   const username = useSelector(
     state => state.persistedReducer.userReducer.username
@@ -172,7 +174,13 @@ const ReplyList = props => {
                           >
                             <div>복사하기</div>
                           </CopyToClipboard>
-                          <div>작성글 보기</div>
+                          <div
+                            onClick={() => {
+                              navigate(`/written/${reply.user_id}`);
+                            }}
+                          >
+                            작성글 보기
+                          </div>
                           <div
                             onClick={() => onEdit(reply.reply_id, reply.text)}
                           >
@@ -193,7 +201,13 @@ const ReplyList = props => {
                           >
                             <div>복사하기</div>
                           </CopyToClipboard>
-                          <div>작성글 보기</div>
+                          <div
+                            onClick={() => {
+                              navigate(`/written/${reply.user_id}`);
+                            }}
+                          >
+                            작성글 보기
+                          </div>
                         </EditBox>
                         <EditBoxBack onClick={() => offIcon(reply.reply_id)} />
                       </>

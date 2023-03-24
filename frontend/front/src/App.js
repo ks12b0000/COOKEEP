@@ -38,26 +38,21 @@ function App() {
             <Route path='/myposts/:userId' element={<MyPosts />}></Route>
             <Route path='/mylikes/:userId' element={<MyLikes />}></Route>
           </Route>
+
           {/*카테고리*/}
-
-
-
-                    {/*카테고리*/}
-                    <Route path=":category/writing" element={<Writing />}></Route>
-                    <Route path="/korea/*" element={<Korean/>}></Route>
-                    <Route path="/western" element={<Western />}></Route>
-                    <Route path="/chinese" element={<Chinese />}></Route>
-                    <Route path="/japanese" element={<Japanese />}></Route>
-                    <Route path="/diet" element={<Diet />}></Route>
-                    <Route path="/vegan" element={<Vegan />}></Route>
-                    <Route path="/etc" element={<Etc />}></Route>
-                    <Route path="/all" element={<AllCategory />}></Route>
-
+          <Route path=':category/writing' element={<Writing />}></Route>
+          <Route path='/korea/*' element={<Korean />}></Route>
+          <Route path='/western' element={<Western />}></Route>
+          <Route path='/chinese' element={<Chinese />}></Route>
+          <Route path='/japanese' element={<Japanese />}></Route>
+          <Route path='/diet' element={<Diet />}></Route>
+          <Route path='/vegan' element={<Vegan />}></Route>
+          <Route path='/etc' element={<Etc />}></Route>
+          <Route path='/all' element={<AllCategory />}></Route>
 
           <Route path='/category/:id' element={<Detail />} />
           <Route path='/:id/edit' element={<Edit />} />
-          <Route path='/written/:id' element={<Written />} />
-
+          <Route path='/written/:userId' element={<Written />} />
 
           <Route path='/login' element={<Login />}></Route>
           <Route path='/callback/kakao' element={<KaKaoLogin />}></Route>
