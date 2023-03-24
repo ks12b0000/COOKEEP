@@ -37,6 +37,7 @@ const CommentList = props => {
         props.boardId,
         SelectedButton
       );
+      console.log(res);
       setComments(res.data.result.list);
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
@@ -52,14 +53,14 @@ const CommentList = props => {
   };
 
   //left arrow 버튼으로 페이지 불러오기
-  const leftList = async() => {
+  const leftList = async () => {
     if (SelectedButton > 0) {
       setSelectedButton(prev => prev - 1);
     }
   };
 
   //right arrow 버튼으로 페이지 불러오기
-  const rightList = async()=> {
+  const rightList = async () => {
     if (SelectedButton < Page.length - 1) {
       setSelectedButton(prev => prev + 1);
     }
@@ -190,7 +191,7 @@ const CommentList = props => {
                           </CopyToClipboard>
                           <div
                             onClick={() => {
-                              navigate('/written');
+                              navigate(`/written/${comment.user_id}`);
                             }}
                           >
                             작성글 보기
@@ -221,7 +222,7 @@ const CommentList = props => {
                           </CopyToClipboard>
                           <div
                             onClick={() => {
-                              navigate(`/written/${comment.comment_id}`);
+                              navigate(`/written/${comment.user_id}`);
                             }}
                           >
                             작성글 보기
