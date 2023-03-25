@@ -1,50 +1,86 @@
 import styled from "@emotion/styled";
 import {useSelector} from "react-redux";
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import DetailBtn from "../detail/detailBtn/DetailBtn";
-import categoryHttp from "../../../http/categoryHttp";
+import CategoryHttp from "../../../http/categoryHttp";
 import {useNavigate} from "react-router";
 
 
-function TopContent({detailPost}) {
+function TopContent({boardId, detailPost}) {
 
     const dt = new Date(detailPost?.create_date);
     const DateString =dt.toLocaleDateString()
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
-    const {board_id} = detailPost;
+    const categoryHttp = new CategoryHttp();
+
+    const[IsLiked, setIsLiked] = useState(false);
+
+    useEffect(()=>{
+      checkIsLiked();
+    },[IsLiked])
+
+    const checkIsLiked = async () => {
+      try {
+        const res = await categoryHttp.getisLiked(boardId, userId);
+        setIsLiked(res.data.result.like)
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
 
-    return(
-        <TopContainer>
-            <TopHeader>
-                <h1>{detailPost.category}</h1>
-                <h2>{detailPost.title}</h2>
-                <div>
-                    <span>{DateString}</span><span>{detailPost.view}</span>
-                </div>
-                <h3>{detailPost.user_name}</h3>
-                <TopHeaderIconWrap>
-                    {detailPost.user_id === userId ?
-                        <DetailBtn board_id={board_id} />:
-                        <>
-                          <li>
-                          <p><img src={`${process.env.PUBLIC_URL}/image/like.png`} alt=""/></p>
-                          <p>{detailPost.liked}</p>
-                          </li>
-                          <li>
-                          <p><img src={`${process.env.PUBLIC_URL}/image/message-dots-circle.png`} alt=""/></p>
-                          <p>{detailPost.commented}</p>
-                         </li>
-                        </>
-                    }
-                </TopHeaderIconWrap>
-
-            </TopHeader>
-            <TopBody >
-                <div dangerouslySetInnerHTML={{__html: detailPost.text}}/>
-            </TopBody>
-        </TopContainer>
-    )
+    return (
+      <TopContainer>
+        <TopHeader>
+          <h1>{detailPost.category}</h1>
+          <h2>{detailPost.title}</h2>
+          <div>
+            <span>{DateString}</span>
+            <span>{detailPost.view}</span>
+          </div>
+          <h3>{detailPost.user_name}</h3>
+          <TopHeaderIconWrap>
+            {detailPost.user_id === userId ? (
+              <DetailBtn board_id={boardId} />
+            ) : (
+              <>
+                <li>
+                  {IsLiked === true ? (
+                    <p>
+                      <img
+                        src={`${process.env.PUBLIC_URL}/image/like-fill.png`}
+                        alt=''
+                      />
+                    </p>
+                  ) : (
+                    <p>
+                      <img
+                        src={`${process.env.PUBLIC_URL}/image/like.png`}
+                        alt=''
+                      />
+                    </p>
+                  )}
+                  <p>{detailPost.liked}</p>
+                </li>
+                <li>
+                  <p>
+                    <img
+                      src={`${process.env.PUBLIC_URL}/image/message-dots-circle.png`}
+                      alt=''
+                    />
+                  </p>
+                  <p>{detailPost.commented}</p>
+                </li>
+              </>
+            )}
+          </TopHeaderIconWrap>
+        </TopHeader>
+        <TopBody>
+          <div dangerouslySetInnerHTML={{ __html: detailPost.text }} />
+        </TopBody>
+      </TopContainer>
+    );
 }
 export default TopContent;
 
