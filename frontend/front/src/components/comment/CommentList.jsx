@@ -26,6 +26,7 @@ const CommentList = props => {
   const [EditComment, setEditComment] = useState('');
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
+  const [Count, setCount] = useState(0);
 
   useEffect(() => {
     getList();
@@ -37,8 +38,8 @@ const CommentList = props => {
         props.boardId,
         SelectedButton
       );
-      console.log(res);
       setComments(res.data.result.list);
+      setCount(res.data.result.cnt);
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
@@ -63,6 +64,20 @@ const CommentList = props => {
   const rightList = async () => {
     if (SelectedButton < Page.length - 1) {
       setSelectedButton(prev => prev + 1);
+    }
+  };
+
+  //첫 페이지로 이동
+  const firstList = async () => {
+    if (SelectedButton > 0) {
+      setSelectedButton(0);
+    }
+  };
+
+  //마지막 페이지로 이동
+  const lastList = async () => {
+    if (SelectedButton < Page.length - 1) {
+      setSelectedButton(Page.length - 1);
     }
   };
 
@@ -153,7 +168,7 @@ const CommentList = props => {
 
   return (
     <>
-      <CommentTitle>{`댓글 (${Page.length * 10})`}</CommentTitle>
+      <CommentTitle>{`댓글 (${Count})`}</CommentTitle>
       {Comments?.map(comment => (
         <CommentWrap key={comment.comment_id}>
           <Profile />
@@ -289,6 +304,11 @@ const CommentList = props => {
 
       {/* 페이지 네이션 */}
       <Nav>
+        {SelectedButton > 0 && (
+          <Button onClick={() => firstList()}>
+            <DoubleArrow url='/image/double-arrow-left.png' />
+          </Button>
+        )}
         <Button onClick={() => leftList()}>
           <Arrow url='/image/arrow-left.png' />
         </Button>
@@ -304,6 +324,11 @@ const CommentList = props => {
         <Button onClick={() => rightList()}>
           <Arrow url='/image/arrow-right.png' />
         </Button>
+        {SelectedButton < Page.length - 1 && (
+          <Button onClick={() => lastList()}>
+            <DoubleArrow url='/image/double-arrow-right.png' />
+          </Button>
+        )}
       </Nav>
 
       {/* 댓글 작성 컴포넌트 */}
@@ -568,6 +593,13 @@ const Arrow = styled.div`
   height: 14px;
   background: url(${props => props.url});
   background-size: 8px;
+`;
+
+const DoubleArrow = styled.div`
+  width: 14px;
+  height: 12px;
+  background: url(${props => props.url});
+  background-size: 14px;
 `;
 
 export default CommentList;
