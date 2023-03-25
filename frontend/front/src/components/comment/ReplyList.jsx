@@ -62,6 +62,20 @@ const ReplyList = props => {
     }
   };
 
+  //첫 페이지로 이동
+  const firstList = async () => {
+    if (SelectedButton > 0) {
+      setSelectedButton(0);
+    }
+  };
+
+  //마지막 페이지로 이동
+  const lastList = async () => {
+    if (SelectedButton < Page.length - 1) {
+      setSelectedButton(Page.length - 1);
+    }
+  };
+
   // 대댓글 수정 기능
   const submitEdit = async (e, replyId, text) => {
     e.preventDefault();
@@ -244,6 +258,11 @@ const ReplyList = props => {
 
       {/* 페이지 네이션 */}
       <Nav>
+        {SelectedButton > 0 && (
+          <Button onClick={() => firstList()}>
+            <DoubleArrow url='/image/double-arrow-left.png' />
+          </Button>
+        )}
         <Button onClick={() => leftList()}>
           <Arrow url='/image/arrow-left.png' />
         </Button>
@@ -259,6 +278,11 @@ const ReplyList = props => {
         <Button onClick={() => rightList()}>
           <Arrow url='/image/arrow-right.png' />
         </Button>
+        {SelectedButton < Page.length - 1 && (
+          <Button onClick={() => lastList()}>
+            <DoubleArrow url='/image/double-arrow-right.png' />
+          </Button>
+        )}
       </Nav>
 
       {Replys.length !== 0 && <Line />}
@@ -518,6 +542,13 @@ const Line = styled.div`
   width: 100%;
   height: 0.1px;
   background-color: #ffa590;
+`;
+
+const DoubleArrow = styled.div`
+  width: 14px;
+  height: 12px;
+  background: url(${props => props.url});
+  background-size: 14px;
 `;
 
 export default ReplyList;
