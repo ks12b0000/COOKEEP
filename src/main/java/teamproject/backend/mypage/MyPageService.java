@@ -23,9 +23,9 @@ public interface MyPageService {
 
     public void userDelete(Long user_id, HttpServletResponse response);
 
-    public GetLikeAndCommentByUserResponse likeByUser(Long user_id);
+    public GetLikeAndCommentByUserResponse likeByUser(Pageable pageable, Long user_id);
 
-    public GetBoardByUserResponse boardByUser(Long user_id);
+    public GetBoardByUserResponse boardByUser(Pageable pageable, Long user_id);
 
 
     public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId);

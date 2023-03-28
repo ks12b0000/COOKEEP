@@ -9,8 +9,11 @@ import java.util.List;
 public class GetBoardByUserResponse {
     List<BoardByUserResponse> boardList;
 
+    int total;
+
     @Builder
-    public GetBoardByUserResponse(List<BoardByUserResponse> boardList) {
+    public GetBoardByUserResponse(List<BoardByUserResponse> boardList, int total) {
         this.boardList = boardList;
+        this.total = total;
     }
 }
