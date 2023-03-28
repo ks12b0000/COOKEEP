@@ -1,5 +1,6 @@
 package teamproject.backend.mypage;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import teamproject.backend.mypage.dto.*;
 
@@ -33,5 +34,5 @@ public interface MyPageService {
 
     public List<String> suggestNickname(int size);
 
-    public GetLikeAndCommentByUserResponse commentByUser(Long user_id);
+    public GetLikeAndCommentByUserResponse commentByUser(Pageable pageable, Long user_id);
 }

@@ -2,13 +2,18 @@ package teamproject.backend.mypage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
 import teamproject.backend.board.BoardService;
 import teamproject.backend.boardComment.BoardCommentRepository;
-import teamproject.backend.domain.*;
+import teamproject.backend.domain.Board;
+import teamproject.backend.domain.BoardLike;
+import teamproject.backend.domain.Notification;
+import teamproject.backend.domain.User;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mypage.dto.*;
 import teamproject.backend.notification.NotificationRepository;
@@ -266,12 +271,15 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetLikeAndCommentByUserResponse commentByUser(Long user_id) {
+    public GetLikeAndCommentByUserResponse commentByUser(Pageable pageable, Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
-        List<LikeAndCommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUserDistinctBoard(user);
+        Page<LikeAndCommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUserDistinctBoard(pageable, user);
 
-        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder().commentList(commentByUserResponses).build();
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder()
+                .commentList(commentByUserResponses.getContent())
+                .total(commentByUserResponses.getTotalPages())
+                .build();
 
         return getCommentByUserResponse;
     }

@@ -9,8 +9,11 @@ import java.util.List;
 public class GetLikeAndCommentByUserResponse {
     List<LikeAndCommentByUserResponse> commentList;
 
+    int total;
+
     @Builder
-    public GetLikeAndCommentByUserResponse(List<LikeAndCommentByUserResponse> commentList) {
+    public GetLikeAndCommentByUserResponse(List<LikeAndCommentByUserResponse> commentList, int total){
         this.commentList = commentList;
+        this.total = total;
     }
 }
