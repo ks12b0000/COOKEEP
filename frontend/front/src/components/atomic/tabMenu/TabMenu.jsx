@@ -94,7 +94,7 @@ const client = new SearchHttp();
 
 
     return (
-        <TableBox>
+        <TableBox >
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange}  TabIndicatorProps={{

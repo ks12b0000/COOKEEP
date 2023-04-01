@@ -196,8 +196,7 @@ const QuillBox = styled.div`
     margin:42px 0;
   }
    .quill {
-     border-radius: 5px;
-     border: 1px solid #CED4DA;
+    
      
      .ql-toolbar.ql-snow{
        border:none;
@@ -253,10 +252,13 @@ const TagInput = styled.fieldset`
 
     &:focus {
       outline: none;
+      box-shadow: none;
+      border:1px solid #FFA590;
     }
   }
   
 `
+
 const InputBox = styled.fieldset`
     position: relative;
     margin-top: 24px;
@@ -279,7 +281,6 @@ const InputBox = styled.fieldset`
         font-weight: 400;
         font-size: 16px;
         line-height: 23px;
-        color: #CED4DA;
       -webkit-appearance: none; /* for chrome */
         -moz-appearance: none; /*for firefox*/
         appearance: none;
@@ -288,6 +289,8 @@ const InputBox = styled.fieldset`
         &:focus {
             outline: none;
         }
+      
+      
     }
     input {
       height: 48px;
@@ -305,9 +308,12 @@ const InputBox = styled.fieldset`
       }
       &:focus {
          outline: none;
+         box-shadow: none;
+        border:1px solid #FFA590;
         }
     }
 `;
+
 const ButtonsWrap = styled.div`
     margin-top:42px;
     display: flex;

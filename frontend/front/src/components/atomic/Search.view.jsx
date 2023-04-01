@@ -4,6 +4,8 @@ import TabMenu from "./tabMenu/TabMenu";
 import OnChangeMenu from "./tabMenu/OnChageMenu";
 import {useEffect, useState} from "react";
 import SearchHttp from "../../http/searchHttp";
+import {Link} from "react-router-dom";
+import {useNavigate} from "react-router";
 
 const SearchContainer = styled.div`
   margin:0 auto;
@@ -51,7 +53,7 @@ const TagSearch = styled.span`
 function SearchView({bottom,onFocus,onBlur}) {
     const [value,setValue] =useState("");
     const [tag,setTag] = useState(false);
-
+    const navigation = useNavigate();
     const handleTag = () => {
         setTag(!tag)
     }
@@ -72,6 +74,10 @@ function SearchView({bottom,onFocus,onBlur}) {
     color:  ${!tag ? '#FFC9BB' : '#FF4122'}; 
     cursor: pointer;
     `
+    const  TagSearchClick = (value) => {
+        navigation(`/searchTag/${value}`)
+    }
+
 
     return (
         <>
@@ -85,7 +91,8 @@ function SearchView({bottom,onFocus,onBlur}) {
                     {bottom || value === "" &&  <TabMenu /> }
                     {value.length >= 1 && <OnChangeMenu value={value} tag={tag} /> }
                 </InputWrap>
-                <button>검색</button>
+                {tag ?   <button onClick={() => TagSearchClick(value)}>태그검색</button> :  <Link to={`/search/${value}`}><button>검색</button></Link> }
+
 
             </SearchContainer>
         </>

@@ -105,8 +105,12 @@ const Quill = ({quillValue,setQuillValue}) => {
 export  default Quill
 
 const QuillWrap = styled.div`
+  border-radius: 5px;
+  border: 1px solid #CED4DA;
   margin:20px 0;
     .ql-editor {
       min-height: 500px;
+       
     }
+ 
 `

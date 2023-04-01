@@ -1,12 +1,18 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import { logoutUser } from '../../../../redux/reducer/userSlice';
 import { mq } from '../../../../constants/media/media';
 import { color } from '../../../../constants/color';
 import UserHttp from '../../../../http/userHttp';
 import AuthHttp from '../../../../http/authHttp';
+
+import IconButton from "@mui/material/IconButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
+import * as React from "react";
+
 
 const userHttp = new UserHttp();
 const authHttp = new AuthHttp();
@@ -15,6 +21,8 @@ const RightGnb = ({HandleSearch,searchOn}) => {
 
   const userInfo = useSelector(state => state.persistedReducer.userReducer);
   const dispatch = useDispatch();
+    const [open, setOpen] = useState(false)
+
 
   useEffect(() => {
     LoginCheck();
@@ -47,7 +55,7 @@ const RightGnb = ({HandleSearch,searchOn}) => {
 
   return (
     <>
-      <GnbContainer>
+      <GnbContainer className={userInfo.isLoggedIn && 'user'}>
         {userInfo.isLoggedIn === false ? (
           <>
               {searchOn ?  <li><img src={`${process.env.PUBLIC_URL}/image/search-active.png`} alt='검색아이콘'/></li> :
@@ -61,21 +69,25 @@ const RightGnb = ({HandleSearch,searchOn}) => {
           </>
         ) : (
           <>
-              {searchOn ?
-                  <li onClick={HandleSearch}><img src={`${process.env.PUBLIC_URL}/image/search-active.png`} alt='검색아이콘'/></li> :
-                  <li onClick={HandleSearch}><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt='검색아이콘'/></li>
-              }
+               <li onClick={HandleSearch} className={searchOn ? 'active' : 'search' }><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt='검색아이콘'/></li>
 
             <li>
               <Link to={`/mypage/${userInfo.userId}`}>
                   <img src={`${process.env.PUBLIC_URL}/image/mypage.png`} alt='마이페이지'/>
               </Link>
             </li>
-            <li>
-              <Link to='/' onClick={logout}>
-                  <img src={`${process.env.PUBLIC_URL}/image/user.png`} alt='로그아웃'/>
-              </Link>
-            </li>
+
+
+                <LogOut>
+                     <div onClick={() => setOpen(!open)}><img src={`${process.env.PUBLIC_URL}/image/user.png`} alt='마이페이지'/></div>
+                    {open &&
+                        <MenuList>
+                            <li onClick={() => console.log('hhhh')}>마이페이지</li>
+                            <li onClick={logout}>로그아웃 </li>
+                        </MenuList>
+                    }
+                </LogOut>
+
           </>
         )}
       </GnbContainer>
@@ -92,6 +104,58 @@ const MediaMenu = styled.div`
   }
 `;
 
+const LogOut =styled.li`
+  position: relative;
+`
+const IconWrap = styled.div`
+ 
+ text-align: right;
+  >button{
+    width: 30px;
+    height: 30px;
+    &:hover{
+      background:#FF4122;
+      color:#ffffff;
+    }
+  }
+`
+const MenuList = styled.ul`
+  position: absolute;
+  top:55px;
+  z-index: 1000;
+  left:-20px;
+  width: 80px;
+  background:#ffffff;
+  border-radius: 5px;
+  border:1px solid #FF4122;
+  justify-content: center;
+  display: flex;
+  padding:5px;
+  gap:5px;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  li{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100% !important;
+    height: 33px !important;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+
+    color: #3E4145;
+    &:hover{
+      background:#FF4122;
+      color:#ffffff;
+      border-radius: 5px;
+    }
+
+  }
+
+`
 const GnbContainer = styled.ul`
     width: 225px;
     display: flex;
@@ -101,7 +165,37 @@ const GnbContainer = styled.ul`
     ${mq[0]} {
       display: none;
     }
+  
+  &.user {
+    gap:10px;
     li {
+      width: 44px;
+      height: 44px;
+      &.search{
+        img{
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+    
+  }
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+      &.active {
+        width: 44px;
+        height: 44px;
+        background: #FFC9BB;
+        border-radius: 999px;
+
+        img{
+          width: 20px;
+          height: 20px;
+        }
+      }
       a {
         color: #000000;
         cursor: pointer;
