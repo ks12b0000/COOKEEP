@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import teamproject.backend.board.dto.BoardResponseInBannerFormat;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.domain.Board;
 import teamproject.backend.domain.FoodCategory;
@@ -25,6 +24,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<BoardResponseInCardFormat> findByCategory(Pageable pageable, FoodCategory category);
 
     List<Board> findByUser(User user);
+
+    @Query("select new teamproject.backend.mypage.dto.BoardByUserResponse(b.boardId, b.title, b.commented) from Board b where b.user.id =:userId")
+    Page<BoardByUserResponse> findBoardByUserId(Pageable pageable, Long userId);
 
     @Query("select new teamproject.backend.mypage.dto.BoardByUserResponse(b.boardId, b.title, b.commented) from Board b where b.user.id = :userId")
     Page<BoardByUserResponse> findBannerByUserId(Pageable pageable, Long userId);

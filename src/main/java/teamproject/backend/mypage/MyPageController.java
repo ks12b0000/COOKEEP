@@ -2,7 +2,9 @@ package teamproject.backend.mypage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -135,8 +137,8 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/like/list/{user_id}")
-    public BaseResponse likeByUser(@PathVariable Long user_id) {
-        GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.likeByUser(user_id);
+    public BaseResponse likeByUser(@PageableDefault(size = 10) Pageable pageable, @PathVariable Long user_id) {
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.likeByUser(pageable, user_id);
 
         return new BaseResponse("좋아요 누른 글 목록을 불러왔습니다.", getCommentByUserResponse);
     }
@@ -148,8 +150,8 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/board/list/{user_id}")
-    public BaseResponse boardByUser(@PathVariable Long user_id) {
-        GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(user_id);
+    public BaseResponse boardByUser(@PageableDefault(size = 10) Pageable pageable, @PathVariable Long user_id) {
+        GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(pageable, user_id);
 
         return new BaseResponse("내가 쓴 글 목록을 불러왔습니다.", getBoardByUserResponse);
     }
@@ -188,8 +190,8 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/comment/list/{user_id}")
-    public BaseResponse commentByUser(@PathVariable Long user_id) {
-        GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.commentByUser(user_id);
+    public BaseResponse commentByUser(@PageableDefault(size = 10) Pageable pageable, @PathVariable Long user_id) {
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.commentByUser(pageable, user_id);
 
         return new BaseResponse("내가 댓글 단 글 목록을 불러왔습니다.", getCommentByUserResponse);
     }

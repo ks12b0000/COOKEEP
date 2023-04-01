@@ -2,13 +2,17 @@ package teamproject.backend.mypage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
 import teamproject.backend.board.BoardService;
 import teamproject.backend.boardComment.BoardCommentRepository;
-import teamproject.backend.domain.*;
+import teamproject.backend.domain.Board;
+import teamproject.backend.domain.Notification;
+import teamproject.backend.domain.User;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mypage.dto.*;
 import teamproject.backend.notification.NotificationRepository;
@@ -178,12 +182,13 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetLikeAndCommentByUserResponse likeByUser(Long user_id) {
+    public GetLikeAndCommentByUserResponse likeByUser(Pageable pageable, Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        List<LikeAndCommentByUserResponse> likeBoards = likeBoardRepository.findByUser(user).stream().map(BoardLike::toDto).collect(Collectors.toList());     // map으로 매핑 후  리스트로 변환
-
-        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder().commentList(likeBoards).build();
-
+        Page<LikeAndCommentByUserResponse> boards = likeBoardRepository.findBoardByUserId(pageable, user.getId());
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder()
+                .commentList(boards.getContent())
+                .total(boards.getTotalPages())
+                .build();
         return getCommentByUserResponse;
     }
 
@@ -193,12 +198,13 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetBoardByUserResponse boardByUser(Long user_id) {
+    public GetBoardByUserResponse boardByUser(Pageable pageable, Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        List<BoardByUserResponse> userBoards = boardRepository.findByUser(user).stream().map(Board::toDto).collect(Collectors.toList());
-
-        GetBoardByUserResponse getBoardByUserResponse = GetBoardByUserResponse.builder().boardList(userBoards).build();
-
+        Page<BoardByUserResponse> boards = boardRepository.findBoardByUserId(pageable, user.getId());
+        GetBoardByUserResponse getBoardByUserResponse = GetBoardByUserResponse.builder()
+                .boardList(boards.getContent())
+                .total(boards.getTotalPages())
+                .build();
         return getBoardByUserResponse;
     }
 
@@ -266,12 +272,15 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetLikeAndCommentByUserResponse commentByUser(Long user_id) {
+    public GetLikeAndCommentByUserResponse commentByUser(Pageable pageable, Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
-        List<LikeAndCommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUserDistinctBoard(user);
+        Page<LikeAndCommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUserDistinctBoard(pageable, user);
 
-        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder().commentList(commentByUserResponses).build();
+        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder()
+                .commentList(commentByUserResponses.getContent())
+                .total(commentByUserResponses.getTotalPages())
+                .build();
 
         return getCommentByUserResponse;
     }

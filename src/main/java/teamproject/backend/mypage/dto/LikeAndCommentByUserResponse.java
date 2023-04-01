@@ -17,4 +17,10 @@ public class LikeAndCommentByUserResponse {
         this.title = board.getTitle();
         this.commented = board.getCommented();
     }
+
+    public LikeAndCommentByUserResponse(Long board_id, String title, Integer commented) {
+        this.board_id = board_id;
+        this.title = title;
+        this.commented = commented;
+    }
 }
