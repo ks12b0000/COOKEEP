@@ -81,12 +81,14 @@ function Detail() {
   };
 
   const checkIsLiked = async () => {
-    try {
-      const res = await categoryHttp.getisLiked(id, userId);
-      setIsLiked(res.data.result.like);
-      console.log(res);
-    } catch (err) {
-      console.log(err);
+    if(isLoggedIn===true){
+      try {
+        const res = await categoryHttp.getisLiked(id, userId);
+        setIsLiked(res.data.result.like);
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -121,7 +123,7 @@ function Detail() {
                       <p>
                         <LikeIcon
                           onClick={e => onLike(e)}
-                          src='/image/like-fill.png'
+                          src='/image/heart-fill.png'
                           alt=''
                         />
                       </p>
@@ -129,7 +131,7 @@ function Detail() {
                       <p>
                         <LikeIcon
                           onClick={e => onLike(e)}
-                          src='/image/like.png'
+                          src='/image/heart.png'
                           alt=''
                         />
                       </p>
