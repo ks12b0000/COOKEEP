@@ -1,5 +1,6 @@
 package teamproject.backend.mypage;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import teamproject.backend.mypage.dto.*;
 
@@ -22,9 +23,9 @@ public interface MyPageService {
 
     public void userDelete(Long user_id, HttpServletResponse response);
 
-    public GetLikeAndCommentByUserResponse likeByUser(Long user_id);
+    public GetLikeAndCommentByUserResponse likeByUser(Pageable pageable, Long user_id);
 
-    public GetBoardByUserResponse boardByUser(Long user_id);
+    public GetBoardByUserResponse boardByUser(Pageable pageable, Long user_id);
 
 
     public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId);
@@ -33,5 +34,5 @@ public interface MyPageService {
 
     public List<String> suggestNickname(int size);
 
-    public GetLikeAndCommentByUserResponse commentByUser(Long user_id);
+    public GetLikeAndCommentByUserResponse commentByUser(Pageable pageable, Long user_id);
 }

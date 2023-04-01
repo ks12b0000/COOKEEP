@@ -77,6 +77,10 @@ function Header({color,categoryName}) {
     const onFocus = () => {
         setBottom(true)
     }
+    const onBlur = () => {
+        setBottom(false)
+    }
+
     //css 변수로 제어
 const TitleWrap = styled.div`
   position: absolute;
@@ -101,10 +105,10 @@ const TitleWrap = styled.div`
     return (
        <>
 
-            <HeaderContainer>
-              <Container>
+            <HeaderContainer >
+              <Container >
                 <Logo />
-                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}/> :    <Nav  categoryName = {categoryName} />}
+                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} /> :    <Nav  categoryName = {categoryName} />}
                 <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn}/>
               </Container>
             </HeaderContainer>
