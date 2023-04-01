@@ -1,40 +1,57 @@
 import styled from "@emotion/styled";
-
 import {Link, useParams} from "react-router-dom";
+import PostLike from './PostLike';
+
 function Post({data}) {
+
     return(
         <>
         { data.map((item,index) =>{
                 const dt = new Date(item.create_date);
                 const DateString =dt.toLocaleDateString()
 
-          return(
-            <PopularList key ={index}>
-              <Link to  ={`/category/${item.board_id}`}>
-                <PopularListImg><img src={item.thumbnail} alt="썸네일"/></PopularListImg>
-                  <PopularTextBox>
-                    <TextBoxLeft>
-                        <h2>{item.category}</h2>
-                      <LeftYear><span>{DateString}</span></LeftYear>
-                      <LeftTitle><span>{item.title}</span></LeftTitle>
-                      <LeftTag>
-                        <LeftWrite>{item.user_name}</LeftWrite>
-                        <LeftHashTag>{item.tags}</LeftHashTag>
-                      </LeftTag>
-                    </TextBoxLeft>
-                    <TextBoxRight>
-                      <div>
-                        <RightImg><img src={`${process.env.PUBLIC_URL}/image/like.png`} alt=""/></RightImg>
-                          <span>{item.liked}</span>
-                      </div>
-                      <div>
-                        <RightImg> <img src={`${process.env.PUBLIC_URL}/image/message-dots-circle.png`} alt=""/></RightImg>
-                          <span>{item.commented}</span>
-                     </div>
+          return (
+            <PopularList key={index}>
+              <Link to={`/category/${item.board_id}`}>
+                <PopularListImg>
+                  <img src={item.thumbnail} alt='썸네일' />
+                </PopularListImg>
+                <PopularTextBox>
+                  <TextBoxLeft>
+                    <h2>{item.category}</h2>
+                    <LeftYear>
+                      <span>{DateString}</span>
+                    </LeftYear>
+                    <LeftTitle>
+                      <span>{item.title}</span>
+                    </LeftTitle>
+                    <LeftTag>
+                      <LeftWrite>{item.user_name}</LeftWrite>
+                      <LeftHashTag>{item.tags}</LeftHashTag>
+                    </LeftTag>
+                  </TextBoxLeft>
+                  <TextBoxRight>
+                    <div>
+                      <HeartImg>
+                        <PostLike boardId={item.board_id} />
+                      </HeartImg>
+                      <span>{item.liked}</span>
+                    </div>
+                    <div>
+                      <CommentImg>
+                        {' '}
+                        <img
+                          src='/image/message-dots-circle.png'
+                          alt=''
+                        />
+                      </CommentImg>
+                      <span>{item.commented}</span>
+                    </div>
                   </TextBoxRight>
                 </PopularTextBox>
               </Link>
-          </PopularList> )})}
+            </PopularList>
+          );})}
         </>
     )
 }
@@ -152,13 +169,25 @@ const TextBoxRight = styled.div`
     }
   }
 `
-const RightImg = styled.div`
-  width: 24px;
-  height: 24px;
+const HeartImg = styled.div`
+  width: 25.5px;
+  height: 23px;
+  margin-top: 1px;
 
   img{
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     object-fit: cover;
   }
  `
+
+ const CommentImg = styled.div`
+   width: 24px;
+   height: 24px;
+
+   img {
+     width: 90%;
+     height: 90%;
+     object-fit: cover;
+   }
+ `;

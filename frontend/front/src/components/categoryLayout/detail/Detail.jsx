@@ -21,6 +21,9 @@ function Detail() {
   const navigate = useNavigate();
 
   const { userId } = useSelector(state => state.persistedReducer.userReducer);
+  const { isLoggedIn } = useSelector(
+    state => state.persistedReducer.userReducer
+  );
   const [detailUserId, setDetailUserId] = useState(null);
 
   const { id } = useParams();
@@ -58,18 +61,22 @@ function Detail() {
 
   const onLike = async e => {
     e.preventDefault();
-    try {
-      const res = await categoryHttp.postLike(id);
-      if(res.data.result==='좋아요 취소 성공.'){
-        setIsLiked(false)
-      }
+    if (isLoggedIn === false) {
+      alert('로그인이 필요한 기능입니다.');
+    } else {
+      try {
+        const res = await categoryHttp.postLike(id);
+        if (res.data.result === '좋아요 취소 성공.') {
+          setIsLiked(false);
+        }
 
-      if(res.data.result==='좋아요 누르기 성공.'){
-        setIsLiked(true)
+        if (res.data.result === '좋아요 누르기 성공.') {
+          setIsLiked(true);
+        }
+        console.log(res);
+      } catch (err) {
+        console.log(err.response);
       }
-      console.log(res);
-    } catch (err) {
-      console.log(err.response);
     }
   };
 
@@ -114,7 +121,7 @@ function Detail() {
                       <p>
                         <LikeIcon
                           onClick={e => onLike(e)}
-                          src={`${process.env.PUBLIC_URL}/image/like-fill.png`}
+                          src='/image/like-fill.png'
                           alt=''
                         />
                       </p>
@@ -122,7 +129,7 @@ function Detail() {
                       <p>
                         <LikeIcon
                           onClick={e => onLike(e)}
-                          src={`${process.env.PUBLIC_URL}/image/like.png`}
+                          src='/image/like.png'
                           alt=''
                         />
                       </p>
@@ -131,10 +138,7 @@ function Detail() {
                   </li>
                   <li>
                     <p>
-                      <img
-                        src={`${process.env.PUBLIC_URL}/image/message-dots-circle.png`}
-                        alt=''
-                      />
+                      <img src='/image/message-dots-circle.png' alt='' />
                     </p>
                     <p>{detailPost.commented}</p>
                   </li>
@@ -231,8 +235,8 @@ const TopHeaderIconWrap = styled.ul`
 
 const LikeIcon = styled.img`
   margin-top: 2px;
-`
-
+  cursor: pointer;
+`;
 
 const TopBody = styled.div`
   margin: 16px auto 0;
@@ -246,4 +250,3 @@ const TopBody = styled.div`
   line-height: 23px;
   color: #3e4145;
 `;
-
