@@ -9,19 +9,18 @@ const PostLike = ({ boardId }) => {
   const [IsLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-      checkIsLiked();
+    (async () =>{
+      try {
+        const res = await categoryHttp.getisLiked(boardId, userId);
+        setIsLiked(res.data.result.like);
+        console.log('post like',res);
+      } catch (err) {
+        console.log(err);
+      }
+    })()
   }, []);
 
   // 좋아요 눌렀는지 여부 체크
-  const checkIsLiked = async () => {
-    try {
-      const res = await categoryHttp.getisLiked(boardId, userId);
-      setIsLiked(res.data.result.like);
-      console.log('post like',res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <>

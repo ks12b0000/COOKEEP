@@ -11,7 +11,7 @@ import IsNonData from "../../atomic/isNonData/IsNonData";
 const categoryHttp = new CategoryHttp();
 function CateItem({cateItemName}) {
     const [posts, setPosts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const [totalCount, setTotalCount] = useState(0);
     const onChangePagination = (e,p)=> {

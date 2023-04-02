@@ -11,7 +11,7 @@ import good from '../../../../asset/image/good.png'
 import {useRef} from "react";
 
 SwiperCore.use([Navigation, Pagination]);
-function Banner() {
+function Banner({banner}) {
     const swiperRef = useRef(null)
 
 
@@ -47,21 +47,26 @@ function Banner() {
               slidesPerView={1}
               pagination={{ clickable: true }}
           >
-              {SlideData.map((item)=>(
-                            <SwiperSlide key ={item.id}>
-                                <BannrImg > <img src={item.sum} alt=""/></BannrImg>
-                              <div className='swiperContents'>
-                                <h1>
-                                   <Img><img src={good} alt=""/></Img>
-                                   <span> {item.topText}</span>
-                                </h1>
-                                <BannerText>                                            
-                                  <span>{item.mainText1} </span>
-                                  <span>{item.mainText2}</span>
-                                </BannerText>
-                              </div>
-                            </SwiperSlide>
-              ))}
+              {banner.map((item)=>
+                  {
+                  const title = item.title.split('//');
+                  return (
+                      <SwiperSlide key ={item.id}>
+                          <BannrImg > <img src={item.thumbnail} alt=""/></BannrImg>
+                          <div className='swiperContents'>
+                              <h1>
+                                  <Img><img src={good} alt=""/></Img>
+                                  <span>오늘의 추천 레시피 글</span>
+                              </h1>
+                              <BannerText>
+                                  <span>{title[0]} </span>
+                                  <span>{title[1]}</span>
+                              </BannerText>
+                          </div>
+                      </SwiperSlide>
+                  )
+              }
+              )}
 
              <div className='arrow'>
                  <div id="previousButton" onClick={() => swiperRef.current.swiper.slidePrev()} className='prev' >

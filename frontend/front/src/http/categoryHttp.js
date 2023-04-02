@@ -65,6 +65,17 @@ class CategoryHttp extends Http {
     }
   };
 
+
+  //배너 조회
+
+  getBanner  = async () =>{
+    try {
+      const { data } = await this.axios.get(`/main/recommend/board/weekly/list`);
+      return data;
+    } catch (err) {
+      throw err;
+    }
+  }
   //카테고리 삭제
   deleteCategoryList = async (boardId, userId) => {
     try {

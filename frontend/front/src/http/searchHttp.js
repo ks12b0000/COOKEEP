@@ -4,6 +4,18 @@ import Http from "./http";
 
 class SearchHttp extends Http {
 
+
+    //자동완성 검색 가져오기
+
+    getAutoList = async (keyword) => {
+        try {
+            return await this.axios.get(`/main/search/list?keyword=${keyword}`)
+        } catch (err) {
+            throw  err;
+        }
+    }
+
+
     //자동 검색어
     getAutoSearch = async (text) => {
         try{

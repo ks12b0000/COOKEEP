@@ -91,6 +91,7 @@ const client = new SearchHttp();
 
      let tagData1 = tag.slice(0,5)
      let tagData2 = tag.slice(5,10)
+     console.log(top)
 
 
     return (

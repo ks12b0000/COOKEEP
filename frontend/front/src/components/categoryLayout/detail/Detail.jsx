@@ -108,7 +108,7 @@ function Detail() {
             <h2>{detailPost.title}</h2>
             <div>
               <span>{detailPost.create_date}</span>
-              <span>{detailPost.view}</span>
+              <span>view:{detailPost.view}</span>
             </div>
             <h3>{detailPost.user_name}</h3>
             <TopHeaderIconWrap>
@@ -204,7 +204,7 @@ const TopHeader = styled.div`
   > div {
     margin: 8px 0;
     display: flex;
-    gap: 16px;
+    gap: 10px;
     span {
       display: block;
       font-style: normal;
