@@ -27,9 +27,5 @@
 <img width="750" alt="스크린샷 2023-03-20 오후 7 07 53" src="https://user-images.githubusercontent.com/102012155/226308749-12671c27-4ba5-42b9-85b0-a83ac35f3d8f.png">
 
 
-## Architecture
-(추가 예정)
-
-
 ## 📕 ERD
 <img width="686" alt="스크린샷 2023-03-18 오후 6 43 03" src="https://user-images.githubusercontent.com/102012155/226308886-b2eddf3a-f50b-48b4-aa25-6fd8358c6957.png">
