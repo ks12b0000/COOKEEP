@@ -6,28 +6,35 @@ const PostLike = ({ boardId }) => {
   const categoryHttp = new CategoryHttp();
 
   const { userId } = useSelector(state => state.persistedReducer.userReducer);
+  const { isLoggedIn } = useSelector(
+    state => state.persistedReducer.userReducer
+  );
   const [IsLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    (async () =>{
-      try {
-        const res = await categoryHttp.getisLiked(boardId, userId);
-        setIsLiked(res.data.result.like);
-        console.log('post like',res);
-      } catch (err) {
-        console.log(err);
-      }
-    })()
+      checkIsLiked()
   }, []);
 
   // 좋아요 눌렀는지 여부 체크
 
+  const checkIsLiked = async () => {
+    if(isLoggedIn===true){
+        try {
+        const res = await categoryHttp.getisLiked(boardId, userId);
+        setIsLiked(res.data.result.like);
+        } catch (err) {
+        console.log(err);
+        }
+    }
+  };
+
+
   return (
     <>
       {IsLiked === true ? (
-        <img src='/image/like-fill.png' alt='' />
+        <img src='/image/heart-fill.png' alt='' />
       ) : (
-        <img src='/image/like.png' alt='' />
+        <img src='/image/heart.png' alt='' />
       )}
     </>
   );

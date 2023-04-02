@@ -8,12 +8,27 @@ import "swiper/css/pagination";
 import left from '../../../../asset/image/left.png'
 import right from '../../../../asset/image/right.png'
 import good from '../../../../asset/image/good.png'
-import {useRef} from "react";
+import {useEffect, useRef, useState} from "react";
+import CategoryHttp from "../../../../http/categoryHttp";
 
 SwiperCore.use([Navigation, Pagination]);
-function Banner({banner}) {
+const client = new CategoryHttp();
+function Banner() {
     const swiperRef = useRef(null)
 
+    const [banner,setBanner] = useState([])
+
+    useEffect(() => {
+        (async () => {
+            try{
+                const res = await client.getBanner();
+                setBanner(res.result);
+            }
+            catch (err) {
+                console.log(err)
+            }
+        })();
+    },[])
 
     const SlideData = [
         {
@@ -51,7 +66,7 @@ function Banner({banner}) {
                   {
                   const title = item.title.split('//');
                   return (
-                      <SwiperSlide key ={item.id}>
+                      <SwiperSlide key ={item.board_id}>
                           <BannrImg > <img src={item.thumbnail} alt=""/></BannrImg>
                           <div className='swiperContents'>
                               <h1>
