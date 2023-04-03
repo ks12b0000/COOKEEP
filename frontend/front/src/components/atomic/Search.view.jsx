@@ -75,7 +75,7 @@ function SearchView({bottom,onFocus,onBlur}) {
     cursor: pointer;
     `
     const  TagSearchClick = (value) => {
-        navigation(`/searchTag/${value}`)
+        navigation(`/searchTag${value? '/'+ value : '/null' }`)
     }
 
 
@@ -91,7 +91,7 @@ function SearchView({bottom,onFocus,onBlur}) {
                     {bottom || value === "" &&  <TabMenu /> }
                     {value.length >= 1 && <OnChangeMenu value={value} tag={tag} /> }
                 </InputWrap>
-                {tag ?   <button onClick={() => TagSearchClick(value)}>태그검색</button> :  <Link to={`/search/${value}`}><button>검색</button></Link> }
+                {tag ?   <button onClick={() => TagSearchClick(value)}>태그검색</button> :  <Link to={`/search${value ?  '/'+ value : '/null' }`}><button>검색</button></Link> }
 
 
             </SearchContainer>

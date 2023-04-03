@@ -31,20 +31,18 @@ function WritingForm() {
     const navigate = useNavigate();
     const [categoryList,setCategoryList] = useState([]);
     const [categoryValue, setCategoryValue] = useState('카테고리');
+    const [categoryError,setCategoryError] = useState(false);
 
     const [quillValue,setQuillValue] = useState();
     const [title, setTitle] = useState("");
-    const realTitle = title.length < 5 ? 1:0 ;
+    const [titleError,setTitleError] = useState(false);
     const [tag,setTag] = useState('');
-    const realTag = tag.length < 5 ? 1:0 ;
-
-
-    const [content, setContent] = useState('');
+    const [tagError,setTagError] = useState(false);
+    
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
 
     const onChange = (e) =>{
-
         setCategoryValue(e.target.value);
     }
 
@@ -74,7 +72,7 @@ function WritingForm() {
         })()
     },[])
     useEffect(() => {
-        imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png" ? setError(true) : setError(false);
+
     }, [imagePreview]);
 
     const imageChange = async (e) => {
@@ -91,6 +89,43 @@ function WritingForm() {
 
     const onSubmit = async () => {
 
+        if(categoryValue === "카테고리") {
+            alert('카테고리를 선택해주세요');
+            setCategoryError(true)
+            return  false;
+        }else{
+            setCategoryError(false);
+        }
+
+        if (title.length < 5 ) {
+            alert('제목 최소 5자 이상 입력해주세요');
+            setTitleError(true);
+            return false;
+        }else{
+            setTitleError(false);
+        }
+
+
+
+
+        if(tag.length < 5){
+            alert('태그 최소 5자 이상 입력해주세요');
+            setTagError(true);
+            return  false;
+        }else{
+            setTagError(false);
+        }
+
+
+        if( imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png") {
+            alert('썸네일을 등록해주세요');
+            setError(true)
+            return false;
+        }
+        else{
+            setError(false);
+        }
+
         const FormData = {
             category:categoryValue,
             title,
@@ -99,11 +134,8 @@ function WritingForm() {
             thumbnail:imagePreview,
             tags:tag
         }
-        console.log(FormData.text);
-        if (error) {
-            alert("이미지를 업로드해주세요");
-            return false;
-        }
+
+
         try {
             await writeHttp.submitWritingForm(FormData, { headers: { "Content-Type": "multipart/form-data" } });
             alert("글 작성이 완료되었습니다.");
@@ -132,9 +164,10 @@ function WritingForm() {
                             )
                         })}
                     </select>
+                    {categoryError &&  <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>카테고리를 선택해주세요.</ErrorText> }
                      <TitleInput>
                       <input name="title" type="text" placeholder="제목을 입력해주세요"   value={title}  onChange={TitleOnChange}  />
-                      {realTitle ? <ErrorText>최소 5자 이상 입력해주세요 !! </ErrorText> : null}
+                      {titleError && <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>최소 5자 이상 입력해주세요 !! </ErrorText> }
                      </TitleInput>
                 </InputBox>
                 <QuillBox>
@@ -142,14 +175,14 @@ function WritingForm() {
                 </QuillBox>
                 <TagInput>
                     <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
-                    {realTag ? <ErrorText>최소 5자 이상 입력해주세요!!</ErrorText> : null}
+                    {tagError && <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>최소 5자 이상 입력해주세요!!</ErrorText> }
                 </TagInput>
                 <Upload>
                  
                     <InputFile htmlFor="input-file">썸네일을 등록해주세요</InputFile>
                     <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
 
-                    {error && <ErrorText style={{ color: "red" }}>이미지를 업로드!!!</ErrorText>}
+                    {error && <ErrorText style={{ color: "red" }}><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>썸네일을 등록해주세요</ErrorText>}
                 </Upload>
 
 
@@ -179,22 +212,26 @@ const Title = styled.h1`
   line-height: 29px;
   color: #ED3419;
 `
-const ErrorText = styled.span`
+const ErrorText = styled.div`
     position: absolute;
     top:52px;
-    left:12px;
+    left:0;
     width: 100%;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap:4px;
     font-size: 12px;
     line-height: 14px;
     color: #E62F2F;
+    img{
+      width: 12px;
+      height: 12px;
+    }
 
 `
 const QuillBox = styled.div`
     
-  .css-js5xav{
-    margin:42px 0;
-  }
+  
    .quill {
     
      
@@ -394,12 +431,3 @@ const InputFile = styled.label`
     cursor: pointer;
 `;
 
-// const IMGBOX = styled.div`
-//     width: 150px;
-//     height: 150px;
-//     img {
-//         width: 100%;
-//         height: 100%;
-//         object-fit: cover;
-//     }
-// `;
