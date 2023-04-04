@@ -42,6 +42,11 @@ function WritingForm() {
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
 
+    const onCheckEnter = (e) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+        }
+    }
     const onChange = (e) =>{
         setCategoryValue(e.target.value);
     }
@@ -153,7 +158,7 @@ function WritingForm() {
     }
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} onKeyPress={onCheckEnter} >
                  <Title>글쓰기</Title>
                 <InputBox>
                     <select name="category" value={categoryValue} onChange={onChange} >
@@ -309,6 +314,7 @@ const InputBox = styled.fieldset`
     }
 
     select {
+    
         width: 137px;
         height: 48px;
         box-sizing: border-box;
@@ -326,6 +332,7 @@ const InputBox = styled.fieldset`
         &:focus {
             outline: none;
         }
+     
       
       
     }
