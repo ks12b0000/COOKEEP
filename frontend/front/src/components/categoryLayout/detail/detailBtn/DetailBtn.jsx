@@ -9,7 +9,7 @@ import Alert from "../../../atomic/modal/Alert";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router";
 import categoryHttp from "../../../../http/categoryHttp";
-
+import ReactLoading from "react-loading";
 
 
 const CategoryHttp = new categoryHttp();
@@ -81,6 +81,7 @@ function DetailBtn({board_id}) {
                 onClick={handleClick}>
                   <MoreVertIcon />
               </IconButton>
+                <ReactLoading type="bubbles" color="#ff4c4c"/>
             </IconWrap>
             {open &&
                 <MenuList>
