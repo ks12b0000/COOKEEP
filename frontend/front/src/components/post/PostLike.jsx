@@ -2,32 +2,29 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import CategoryHttp from "../../http/categoryHttp";
 
-const PostLike = ({ boardId }) => {
+const PostLike = ({ boardId}) => {
   const categoryHttp = new CategoryHttp();
 
   const { userId } = useSelector(state => state.persistedReducer.userReducer);
   const { isLoggedIn } = useSelector(
-    state => state.persistedReducer.userReducer
+      state => state.persistedReducer.userReducer
   );
   const [IsLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-      checkIsLiked()
+    checkIsLiked()
   }, []);
-
-  // 좋아요 눌렀는지 여부 체크
 
   const checkIsLiked = async () => {
     if(isLoggedIn===true){
-        try {
+      try {
         const res = await categoryHttp.getisLiked(boardId, userId);
         setIsLiked(res.data.result.like);
-        } catch (err) {
+      } catch (err) {
         console.log(err);
-        }
+      }
     }
   };
-
 
   return (
     <>
