@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 
-function ModalBody({icon,text,subText}) {
+function ModalBody({icon,text,subText,buttons}) {
     return (
         <>
-            <ModalContents>
+            <ModalContents buttons={buttons}>
                 <ModalIcon>{icon}</ModalIcon>
                 <p>{text}</p>
                 <SubText>
@@ -19,7 +19,7 @@ export default ModalBody;
 
 const ModalContents = styled.div`
   display: flex;
-  height: 200px;
+  height: ${props => props.buttons? '200px':'100%'};
   flex-direction:column;
   justify-content: center;
   align-items: center;

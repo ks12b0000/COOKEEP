@@ -10,6 +10,11 @@ import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import Quill from "../Quill";
 
+import CancelPopup from "../popup/CancelPopup";
+import CreatePopup from "../popup/CreatePopup";
+import LoadingPopup from "../popup/LoadingPopup";
+import CompletePopup from "../popup/CompletePopup";
+
 
 
 const writeHttp = new WriteHttp();
@@ -28,6 +33,11 @@ function WritingForm() {
     const { category } = useParams();
 
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
+    const [isOpen,setIsOpen] = useState(false);
+    const [createIsOpen,setCreateIsOpen] = useState(false);
+    const [isLoading,setIsLoading] =useState(false);
+    const [isComplete,setIsComplete] =useState(false);
+
     const navigate = useNavigate();
     const [categoryList,setCategoryList] = useState([]);
     const [categoryValue, setCategoryValue] = useState('카테고리');
@@ -38,7 +48,6 @@ function WritingForm() {
     const [titleError,setTitleError] = useState(false);
     const [tag,setTag] = useState('');
     const [tagError,setTagError] = useState(false);
-    
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
 
@@ -59,11 +68,10 @@ function WritingForm() {
     const TagOnChange = (e) => {
         setTag(e.target.value);
     }
-
     //취소
     const cancel = (e) => {
-        e.preventDefault();
-        navigate(-1)
+        setIsOpen(true)
+        // navigate(-1)
     }
 
     useEffect(() => {
@@ -92,45 +100,7 @@ function WritingForm() {
     };
 
 
-    const onSubmit = async () => {
-
-        if(categoryValue === "카테고리") {
-            alert('카테고리를 선택해주세요');
-            setCategoryError(true)
-            return  false;
-        }else{
-            setCategoryError(false);
-        }
-
-        if (title.length < 5 ) {
-            alert('제목 최소 5자 이상 입력해주세요');
-            setTitleError(true);
-            return false;
-        }else{
-            setTitleError(false);
-        }
-
-
-
-
-        if(tag.length < 5){
-            alert('태그 최소 5자 이상 입력해주세요');
-            setTagError(true);
-            return  false;
-        }else{
-            setTagError(false);
-        }
-
-
-        if( imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png") {
-            alert('썸네일을 등록해주세요');
-            setError(true)
-            return false;
-        }
-        else{
-            setError(false);
-        }
-
+    const onSubmit =  () => {
         const FormData = {
             category:categoryValue,
             title,
@@ -139,26 +109,98 @@ function WritingForm() {
             thumbnail:imagePreview,
             tags:tag
         }
+        setIsLoading(true)
+         setTimeout(async ()=> {
+             try {
+                 await writeHttp.submitWritingForm(FormData, { headers: { "Content-Type": "multipart/form-data" } });
+                 setIsComplete(true);
+
+             } catch (err) {
+                 console.log(err);
+             }
+             setIsLoading(false);
+         },2000)
 
 
-        try {
-            await writeHttp.submitWritingForm(FormData, { headers: { "Content-Type": "multipart/form-data" } });
-            alert("글 작성이 완료되었습니다.");
-            navigate(`/${category}`);
-        } catch (err) {
-            console.log(err);
-        }
     };
 
+   const CreateOpen = (e) => {
+       e.preventDefault();
+
+       if(categoryValue === "카테고리") {
+           alert('카테고리를 선택해주세요');
+           setCategoryError(true)
+           return  false;
+       }else{
+           setCategoryError(false);
+       }
+
+       if (title.length < 5 ) {
+           alert('제목 최소 5자 이상 입력해주세요');
+           setTitleError(true);
+           return false;
+       }else{
+           setTitleError(false);
+       }
+
+       if(tag.length < 5){
+           alert('태그 최소 5자 이상 입력해주세요');
+           setTagError(true);
+           return  false;
+       }else{
+           setTagError(false);
+       }
 
 
+       if( imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png") {
+           alert('썸네일을 등록해주세요');
+           setError(true)
+           return false;
+       }
+       else{
+           setError(false);
+       }
+
+       setCreateIsOpen(true);
+   }
     const Props = {
         quillValue,
-        setQuillValue
+        setQuillValue,
+        Cancel:{
+            setOpenModal:() => setIsOpen(false),
+            body:{
+                text:'글쓰기 등록을 취소하겠습니까?',
+                icon:(
+                    <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt=""/>
+                ),
+                subText:(
+                    <>
+                        글쓰기 등록을 취소하시면 <br/>
+                        작성하신 내용이 전부 삭제됩니다.
+                    </>
+                ),
+            },
+            buttons:{
+                btn:[
+                    {
+                        text:'취소',
+                        onClick:() => setIsOpen(false)
+                    },
+                    {
+                        text:'확인',
+                        onClick:() => navigate(-1),
+                    },
+                ]
+            }
+        },
+
+
     }
+
+   
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} onKeyPress={onCheckEnter} >
+            <form  onKeyPress={onCheckEnter} >
                  <Title>글쓰기</Title>
                 <InputBox>
                     <select name="category" value={categoryValue} onChange={onChange} >
@@ -190,13 +232,20 @@ function WritingForm() {
                     {error && <ErrorText style={{ color: "red" }}><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>썸네일을 등록해주세요</ErrorText>}
                 </Upload>
 
-
                 <ButtonsWrap>
                     <CancelButton onClick={cancel}>취소</CancelButton>
-                    <WritingButton >등록</WritingButton>
+                    <WritingButton onClick={CreateOpen} >등록</WritingButton>
                 </ButtonsWrap>
+
             </form>
+
+            {isOpen && <CancelPopup {...Props}/> }
+            {createIsOpen && <CreatePopup setCreateIsOpen={setCreateIsOpen} onSubmit={onSubmit} /> }
+            {isLoading && <LoadingPopup /> }
+            {isComplete &&  <CompletePopup category={category}/>}
+
         </>
+
     );
 }
 
