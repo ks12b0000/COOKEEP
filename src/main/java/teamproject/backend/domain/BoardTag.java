@@ -29,11 +29,4 @@ public class BoardTag {
         this.board = board;
         this.tag = tag;
     }
-
-    public SearchByResponse toSearchDto(){
-        return SearchByResponse.builder()
-                .board(board)
-                .tags(tag.getTagName())
-                .build();
-    }
 }

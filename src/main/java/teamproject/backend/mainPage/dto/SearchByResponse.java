@@ -19,7 +19,6 @@ public class SearchByResponse {
     private Integer commented;
     private Integer liked;
 
-    @Builder
     public SearchByResponse(Board board, String tags) {
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();

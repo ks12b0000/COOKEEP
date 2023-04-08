@@ -52,7 +52,7 @@ public class MainPageController {
     @GetMapping("/main/search/tag/list")
     public BaseResponse searchTagList(@RequestParam String keyword) {
 
-        GetSearchByResponse getSearchByResponse = mainPageService.searchTagList(keyword);
+        List<SearchByResponse> getSearchByResponse = mainPageService.searchTagList(keyword);
 
         return new BaseResponse("검색 결과를 가져오는데 성공했습니다.", getSearchByResponse);
     }

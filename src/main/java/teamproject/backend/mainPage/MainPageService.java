@@ -13,7 +13,7 @@ import java.util.List;
 public interface MainPageService {
 
     public List<BoardResponseInCardFormat> searchList(String keyword);
-    public GetSearchByResponse searchTagList(String keyword);
+    public List<SearchByResponse> searchTagList(String keyword);
     public GetTop10TagList top10TagList();
     public GetTop10SearchList top10SearchList();
     public GetNotificationResponse notificationByUser(Long user_id, Sort sort);
