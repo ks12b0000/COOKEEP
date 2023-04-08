@@ -58,7 +58,7 @@ class CategoryHttp extends Http {
   //댓글 많은순 조회
   getCommented = async () => {
     try {
-      const { data } = await this.axios.get(`/main/best/commented/list`);
+      const { data } = await this.axios.get(`/main/best/viewed/list`);
       return data;
     } catch (err) {
       throw err;
