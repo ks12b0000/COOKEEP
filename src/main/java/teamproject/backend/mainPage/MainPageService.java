@@ -18,4 +18,5 @@ public interface MainPageService {
     public GetTop10SearchList top10SearchList();
     public GetNotificationResponse notificationByUser(Long user_id, Sort sort);
     public GetAutoSearchList autoSearchList(String keyword);
+    public GetAutoSearchList autoTagSearchList(String keyword);
 }

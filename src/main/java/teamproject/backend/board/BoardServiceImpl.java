@@ -260,11 +260,11 @@ public class BoardServiceImpl implements BoardService{
     }
 
     /**
-     * 댓글순 5개 가져오기
+     * 조회순 5개 가져오기
      * @return
      */
-    public List<BoardResponseInCardFormat> findBoarListByCommented() {
-        List<Board> boards = boardRepository.findTop5ByOrderByCommentedDesc();
+    public List<BoardResponseInCardFormat> findBoarViewedByCommented() {
+        List<Board> boards = boardRepository.findTop5ByOrderByViewDesc();
 
         return getBoardResponsesInCardFormat(boards, boards.size());
     }

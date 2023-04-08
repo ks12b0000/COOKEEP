@@ -2,7 +2,7 @@ package teamproject.backend.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamproject.backend.mainPage.dto.SearchByResponse;
+import teamproject.backend.mainPage.dto.AutoSearchList;
 import teamproject.backend.mainPage.dto.Top10TagList;
 
 import javax.persistence.*;
@@ -26,6 +26,11 @@ public class Tag {
         return Top10TagList.builder()
                 .tag_id(getTagId())
                 .tag_name(getTagName())
+                .build();
+    }
+    public AutoSearchList autoSearchList(){
+        return AutoSearchList.builder()
+                .keyword(tagName)
                 .build();
     }
 }

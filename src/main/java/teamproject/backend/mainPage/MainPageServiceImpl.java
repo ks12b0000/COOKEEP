@@ -130,6 +130,20 @@ public class MainPageServiceImpl implements MainPageService {
         return getAutoSearchList;
     }
 
+    /**
+     * 태그 자동완성 기능
+     * @param keyword
+     * @return
+     */
+    @Override
+    public GetAutoSearchList autoTagSearchList(String keyword) {
+        List<AutoSearchList> autoSearchList = tagRepository.findByTagNameContaining(keyword).stream().map(Tag::autoSearchList).collect(Collectors.toList());
+
+        GetAutoSearchList getAutoSearchList = GetAutoSearchList.builder().autoSearchLists(autoSearchList).build();
+
+        return getAutoSearchList;
+    }
+
     public void searchSave(String keyword) {
         SearchKeyword search = new SearchKeyword(keyword);
         searchRepository.save(search);
