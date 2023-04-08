@@ -93,14 +93,14 @@ public class MainPageController {
     }
 
     /**
-     * 댓글순 5개 가져오기
-     * [GET] /main/best/commented/list
+     * 조회순 5개 가져오기
+     * [GET] /main/best/viewed/list
      * @return
      */
-    @GetMapping("/main/best/commented/list")
+    @GetMapping("/main/best/viewed/list")
     public BaseResponse boardListOrderByCommented(){
-        List<BoardResponseInCardFormat> pages = boardService.findBoarListByCommented();
-        return new BaseResponse<>("성공적으로 글을 가져왔습니다.", pages);
+        List<BoardResponseInCardFormat> pages = boardService.findBoarViewedByCommented();
+        return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
 
     /**
@@ -135,5 +135,17 @@ public class MainPageController {
 
         return new BaseResponse("검색어 자동완성 리스트를 불러오는데 성공했습니다.", getAutoSearchList);
     }
-    
+
+    /**
+     * 태그 자동완성 기능
+     * [GET] /main/auto/tag/search/list?keyword=
+     * @param keyword
+     * @return
+     */
+    @GetMapping("/main/auto/tag/search/list")
+    public BaseResponse autoTagSearchList(@RequestParam String keyword) {
+        GetAutoSearchList getAutoTagSearchList = mainPageService.autoTagSearchList(keyword);
+
+        return new BaseResponse("태그 자동완성 리스트를 불러오는데 성공했습니다.", getAutoTagSearchList);
+    }
 }
