@@ -151,6 +151,7 @@ const ModalBack = styled.div`
   left: 0;
   overflow: hidden;
   touch-action: none;
+  z-index: 100;
 `;
 
 const ModalWrap = styled.div`
@@ -165,6 +166,7 @@ const ModalWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 101;
 `;
 
 const ModalIcon = styled.img`

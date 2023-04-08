@@ -31,6 +31,7 @@ function Detail() {
   //state
   const [detailPost, setDetailPost] = useState([]);
   const [IsLiked, setIsLiked] = useState(false);
+  const [IsModal, setIsModal] = useState(false);
 
   const { isOpen, controller } = useModal();
 
@@ -62,7 +63,7 @@ function Detail() {
   const onLike = async e => {
     e.preventDefault();
     if (isLoggedIn === false) {
-      alert('로그인이 필요한 기능입니다.');
+      setIsModal(true);
     } else {
       try {
         const res = await categoryHttp.postLike(id);
@@ -159,6 +160,22 @@ function Detail() {
 
       {isOpen && <Alert {...Props} />}
       <Footer />
+
+      {IsModal && (
+        <>
+          <ModalBack />
+          <ModalWrap>
+            <ModalIcon src='/image/modal-icon.png' />
+            <ModalText>로그인 후 이용 가능합니다.</ModalText>
+            <Line1 />
+            <ButtonWrap>
+              <Button onClick={() => setIsModal(false)}>취소</Button>
+              <Line2 />
+              <Button onClick={() => navigate('/login')}>로그인</Button>
+            </ButtonWrap>
+          </ModalWrap>
+        </>
+      )}
     </>
   );
 }
@@ -252,3 +269,81 @@ const TopBody = styled.div`
   line-height: 23px;
   color: #3e4145;
 `;
+
+//모달창 디자인
+const ModalBack = styled.div`
+  height: 100%;
+  width: 100vw;
+  background-color: black;
+  opacity: 0.4;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  touch-action: none;
+  z-index: 100;
+`;
+
+const ModalWrap = styled.div`
+  width: 500px;
+  height: 256px;
+  background-color: white;
+  border-radius: 10px;
+  position: fixed;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 101;
+`;
+
+const ModalIcon = styled.img`
+  margin-top: 70px;
+`;
+
+const ModalText = styled.div`
+  font-size: 16px;
+  font-weight: 700;
+  color: black;
+  margin-top: 19px;
+`;
+
+const Line1 = styled.div`
+  width: 100%;
+  height: 0.1px;
+  background-color: #616060;
+  margin-top: 66px;
+  margin-top: auto;
+`;
+
+const ButtonWrap = styled.div`
+  width: 100%;
+  height: 56px;
+  display: grid;
+  grid-template-columns: 49% 1% 49%;
+`;
+
+const Button = styled.div`
+  display: flex;
+  font-size: 16px;
+  color: #5a5c5f;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  transition: 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    color: #ff4122;
+  }
+`;
+
+const Line2 = styled.div`
+  height: 56px;
+  width: 0.1px;
+  background-color: #616060;
+`;
+

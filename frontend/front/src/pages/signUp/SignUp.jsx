@@ -112,6 +112,7 @@ function SignUp() {
     } else {
       try {
         const res = await userHttp.postSignUp(body);
+        console.log(res);
         setIsDone(true);
       } catch (err) {
         console.log(err);
@@ -238,16 +239,24 @@ function SignUp() {
             {/* 아이디 입력 */}
             <SignName>아이디</SignName>
             <IdWrap>
-              <IdInput
-                value={Username}
-                type='id'
-                ref={idRef}
-                placeholder='영문, 숫자 조합 5자리 이상'
-                onChange={e => {
-                  setUsername(e.currentTarget.value);
-                }}
-                isError={IsError}
-              />
+            {CheckUsername===true
+            ?
+            <IdInput
+              value={Username}
+              disabled
+            />
+            :
+            <IdInput
+              value={Username}
+              type='id'
+              ref={idRef}
+              placeholder='영문, 숫자 조합 5자리 이상'
+              onChange={e => {
+                setUsername(e.currentTarget.value);
+              }}
+              isError={IsError}
+            />
+            }
               <IdButton
                 onClick={e => onCheckUsername(e)}
                 isFilled={Username !== ''}
@@ -264,16 +273,24 @@ function SignUp() {
             {/* 이메일 입력 */}
             <SignName>이메일</SignName>
             <IdWrap>
+              {CheckEmail===true
+              ?
               <IdInput
-                value={Email}
-                type='email'
-                ref={emailRef}
-                placeholder='이메일을 입력하세요'
-                onChange={e => {
-                  setEmail(e.currentTarget.value);
-                }}
-                isError={IsError}
+              value={Email}
+              disabled
               />
+              :
+              <IdInput
+              value={Email}
+              type='email'
+              ref={emailRef}
+              placeholder='이메일을 입력하세요'
+              onChange={e => {
+                setEmail(e.currentTarget.value);
+              }}
+              isError={IsError}
+            />
+              }
               <IdButton onClick={e => onCheckEmail(e)} isFilled={Email !== ''}>
                 중복확인
               </IdButton>
