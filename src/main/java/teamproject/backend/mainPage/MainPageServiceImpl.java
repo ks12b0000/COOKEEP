@@ -65,14 +65,12 @@ public class MainPageServiceImpl implements MainPageService {
      * @return
      */
     @Override
-    public GetSearchByResponse searchTagList(String keyword) {
+    public List<SearchByResponse> searchTagList(String keyword) {
         Tag tag = tagRepository.findByTagName(keyword);
 
-        List<SearchByResponse> boardTagList = boardTagRepository.findByTag(tag).stream().map(BoardTag::toSearchDto).collect(Collectors.toList());
+        List<BoardTag> boardTagList = boardTagRepository.findByTag(tag);
 
-        GetSearchByResponse getSearchByResponse = GetSearchByResponse.builder().searchList(boardTagList).build();
-
-        return getSearchByResponse;
+        return getSearchByResponse(boardTagList, boardTagList.size());
     }
 
     /**
@@ -159,6 +157,17 @@ public class MainPageServiceImpl implements MainPageService {
             Board board = boards.get(i);
             String tags = boardTagService.findTagsByBoard(board);
             responses.add(new BoardResponseInCardFormat(board, tags));
+        }
+        return responses;
+    }
+
+    private List<SearchByResponse> getSearchByResponse(List<BoardTag> boards, int length){
+        List<SearchByResponse> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i).getBoard();
+            String tags = boardTagService.findTagsByBoard(board);
+            responses.add(new SearchByResponse(board, tags));
         }
         return responses;
     }
