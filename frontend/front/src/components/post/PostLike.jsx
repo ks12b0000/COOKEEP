@@ -12,10 +12,11 @@ const PostLike = ({ boardId }) => {
   const [IsLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-      checkIsLiked();
+      checkIsLiked()
   }, []);
 
   // 좋아요 눌렀는지 여부 체크
+
   const checkIsLiked = async () => {
     if(isLoggedIn===true){
         try {
@@ -26,6 +27,7 @@ const PostLike = ({ boardId }) => {
         }
     }
   };
+
 
   return (
     <>

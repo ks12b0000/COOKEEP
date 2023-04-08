@@ -8,12 +8,27 @@ import "swiper/css/pagination";
 import left from '../../../../asset/image/left.png'
 import right from '../../../../asset/image/right.png'
 import good from '../../../../asset/image/good.png'
-import {useRef} from "react";
+import {useEffect, useRef, useState} from "react";
+import CategoryHttp from "../../../../http/categoryHttp";
 
 SwiperCore.use([Navigation, Pagination]);
+const client = new CategoryHttp();
 function Banner() {
     const swiperRef = useRef(null)
 
+    const [banner,setBanner] = useState([])
+
+    useEffect(() => {
+        (async () => {
+            try{
+                const res = await client.getBanner();
+                setBanner(res.result);
+            }
+            catch (err) {
+                console.log(err)
+            }
+        })();
+    },[])
 
     const SlideData = [
         {
@@ -47,21 +62,26 @@ function Banner() {
               slidesPerView={1}
               pagination={{ clickable: true }}
           >
-              {SlideData.map((item)=>(
-                            <SwiperSlide key ={item.id}>
-                                <BannrImg > <img src={item.sum} alt=""/></BannrImg>
-                              <div className='swiperContents'>
-                                <h1>
-                                   <Img><img src={good} alt=""/></Img>
-                                   <span> {item.topText}</span>
-                                </h1>
-                                <BannerText>                                            
-                                  <span>{item.mainText1} </span>
-                                  <span>{item.mainText2}</span>
-                                </BannerText>
-                              </div>
-                            </SwiperSlide>
-              ))}
+              {banner.map((item)=>
+                  {
+                  const title = item.title.split('//');
+                  return (
+                      <SwiperSlide key ={item.board_id}>
+                          <BannrImg > <img src={item.thumbnail} alt=""/></BannrImg>
+                          <div className='swiperContents'>
+                              <h1>
+                                  <Img><img src={good} alt=""/></Img>
+                                  <span>오늘의 추천 레시피 글</span>
+                              </h1>
+                              <BannerText>
+                                  <span>{title[0]} </span>
+                                  <span>{title[1]}</span>
+                              </BannerText>
+                          </div>
+                      </SwiperSlide>
+                  )
+              }
+              )}
 
              <div className='arrow'>
                  <div id="previousButton" onClick={() => swiperRef.current.swiper.slidePrev()} className='prev' >

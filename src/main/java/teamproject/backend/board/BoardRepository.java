@@ -33,7 +33,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findTop5ByOrderByLikedDesc();
 
-    List<Board> findTop5ByOrderByCommentedDesc();
+    List<Board> findTop5ByOrderByViewDesc();
 
     @Transactional
     @Modifying

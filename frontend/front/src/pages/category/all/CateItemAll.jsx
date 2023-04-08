@@ -14,30 +14,21 @@ import AllPagination from "../../../components/categoryLayout/pagination/Paginat
 const categoryHttp = new CategoryHttp();
 
 function CateItemAll() {
+    const [allText,setAllText] = useState(null);
+    const [posts, setPosts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
 
-        const[allText,setAllText] = useState(null);
-        const [posts, setPosts] = useState([]);
-        const [currentPage, setCurrentPage] = useState(1);
-        const [showPost, setShowPost] = useState(10);
-        const [totalPost, setTotalPost] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
+    const onChangePagination = (e,p)=> {
+        setCurrentPage(p)
 
-        const LastIndex = currentPage * showPost;
-        const FirstIndex = LastIndex - showPost;
-        const currentPost = posts.slice(FirstIndex, LastIndex);
-        const paginate = (pageNum) => setCurrentPage(pageNum);
-        const prevPage = () => setCurrentPage(currentPage - 1);
-        const nextPage = () => setCurrentPage(currentPage + 1);
-
-        const showPagination = () => {
-            return <AllPagination showPost={showPost} totalPost={totalPost} currentPage={currentPage} paginate={paginate} prevPage={prevPage} nextPage={nextPage} />;
-        };
-
+    };
         useEffect(() => {
             (async () => {
                 try {
                     const { result } = await categoryHttp.getAllBoard(allText);
                     setPosts(result);
-                    setTotalPost(result.length);
+                    setTotalCount(result.length);
                 } catch (err) {
                     console.log(err);
                 }
@@ -60,11 +51,10 @@ function CateItemAll() {
                 <Ul>
                     {
 
-                        posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={currentPost}/>
+                        posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts}/>
                     }
-
                 </Ul>
-                <div>{showPagination()}</div>
+                <Pagination  count={totalCount}  page={currentPage}   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton />
             </>
         );
     }

@@ -11,11 +11,11 @@ import IsNonData from "../../atomic/isNonData/IsNonData";
 const categoryHttp = new CategoryHttp();
 function CateItem({cateItemName}) {
     const [posts, setPosts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const [totalCount, setTotalCount] = useState(0);
     const onChangePagination = (e,p)=> {
-        setCurrentPage(p)
+        setCurrentPage(p - 1)
 
     };
 
@@ -48,12 +48,29 @@ function CateItem({cateItemName}) {
                     posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts}/>
                 }
             </Ul>
-         <Pagination  count={totalCount}  page={currentPage}   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton />
+           <PaginationWrap > <Pagination  count={totalCount}  page={currentPage + 1 }   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton /></PaginationWrap>
         </>
     );
 }
 
 export default CateItem;
+
+const PaginationWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  .MuiPagination-ul li button{
+    width:40px;
+    height:40px;
+    color:#CBCBCB;
+    font-weight: 600;
+    font-size: 16px
+  }
+  .Mui-selected {
+    background:#FF4122 !important;
+    color:#ffffff !important;
+    border:none !important;
+  }
+`
 const Ul = styled.ul`
     margin-top:16px;
   min-height: 800px;

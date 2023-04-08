@@ -25,6 +25,8 @@ import MyLikes from "./pages/myPage/MyLikes";
 import Written from "./pages/written/Written";
 import NotFound from "./pages/notFound/NotFound";
 import AllCategory from "./pages/category/all/AllCategory";
+import SearchList from "./components/categoryLayout/searchList/SearchList";
+import SearchTag from "./components/categoryLayout/searchList/SearchTag";
 
 function App() {
     const user = useSelector((state) => state);
@@ -53,7 +55,12 @@ function App() {
           <Route path='/category/:id' element={<Detail />} />
           <Route path='/:id/edit' element={<Edit />} />
           <Route path='/written/:userId' element={<Written />} />
+          {/**/}
 
+          {/*검색*/}
+          <Route path='/search/:contents' element={<SearchList />} />
+          <Route path='/searchTag/:contents' element={<SearchTag />} />
+          {/**/}
           <Route path='/login' element={<Login />}></Route>
           <Route path='/callback/kakao' element={<KaKaoLogin />}></Route>
           <Route path='/callback/google' element={<GoogleLogin />}></Route>

@@ -91,10 +91,11 @@ const client = new SearchHttp();
 
      let tagData1 = tag.slice(0,5)
      let tagData2 = tag.slice(5,10)
+     console.log(top)
 
 
     return (
-        <TableBox>
+        <TableBox >
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange}  TabIndicatorProps={{

@@ -9,7 +9,7 @@ import Alert from "../../../atomic/modal/Alert";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router";
 import categoryHttp from "../../../../http/categoryHttp";
-
+import ReactLoading from "react-loading";
 
 
 const CategoryHttp = new categoryHttp();
@@ -39,11 +39,38 @@ function DetailBtn({board_id}) {
         }
 
     }
+
     const Props = {
-        onClick:deletePost,
         setOpenModal:handelModal,
-        text:'정말로 해당 게시글을 삭제하시겠습니까?'
+        body:{
+            text:'정말로 해당 게시글을 삭제하시겠습니까?',
+            icon:(
+                <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt=""/>
+            ),
+            subText:(
+                <>
+                    글쓰기 등록을 취소하시면 작성하시면 <br/>
+                    작성하신 내용이 전부 삭제됩니다.
+                </>
+            ),
+
+        },
+
+        buttons:{
+            btn:[
+                {
+                    text:'확인',
+                    onClick:deletePost,
+                },
+                {
+                    text:'취소',
+                    onClick:handelModal
+                }
+            ]
+        }
     }
+
+
     return(
         <div>
             <IconWrap >
@@ -54,6 +81,7 @@ function DetailBtn({board_id}) {
                 onClick={handleClick}>
                   <MoreVertIcon />
               </IconButton>
+                <ReactLoading type="bubbles" color="#ff4c4c"/>
             </IconWrap>
             {open &&
                 <MenuList>
