@@ -1,4 +1,3 @@
-
 import Popularity from "./popularity/Popularity";
 import Ranking from "./ranking/Ranking";
 import Banner from "./banner/Banner";
@@ -10,7 +9,6 @@ import CategoryHttp from "../../../http/categoryHttp";
 const client = new CategoryHttp();
 
 function Main() {
-
     const [likeList,setLikeList] = useState([]);
     const [commented,setCommented] = useState([]);
 
@@ -29,7 +27,6 @@ function Main() {
        },[])
 
     const Props = {
-
         like:{
             likeList
         },
@@ -43,7 +40,6 @@ function Main() {
            <Banner   />
            <Popularity {...Props.like} />
            <Ranking   {...Props.comment}/>
-
        </>
    )
 }

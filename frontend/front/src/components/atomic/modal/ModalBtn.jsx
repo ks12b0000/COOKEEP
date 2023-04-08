@@ -5,8 +5,6 @@ import styled from '@emotion/styled'
 
 function ModalBtn({btn}) {
 
-
-
     return (
           <ModalFooter btn ={btn}>
               {btn.map((item,index) => (

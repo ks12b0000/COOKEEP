@@ -10,7 +10,7 @@ function Popularity({likeList}) {
 
     return(
         <Container>
-          <PopularTitle>이달의 인기 레시피 </PopularTitle>
+          <PopularTitle> <div><img src={`${process.env.PUBLIC_URL}/image/popular.png`} alt=""/></div>이달의 인기 레시피 </PopularTitle>
           <PopularUl>
               {likeList.length === 0 ? <IsNonData text='데이터가 존재하지 않습니다.' />: <Post data={likeList} /> }
           </PopularUl>
@@ -35,6 +35,9 @@ const  PopularUl = styled.ul`
   margin-top:16px;
 `
 const PopularTitle = styled.h1`
+  display: flex;
+  gap:4px;
+  align-items: center;
   font-weight: 700;
   font-size: 24px;
   color:${color.main}

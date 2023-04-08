@@ -26,6 +26,7 @@ const ButtonWrap = styled.div`
     justify-content: end;
 `;
 function Category({title,categoryName}){
+
     return(
         <Layout>
             <Container>

@@ -3,11 +3,12 @@ import ModalBtn from "./ModalBtn";
 import ModalBody from "./ModalBody";
 function Alert({ setOpenModal,buttons,body }) {
 
+
     return (
         <>
         <ModalBackground  onClick={setOpenModal} />
             <ModalContainer>
-                <ModalBody {...body} />
+                <ModalBody {...body} buttons={buttons}/>
                 {buttons && <ModalBtn  {...buttons} /> }
             </ModalContainer>
         </>

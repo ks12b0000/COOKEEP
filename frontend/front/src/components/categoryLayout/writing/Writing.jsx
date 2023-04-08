@@ -1,4 +1,3 @@
-import Header from "../../layout/header/Header";
 import styled from "@emotion/styled";
 import WritingForm from "./writingForm/WritingForm";
 import Layout from "../../layout/Layout";

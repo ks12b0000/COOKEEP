@@ -1,8 +1,38 @@
 import styled from "@emotion/styled";
 import {Link, useParams} from "react-router-dom";
 import PostLike from './PostLike';
+import CategoryHttp from "../../http/categoryHttp";
+import {useSelector} from "react-redux";
+import {useEffect, useState} from "react";
 
 function Post({data}) {
+    const boradId  =data.map((item) => item.board_id);
+    console.log(boradId);
+    const categoryHttp = new CategoryHttp();
+
+    const { userId } = useSelector(state => state.persistedReducer.userReducer);
+    const { isLoggedIn } = useSelector(
+        state => state.persistedReducer.userReducer
+    );
+    const [IsLiked, setIsLiked] = useState(false);
+
+    useEffect(() => {
+        checkIsLiked()
+    }, []);
+
+    // 좋아요 눌렀는지 여부 체크
+
+    const checkIsLiked = async () => {
+        if(isLoggedIn===true){
+            try {
+                const res = await categoryHttp.getisLiked([boradId], userId);
+                setIsLiked(res.data.result.like);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+
 
     return(
         <>
@@ -33,7 +63,7 @@ function Post({data}) {
                   <TextBoxRight>
                     <div>
                       <HeartImg>
-                        <PostLike boardId={item.board_id} />
+                        <PostLike boardId={item.board_id}/>
                       </HeartImg>
                       <span>{item.liked}</span>
                     </div>
