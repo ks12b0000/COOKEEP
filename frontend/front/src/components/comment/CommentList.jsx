@@ -5,7 +5,6 @@ import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
 import ReplyList from './ReplyList';
 import ReplyUpload from './ReplyUpload';
-import Pagination from './Pagination';
 import CommentUpload from './CommentUpload';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -300,36 +299,39 @@ const CommentList = props => {
         </CommentWrap>
       ))}
 
-      {}
-
+    
       {/* 페이지 네이션 */}
-      <Nav>
-        {SelectedButton > 0 && (
-          <Button onClick={() => firstList()}>
-            <DoubleArrow url='/image/double-arrow-left.png' />
+      {Comments.length !== 0
+      &&
+        <Nav>
+          {SelectedButton > 0 && (
+            <Button onClick={() => firstList()}>
+              <DoubleArrow url='/image/double-arrow-left.png' />
+            </Button>
+          )}
+          <Button onClick={() => leftList()}>
+            <Arrow url='/image/arrow-left.png' />
           </Button>
-        )}
-        <Button onClick={() => leftList()}>
-          <Arrow url='/image/arrow-left.png' />
-        </Button>
-        {Page.map((page, i) => (
-          <Button
-            key={i}
-            onClick={() => pageList(page)}
-            aria-current={page === SelectedButton ? 'true' : null}
-          >
-            {page + 1}
+          {Page.map((page, i) => (
+            <Button
+              key={i}
+              onClick={() => pageList(page)}
+              aria-current={page === SelectedButton ? 'true' : null}
+            >
+              {page + 1}
+            </Button>
+          ))}
+          <Button onClick={() => rightList()}>
+            <Arrow url='/image/arrow-right.png' />
           </Button>
-        ))}
-        <Button onClick={() => rightList()}>
-          <Arrow url='/image/arrow-right.png' />
-        </Button>
-        {SelectedButton < Page.length - 1 && (
-          <Button onClick={() => lastList()}>
-            <DoubleArrow url='/image/double-arrow-right.png' />
-          </Button>
-        )}
-      </Nav>
+          {SelectedButton < Page.length - 1 && (
+            <Button onClick={() => lastList()}>
+              <DoubleArrow url='/image/double-arrow-right.png' />
+            </Button>
+          )}
+        </Nav>
+      }
+      
 
       {/* 댓글 작성 컴포넌트 */}
       <Line />

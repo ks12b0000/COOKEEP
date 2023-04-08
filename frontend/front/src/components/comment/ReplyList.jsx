@@ -257,34 +257,37 @@ const ReplyList = props => {
       ))}
 
       {/* 페이지 네이션 */}
-      <Nav>
-        {SelectedButton > 0 && (
-          <Button onClick={() => firstList()}>
-            <DoubleArrow url='/image/double-arrow-left.png' />
+      {Replys.length!==0
+      &&
+        <Nav>
+          {SelectedButton > 0 && (
+            <Button onClick={() => firstList()}>
+              <DoubleArrow url='/image/double-arrow-left.png' />
+            </Button>
+          )}
+          <Button onClick={() => leftList()}>
+            <Arrow url='/image/arrow-left.png' />
           </Button>
-        )}
-        <Button onClick={() => leftList()}>
-          <Arrow url='/image/arrow-left.png' />
-        </Button>
-        {Page.map((page, i) => (
-          <Button
-            key={i}
-            onClick={() => pageList(page)}
-            aria-current={page === SelectedButton ? 'true' : null}
-          >
-            {page + 1}
+          {Page.map((page, i) => (
+            <Button
+              key={i}
+              onClick={() => pageList(page)}
+              aria-current={page === SelectedButton ? 'true' : null}
+            >
+              {page + 1}
+            </Button>
+          ))}
+          <Button onClick={() => rightList()}>
+            <Arrow url='/image/arrow-right.png' />
           </Button>
-        ))}
-        <Button onClick={() => rightList()}>
-          <Arrow url='/image/arrow-right.png' />
-        </Button>
-        {SelectedButton < Page.length - 1 && (
-          <Button onClick={() => lastList()}>
-            <DoubleArrow url='/image/double-arrow-right.png' />
-          </Button>
-        )}
-      </Nav>
-
+          {SelectedButton < Page.length - 1 && (
+            <Button onClick={() => lastList()}>
+              <DoubleArrow url='/image/double-arrow-right.png' />
+            </Button>
+          )}
+        </Nav>  
+      }
+      
       {Replys.length !== 0 && <Line />}
     </>
   );
