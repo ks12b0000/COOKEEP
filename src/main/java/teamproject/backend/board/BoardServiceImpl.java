@@ -272,7 +272,7 @@ public class BoardServiceImpl implements BoardService{
     public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
         Page<BoardByUserResponse> boards = boardRepository.findBannerByUserId(pageable, userId);
-        return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalElements());
+        return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalPages());
     }
 
     public CheckUserLikeBoard checkLiked(Long userId, Long boardId){
