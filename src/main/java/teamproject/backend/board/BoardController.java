@@ -60,7 +60,7 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/list")
-    public BaseResponse boardListByCategory(@PageableDefault(size = 10, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, @RequestParam String category){
+    public BaseResponse boardListByCategory(@PageableDefault(size = 20, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, @RequestParam String category){
         BoardListResponseByCategory pages = boardService.findBoardListByFoodCategoryName(pageable, category);
         return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
