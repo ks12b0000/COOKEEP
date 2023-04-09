@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.dto.*;
@@ -23,7 +22,6 @@ import teamproject.backend.user.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -188,8 +186,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/board/all/list")
-    public BaseResponse findBoarListByAll(@SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
-        List<BoardResponseInCardFormat> boarListByAll = boardService.findBoarListByAll(sort);
+    public BaseResponse findBoarListByAll(@PageableDefault(size = 20, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        BoardListResponseAll boarListByAll = boardService.findBoarListByAll(pageable);
 
         return new BaseResponse("성공적으로 전체 게시글 목록을 조회했습니다.", boarListByAll);
     }
