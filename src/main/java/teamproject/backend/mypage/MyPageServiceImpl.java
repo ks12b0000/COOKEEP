@@ -230,7 +230,7 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public GetNotificationResponse notificationByUser(Long user_id, Pageable pageable) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        Page<Notification> notifications = notificationRepository.findByUser(user, pageable);
+        Page<Notification> notifications = notificationRepository.findPageByUser(user, pageable);
 
         GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder()
                 .notificationList(notifications.getContent().stream().map(Notification::toDto).collect(Collectors.toList()))
