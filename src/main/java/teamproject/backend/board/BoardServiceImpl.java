@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.*;
@@ -240,13 +239,13 @@ public class BoardServiceImpl implements BoardService{
 
     /**
      * 게시글 전체 목록
-     * @param sort
+     * @param
      * @return
      */
-    public List<BoardResponseInCardFormat> findBoarListByAll(Sort sort) {
-        List<Board> boards = boardRepository.findAll(sort);
+    public BoardListResponseAll findBoarListByAll(Pageable pageable) {
+        Page<BoardResponseInCardFormat> boards = boardRepository.findCardByAll(pageable);
 
-        return getBoardResponsesInCardFormat(boards, boards.size());
+        return new BoardListResponseAll(boards.getContent(), boards.getTotalPages());
     }
 
     /**
@@ -272,7 +271,7 @@ public class BoardServiceImpl implements BoardService{
     public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
         Page<BoardByUserResponse> boards = boardRepository.findBannerByUserId(pageable, userId);
-        return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalElements());
+        return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalPages());
     }
 
     public CheckUserLikeBoard checkLiked(Long userId, Long boardId){

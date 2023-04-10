@@ -23,6 +23,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "where b.category = :category")
     Page<BoardResponseInCardFormat> findByCategory(Pageable pageable, FoodCategory category);
 
+    @Query("select new teamproject.backend.board.dto.BoardResponseInCardFormat(b.boardId, b.category.categoryName, " +
+            "b.title, b.user.nickname, b.createDate, b.thumbnail, b.commented, b.liked, b.view) " +
+            "from Board b ")
+    Page<BoardResponseInCardFormat> findCardByAll(Pageable pageable);
     List<Board> findByUser(User user);
 
     @Query("select new teamproject.backend.mypage.dto.BoardByUserResponse(b.boardId, b.title, b.commented) from Board b where b.user.id =:userId")
