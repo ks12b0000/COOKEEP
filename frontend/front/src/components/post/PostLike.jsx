@@ -1,22 +1,22 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import CategoryHttp from "../../http/categoryHttp";
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import CategoryHttp from '../../http/categoryHttp';
 
-const PostLike = ({ boardId}) => {
+const PostLike = ({ boardId }) => {
   const categoryHttp = new CategoryHttp();
 
   const { userId } = useSelector(state => state.persistedReducer.userReducer);
   const { isLoggedIn } = useSelector(
-      state => state.persistedReducer.userReducer
+    state => state.persistedReducer.userReducer
   );
   const [IsLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    checkIsLiked()
+    checkIsLiked();
   }, []);
 
   const checkIsLiked = async () => {
-    if(isLoggedIn===true){
+    if (isLoggedIn === true) {
       try {
         const res = await categoryHttp.getisLiked(boardId, userId);
         setIsLiked(res.data.result.like);
@@ -29,9 +29,9 @@ const PostLike = ({ boardId}) => {
   return (
     <>
       {IsLiked === true ? (
-        <img src='/image/heart-fill.png' alt='' />
+        <img src='/image/post-like-fill.png' alt='' />
       ) : (
-        <img src='/image/heart.png' alt='' />
+        <img src='/image/post-like.png' alt='' />
       )}
     </>
   );
