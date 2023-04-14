@@ -27,6 +27,12 @@ const ButtonWrap = styled.div`
 `;
 function Category({title,categoryName}){
 
+
+    const RR = () => {
+        return (
+            <div></div>
+        )
+    }
     return(
         <Layout>
             <Container>

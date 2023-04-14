@@ -29,6 +29,7 @@ const Container = styled.section`
 
 const  PopularUl = styled.ul`
   display: flex;
+  min-height: 300px;
   justify-content: space-around;
   align-items: center;
   gap:16px;
