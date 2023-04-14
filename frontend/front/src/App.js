@@ -4,7 +4,6 @@ import { Routes, Route } from "react-router";
 import { useSelector } from "react-redux";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
-import MyPage from "./pages/myPage/MyPage";
 import SignUp from "./pages/signUp/SignUp";
 import Japanese from "./pages/category/japanese/Japanese";
 import PrivateRoute from "./until/PrivateRoute";
@@ -27,6 +26,9 @@ import NotFound from "./pages/notFound/NotFound";
 import AllCategory from "./pages/category/all/AllCategory";
 import SearchList from "./components/categoryLayout/searchList/SearchList";
 import SearchTag from "./components/categoryLayout/searchList/SearchTag";
+import MyComments from "./pages/myPage/MyComments";
+import MyAlarms from "./pages/myPage/MyAlarms";
+import MyAccount from "./pages/myPage/MyAccount";
 
 function App() {
     const user = useSelector((state) => state);
@@ -36,9 +38,12 @@ function App() {
         {/*라우터관리*/}
         <Routes>
           <Route element={<PrivateRoute />}>
-            <Route path='/mypage/:userId' element={<MyPage />}></Route>
-            <Route path='/myposts/:userId' element={<MyPosts />}></Route>
-            <Route path='/mylikes/:userId' element={<MyLikes />}></Route>
+            {/* 마이페이지 */}
+            <Route path='/mypage/alarms/:userId' element={<MyAlarms />}></Route>
+            <Route path='/mypage/posts/:userId' element={<MyPosts />}></Route>
+            <Route path='/mypage/likes/:userId' element={<MyLikes />}></Route>
+            <Route path='/mypage/comments/:userId' element={<MyComments />}></Route>
+            <Route path='/mypage/account/:userId' element={<MyAccount />}></Route>
           </Route>
 
           {/*카테고리*/}

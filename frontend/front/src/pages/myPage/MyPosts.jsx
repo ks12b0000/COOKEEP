@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import AuthHttp from '../../http/authHttp';
 import Header from '../../components/layout/header/Header';
 import Footer from '../../components/layout/footer/Footer';
-import { StyledLink, Wrap } from './MyPage';
+import { StyledLink } from './MyAlarms';
 
 const authHttp = new AuthHttp();
 
@@ -61,6 +61,21 @@ const MyPosts = () => {
         </>
     )
 }
+
+const Wrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -10;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+`;
 
 const Title = styled.div`
     font-size: 35px;

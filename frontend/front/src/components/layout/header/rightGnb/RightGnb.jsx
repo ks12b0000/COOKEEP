@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {useEffect, useState} from 'react';
 import { logoutUser } from '../../../../redux/reducer/userSlice';
@@ -20,9 +20,10 @@ const authHttp = new AuthHttp();
 const RightGnb = ({HandleSearch,searchOn}) => {
 
   const userInfo = useSelector(state => state.persistedReducer.userReducer);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-    const [open, setOpen] = useState(false)
 
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     LoginCheck();
@@ -72,7 +73,7 @@ const RightGnb = ({HandleSearch,searchOn}) => {
                <li onClick={HandleSearch} className={searchOn ? 'active' : 'search' }><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt='검색아이콘'/></li>
 
             <li>
-              <Link to={`/mypage/${userInfo.userId}`}>
+              <Link to={'/alarm'}>
                   <img src={`${process.env.PUBLIC_URL}/image/mypage.png`} alt='마이페이지'/>
               </Link>
             </li>
@@ -82,7 +83,7 @@ const RightGnb = ({HandleSearch,searchOn}) => {
                      <div onClick={() => setOpen(!open)}><img src={`${process.env.PUBLIC_URL}/image/user.png`} alt='마이페이지'/></div>
                     {open &&
                         <MenuList>
-                            <li onClick={() => console.log('hhhh')}>마이페이지</li>
+                            <li onClick={() => navigate(`/mypage/alarms/${userInfo.userId}`)}>마이페이지</li>
                             <li onClick={logout}>로그아웃 </li>
                         </MenuList>
                     }
