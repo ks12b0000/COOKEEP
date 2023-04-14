@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 const MypageNav = (props) => {
 
+    const navigate = useNavigate();
     const[userInfo, serUserInfo] = useState([]);
 
     return (
@@ -15,23 +17,38 @@ const MypageNav = (props) => {
                     <div><span>닉네임</span>{props.userEmail}</div>
                 </UserInfo>
             </UserWrap>
-            <Box>
-                <BoxIcon url='/image/mypage-alarm.png' />
-                <BoxText>댓글 알림</BoxText>
+            <Box className={props.categoryName === 'alarms' ? 'active' : null} onClick={() => navigate(`/mypage/alarms/${props.userId}`)}>
+                {props.categoryName === 'alarms'
+                    ? 
+                    <BoxIcon url='/image/mypage-alarm-w.png' />
+                    :
+                    <BoxIcon url='/image/mypage-alarm.png' />
+                }
+                <BoxText className={props.categoryName === 'alarms' ? 'active' : null}>댓글 알림</BoxText>
             </Box>
-            <Box>
-                <BoxIcon url='/image/mypage-written.png' />
-                <BoxText>내가 작성한 글</BoxText>
+            <Box className={props.categoryName === 'posts' ? 'active' : null} onClick={() => navigate(`/mypage/posts/${props.userId}`)} >
+            {props.categoryName === 'posts'
+                    ? 
+                    <BoxIcon url='/image/mypage-written-w.png' />
+                    :
+                    <BoxIcon url='/image/mypage-written.png' />
+                }       
+                <BoxText className={props.categoryName === 'posts' ? 'active' : null}>내가 작성한 글</BoxText>
             </Box>
-            <Box>
-                <BoxIcon url='/image/mypage-like.png' />
+            <Box className={props.categoryName === 'likes' ? 'active' : null} onClick={() => navigate(`/mypage/likes/${props.userId}`)}>
+            {props.categoryName === 'likes'
+                    ? 
+                    <BoxIcon url='/image/mypage-like-w.png' />
+                    :
+                    <BoxIcon url='/image/mypage-like.png' />
+                }   
                 <BoxText>내가 좋아요한 글</BoxText>
             </Box>
-            <Box>
+            <Box className={props.categoryName === 'comments' ? 'active' : null}>
                 <BoxIcon url='/image/mypage-comment.png' />
                 <BoxText>내가 댓글단 글</BoxText>
             </Box>
-            <Box>
+            <Box className={props.categoryName === 'account' ? 'active' : null}>
                 <BoxIcon url='/image/mypage-account.png' />
                 <BoxText>설정</BoxText>
             </Box>
@@ -85,6 +102,9 @@ const Box = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    &.active {
+           background-color: #FF6242;
+        }
 `
 
 const BoxIcon = styled.div`
@@ -102,6 +122,9 @@ const BoxText = styled.div`
     color: #B0B0B0;
     font-size: 18px;
     font-weight: 500;
+    &.active {
+            color: white;
+        }
 `
 
 export default MypageNav;

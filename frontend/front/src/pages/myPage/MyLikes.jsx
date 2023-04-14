@@ -4,109 +4,78 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import AuthHttp from '../../http/authHttp';
-import Header from '../../components/layout/header/Header';
-import Footer from '../../components/layout/footer/Footer';
-import { StyledLink } from './MyAlarms';
+import Layout from "../../components/layout/Layout";
+import MypageNav from '../../components/mypage/myPageNav';
 
 const authHttp = new AuthHttp();
 
 const MyLikes = () => {
+  const params = useParams();
+  const { userId } = params;
 
-    const params = useParams();
-    const { userId } = params;
+  const navigate = useNavigate();
 
-    const[GetPosts, setGetPosts] = useState([])
+  const username = useSelector(
+    state => state.persistedReducer.userReducer.username
+  );
 
-    useEffect(()=>{
-        onMyLikes();
-    },[])
+  const [UserInfo, setUserInfo] = useState([]);
+  
+  useEffect(() => {
+    onMypage();
+  }, []);
 
-    const onMyLikes = async () => {
-        try {
-          const res = await authHttp.getMyLikes(userId);
-          console.log(res);
-          setGetPosts(res.data.result.likeList);
-        } catch (err) {
-          console.log(err);
-        }
-      };
+  const onMypage = async () => {
+    try {
+      const res = await authHttp.getMypage(userId);
+      setUserInfo(res.data.result);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    return(
-        <>
-            <Header />
-            <Wrap onClick={()=>{console.log(GetPosts.length)}}>
-                <Title>내가 좋아요한 게시글</Title>
-                {GetPosts.length === 0 ? (
-                    <>
-                        <div>좋아요한 게시글이 없습니다.</div>
-                    </>
-                )
-                :
-                (
-                    <>
-                        {GetPosts.map((post)=>(
-                            <StyledLink to={`/category/${post.board_id}`} key={post.board_id}>
-                                <BoxItem>
-                                    <Img src={post.thumbnail}/>
-                                    <PostTitle>{post.title}</PostTitle>
-                                </BoxItem>
-                            </StyledLink>
-                        ))}
-                    </>
-                )
-                }
-            </Wrap>
-            <Footer />
+  return (
+    <Layout>
+      <Wrap>
+      <Text>마이페이지</Text>
+      {username === UserInfo.username ? (
+        <>           
+            <BoxWrap>
+              <MypageNav userName={UserInfo.username} userEmail={UserInfo.email} categoryName='likes' userId={userId}/>
+            </BoxWrap>
         </>
-    )
-}
+      ) : 
+      (
+        navigate('/notfound')
+          )}
+      </Wrap>
+    </Layout>
+  );
+};
 
 const Wrap = styled.div`
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -10;
+  width: 1440px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #f2f2f2;
+  height: 73vh;
+  margin-bottom: 10vh;
+`
+
+const Text = styled.div`
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  margin-top: 3vh;
+  color: #ED3419;
+`
+
+const BoxWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 25% 72%;
 `;
-
-const Title = styled.div`
-    font-size: 35px;
-    margin-bottom: 50px;
-    z-index: 100;
-`
-
-const BoxItem = styled.div`
-    width: 900px;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-    height: 150px;
-    border-radius: 30px;
-    padding: 40px 60px;
-    box-sizing: border-box;
-    display: flex;
-    margin-bottom: 30px;
-    align-items: center;
-    cursor: pointer;
-`
-
-const Img = styled.img`
-    width: 100px;
-    height: 100px;
-    border-radius: 20px;
-    margin-right: 30px;
-`
-
-const PostTitle = styled.div`
-    font-size: 23px;
-    font-weight: 400;
-`
 
 
 export default MyLikes;
