@@ -37,6 +37,7 @@ const CommentList = props => {
         props.boardId,
         SelectedButton
       );
+      console.log('댓글', res );
       setComments(res.data.result.list);
       setCount(res.data.result.cnt);
       const arrayLength = res.data.result.total;
@@ -194,7 +195,7 @@ const CommentList = props => {
 
                 {comment.icon_selected && (
                   <>
-                    {username === comment.user_name ? (
+                    {userId === comment.user_id ? (
                       <>
                         <EditBox ref={modalRef}>
                           <CopyToClipboard

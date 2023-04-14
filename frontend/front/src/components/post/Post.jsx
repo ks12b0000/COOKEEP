@@ -7,7 +7,6 @@ import {useEffect, useState} from "react";
 
 function Post({data}) {
     const boradId  =data.map((item) => item.board_id);
-    console.log(boradId);
     const categoryHttp = new CategoryHttp();
 
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
