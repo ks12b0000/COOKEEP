@@ -36,7 +36,7 @@ public class BoardCommentReplyResponse {
     }
 
     private String asString(Date date){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         return format.format(date);
     }
 }
