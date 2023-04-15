@@ -29,7 +29,7 @@ const MyAlarms = () => {
     try {
       const res = await authHttp.getMypage(userId);
       setUserInfo(res.data.result);
-      console.log(res);
+      console.log('mypage',res);
     } catch (err) {
       console.log(err);
     }
@@ -42,7 +42,8 @@ const MyAlarms = () => {
       {username === UserInfo.username ? (
         <>           
             <BoxWrap>
-              <MypageNav userName={UserInfo.username} userEmail={UserInfo.email} categoryName='alarms' userId={userId}/>
+              <MypageNav userNickName={UserInfo.nickname} userName={UserInfo.username} userEmail={UserInfo.email} categoryName='alarms' userId={userId} />
+              <PageWrap></PageWrap>
             </BoxWrap>
         </>
       ) : 
@@ -54,14 +55,18 @@ const MyAlarms = () => {
   );
 };
 
-const Wrap = styled.div`
+export const Wrap = styled.div`
   width: 1440px;
   margin: 0 auto;
   height: 73vh;
   margin-bottom: 10vh;
+
+  @media screen and (max-width: 1700px) {
+       width: 80%;
+    }
 `
 
-const Text = styled.div`
+export const Text = styled.div`
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -69,13 +74,21 @@ const Text = styled.div`
   color: #ED3419;
 `
 
-const BoxWrap = styled.div`
+export const BoxWrap = styled.div`
   width: 100%;
   height: 100%;
   margin: auto;
   display: grid;
-  grid-template-columns: 25% 72%;
+  grid-template-columns: 25% 73%;
+  justify-content: space-between;
 `;
+
+export const PageWrap = styled.div`
+    width: 100%;
+    height: 100%;
+    border: 1px solid #FF6242;
+    border-radius: 10px;
+`
 
 
 export default MyAlarms;

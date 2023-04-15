@@ -12,9 +12,9 @@ const MypageNav = (props) => {
             <UserWrap>
                 <UserImg />
                 <UserInfo>
-                    <div><span>닉네임</span>닉네임이 들어올자리</div>
-                    <div><span>닉네임</span>{props.userName}</div>
-                    <div><span>닉네임</span>{props.userEmail}</div>
+                    <div><span>닉네임</span>{props.userNickName}</div>
+                    <div><span>아이디</span>{props.userName}</div>
+                    <div><span>이메일</span>{props.userEmail}</div>
                 </UserInfo>
             </UserWrap>
             <Box className={props.categoryName === 'alarms' ? 'active' : null} onClick={() => navigate(`/mypage/alarms/${props.userId}`)}>
@@ -38,19 +38,29 @@ const MypageNav = (props) => {
             <Box className={props.categoryName === 'likes' ? 'active' : null} onClick={() => navigate(`/mypage/likes/${props.userId}`)}>
             {props.categoryName === 'likes'
                     ? 
-                    <BoxIcon url='/image/mypage-like-w.png' />
+                    <BoxIcon url='/image/mypage-like-w.png' marginTop='3px'/>
                     :
-                    <BoxIcon url='/image/mypage-like.png' />
+                    <BoxIcon url='/image/mypage-like.png' marginTop='3px'/>
                 }   
-                <BoxText>내가 좋아요한 글</BoxText>
+                <BoxText className={props.categoryName === 'likes' ? 'active' : null}>내가 좋아요한 글</BoxText>
             </Box>
-            <Box className={props.categoryName === 'comments' ? 'active' : null}>
-                <BoxIcon url='/image/mypage-comment.png' />
-                <BoxText>내가 댓글단 글</BoxText>
+            <Box className={props.categoryName === 'comments' ? 'active' : null} onClick={() => navigate(`/mypage/comments/${props.userId}`)}>
+            {props.categoryName === 'comments'
+                    ? 
+                    <BoxIcon url='/image/mypage-comment-w.png' marginTop='3px'/>
+                    :
+                    <BoxIcon url='/image/mypage-comment.png' marginTop='3px'/>
+                }   
+                <BoxText className={props.categoryName === 'comments' ? 'active' : null}>내가 댓글단 글</BoxText>
             </Box>
-            <Box className={props.categoryName === 'account' ? 'active' : null}>
-                <BoxIcon url='/image/mypage-account.png' />
-                <BoxText>설정</BoxText>
+            <Box className={props.categoryName === 'account' ? 'active' : null} onClick={() => navigate(`/mypage/account/${props.userId}`)}>
+            {props.categoryName === 'account'
+                    ? 
+                    <BoxIcon url='/image/mypage-account-w.png' />
+                    :
+                    <BoxIcon url='/image/mypage-account.png' />
+                }
+                <BoxText className={props.categoryName === 'account' ? 'active' : null}>설정</BoxText>
             </Box>
         </Wrap>
     )
@@ -71,8 +81,8 @@ const UserWrap = styled.div`
 ` 
 
 const UserImg = styled.div`
-    width: 100px;
-    height: 100px;
+    width:80px;
+    height: 80px;
     border-radius: 50px;
     background-color: #D9D9D9;
     margin-right: 24px;
@@ -98,7 +108,7 @@ const Box = styled.div`
     margin: 15px auto;
     border: 1px solid #FF6242;
     border-radius: 10px;
-    height: 12%;
+    height: 11.3%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,6 +126,7 @@ const BoxIcon = styled.div`
     &.active {
            font-weight: 700;
         }
+    margin-top: ${props=>props.marginTop};
 `
 
 const BoxText = styled.div`
