@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
@@ -229,11 +228,14 @@ public class MyPageServiceImpl implements MyPageService {
      * @return
      */
     @Override
-    public GetNotificationResponse notificationByUser(Long user_id, Sort sort) {
+    public GetNotificationResponse notificationByUser(Long user_id, Pageable pageable) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        List<NotificationResponse> notificationList = notificationRepository.findByUser(user, sort).stream().map(Notification::toDto).collect(Collectors.toList());
+        Page<Notification> notifications = notificationRepository.findPageByUser(user, pageable);
 
-        GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder().notificationList(notificationList).build();
+        GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder()
+                .notificationList(notifications.getContent().stream().map(Notification::toDto).collect(Collectors.toList()))
+                .total(notifications.getTotalPages())
+                .build();
 
         return getNotificationResponse;
     }
