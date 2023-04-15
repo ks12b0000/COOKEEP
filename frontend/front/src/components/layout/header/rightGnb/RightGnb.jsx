@@ -158,7 +158,7 @@ const MenuList = styled.ul`
 
 `
 const GnbContainer = styled.ul`
-    width: 225px;
+    width: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
