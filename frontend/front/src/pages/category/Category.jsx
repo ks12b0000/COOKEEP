@@ -12,7 +12,7 @@ const Container = styled.section`
   min-height: 800px;
   margin: 24px auto 16px;
   @media screen and (max-width: 1700px) {
-       width: 80%;
+       width: 1300px;
     }
 `;
 const Category1Title = styled.div`

@@ -19,6 +19,9 @@ export default Ranking;
 const RankingWrap = styled.section`
   width:1400px;
   margin:48px auto 16px;
+  @media screen and (max-width: 1700px) {
+       width: 1300px;
+    }
 `
 const RankingTitle = styled.h1`
   display: flex;
