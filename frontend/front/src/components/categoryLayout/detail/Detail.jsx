@@ -116,7 +116,35 @@ function Detail() {
             <h3>{detailPost.user_name}</h3>
             <TopHeaderIconWrap>
               {detailPost.user_id === userId ? (
-                <DetailBtn board_id={id} />
+                <>
+                  <li>
+                    {IsLiked === true ? (
+                        <p>
+                          <LikeIcon
+                              onClick={e => onLike(e)}
+                              src='/image/heart-fill.png'
+                              alt=''
+                          />
+                        </p>
+                    ) : (
+                        <p>
+                          <LikeIcon
+                              onClick={e => onLike(e)}
+                              src='/image/heart.png'
+                              alt=''
+                          />
+                        </p>
+                    )}
+                    <p>{detailPost.liked}</p>
+                  </li>
+                  <li>
+                    <p>
+                      <img src='/image/message-dots-circle.png' alt='' />
+                    </p>
+                    <p>{detailPost.commented}</p>
+                  </li>
+                  <DetailBtn board_id={id} />
+                </>
               ) : (
                 <>
                   <li>

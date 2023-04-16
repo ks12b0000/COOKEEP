@@ -7,10 +7,10 @@ function Alert({ setOpenModal,buttons,body }) {
     return (
         <>
         <ModalBackground  onClick={setOpenModal} />
-            <ModalContainer>
-                <ModalBody {...body} buttons={buttons}/>
-                {buttons && <ModalBtn  {...buttons} /> }
-            </ModalContainer>
+                <ModalContainer>
+                    <ModalBody {...body} buttons={buttons}/>
+                    {buttons && <ModalBtn  {...buttons} /> }
+                </ModalContainer>
         </>
 
     );

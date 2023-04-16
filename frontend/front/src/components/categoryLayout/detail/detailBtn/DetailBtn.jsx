@@ -110,7 +110,9 @@ const IconWrap = styled.div`
   }
 `
 const MenuList = styled.ul`
+  position: absolute;
   margin-top:10px;
+  background:#ffffff;
   border-radius: 5px;
   border:1px solid #FF4122;
   justify-content: center;

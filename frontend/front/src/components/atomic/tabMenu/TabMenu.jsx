@@ -7,6 +7,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import styled from "@emotion/styled";
 import SearchHttp from "../../../http/searchHttp";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router";
 
 
 const TableBox = styled.div`
@@ -47,13 +48,28 @@ const TableBox = styled.div`
 
 const TabMenuList =styled.ul`
   width: 50%;
-  
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+
   li{
-    padding-top:10px;
+ 
     font-weight: 500;
     font-size: 18px;
-    line-height: 22px;
+    cursor: pointer;
     color: #B0B0B0;
+    
+    &:hover{
+      background:#eee;
+    }
+    &.active{
+      font-weight:700;
+      color:#FF4122;
+      span{
+        font-weight:700;
+        color:#FF4122;
+      }
+    }
     span{
      position: static;
       font-size: 18px;
@@ -64,14 +80,26 @@ const TabMenuList =styled.ul`
   }
 `
 const client = new SearchHttp();
- function TabMenu({bottom}) {
-    const [value, setValue] = React.useState('1');
+ function TabMenu() {
+     const navigation = useNavigate();
+     const [value, setValue] = React.useState('1');
+     const [topActive,setTopActive] = useState('테스');
+     const [tagActive,setTagActive] = useState('테스트');
      const [top,setTop] = useState([]);
      const [tag,setTag] = useState([])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+     const TopNav = (keyword) => {
+         navigation(`/search/${keyword}`)
+         setTopActive(keyword)
+     }
+
+     const TagNav = (keyword) => {
+         navigation(`/searchTag/${keyword}`)
+         setTagActive(keyword)
+     }
 
      useEffect(() => {
          ( async () =>{
@@ -91,7 +119,8 @@ const client = new SearchHttp();
 
      let tagData1 = tag.slice(0,5)
      let tagData2 = tag.slice(5,10)
-     console.log(top)
+     let topData1 = top.slice(0,5)
+     let topData2 = top.slice(5,10)
 
 
     return (
@@ -105,27 +134,27 @@ const client = new SearchHttp();
                         <Tab label="인기 태그" value="2" />
                     </TabList>
                 </Box>
-                <TabPanel value="1" sx={{padding:"7px 0 0",display:'flex',gap:5 }} >
+                <TabPanel value="1" sx={{padding:"25px 0 0",display:'flex',gap:5 }} >
                    <TabMenuList>
-                       {top.map((item,index) => (
-                           <li key={index}><span>{index+1}.</span>{item.keyword}</li>
+                       {topData1.map((item,index) => (
+                           <li key={index} onClick={() => TopNav(item.keyword)} className={topActive === item.keyword && 'active'}><span>{index+1}.</span>{item.keyword}</li>
                        ))}
                    </TabMenuList>
                     <TabMenuList>
-                        {top.map((item,index) => (
-                            <li key={index}><span>{index+6}.</span>{item.keyword}</li>
+                        {topData2.map((item,index) => (
+                            <li key={index} onClick={() => TopNav(item.keyword)} className={topActive === item.keyword && 'active'} ><span>{index+6}.</span>{item.keyword}</li>
                         ))}
                     </TabMenuList>
                 </TabPanel>
-                <TabPanel value="2" sx={{padding:" 0 0",display:'flex',gap:5 }}>
+                <TabPanel value="2" sx={{padding:" 0",display:'flex',gap:5 }}>
                     <TabMenuList>
                         {tagData1.map((item,index) => (
-                            <li key={index}><span>{index+1}.</span>{item.tag_name}</li>
+                            <li key={index} onClick={() => TagNav(item.tag_name)} className={tagActive === item.tag_name && 'active'}><span>{index+1}.</span>{item.tag_name}</li>
                         ))}
                     </TabMenuList>
                     <TabMenuList>
                         {tagData2.map((item,index) => (
-                            <li key={index}><span>{index+6}.</span>{item.tag_name}</li>
+                            <li key={index} onClick={() => TagNav(item.tag_name)} className={tagActive === item.tag_name && 'active'}><span>{index+6}.</span>{item.tag_name}</li>
                         ))}
                     </TabMenuList>
                 </TabPanel>
