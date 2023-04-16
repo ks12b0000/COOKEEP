@@ -9,6 +9,10 @@ import CateItemAll from "./CateItemAll";
 const Container = styled.section`
   width: 1440px;
   margin: 24px auto 16px;
+
+  @media screen and (max-width: 1700px) {
+       width: 1300px;
+    }
 `;
 const Category1Title = styled.div`
     padding-top:10px;

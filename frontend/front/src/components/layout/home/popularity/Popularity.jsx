@@ -25,6 +25,10 @@ const Container = styled.section`
   ${mq[0]}{
     width: 100vw;
   }
+
+  @media screen and (max-width: 1700px) {
+       width: 1300px;
+    }
 `
 
 const  PopularUl = styled.ul`

@@ -52,6 +52,7 @@ const RightGnb = ({HandleSearch,searchOn}) => {
     dispatch(logoutUser());
 
     alert('로그아웃이 완료되었습니다.');
+    window.location.reload();
   };
 
   return (

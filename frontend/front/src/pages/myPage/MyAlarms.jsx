@@ -168,7 +168,7 @@ export const Wrap = styled.div`
   margin-bottom: 10vh;
 
   @media screen and (max-width: 1700px) {
-       width: 80%;
+       width: 1300px;
     }
 `
 

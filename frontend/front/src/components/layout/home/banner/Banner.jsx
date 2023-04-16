@@ -172,7 +172,7 @@ const BannerWrap = styled.section`
     background:transparent;
 
     @media screen and (max-width: 1700px) {
-       width: 80%;
+       width: 1250px;
     }
     
     >div {

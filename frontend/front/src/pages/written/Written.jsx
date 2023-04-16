@@ -86,7 +86,7 @@ const Written = () => {
                 key={list.board_id}
                 onClick={() => navigate(`/category/${list.board_id}`)}
               >
-                {list.title}
+                {list.title}<span>{`(${list.commented})`}</span>
               </WrittenBlock>
             ))}
           </>
@@ -194,6 +194,10 @@ const WrittenBlock = styled.div`
   box-sizing: border-box;
   margin: 10px 0;
   cursor: pointer;
+
+  span{
+    margin-left: 5px;
+  }
 `;
 
 // 페이지네이션
