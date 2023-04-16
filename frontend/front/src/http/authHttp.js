@@ -21,6 +21,16 @@ class AuthHttp extends Http {
         }
     };
 
+    // 마이페이지 알림 리스트 불러오기
+    getAlarmList = async (user_id, num) => {
+        try {
+            const res = await this.axios.get(`auth/user/notification/list/${user_id}?page=${num}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
     //현재 비밀번호 확인
     postCheckPassword = async (user_id, params) => {
         try {
