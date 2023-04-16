@@ -55,7 +55,7 @@ function CateItem({cateItemName}) {
 
 export default CateItem;
 
-const PaginationWrap = styled.div`
+export const PaginationWrap = styled.div`
   display: flex;
   justify-content: center;
   .MuiPagination-ul li button{

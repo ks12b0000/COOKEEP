@@ -39,8 +39,9 @@ function OnChangeMenu({value,tag}) {
     const [autoList,setAutoList] =useState([])
     const tagData = async () => {
         try {
-            const res = await client.getAutoTag(value);
-            setAutoList(res.data.result.searchList);
+            const res = await client.getAutoSearchTag(value);
+            setAutoList(res.data.result.autoSearchLists)
+
         }
         catch (err) {
             console.log(err);

@@ -16,7 +16,8 @@ function SearchTag() {
         (async () => {
             try {
                 const res = await client.getAutoTag(contents);
-                setTag(res.data.result.searchList);
+                console.log(res);
+                setTag(res.data.result);
             }
             catch (err) {
                 console.log(err);
