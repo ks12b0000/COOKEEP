@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import teamproject.backend.domain.Board;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Getter
@@ -17,7 +18,7 @@ public class BoardResponseInDetailFormat {
     private String text;
     private String user_name;
     private Long user_id;
-    private Date create_date;
+    private String create_date;
     private Integer commented;
     private Integer liked;
     private Integer view;
@@ -29,9 +30,14 @@ public class BoardResponseInDetailFormat {
         this.text = board.getText();
         this.user_name = board.getUser().getNickname();
         this.user_id = board.getUser().getId();
-        this.create_date = board.getCreateDate();
+        this.create_date = asString(board.getCreateDate());
         this.commented = board.getCommented();
         this.liked = board.getLiked();
         this.view = board.getView();
     }
+    private String asString(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        return format.format(date);
+    }
+
 }

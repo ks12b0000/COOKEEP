@@ -9,9 +9,11 @@ import java.util.List;
 public class GetNotificationResponse {
 
     List<NotificationResponse> notificationList;
+    int total;
 
     @Builder
-    public GetNotificationResponse(List<NotificationResponse> notificationList) {
+    public GetNotificationResponse(List<NotificationResponse> notificationList, int total) {
         this.notificationList = notificationList;
+        this.total = total;
     }
 }

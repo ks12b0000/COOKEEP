@@ -170,6 +170,10 @@ const BannerWrap = styled.section`
     z-index: 10;
     display: flex;
     background:transparent;
+
+    @media screen and (max-width: 1700px) {
+       width: 80%;
+    }
     
     >div {
       position: relative;

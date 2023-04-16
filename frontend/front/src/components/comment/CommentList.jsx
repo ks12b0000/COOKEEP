@@ -37,6 +37,7 @@ const CommentList = props => {
         props.boardId,
         SelectedButton
       );
+      console.log('댓글', res );
       setComments(res.data.result.list);
       setCount(res.data.result.cnt);
       const arrayLength = res.data.result.total;
@@ -48,33 +49,33 @@ const CommentList = props => {
   };
 
   //넘버 버튼으로 페이지 불러오기
-  const pageList = async pageNum => {
+  const pageList = (pageNum) => {
     setSelectedButton(pageNum);
   };
 
   //left arrow 버튼으로 페이지 불러오기
-  const leftList = async () => {
+  const leftList = () => {
     if (SelectedButton > 0) {
       setSelectedButton(prev => prev - 1);
     }
   };
 
   //right arrow 버튼으로 페이지 불러오기
-  const rightList = async () => {
+  const rightList = () => {
     if (SelectedButton < Page.length - 1) {
       setSelectedButton(prev => prev + 1);
     }
   };
 
   //첫 페이지로 이동
-  const firstList = async () => {
+  const firstList = () => {
     if (SelectedButton > 0) {
       setSelectedButton(0);
     }
   };
 
   //마지막 페이지로 이동
-  const lastList = async () => {
+  const lastList = () => {
     if (SelectedButton < Page.length - 1) {
       setSelectedButton(Page.length - 1);
     }
@@ -194,7 +195,7 @@ const CommentList = props => {
 
                 {comment.icon_selected && (
                   <>
-                    {username === comment.user_name ? (
+                    {userId === comment.user_id ? (
                       <>
                         <EditBox ref={modalRef}>
                           <CopyToClipboard
@@ -544,8 +545,8 @@ const Line = styled.div`
   margin: 40px 0;
 `;
 
-//페이지 네이션
-const Nav = styled.nav`
+//페이지네이션
+export const Nav = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -553,7 +554,7 @@ const Nav = styled.nav`
   margin: 16px;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   border: 1px solid #cbcbcb;
   position: relative;
   top: 0;
@@ -590,14 +591,14 @@ const Button = styled.button`
   }
 `;
 
-const Arrow = styled.div`
+export const Arrow = styled.div`
   width: 8px;
   height: 14px;
   background: url(${props => props.url});
   background-size: 8px;
 `;
 
-const DoubleArrow = styled.div`
+export const DoubleArrow = styled.div`
   width: 14px;
   height: 12px;
   background: url(${props => props.url});

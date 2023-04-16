@@ -20,6 +20,7 @@ public class BoardTagServiceImpl implements BoardTagService{
 
     @Override
     public void saveBoardTags(Board board, String tagRequest){
+        if(tagRequest == null) return;
         List<String> tagNames = splitTagName(tagRequest.replace(" ", ""));
         for(String tagName : tagNames){
             createTag(tagName);

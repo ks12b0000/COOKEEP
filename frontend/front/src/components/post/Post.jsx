@@ -7,7 +7,6 @@ import {useEffect, useState} from "react";
 
 function Post({data}) {
     const boradId  =data.map((item) => item.board_id);
-    console.log(boradId);
     const categoryHttp = new CategoryHttp();
 
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
@@ -61,22 +60,22 @@ function Post({data}) {
                     </LeftTag>
                   </TextBoxLeft>
                   <TextBoxRight>
-                    <div>
-                      <HeartImg>
+                    <IconWrap>
+                      <IconImg>
                         <PostLike boardId={item.board_id}/>
-                      </HeartImg>
+                      </IconImg>
                       <span>{item.liked}</span>
-                    </div>
-                    <div>
-                      <CommentImg>
+                    </IconWrap>
+                    <IconWrap>
+                      <IconImg>
                         {' '}
                         <img
-                          src='/image/message-dots-circle.png'
+                          src='/image/post-comment.png'
                           alt=''
                         />
-                      </CommentImg>
+                      </IconImg>
                       <span>{item.commented}</span>
-                    </div>
+                    </IconWrap>
                   </TextBoxRight>
                 </PopularTextBox>
               </Link>
@@ -198,26 +197,12 @@ const TextBoxRight = styled.div`
       color: #B0B0B0;
     }
   }
-`
-const HeartImg = styled.div`
-  width: 25.5px;
-  height: 23px;
-  margin-top: 1px;
-
-  img{
-    width: 90%;
-    height: 90%;
-    object-fit: cover;
-  }
+ `
+ const IconWrap = styled.div`
+  margin-left: 3px;
  `
 
- const CommentImg = styled.div`
-   width: 24px;
-   height: 24px;
-
-   img {
-     width: 90%;
-     height: 90%;
-     object-fit: cover;
-   }
+ const IconImg = styled.div`
+   width: 19px;
+   height: 19px;
  `;

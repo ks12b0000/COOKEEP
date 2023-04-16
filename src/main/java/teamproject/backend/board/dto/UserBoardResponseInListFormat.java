@@ -15,9 +15,9 @@ public class UserBoardResponseInListFormat {
     private List<BoardByUserResponse> boardList;
     private String username;
     private String userPicture;
-    private Long total;
+    private int total;
 
-    public UserBoardResponseInListFormat(List<BoardByUserResponse> boardList, User user, Long total) {
+    public UserBoardResponseInListFormat(List<BoardByUserResponse> boardList, User user, int total) {
         this.boardList = boardList;
         this.username = user.getNickname();
         this.userPicture = user.getImageURL();

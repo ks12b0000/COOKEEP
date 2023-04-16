@@ -10,7 +10,7 @@ import { Wrap, Text, BoxWrap, PageWrap } from './MyAlarms';
 
 const authHttp = new AuthHttp();
 
-const MyPosts = () => {
+const MyComments = () => {
   const params = useParams();
   const { userId } = params;
 
@@ -21,7 +21,7 @@ const MyPosts = () => {
   );
 
   const [UserInfo, setUserInfo] = useState([]);
-
+  
   useEffect(() => {
     onMypage();
   }, []);
@@ -41,16 +41,18 @@ const MyPosts = () => {
       <Wrap>
       <Text>마이페이지</Text>
       {username === UserInfo.username ? (
-        <BoxWrap>
-          <MypageNav userNickName={UserInfo.nickname} userName={UserInfo.username} userEmail={UserInfo.email} categoryName='posts' userId={userId}/>
-        </BoxWrap>
+        <>           
+            <BoxWrap>
+              <MypageNav userNickName={UserInfo.nickname} userName={UserInfo.username} userEmail={UserInfo.email} categoryName='comments' userId={userId}/>
+            </BoxWrap>
+        </>
       ) : 
       (
         navigate('/notfound')
-      )}
+          )}
       </Wrap>
     </Layout>
   );
 };
 
-export default MyPosts;
+export default MyComments;

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -170,8 +169,8 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/notification/list/{user_id}")
-    public BaseResponse notificationList(@PathVariable Long user_id, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
-        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, sort);
+    public BaseResponse notificationList(@PathVariable Long user_id, @PageableDefault(size = 10, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, pageable);
 
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }

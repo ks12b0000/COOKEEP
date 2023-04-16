@@ -1,7 +1,6 @@
 package teamproject.backend.mypage;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import teamproject.backend.mypage.dto.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +29,7 @@ public interface MyPageService {
 
     public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId);
 
-    public GetNotificationResponse notificationByUser(Long user_id, Sort sort);
+    public GetNotificationResponse notificationByUser(Long user_id, Pageable pageable);
 
     public List<String> suggestNickname(int size);
 

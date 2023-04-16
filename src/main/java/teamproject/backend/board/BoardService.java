@@ -1,7 +1,6 @@
 package teamproject.backend.board;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import teamproject.backend.board.dto.*;
 import teamproject.backend.domain.User;
 
@@ -20,7 +19,7 @@ public interface BoardService {
 
     void update(Long boardId, BoardWriteRequest boardWriteRequest);
 
-    List<BoardResponseInCardFormat> findBoarListByAll(Sort sort);
+    BoardListResponseAll findBoarListByAll(Pageable pageable);
 
     public List<BoardResponseInCardFormat> findBoarListByLiked();
 

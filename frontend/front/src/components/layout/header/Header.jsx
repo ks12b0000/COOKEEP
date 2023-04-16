@@ -39,6 +39,10 @@ const Container = styled.div`
     justify-content: space-around;
     height: 70px;
   }
+
+  @media screen and (max-width: 1700px) {
+       width: 80%;
+    }
 `;
 
 

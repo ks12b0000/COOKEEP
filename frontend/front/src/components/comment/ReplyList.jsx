@@ -179,7 +179,7 @@ const ReplyList = props => {
                 />
                 {reply.icon_selected && (
                   <>
-                    {username === reply.user_name ? (
+                    {userId === reply.user_id ? (
                       <>
                         <EditBox ref={modalRef}>
                           <CopyToClipboard
