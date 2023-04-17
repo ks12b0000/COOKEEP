@@ -276,8 +276,28 @@ public class BoardServiceImpl implements BoardService{
 
     public CheckUserLikeBoard checkLiked(Long userId, Long boardId){
         User user = getUserById(userId);
-        Board board = findBoardByBoardId(boardId);
-        boolean check = likeBoardRepository.existsByBoardAndUser(board, user);
-        return new CheckUserLikeBoard(check);
+        return getLikeBoard(user, boardId);
+    }
+
+    private CheckUserLikeBoard getLikeBoard( User user, Long boardId) {
+        Board board = null;
+        boolean check = false;
+        try {
+            board = findBoardByBoardId(boardId);
+            check = likeBoardRepository.existsByBoardAndUser(board, user);
+        }
+        catch (Exception e){
+
+        }
+        return new CheckUserLikeBoard(check, boardId);
+    }
+
+    public List<CheckUserLikeBoard> checkLikedList(Long userId, List<Long> boardIds){
+        User user = getUserById(userId);
+        List<CheckUserLikeBoard> list = new ArrayList<>();
+        for(Long boardId : boardIds){
+            list.add(getLikeBoard(user, boardId));
+        }
+        return list;
     }
 }
