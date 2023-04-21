@@ -75,7 +75,8 @@ public class BoardTagServiceImpl implements BoardTagService{
         for(BoardTag boardTag : boardTags){
             tags += "#" + boardTag.getTag().getTagName() + " ";
         }
-        return deleteLastChar(tags);
+        if(tags.length() == 0) return tags;
+        else return deleteLastChar(tags);
     }
 
     @Override
