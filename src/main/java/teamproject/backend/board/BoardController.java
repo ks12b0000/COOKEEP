@@ -193,7 +193,7 @@ public class BoardController {
     }
 
     @GetMapping("/board/{userId}/list")
-    public BaseResponse findBoardListByUser(@PathVariable Long userId, @PageableDefault(size = 10) Pageable pageable){
+    public BaseResponse findBoardListByUser(@PathVariable Long userId, @PageableDefault(size = 8) Pageable pageable){
         UserBoardResponseInListFormat listFormat = boardService.findBoardListByUser(pageable, userId);
         return new BaseResponse("성공적으로 유저 글 목록을 불러왔습니다.", listFormat);
     }
