@@ -4,37 +4,40 @@ import styled from "@emotion/styled";
 
 import { useState, useEffect } from "react";
 
-import Pagination from "../../../components/categoryLayout/pagination/Pagination";
+import {Pagination} from "@mui/material";
 import IsNonData from "../../../components/atomic/isNonData/IsNonData";
 import CategoryHttp from "../../../http/categoryHttp";
 import Post from "../../../components/post/Post";
 import AllPagination from "../../../components/categoryLayout/pagination/Pagination";
+import {PaginationWrap} from "../../../components/categoryLayout/cateItem/CateItem";
 
 
 const categoryHttp = new CategoryHttp();
 
 function CateItemAll() {
-    const [allText,setAllText] = useState(null);
+    const [allText,setAllText] = useState(0);
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
 
     const [totalCount, setTotalCount] = useState(0);
     const onChangePagination = (e,p)=> {
-        setCurrentPage(p)
+        setCurrentPage(p - 1)
 
     };
         useEffect(() => {
             (async () => {
                 try {
-                    const { result } = await categoryHttp.getAllBoard(allText);
-                    setPosts(result);
-                    setTotalCount(result.length);
+                    const { result } = await categoryHttp.getAllBoard(currentPage,allText);
+
+                    setPosts(result.boards);
+                    setTotalCount(result.total);
                 } catch (err) {
                     console.log(err);
                 }
             })();
-        }, [allText]);
+        }, [currentPage,allText]);
 
+        console.log(totalCount);
         const FilterPosts = (e) => {
             setAllText(e.target.value)
         };
@@ -54,12 +57,13 @@ function CateItemAll() {
                         posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts}/>
                     }
                 </Ul>
-                <Pagination  count={totalCount}  page={currentPage}   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton />
+                <PaginationWrap > <Pagination  count={totalCount}  page={currentPage + 1 }   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton /></PaginationWrap>
             </>
         );
     }
     export default CateItemAll;
     const Ul = styled.ul`
+      margin-bottom: 20px;
     margin-top:30px;
     min-height: 800px;
     display: flex;

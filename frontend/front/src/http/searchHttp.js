@@ -25,8 +25,16 @@ class SearchHttp extends Http {
             throw  err;
         }
     }
+    getAutoSearchTag = async (text) => {
+        try{
+            return await  this.axios.get(`/main/auto/tag/search/list?keyword=${text}`)
+        }
+        catch (err) {
+            throw  err;
+        }
+    }
 
-    getAutoTag= async (text) => {
+        getAutoTag= async (text) => {
         try{
             return await  this.axios.get(`/main/search/tag/list?keyword=${text}`)
         }

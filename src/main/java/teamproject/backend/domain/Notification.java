@@ -59,7 +59,6 @@ public class Notification {
         return NotificationResponse.builder()
                 .notification_id(id)
                 .user_id(user.getId())
-                .board_id(board.getBoardId())
                 .message(message)
                 .createDate(createDate)
                 .notification_url(notification_url)

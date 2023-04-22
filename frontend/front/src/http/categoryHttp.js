@@ -28,7 +28,7 @@ class CategoryHttp extends Http {
   //글 조회
   getBoard = async id => {
     try {
-      const { data } = await this.axios.get(`board?board_id=${id}`);
+      const { data } = await this.axios.get(`board?board_id=${id}&size=10`);
       return data;
     } catch (err) {
       throw err;
@@ -37,9 +37,9 @@ class CategoryHttp extends Http {
 
   //전제글 목록조회
 
-  getAllBoard = async text => {
+  getAllBoard = async (page,allText) => {
     try {
-      const { data } = await this.axios.get(`board/all/list?${text}`);
+      const { data } = await this.axios.get(`/board/all/list?${page ? `page=${page}` : allText}`);
       return data;
     } catch (err) {
       throw err;

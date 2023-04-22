@@ -22,6 +22,7 @@ import teamproject.backend.user.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -182,7 +183,6 @@ public class BoardController {
      * [GET] /board/all/list 최신순 (기본값)
      * [GET] /board/all/list?sort=liked,desc 좋아요순
      * [GET] /board/all/list?sort=commented,desc 댓글순
-     * @param sort
      * @return
      */
     @GetMapping("/board/all/list")
@@ -201,6 +201,12 @@ public class BoardController {
     @GetMapping("/board/{boardId}/like/{userId}")
     public BaseResponse checkLiked(@PathVariable Long boardId, @PathVariable Long userId){
         CheckUserLikeBoard check = boardService.checkLiked(userId, boardId);
+        return new BaseResponse("유저 좋아요 여부를 조회했습니다.", check);
+    }
+
+    @GetMapping("/like/{userId}/board")
+    public BaseResponse checkLikedList(@PathVariable Long userId, @RequestParam List<Long> boardIds){
+        List<CheckUserLikeBoard> check = boardService.checkLikedList(userId, boardIds);
         return new BaseResponse("유저 좋아요 여부를 조회했습니다.", check);
     }
 }

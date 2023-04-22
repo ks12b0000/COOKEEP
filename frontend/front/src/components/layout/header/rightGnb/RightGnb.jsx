@@ -60,8 +60,7 @@ const RightGnb = ({HandleSearch,searchOn}) => {
       <GnbContainer className={userInfo.isLoggedIn && 'user'}>
         {userInfo.isLoggedIn === false ? (
           <>
-              {searchOn ?  <li><img src={`${process.env.PUBLIC_URL}/image/search-active.png`} alt='검색아이콘'/></li> :
-                  <li><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt='검색아이콘'/></li>}
+              <li onClick={HandleSearch} className={searchOn ? 'active' : 'search' }><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt='검색아이콘'/></li>
             <li>
               <Link to='/login'> 로그인</Link>
             </li>

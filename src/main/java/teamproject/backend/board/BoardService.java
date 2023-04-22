@@ -28,4 +28,6 @@ public interface BoardService {
     UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId);
 
     CheckUserLikeBoard checkLiked(Long userId, Long BoardId);
+
+    List<CheckUserLikeBoard> checkLikedList(Long userId,List<Long> boardIds);
 }

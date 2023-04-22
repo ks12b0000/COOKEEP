@@ -45,36 +45,13 @@ const Container = styled.div`
     }
 `;
 
-const ContainerFalse = styled.div`
-  position: relative;
-  top:0;
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  height: 65px;
-  margin: 0 auto;
-  border:1px solid #ccc;
-  box-shadow: 4px 4px 16px rgba(0,0,0,.1);
-`
 
 
 
 function Header({color,categoryName}) {
-
-
-
-    const [isFocus, setIsFocus] = useState(false);
     const [searchOn,setSearchOn] =useState(false);
     const [bottom,setBottom] =useState(false);
 
-
-    const handleFocus = () => {
-        setIsFocus(true)
-    }
-    const handleClick = () => {
-        setIsFocus(false);
-    }
     const HandleSearch  = () => {
         setSearchOn(!searchOn);
     }
@@ -83,28 +60,6 @@ function Header({color,categoryName}) {
     }
     const onBlur = () => {
         setBottom(false)
-    }
-
-    //css 변수로 제어
-const TitleWrap = styled.div`
-  position: absolute;
-  top:50%;
-  left:50%;
-  transform: translate(-50%,-50%);
-  height: 130px;
-    >p{
-    text-align: center;
-    width: 720px;
-    font-size: 2.2rem;
-    line-height: 45px;
-    color:${color}
-    }
-`
-
-    const Props = {
-      isFocus:isFocus,
-      onFocus:handleFocus,
-      onClick:handleClick
     }
     return (
        <>

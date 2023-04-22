@@ -143,13 +143,7 @@ function WritingForm() {
            setTitleError(false);
        }
 
-       if(tag.length < 5){
-           alert('태그 최소 5자 이상 입력해주세요');
-           setTagError(true);
-           return  false;
-       }else{
-           setTagError(false);
-       }
+
 
 
        if( imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png") {
@@ -222,7 +216,7 @@ function WritingForm() {
                 </QuillBox>
                 <TagInput>
                     <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
-                    {tagError && <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>최소 5자 이상 입력해주세요!!</ErrorText> }
+
                 </TagInput>
                 <Upload>
                  

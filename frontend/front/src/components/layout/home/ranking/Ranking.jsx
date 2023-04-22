@@ -33,6 +33,7 @@ const RankingTitle = styled.h1`
 `
 
 const  RankingUl = styled.ul`
+  min-height: 300px;
   display: flex;
   justify-content: space-around;
   align-items: center;

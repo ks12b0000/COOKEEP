@@ -14,6 +14,7 @@ import CategoryHttp from "../../../../http/categoryHttp";
 SwiperCore.use([Navigation, Pagination]);
 const client = new CategoryHttp();
 function Banner() {
+
     const swiperRef = useRef(null)
 
     const [banner,setBanner] = useState([])
@@ -56,6 +57,7 @@ function Banner() {
     return(
         <BannerWrap >
           <Swiper
+              loop={true}
               allowTouchMove={false}
               ref={swiperRef}
               spaceBetween={30}
@@ -66,7 +68,7 @@ function Banner() {
                   {
                   const title = item.title.split('//');
                   return (
-                      <SwiperSlide key ={item.board_id}>
+                      <SwiperSlide key ={item.board_id} onClick={() => window.location.href=`/category/${item.board_id}`}>
                           <BannrImg > <img src={item.thumbnail} alt=""/></BannrImg>
                           <div className='swiperContents'>
                               <h1>
@@ -101,7 +103,7 @@ function Banner() {
 export default Banner;
 
 const BannrImg =styled.div`
-   
+
   img{
     position: absolute;
     z-index: -1;
@@ -129,7 +131,7 @@ const BannerWrap = styled.section`
   width:100%;
   height: 350px;
   background:#D9D9D9;
-
+  cursor: pointer;
 
 
 
