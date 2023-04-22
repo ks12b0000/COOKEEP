@@ -31,6 +31,46 @@ class AuthHttp extends Http {
         }
     };
 
+    //마이페이지 내가 쓴 글 목록보기
+    getPostList = async (user_id, num) => {
+        try {
+            const res = await this.axios.get(`/auth/user/board/list/${user_id}?page=${num}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    //마이페이지 좋아요 누른 글 목록보기
+    getLikeList = async (user_id, num) => {
+        try {
+            const res = await this.axios.get(`/auth/user/like/list/${user_id}?page=${num}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    //마이페이지 내가 댓글 단 글 목록보기
+    getCommentList = async (user_id, num) => {
+        try {
+            const res = await this.axios.get(`/auth/user/comment/list/${user_id}?page=${num}`);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    //마이페이지 좋아요 다중 삭제
+    deleteLikeList = async (user_id, params) => {
+        try {
+            const res = await this.axios.delete(`auth/user/like/${user_id}`,params);
+            return res;
+        } catch (err) {
+            throw err;
+        }
+    };
+
     //현재 비밀번호 확인
     postCheckPassword = async (user_id, params) => {
         try {

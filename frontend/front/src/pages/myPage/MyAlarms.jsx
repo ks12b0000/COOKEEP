@@ -21,7 +21,7 @@ const MyAlarms = () => {
 
   const [UserInfo, setUserInfo] = useState([]);
 
-  const [Alarms, setAlarms] = useState([1,2]);
+  const [Alarms, setAlarms] = useState([]);
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
   const [Count, setCount] = useState(0);
@@ -35,7 +35,6 @@ const MyAlarms = () => {
     try {
       const res = await authHttp.getMypage(userId);
       setUserInfo(res.data.result);
-      console.log('mypage',res);
     } catch (err) {
       console.log(err);
     }
@@ -48,8 +47,8 @@ const MyAlarms = () => {
         SelectedButton,
       );
       console.log(res);
-      setAlarms(res.data.result.list);
-      setCount(res.data.result.cnt);
+      setAlarms(res.data.result.notificationList);
+      setCount(res.data.result.total);
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
@@ -112,14 +111,15 @@ const MyAlarms = () => {
                   <EmptyText>댓글 알림이 없습니다.</EmptyText>
                   :
                   <>
-                    <ContentBox marginTop='30px'></ContentBox>
-                    <ContentBox></ContentBox>
-                    <ContentBox></ContentBox>
-                    <ContentBox></ContentBox>
-                    <ContentBox></ContentBox>
-                    <ContentBox></ContentBox>
-                    <ContentBox></ContentBox>
-                    <ContentBox></ContentBox>
+                    <ContentsWrap>
+                      {Alarms.map((alarm) => (
+                        <ContentsBox onClick={() => {window.open(alarm.notification_url, '_self')}} key={alarm.notification_id}>
+                          <ContentsText>{alarm.message}</ContentsText>
+                          <ContentsArrow src='/image/mypage-alarms-arrow.png'/>
+                        </ContentsBox>
+                      ))}
+                    </ContentsWrap>
+
                     <Nav>
                     {SelectedButton > 0 && (
                       <Button onClick={() => firstList()}>
@@ -229,7 +229,11 @@ export const EmptyText = styled.div`
   top: -15px;
 `
 
-export const ContentBox = styled.div`
+export const ContentsWrap = styled.div`
+  margin-top: 30px;
+`
+
+export const ContentsBox = styled.div`
   width: 100%;
   height: 5.8vh;
   border: 1px solid #CED4DA;
@@ -237,14 +241,32 @@ export const ContentBox = styled.div`
   margin: 10px 0;
   margin-top: ${props => props.marginTop};
   display: flex;
-  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
 
-  &.hover{
+  &:hover{
     border: 1px solid #FFA590;
   }
+
+  &:active{
+    background-color: #F0F0F0;
+    border: 1px solid #FF4122;
+  }
 `
-export const ContentText = styled.div`
-  
+export const ContentsText = styled.div`
+  font-weight: 400;
+  font-size: 13px;
+`
+
+const ContentsArrow = styled.img`
+    position: absolute;
+    top: 50%;
+    left: 97%;
+    transform: translate(0, -50%);
 `
 
 //페이지네이션
