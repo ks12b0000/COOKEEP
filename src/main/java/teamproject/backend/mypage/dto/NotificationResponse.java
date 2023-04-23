@@ -24,13 +24,16 @@ public class NotificationResponse {
 
     private String notification_url;
 
+    private String userNickName;
+
     @Builder
-    public NotificationResponse(Long notification_id, Long user_id, String message, Date createDate, String notification_url) {
+    public NotificationResponse(Long notification_id, Long user_id, String message, Date createDate, String notification_url, String userNickName) {
         this.notification_id = notification_id;
         this.user_id = user_id;
         this.message = message;
         this.createDate = asString(createDate);
         this.notification_url = notification_url;
+        this.userNickName = userNickName;
     }
 
     private String asString(Date date){
