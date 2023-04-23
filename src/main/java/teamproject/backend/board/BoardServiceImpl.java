@@ -268,6 +268,26 @@ public class BoardServiceImpl implements BoardService{
         return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
+    /**
+     * 좋아요순 10개 가져오기
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListByLikedMore() {
+        List<Board> boards = boardRepository.findTop10ByOrderByLikedDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    /**
+     * 조회순 10개 가져오기
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarViewedByCommentedMore() {
+        List<Board> boards = boardRepository.findTop10ByOrderByViewDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
     public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
         Page<BoardByUserResponse> boards = boardRepository.findBannerByUserId(pageable, userId);
