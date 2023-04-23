@@ -4,11 +4,20 @@ import Http from "./http";
 
 class CategoryHttp extends Http {
   //카테고리 리스트 목록조회
-  getCategoryPostList = async (bool, pages, categoryName) => {
+  getCategoryPostList = async (bool, pages, categoryName,allText) => {
     if (bool) {
       try {
         const { data } = await this.axios.get(
-          `board/list?page=${pages}&category=${categoryName}&size=10`
+          `board/list?category=${categoryName}&page=${pages}&size=10`
+        );
+        return data;
+      } catch (err) {
+        throw err;
+      }
+    }else{
+      try {
+        const { data } = await this.axios.get(
+            `/board/list?category=${categoryName}&${allText}&size=10`
         );
         return data;
       } catch (err) {
