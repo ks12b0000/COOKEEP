@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
         user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
-        notificationSave(user);
 
         return user.getId();
     }
@@ -80,7 +79,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
         userRepository.save(user);
 
         SocialUserInfo userInfo = new SocialUserInfo(user.getId(), user.getUsername(), user.getEmail());
-        notificationSave(user);
 
         return userInfo;
     }
@@ -284,13 +282,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
         FindPwResponse findPwResponse = new FindPwResponse(password);
 
         return findPwResponse;
-    }
-
-    private void notificationSave(User user) {
-        String message = "마이페이지에서 새로운 닉네임을 설정해주세요!";
-        String url = "https://www.teamprojectvv.shop/mypage/" + user.getId();
-        Notification notification = new Notification(user, message, url);
-        notificationRepository.save(notification);
     }
 
     private String getRandomNickname(){
