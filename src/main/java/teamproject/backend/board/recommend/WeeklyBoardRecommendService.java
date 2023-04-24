@@ -33,6 +33,7 @@ public class WeeklyBoardRecommendService extends BoardBannerRecommendService{
     @Override
     public List<Long> updateAll() {
         List<Long> randomIdList = getRandomIdList();
+        deleteAll();
 
         for(Long id : randomIdList){
             Optional<Board> board = boardRepository.findById(id);
