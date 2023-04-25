@@ -268,6 +268,26 @@ public class BoardServiceImpl implements BoardService{
         return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
+    /**
+     * 좋아요순 10개 가져오기
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarListByLikedMore() {
+        List<Board> boards = boardRepository.findTop10ByOrderByLikedDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
+    /**
+     * 조회순 10개 가져오기
+     * @return
+     */
+    public List<BoardResponseInCardFormat> findBoarViewedByCommentedMore() {
+        List<Board> boards = boardRepository.findTop10ByOrderByViewDesc();
+
+        return getBoardResponsesInCardFormat(boards, boards.size());
+    }
+
     public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
         Page<BoardByUserResponse> boards = boardRepository.findBannerByUserId(pageable, userId);
@@ -276,8 +296,28 @@ public class BoardServiceImpl implements BoardService{
 
     public CheckUserLikeBoard checkLiked(Long userId, Long boardId){
         User user = getUserById(userId);
-        Board board = findBoardByBoardId(boardId);
-        boolean check = likeBoardRepository.existsByBoardAndUser(board, user);
-        return new CheckUserLikeBoard(check);
+        return getLikeBoard(user, boardId);
+    }
+
+    private CheckUserLikeBoard getLikeBoard( User user, Long boardId) {
+        Board board = null;
+        boolean check = false;
+        try {
+            board = findBoardByBoardId(boardId);
+            check = likeBoardRepository.existsByBoardAndUser(board, user);
+        }
+        catch (Exception e){
+
+        }
+        return new CheckUserLikeBoard(check, boardId);
+    }
+
+    public List<CheckUserLikeBoard> checkLikedList(Long userId, List<Long> boardIds){
+        User user = getUserById(userId);
+        List<CheckUserLikeBoard> list = new ArrayList<>();
+        for(Long boardId : boardIds){
+            list.add(getLikeBoard(user, boardId));
+        }
+        return list;
     }
 }

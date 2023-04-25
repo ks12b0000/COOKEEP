@@ -15,5 +15,5 @@ public interface SearchRepository extends JpaRepository<SearchKeyword, String> {
 
     List<SearchKeyword> findTop10ByOrderBySearchedDesc();
 
-    List<SearchKeyword> findByKeywordContaining(@Param("keyword") String keyword);
+    List<SearchKeyword> findTop5ByKeywordContaining(@Param("keyword") String keyword);
 }

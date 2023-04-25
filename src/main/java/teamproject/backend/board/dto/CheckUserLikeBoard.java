@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CheckUserLikeBoard {
     boolean like;
+    Long boardId;
 }

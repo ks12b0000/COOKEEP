@@ -36,7 +36,7 @@ public class BoardResponseInDetailFormat {
         this.view = board.getView();
     }
     private String asString(Date date){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
         return format.format(date);
     }
 

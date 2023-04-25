@@ -29,9 +29,9 @@ const MypageNav = (props) => {
             <Box className={props.categoryName === 'posts' ? 'active' : null} onClick={() => navigate(`/mypage/posts/${props.userId}`)} >
             {props.categoryName === 'posts'
                     ? 
-                    <BoxIcon url='/image/mypage-written-w.png' />
+                    <BoxIcon url='/image/mypage-post-w.png' />
                     :
-                    <BoxIcon url='/image/mypage-written.png' />
+                    <BoxIcon url='/image/mypage-post.png' />
                 }       
                 <BoxText className={props.categoryName === 'posts' ? 'active' : null}>내가 작성한 글</BoxText>
             </Box>
@@ -51,7 +51,7 @@ const MypageNav = (props) => {
                     :
                     <BoxIcon url='/image/mypage-comment.png' marginTop='3px'/>
                 }   
-                <BoxText className={props.categoryName === 'comments' ? 'active' : null}>내가 댓글단 글</BoxText>
+                <BoxText className={props.categoryName === 'comments' ? 'active' : null}>내가 댓글 단 글</BoxText>
             </Box>
             <Box className={props.categoryName === 'account' ? 'active' : null} onClick={() => navigate(`/mypage/account/${props.userId}`)}>
             {props.categoryName === 'account'
@@ -81,8 +81,8 @@ const UserWrap = styled.div`
 ` 
 
 const UserImg = styled.div`
-    width:80px;
-    height: 80px;
+    width:75px;
+    height: 75px;
     border-radius: 50px;
     background-color: #D9D9D9;
     margin-right: 24px;
@@ -94,6 +94,7 @@ const UserInfo = styled.div`
         font-size: 14px;
         font-weight: 400;
         margin-bottom: 9px;
+        letter-spacing: -0.5px;
     }
 
     span{
@@ -112,6 +113,8 @@ const Box = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+
     &.active {
            background-color: #FF6242;
         }
@@ -131,11 +134,11 @@ const BoxIcon = styled.div`
 
 const BoxText = styled.div`
     color: #B0B0B0;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     &.active {
             color: white;
-        }
+        } 
 `
 
 export default MypageNav;

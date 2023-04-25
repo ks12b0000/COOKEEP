@@ -121,7 +121,7 @@ public class MainPageServiceImpl implements MainPageService {
      */
     @Override
     public GetAutoSearchList autoSearchList(String keyword) {
-        List<AutoSearchList> autoSearchList = searchRepository.findByKeywordContaining(keyword).stream().map(SearchKeyword::autoSearchList).collect(Collectors.toList());
+        List<AutoSearchList> autoSearchList = searchRepository.findTop5ByKeywordContaining(keyword).stream().map(SearchKeyword::autoSearchList).collect(Collectors.toList());
 
         GetAutoSearchList getAutoSearchList = GetAutoSearchList.builder().autoSearchLists(autoSearchList).build();
 
@@ -135,7 +135,7 @@ public class MainPageServiceImpl implements MainPageService {
      */
     @Override
     public GetAutoSearchList autoTagSearchList(String keyword) {
-        List<AutoSearchList> autoSearchList = tagRepository.findByTagNameContaining(keyword).stream().map(Tag::autoSearchList).collect(Collectors.toList());
+        List<AutoSearchList> autoSearchList = tagRepository.findTop5ByTagNameContaining(keyword).stream().map(Tag::autoSearchList).collect(Collectors.toList());
 
         GetAutoSearchList getAutoSearchList = GetAutoSearchList.builder().autoSearchLists(autoSearchList).build();
 
