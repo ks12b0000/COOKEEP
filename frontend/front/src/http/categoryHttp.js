@@ -64,6 +64,17 @@ class CategoryHttp extends Http {
       throw err;
     }
   };
+
+  //더보기 좋아요 많은순기
+  getMainLikeMore = async () => {
+    try {
+      const { data } = await this.axios.get(`/main/best/liked/list/more`);
+      return data;
+    } catch (err) {
+      throw err;
+    }
+  };
+
   //댓글 많은순 조회
   getCommented = async () => {
     try {
@@ -74,7 +85,15 @@ class CategoryHttp extends Http {
     }
   };
 
-
+  //더보기 댓글많은순 조회
+  getCommentedMore =async () => {
+    try{
+      const {data} = await  this.axios.get(`/main/best/viewed/list/more`);
+      return data;
+    }catch (err) {
+      throw err;
+    }
+  }
   //배너 조회
 
   getBanner  = async () =>{

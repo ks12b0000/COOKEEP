@@ -136,7 +136,7 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/like/list/{user_id}")
-    public BaseResponse likeByUser(@PageableDefault(size = 8) Pageable pageable, @PathVariable Long user_id) {
+    public BaseResponse likeByUser(@PageableDefault(size = 8, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable Long user_id) {
         GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.likeByUser(pageable, user_id);
 
         return new BaseResponse("좋아요 누른 글 목록을 불러왔습니다.", getCommentByUserResponse);
@@ -149,7 +149,7 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/board/list/{user_id}")
-    public BaseResponse boardByUser(@PageableDefault(size = 8) Pageable pageable, @PathVariable Long user_id) {
+    public BaseResponse boardByUser(@PageableDefault(size = 8, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable Long user_id) {
         GetBoardByUserResponse getBoardByUserResponse = myPageService.boardByUser(pageable, user_id);
 
         return new BaseResponse("내가 쓴 글 목록을 불러왔습니다.", getBoardByUserResponse);
@@ -189,7 +189,7 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/auth/user/comment/list/{user_id}")
-    public BaseResponse commentByUser(@PageableDefault(size = 8) Pageable pageable, @PathVariable Long user_id) {
+    public BaseResponse commentByUser(@PageableDefault(size = 8, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable Long user_id) {
         GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.commentByUser(pageable, user_id);
 
         return new BaseResponse("내가 댓글 단 글 목록을 불러왔습니다.", getCommentByUserResponse);

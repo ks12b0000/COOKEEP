@@ -99,34 +99,30 @@ const ReplyList = props => {
     }
   };
 
-  //아이콘창 켜기 기능
-  const onIcon = (e, id) => {
+  //켜기 기능
+  const onItem = (e, id, item) => {
     e.stopPropagation();
     const copyList = [...Replys];
-    copyList.find(reply => reply.reply_id === id).icon_selected = true;
+    copyList.find(reply => reply.reply_id === id)[item + '_selected'] = true;
     setReplys(copyList);
+    console.log('Page', Page.length);
   };
 
-  //아이콘창 닫기 기능
-  const offIcon = id => {
+  //닫기 기능
+  const offItem = (e, id, item) => {
+    e.stopPropagation();
     const copyList = [...Replys];
-    copyList.find(reply => reply.reply_id === id).icon_selected = false;
+    copyList.find(reply => reply.reply_id === id)[item + '_selected'] = false;
     setReplys(copyList);
   };
 
-  //대댓글 수정창 켜기 기능
-  const onEdit = (id, text) => {
+  //댓글 수정창 켜기 기능
+  const onEdit = (e, id, text) => {
+    e.stopPropagation();
     const copyList = [...Replys];
     copyList.find(reply => reply.reply_id === id).edit_selected = true;
     setReplys(copyList);
     setEditComment(text);
-  };
-
-  //대댓글 수정창 닫기 기능
-  const offEdit = id => {
-    const copyList = [...Replys];
-    copyList.find(reply => reply.reply_id === id).edit_selected = false;
-    setReplys(copyList);
   };
 
   //대댓글 삭제 기능
@@ -147,10 +143,10 @@ const ReplyList = props => {
   };
 
   return (
-    <>
+    <Wrap>
+      <ReplyArrow src='/image/reply-arrow.png' Length={Replys.length} />
       {Replys?.map(reply => (
         <CommentWrap key={reply.reply_id}>
-          <ReplyArrow src='/image/reply-arrow.png' />
           <Profile />
           <CommentBlock>
             <TextWrap>
@@ -175,7 +171,7 @@ const ReplyList = props => {
                 <EditButton
                   src='/image/edit-icon.png'
                   alt='edit-button'
-                  onClick={e => onIcon(e, reply.reply_id)}
+                  onClick={e => onItem(e, reply.reply_id, 'icon')}
                 />
                 {reply.icon_selected && (
                   <>
@@ -196,7 +192,7 @@ const ReplyList = props => {
                             작성글 보기
                           </div>
                           <div
-                            onClick={() => onEdit(reply.reply_id, reply.text)}
+                            onClick={e => onEdit(e, reply.reply_id, reply.text)}
                           >
                             수정하기
                           </div>
@@ -204,7 +200,9 @@ const ReplyList = props => {
                             삭제하기
                           </div>
                         </EditBox>
-                        <EditBoxBack onClick={() => offIcon(reply.reply_id)} />
+                        <EditBoxBack
+                          onClick={e => offItem(e, reply.reply_id, 'icon')}
+                        />
                       </>
                     ) : (
                       <>
@@ -223,7 +221,9 @@ const ReplyList = props => {
                             작성글 보기
                           </div>
                         </EditBox>
-                        <EditBoxBack onClick={() => offIcon(reply.reply_id)} />
+                        <EditBoxBack
+                          onClick={e => offItem(e, reply.reply_id, 'icon')}
+                        />
                       </>
                     )}
                   </>
@@ -245,7 +245,7 @@ const ReplyList = props => {
                   </Edit2Button>
                   <Edit2Button
                     left='92%'
-                    onClick={() => offEdit(reply.reply_id)}
+                    onClick={e => offItem(e, reply.reply_id, 'edit')}
                   >
                     취소
                   </Edit2Button>
@@ -257,8 +257,7 @@ const ReplyList = props => {
       ))}
 
       {/* 페이지 네이션 */}
-      {Replys.length!==0
-      &&
+      {Replys.length !== 0 && (
         <Nav>
           {SelectedButton > 0 && (
             <Button onClick={() => firstList()}>
@@ -285,13 +284,19 @@ const ReplyList = props => {
               <DoubleArrow url='/image/double-arrow-right.png' />
             </Button>
           )}
-        </Nav>  
-      }
-      
+        </Nav>
+      )}
+
       {Replys.length !== 0 && <Line />}
-    </>
+    </Wrap>
   );
 };
+
+const Wrap = styled.div`
+  width: 1270px;
+  height: auto;
+  position: relative;
+`
 
 const CommentWrap = styled.div`
   width: 1270px;
@@ -301,12 +306,16 @@ const CommentWrap = styled.div`
   grid-template-columns: 8% 92%;
   justify-content: space-between;
   margin: 10px 0 0 0;
+
+  @media screen and (max-width: 1700px) {
+    width: 1130px;
+  }
 `;
 
 const ReplyArrow = styled.img`
   position: absolute;
-  top: 35px;
-  left: -60px;
+  top: ${props=>props.Length?'34px':'14px'};
+  left: -70px;
 `;
 
 const Profile = styled.div`
@@ -375,16 +384,19 @@ const ContentBlock = styled.div`
 const ContentTextWrap = styled.div`
   display: grid;
   width: 1194px;
-  grid-template-columns: 96% 1%;
+  grid-template-columns: 98% 1%;
   justify-content: space-between;
   position: relative;
+
+  @media screen and (max-width: 1700px) {
+    width: 1075px;
+  }
 `;
 
 const ContentText = styled.div`
   font-size: 15px;
   display: block;
   border: 2px solid #f0f0f0;
-  width: 100%;
   padding: 24px 16px;
   border-radius: 10px;
   box-sizing: border-box;

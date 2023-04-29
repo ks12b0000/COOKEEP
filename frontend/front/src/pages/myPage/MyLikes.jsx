@@ -3,9 +3,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import AuthHttp from '../../http/authHttp';
-import Layout from "../../components/layout/Layout";
+import Layout from '../../components/layout/Layout';
 import MypageNav from '../../components/mypage/myPageNav';
-import { Button, Arrow, DoubleArrow } from '../../components/comment/CommentList'
+import {
+  Button,
+  Arrow,
+  DoubleArrow,
+} from '../../components/comment/CommentList';
 
 const authHttp = new AuthHttp();
 
@@ -25,7 +29,9 @@ const MyLikes = () => {
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
   const [Count, setCount] = useState(0);
-  
+  const [IsEdit, setIsEdit] = useState(false);
+  const [BoardIdList, setBoardIdList] = useState([]);
+
   useEffect(() => {
     onMypage();
     getLikeList();
@@ -44,10 +50,7 @@ const MyLikes = () => {
   //좋아요한 게시글 리스트 불러오기
   const getLikeList = async () => {
     try {
-      const res = await authHttp.getLikeList(
-        userId,
-        SelectedButton,
-      );
+      const res = await authHttp.getLikeList(userId, SelectedButton);
       console.log(res);
       setLikes(res.data.result.commentList);
       setCount(res.data.result.total);
@@ -60,23 +63,34 @@ const MyLikes = () => {
   };
 
   //좋아요 한 게시글 리스트 다중삭제
-  const onDeletLikeList = async (e) => {
+  const onDeletLikeList = async e => {
     e.preventDefault();
 
-    const body = {
-
-    };
+    const params = {
+      'boardIdList' : BoardIdList
+    }
 
     try {
-        
+      const res = await authHttp.deleteLikeList(userId, params);
+      console.log(res);
     } catch (err) {
-
+      console.log(err);
     }
-  }
+  };
+
+  const handleBoardIdList = boardId => {
+    if (BoardIdList.includes(boardId)) {
+      // 이미 체크한 보드를 다시 클릭한 경우
+      setBoardIdList(BoardIdList.filter(id => id !== boardId));
+    } else {
+      // 체크하지 않은 보드를 클릭한 경우
+      setBoardIdList([...BoardIdList, boardId]);
+    }
+  };
 
   // 페이지 네이션 함수
   //넘버 버튼으로 페이지 불러오기
-  const pageList = (pageNum) => {
+  const pageList = pageNum => {
     setSelectedButton(pageNum);
   };
 
@@ -111,69 +125,143 @@ const MyLikes = () => {
   return (
     <Layout>
       <Wrap>
-      <Text>마이페이지</Text>
-      {username === UserInfo.username ? (
-        <>           
+        <Text>마이페이지</Text>
+        {username === UserInfo.username ? (
+          <>
             <BoxWrap>
-              <MypageNav userNickName={UserInfo.nickname} userName={UserInfo.username} userEmail={UserInfo.email} categoryName='likes' userId={userId} />
+              <MypageNav
+                userNickName={UserInfo.nickname}
+                userName={UserInfo.username}
+                userEmail={UserInfo.email}
+                categoryName='likes'
+                userId={userId}
+              />
               <PageWrap>
-                <EditButton>편집</EditButton>
-                <RedIconWrap>
-                  <RedIcon>
-                    <img src='/image/mypage-like-r.png' alt='icon'/>
-                  </RedIcon>
-                  <IconText>내가 좋아요한 글</IconText>
-                </RedIconWrap>
-                {Likes.length === 0
-                  ?
+                <TopWrap>
+                  <RedIconWrap>
+                    <RedIcon>
+                      <img src='/image/mypage-like-r.png' alt='icon' />
+                    </RedIcon>
+                    <IconText>내가 좋아요한 글</IconText>
+                  </RedIconWrap>
+                  {IsEdit ? (
+                    <ButtonWrap>
+                      <EditButton
+                        backColor='white'
+                        border='1px solid #FF4122'
+                        color='#FF4122'
+                        marginRight
+                        onClick={() => setIsEdit(false)}
+                      >
+                        취소
+                      </EditButton>
+                      {BoardIdList.length !== 0 ? (
+                        <EditButton
+                          backColor='#FF4122'
+                          border='1px solid #FF4122'
+                          color='white'
+                          onClick={e => onDeletLikeList(e)}
+                        >
+                          삭제
+                        </EditButton>
+                      ) : (
+                        <EditButton
+                          backColor='#F0F0F0'
+                          border='1px solid #F0F0F0'
+                          color='white'
+                          cursor='true'
+                        >
+                          삭제
+                        </EditButton>
+                      )}
+                    </ButtonWrap>
+                  ) : (
+                    <EditButton
+                      backColor='#FF4122'
+                      border='1px solid #FF4122'
+                      color='white'
+                      onClick={() => setIsEdit(true)}
+                    >
+                      편집
+                    </EditButton>
+                  )}
+                </TopWrap>
+                {Likes.length === 0 ? (
                   <EmptyText>좋아요 누른 글이 없습니다.</EmptyText>
-                  :
+                ) : (
                   <>
                     <ContentsWrap>
-                      {Likes.map((like) => (
-                        <ContentsBox onClick={() => { window.open(`https://www.teamprojectvv.shop/category/${like.board_id}`, '_self') }} key={like.board_id}>
-                          <ContentsText>{like.title}</ContentsText>
-                          <ContentsArrow src='/image/mypage-alarms-arrow.png'/>
-                        </ContentsBox>
+                      {Likes.map(like => (
+                        <ImgTextWrap key={like.board_id}>
+                          {IsEdit && (
+                            <>
+                              {BoardIdList.includes(like.board_id) ? (
+                                <CheckImg
+                                  src='/image/mylike-check.png'
+                                  onClick={e =>
+                                    handleBoardIdList(like.board_id)
+                                  }
+                                />
+                              ) : (
+                                <CheckImg
+                                  src='/image/mylike-check-x.png'
+                                  onClick={e =>
+                                    handleBoardIdList(like.board_id)
+                                  }
+                                />
+                              )}
+                            </>
+                          )}
+                          <ContentsBox
+                            onClick={() => {
+                              window.open(
+                                `https://www.teamprojectvv.shop/category/${like.board_id}`,
+                                '_self'
+                              );
+                            }}
+                          >
+                            <ContentsText>{like.title}</ContentsText>
+                            <ContentsArrow src='/image/mypage-alarms-arrow.png' />
+                          </ContentsBox>
+                        </ImgTextWrap>
                       ))}
                     </ContentsWrap>
 
                     <Nav>
-                    {SelectedButton > 0 && (
-                      <Button onClick={() => firstList()}>
-                        <DoubleArrow url='/image/double-arrow-left.png' />
+                      {SelectedButton > 0 && (
+                        <Button onClick={() => firstList()}>
+                          <DoubleArrow url='/image/double-arrow-left.png' />
+                        </Button>
+                      )}
+                      <Button onClick={() => leftList()}>
+                        <Arrow url='/image/arrow-left.png' />
                       </Button>
-                    )}
-                    <Button onClick={() => leftList()}>
-                      <Arrow url='/image/arrow-left.png' />
-                    </Button>
-                    {Page.map((page, i) => (
-                      <Button
-                        key={i}
-                        onClick={() => pageList(page)}
-                        aria-current={page === SelectedButton ? 'true' : null}
-                      >
-                        {page + 1}
+                      {Page.map((page, i) => (
+                        <Button
+                          key={i}
+                          onClick={() => pageList(page)}
+                          aria-current={page === SelectedButton ? 'true' : null}
+                        >
+                          {page + 1}
+                        </Button>
+                      ))}
+                      <Button onClick={() => rightList()}>
+                        <Arrow url='/image/arrow-right.png' />
                       </Button>
-                    ))}
-                    <Button onClick={() => rightList()}>
-                      <Arrow url='/image/arrow-right.png' />
-                    </Button>
-                    {SelectedButton < Page.length - 1 && (
-                      <Button onClick={() => lastList()}>
-                        <DoubleArrow url='/image/double-arrow-right.png' />
-                      </Button>
-                    )}
-                  </Nav>
+                      {SelectedButton < Page.length - 1 && (
+                        <Button onClick={() => lastList()}>
+                          <DoubleArrow url='/image/double-arrow-right.png' />
+                        </Button>
+                      )}
+                    </Nav>
                   </>
-                }
+                )}
               </PageWrap>
             </BoxWrap>
-        </>
-      ) : 
-      (
-        navigate('/notfound')
-          )}
+          </>
+        ) : (
+          navigate('/notfound')
+        )}
       </Wrap>
     </Layout>
   );
@@ -186,17 +274,17 @@ export const Wrap = styled.div`
   margin-bottom: 10vh;
 
   @media screen and (max-width: 1700px) {
-       width: 1300px;
-    }
-`
+    width: 1300px;
+  }
+`;
 
 export const Text = styled.div`
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 20px;
   margin-top: 3vh;
-  color: #ED3419;
-`
+  color: #ed3419;
+`;
 
 export const BoxWrap = styled.div`
   width: 100%;
@@ -208,48 +296,60 @@ export const BoxWrap = styled.div`
 `;
 
 export const PageWrap = styled.div`
-    width: 100%;
-    height: 100%;
-    border: 1px solid #FF6242;
-    border-radius: 10px;
-    padding: 30px 25px;
-    box-sizing: border-box;
-    position: relative;
-`
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ff6242;
+  border-radius: 10px;
+  padding: 30px 25px;
+  box-sizing: border-box;
+  position: relative;
+`;
+
+const TopWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 const EditButton = styled.div`
-  position: absolute;
-  top: 18px;
-  left: 84.7%;
-  width: 120px;
-  height: 45px;
+  width: 110px;
+  height: 40px;
   border-radius: 5px;
-  background-color: #FF4122;
+  background-color: ${props => props.backColor};
+  border: ${props => props.border};
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: ${props => props.color};
   font-weight: 500;
   font-size: 16px;
-`
+  margin-right: ${props => (props.marginRight ? '10px' : '')};
+  cursor: ${props => (props.cursor ? '' : 'pointer')};
+`;
+
+const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 export const RedIconWrap = styled.div`
   display: flex;
-`
+`;
 
 export const RedIcon = styled.div`
   width: 23px;
   height: 23px;
   padding-top: 2px;
   box-sizing: border-box;
-`
+`;
 
 export const IconText = styled.div`
   font-size: 18px;
   font-weight: 800;
-  color: #FB3B1E;
+  color: #fb3b1e;
   margin-left: 6px;
-`
+`;
 
 export const EmptyText = styled.div`
   width: 100%;
@@ -261,18 +361,32 @@ export const EmptyText = styled.div`
   justify-content: center;
   font-size: 18px;
   font-weight: 700;
-  color: #FB3B1E;
+  color: #fb3b1e;
   top: -15px;
-`
+`;
 
 export const ContentsWrap = styled.div`
   margin-top: 30px;
-`
+`;
+
+const ImgTextWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CheckImg = styled.img`
+  margin-right: 11px;
+  cursor: pointer;
+
+  @media screen and (max-width: 1700px) {
+    width: 28px;
+  }
+`;
 
 export const ContentsBox = styled.div`
   width: 100%;
   height: 5.8vh;
-  border: 1px solid #CED4DA;
+  border: 1px solid #ced4da;
   border-radius: 10px;
   margin: 10px 0;
   margin-top: ${props => props.marginTop};
@@ -284,26 +398,27 @@ export const ContentsBox = styled.div`
   transition: 0.2s;
   position: relative;
 
-  &:hover{
-    border: 1px solid #FFA590;
+  &:hover {
+    border: 1px solid #ffa590;
   }
 
-  &:active{
-    background-color: #F0F0F0;
-    border: 1px solid #FF4122;
+  &:active {
+    background-color: #f0f0f0;
+    border: 1px solid #ff4122;
   }
-`
+`;
+
 export const ContentsText = styled.div`
   font-weight: 400;
   font-size: 13px;
-`
+`;
 
 const ContentsArrow = styled.img`
-    position: absolute;
-    top: 50%;
-    left: 97%;
-    transform: translate(0, -50%);
-`
+  position: absolute;
+  top: 50%;
+  left: 97%;
+  transform: translate(0, -50%);
+`;
 
 //페이지네이션
 export const Nav = styled.nav`
