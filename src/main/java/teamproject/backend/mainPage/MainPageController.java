@@ -104,6 +104,28 @@ public class MainPageController {
     }
 
     /**
+     * 좋아요순 10개 가져오기
+     * [GET] /main/best/liked/list/more
+     * @return
+     */
+    @GetMapping("/main/best/liked/list/more")
+    public BaseResponse boardListOrderByLikedMore() {
+        List<BoardResponseInCardFormat> pages = boardService.findBoarListByLikedMore();
+        return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
+    }
+
+    /**
+     * 조회순 10개 가져오기
+     * [GET] /main/best/viewed/list/more
+     * @return
+     */
+    @GetMapping("/main/best/viewed/list/more")
+    public BaseResponse boardListOrderByCommentedMore(){
+        List<BoardResponseInCardFormat> pages = boardService.findBoarViewedByCommentedMore();
+        return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
+    }
+
+    /**
      * 알림 목록 가져오기
      * [GET] /auth/main/user/notification/list/{user_id}
      * @param user_id

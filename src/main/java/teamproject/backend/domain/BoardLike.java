@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import teamproject.backend.mypage.dto.LikeAndCommentByUserResponse;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -33,9 +34,13 @@ public class BoardLike {
     @Column(nullable = false)
     private boolean status; // true = 좋아요, false = 좋아요 취소
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
     public BoardLike(Board board, User user) {
         this.board = board;
         this.user = user;
+        this.createDate = new Date(System.currentTimeMillis());
         this.status = true;
     }
 

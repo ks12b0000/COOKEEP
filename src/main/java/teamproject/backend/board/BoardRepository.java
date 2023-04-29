@@ -39,6 +39,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findTop5ByOrderByViewDesc();
 
+    List<Board> findTop10ByOrderByLikedDesc();
+
+    List<Board> findTop10ByOrderByViewDesc();
+
     @Transactional
     @Modifying
     @Query("update Board q set q.view = q.view + 1 where q.boardId = :boardId")
