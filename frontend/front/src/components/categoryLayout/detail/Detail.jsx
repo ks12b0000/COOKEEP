@@ -60,6 +60,14 @@ function Detail() {
     }
   };
 
+  const OffLikeModal = () => {
+    setIsModal(false);
+  }
+
+  const MoveLikeModal = () => {
+    navigate('/login');
+  }
+
   const onLike = async e => {
     e.preventDefault();
     if (isLoggedIn === false) {
@@ -98,6 +106,28 @@ function Detail() {
     setOpenModal: controller,
     onClick: FetchDelete,
   };
+
+  const LikeProps = {
+        body:{
+            text:'로그인 후 이용 가능합니다.',
+            icon:(
+                <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt=""/>
+            )
+        },
+
+        buttons:{
+            btn:[
+                {
+                    text:'취소',
+                    onClick: OffLikeModal,
+                },
+                {
+                    text:'로그인',
+                    onClick: MoveLikeModal,
+                }
+            ]
+        }
+  }
 
   return (
     <>
@@ -189,21 +219,7 @@ function Detail() {
       {isOpen && <Alert {...Props} />}
       <Footer />
 
-      {IsModal && (
-        <>
-          <ModalBack />
-          <ModalWrap>
-            <ModalIcon src='/image/modal-icon.png' />
-            <ModalText>로그인 후 이용 가능합니다.</ModalText>
-            <Line1 />
-            <ButtonWrap>
-              <Button onClick={() => setIsModal(false)}>취소</Button>
-              <Line2 />
-              <Button onClick={() => navigate('/login')}>로그인</Button>
-            </ButtonWrap>
-          </ModalWrap>
-        </>
-      )}
+      {IsModal && <Alert {...LikeProps} />}
     </>
   );
 }
@@ -212,6 +228,10 @@ export default Detail;
 const Container = styled.article`
   width: 1440px;
   margin: 0 auto;
+
+  @media screen and (max-width: 1700px) {
+    width: 1300px;
+  }
 `;
 
 const TopContainer = styled.div`
@@ -296,82 +316,5 @@ const TopBody = styled.div`
   font-size: 16px;
   line-height: 23px;
   color: #3e4145;
-`;
-
-//모달창 디자인
-const ModalBack = styled.div`
-  height: 100%;
-  width: 100vw;
-  background-color: black;
-  opacity: 0.4;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  touch-action: none;
-  z-index: 100;
-`;
-
-const ModalWrap = styled.div`
-  width: 500px;
-  height: 256px;
-  background-color: white;
-  border-radius: 10px;
-  position: fixed;
-  top: 46%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 101;
-`;
-
-const ModalIcon = styled.img`
-  margin-top: 70px;
-`;
-
-const ModalText = styled.div`
-  font-size: 16px;
-  font-weight: 700;
-  color: black;
-  margin-top: 19px;
-`;
-
-const Line1 = styled.div`
-  width: 100%;
-  height: 0.1px;
-  background-color: #616060;
-  margin-top: 66px;
-  margin-top: auto;
-`;
-
-const ButtonWrap = styled.div`
-  width: 100%;
-  height: 56px;
-  display: grid;
-  grid-template-columns: 49% 1% 49%;
-`;
-
-const Button = styled.div`
-  display: flex;
-  font-size: 16px;
-  color: #5a5c5f;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  font-weight: 700;
-  transition: 0.2s;
-  cursor: pointer;
-
-  &:hover {
-    color: #ff4122;
-  }
-`;
-
-const Line2 = styled.div`
-  height: 56px;
-  width: 0.1px;
-  background-color: #616060;
 `;
 

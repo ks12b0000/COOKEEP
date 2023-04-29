@@ -64,7 +64,7 @@ class AuthHttp extends Http {
     //마이페이지 좋아요 다중 삭제
     deleteLikeList = async (user_id, params) => {
         try {
-            const res = await this.axios.delete(`auth/user/like/${user_id}`,params);
+            const res = await this.axios.delete(`/auth/user/like/list/${user_id}`,params);
             return res;
         } catch (err) {
             throw err;
