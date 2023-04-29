@@ -4,7 +4,7 @@ import Category from "../Category";
 function Etc() {
 
     const Props ={
-        title:'기타 컨텐츠',
+        title:'기타',
         categoryName:'기타'
     }
     return (
