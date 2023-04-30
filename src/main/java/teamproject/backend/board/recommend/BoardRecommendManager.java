@@ -43,9 +43,9 @@ public class BoardRecommendManager implements RecommendManager<Board> {
 
             for(RecommendService<Board, ?> service : serviceList){
                 Long updateId = service.update(deleteId);
-                deleteStore(deleteId, service);
                 insertStore(updateId, service);
             }
+            store.remove(deleteId);
         }
     }
 
@@ -86,13 +86,7 @@ public class BoardRecommendManager implements RecommendManager<Board> {
 
     private void deleteStore(Long id, RecommendService<Board, ?> targetService){
         if(store.containsKey(id)){
-            List<RecommendService<Board, ?>> list = store.get(id);
-            for(int i = 0 ; i < list.size(); i++){
-                if (list.get(i).equals(targetService)){
-                    list.remove(i);
-                    return;
-                }
-            }
+            targetService.update(id);
         }
     }
 }

@@ -137,7 +137,17 @@ class CategoryHttp extends Http {
   //좋아요 여부 확인
   getisLiked = async (boardId, userId) => {
     try {
-      return await this.axios.get(`board/${boardId}/like/${userId}`);
+        return await this.axios.get(`board/${boardId}/like/${userId}`);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //좋ㅇ하요 복수 확인
+  getisLikeds = async (boardId, userId) => {
+    let boardIds= `boardIds=${boardId}`;
+    try {
+      return await this.axios.get(`/like/${userId}/board?${boardIds}`);
     } catch (err) {
       throw err;
     }

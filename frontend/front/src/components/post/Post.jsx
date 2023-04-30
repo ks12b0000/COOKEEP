@@ -4,10 +4,10 @@ import PostLike from './PostLike';
 import CategoryHttp from "../../http/categoryHttp";
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-
+const categoryHttp = new CategoryHttp();
 function Post({data}) {
     const boradId  =data.map((item) => item.board_id);
-    const categoryHttp = new CategoryHttp();
+    console.log(boradId);
 
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
     const { isLoggedIn } = useSelector(
@@ -16,21 +16,18 @@ function Post({data}) {
     const [IsLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
-        checkIsLiked()
-    }, []);
+            (async () => {
+                {
+                    try {
+                            const res = await categoryHttp.getisLikeds(boradId, userId);
+                            setIsLiked(res.data.result.map((item) => item.like));
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            })()
+    }, [(boradId[0] > 0 && isLoggedIn)]);
 
-    // 좋아요 눌렀는지 여부 체크
-
-    const checkIsLiked = async () => {
-        if(isLoggedIn===true){
-            try {
-                const res = await categoryHttp.getisLiked([boradId], userId);
-                setIsLiked(res.data.result.like);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    };
 
 
     return(
@@ -62,7 +59,7 @@ function Post({data}) {
                   <TextBoxRight>
                     <IconWrap>
                       <IconImg>
-                        <PostLike boardId={item.board_id}/>
+                          {IsLiked[index]? <img src='/image/post-like-fill.png' alt='' /> : <img src="/image/post-like.png" alt=""/> }
                       </IconImg>
                       <span>{item.liked}</span>
                     </IconWrap>
