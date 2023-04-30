@@ -27,15 +27,15 @@ const CommentList = props => {
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
   const [Count, setCount] = useState(0);
-  const [IsModal, setIsModal] = useState(false);
+  // const [IsModal, setIsModal] = useState(false);
 
-  const onModal = () => {
-    setIsModal(true);
-  };
+  // const onModal = () => {
+  //   setIsModal(true);
+  // };
 
-  const changeModal = state => {
-    setIsModal(state);
-  };
+  // const changeModal = state => {
+  //   setIsModal(state);
+  // };
 
   useEffect(() => {
     getList();
@@ -52,6 +52,7 @@ const CommentList = props => {
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
+      console.log('댓글리스트', res);
     } catch (err) {
       console.log(err);
     }
@@ -114,8 +115,7 @@ const CommentList = props => {
   };
 
   //켜기 기능
-  const onItem = (e, id, item) => {
-    e.stopPropagation();
+  const onItem = (id, item) => {
     const copyList = [...Comments];
     copyList.find(comment => comment.comment_id === id)[
       item + '_selected'
@@ -125,8 +125,7 @@ const CommentList = props => {
   };
 
   //닫기 기능
-  const offItem = (e, id, item) => {
-    e.stopPropagation();
+  const offItem = (id, item) => {
     const copyList = [...Comments];
     copyList.find(comment => comment.comment_id === id)[
       item + '_selected'
@@ -135,8 +134,7 @@ const CommentList = props => {
   };
 
   //댓글 수정창 켜기 기능
-  const onEdit = (e, id, text) => {
-    e.stopPropagation();
+  const onEdit = (id, text) => {
     const copyList = [...Comments];
     copyList.find(comment => comment.comment_id === id).edit_selected = true;
     setComments(copyList);
@@ -167,7 +165,7 @@ const CommentList = props => {
                 <EditButton
                   src='/image/edit-icon.png'
                   alt='edit-button'
-                  onClick={e => onItem(e, comment.comment_id, 'icon')}
+                  onClick={()=> onItem(comment.comment_id, 'icon')}
                 />
 
                 {comment.icon_selected && (
@@ -189,17 +187,17 @@ const CommentList = props => {
                             작성글 보기
                           </div>
                           <div
-                            onClick={e =>
-                              onEdit(e, comment.comment_id, comment.text)
+                            onClick={()=>
+                              onEdit(comment.comment_id, comment.text)
                             }
                           >
                             수정하기
                           </div>
                           {/* <div onClick={e => onDelete(e, comment.comment_id)}> */}
-                          <div onClick={() => onModal()}>삭제하기</div>
+                          <div onClick={() => onItem(comment.comment_id, 'modal')}>삭제하기</div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={e => offItem(e, comment.comment_id, 'icon')}
+                          onClick={() => offItem(comment.comment_id, 'icon')}
                         />
                       </>
                     ) : (
@@ -220,7 +218,7 @@ const CommentList = props => {
                           </div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={e => offItem(e, comment.comment_id, 'icon')}
+                          onClick={()=> offItem(comment.comment_id, 'icon')}
                         />
                       </>
                     )}
@@ -235,17 +233,15 @@ const CommentList = props => {
                     type='text'
                     onChange={e => setEditComment(e.currentTarget.value)}
                   />
-                  <Edit2Button
-                    left='86.5%'
+                  <Edit1Button
                     onClick={e =>
                       submitEdit(e, comment.comment_id, comment.text)
                     }
                   >
                     확인
-                  </Edit2Button>
+                  </Edit1Button>
                   <Edit2Button
-                    left='91%'
-                    onClick={e => offItem(e, comment.comment_id, 'edit')}
+                    onClick={()=> offItem(comment.comment_id, 'edit')}
                   >
                     취소
                   </Edit2Button>
@@ -254,11 +250,11 @@ const CommentList = props => {
             </ContentBlock>
 
             {comment.reply_selected ? (
-              <ReplyText onClick={e => offItem(e, comment.comment_id, 'reply')}>
+              <ReplyText onClick={()=> offItem(comment.comment_id, 'reply')}>
                 {`대댓글 닫기 (${comment.replyCount})`}
               </ReplyText>
             ) : (
-              <ReplyText onClick={e => onItem(e, comment.comment_id, 'reply')}>
+              <ReplyText onClick={()=> onItem(comment.comment_id, 'reply')}>
                 {`대댓글 보기 (${comment.replyCount})`}
               </ReplyText>
             )}
@@ -273,9 +269,9 @@ const CommentList = props => {
               </ReplyWrap>
             )}
           </CommentBlock>
-          {IsModal && (
+          {comment.modal_selected && (
             <CommentDelete
-              changeModal={changeModal}
+              offItem={offItem}
               commentId={comment.comment_id}
               userId={userId}
             />
@@ -495,6 +491,30 @@ const EditBlock = styled.input`
     letter-spacing: 2px;
     color: #aaaaaa;
   }
+
+  @media screen and (max-width: 1700px) {
+    width: 1184px;
+  }
+`;
+
+const Edit1Button = styled.div`
+  background-color: #ff4122;
+  width: 20px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  position: absolute;
+  top: 49%;
+  left: 88%;
+  padding: 5px 14px;
+  border-radius: 5px;
+  transition: 0.2s;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    top: 45%;
+  }
 `;
 
 const Edit2Button = styled.div`
@@ -505,7 +525,7 @@ const Edit2Button = styled.div`
   font-weight: 500;
   position: absolute;
   top: 49%;
-  left: ${props => props.left};
+  left: 92.3%;
   padding: 5px 14px;
   border-radius: 5px;
   transition: 0.2s;
