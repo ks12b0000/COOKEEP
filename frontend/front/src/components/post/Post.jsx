@@ -7,8 +7,7 @@ import {useEffect, useState} from "react";
 const categoryHttp = new CategoryHttp();
 function Post({data}) {
     const boradId  =data.map((item) => item.board_id);
-
-
+    console.log(boradId);
 
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
     const { isLoggedIn } = useSelector(
@@ -17,19 +16,17 @@ function Post({data}) {
     const [IsLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
-        (async () => {
-            if(isLoggedIn){
-                try {
-                    const res = await categoryHttp.getisLikeds(boradId, userId);
-                    setIsLiked(res.data.result.map((item) => item.like));
-
-
-                } catch (err) {
-                    console.log(err);
+            (async () => {
+                {
+                    try {
+                            const res = await categoryHttp.getisLikeds(boradId, userId);
+                            setIsLiked(res.data.result.map((item) => item.like));
+                    } catch (err) {
+                        console.log(err);
+                    }
                 }
-            }
-        })()
-    }, []);
+            })()
+    }, [(boradId[0] > 0 && isLoggedIn)]);
 
 
 
@@ -62,7 +59,7 @@ function Post({data}) {
                   <TextBoxRight>
                     <IconWrap>
                       <IconImg>
-                          <PostLike IsLiked={IsLiked} index={index} />
+                          {IsLiked[index]? <img src='/image/post-like-fill.png' alt='' /> : <img src="/image/post-like.png" alt=""/> }
                       </IconImg>
                       <span>{item.liked}</span>
                     </IconWrap>
