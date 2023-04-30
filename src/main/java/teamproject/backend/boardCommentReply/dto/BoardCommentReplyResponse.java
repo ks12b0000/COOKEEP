@@ -19,6 +19,7 @@ public class BoardCommentReplyResponse {
     private String text;
     private boolean edit_selected = false;
     private boolean icon_selected = false;
+    private boolean modal_selected = false;
 
     public BoardCommentReplyResponse(BoardCommentReply reply) {
         this.reply_id = reply.getBoardCommentReplyId();
