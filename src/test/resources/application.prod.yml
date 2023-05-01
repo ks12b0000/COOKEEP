@@ -20,14 +20,12 @@ spring:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
-  sql:
-    init:
-      platform: mysql
+
 cloud:
   aws:
     credentials:
-      accessKey: ${accessKey}       # AWS IAM AccessKey 적기
-      secretKey: ${secretKey}  # AWS IAM SecretKey 적기
+      accessKey: ${accessKey}       # AWS IAM AccessKey ??
+      secretKey: ${secretKey}  # AWS IAM SecretKey ??
     s3:
       bucket: ${bucket}
     region:
