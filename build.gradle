@@ -48,9 +48,9 @@ jar {
 	enabled = false
 }
 
-test.onlyIf {
-	!project.hasProperty('test')
-}
+//test.onlyIf {
+//	!project.hasProperty('test')
+//}
 
 node {
 	version = '16.19.0'
