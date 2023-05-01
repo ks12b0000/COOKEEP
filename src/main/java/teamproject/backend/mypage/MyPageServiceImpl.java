@@ -209,6 +209,7 @@ public class MyPageServiceImpl implements MyPageService {
 
 
     @Override
+    @Transactional
     public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId){
         User user = myPageRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
