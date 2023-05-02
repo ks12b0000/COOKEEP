@@ -64,6 +64,8 @@ jobs:
 #         working-directory: ./backend
 #       with:
 #         arguments: build
+    - name: Test with Gradle
+      run: ./gradlew --info test
     - name: Docker build 
       run: |
        docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
