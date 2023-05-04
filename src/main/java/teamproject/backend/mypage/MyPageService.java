@@ -27,7 +27,7 @@ public interface MyPageService {
     public GetBoardByUserResponse boardByUser(Pageable pageable, Long user_id);
 
 
-    public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId);
+    public void deleteBoardLikes(List<Long> boardIds, Long userId);
 
     public GetNotificationResponse notificationByUser(Long user_id, Pageable pageable);
 
