@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final CookieService cookieService;
-    private final NotificationRepository notificationRepository;
     private final S3DAO s3DAO;
     private static final String DEFAULT_USER_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/default_user_image.png";
 
@@ -50,13 +49,10 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String password = joinRequest.getPassword();
         String salt = SHA256.getSalt();
         String nickname = getRandomNickname();
-        if(nickname == null) nickname = username;
-
         password = SHA256.encrypt(password, salt);
 
-        if (checkIdDuplicate(username)){}
-
         User user = new User(username, nickname, email, password, salt);
+
         user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
@@ -69,11 +65,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Transactional
     public SocialUserInfo joinBySocial(String username, String email){
         checkEmailDuplicate(email);
-
-        User user = new User(username, email, username);
+        String password = username;
+        String salt = SHA256.getSalt();
         String nickname = getRandomNickname();
-        if(nickname == null) nickname = username;
-        user.updateNickname(nickname);
+        password = SHA256.encrypt(password, salt);
+
+        User user = new User(username, nickname, email, password, salt);
+
         user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
