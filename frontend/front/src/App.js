@@ -29,6 +29,8 @@ import SearchTag from "./components/categoryLayout/searchList/SearchTag";
 import MyComments from "./pages/myPage/MyComments";
 import MyAlarms from "./pages/myPage/MyAlarms";
 import MyAccount from "./pages/myPage/MyAccount";
+import PopularityDetail from "./pages/home/PopularityDetail";
+import RankingDetail from "./pages/home/RankingDetail";
 
 function App() {
     const user = useSelector((state) => state);
@@ -45,7 +47,9 @@ function App() {
             <Route path='/mypage/comments/:userId' element={<MyComments />}></Route>
             <Route path='/mypage/account/:userId' element={<MyAccount />}></Route>
           </Route>
-
+          {/*더보기페이지*/}
+          <Route  path="/popularity" element={<PopularityDetail />}/>
+          <Route  path="/rangking" element={<RankingDetail />}/>
           {/*카테고리*/}
           <Route path=':category/writing' element={<Writing />}></Route>
           <Route path='/korea/*' element={<Korean />}></Route>

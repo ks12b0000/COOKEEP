@@ -4,7 +4,7 @@ import Category from "../Category";
 function Japanese() {
 
     const Props ={
-        title:'일식 컨텐츠',
+        title:'일식',
         categoryName:'일식'
     }
     return (

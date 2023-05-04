@@ -34,7 +34,9 @@ public abstract class BoardBannerRecommendService implements RecommendService<Bo
     protected void delete(Long id){
         recommendBanners.remove(id);
     }
-
+    protected void deleteAll(){
+        recommendBanners.clear();
+    }
     public abstract Long update(Long id);
     public abstract List<Long> updateAll();
 }

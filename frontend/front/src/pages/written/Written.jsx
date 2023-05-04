@@ -14,6 +14,7 @@ const Written = () => {
   const [WrittenList, setWrittenList] = useState([]);
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
+  const [Username, setUsername] = useState('');
 
   useEffect(() => {
     onWrittenPage();
@@ -27,6 +28,7 @@ const Written = () => {
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
+      setUsername(res.data.result.username)
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -74,7 +76,7 @@ const Written = () => {
         <UserBlock>
           <UserImg></UserImg>
           <UserText>
-            <span>닉네임</span>집나간호랑이
+            <span>닉네임</span>{Username}
           </UserText>
         </UserBlock>
         {WrittenList.length === 0 ? (

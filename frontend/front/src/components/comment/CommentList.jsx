@@ -7,6 +7,7 @@ import ReplyList from './ReplyList';
 import ReplyUpload from './ReplyUpload';
 import CommentUpload from './CommentUpload';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import CommentDelete from './CommentDelete';
 
 const commentHttp = new CommentHttp();
 
@@ -26,6 +27,15 @@ const CommentList = props => {
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
   const [Count, setCount] = useState(0);
+  // const [IsModal, setIsModal] = useState(false);
+
+  // const onModal = () => {
+  //   setIsModal(true);
+  // };
+
+  // const changeModal = state => {
+  //   setIsModal(state);
+  // };
 
   useEffect(() => {
     getList();
@@ -37,19 +47,19 @@ const CommentList = props => {
         props.boardId,
         SelectedButton
       );
-      console.log('댓글', res );
       setComments(res.data.result.list);
       setCount(res.data.result.cnt);
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
+      console.log('댓글리스트', res);
     } catch (err) {
       console.log(err);
     }
   };
 
   //넘버 버튼으로 페이지 불러오기
-  const pageList = (pageNum) => {
+  const pageList = pageNum => {
     setSelectedButton(pageNum);
   };
 
@@ -104,33 +114,22 @@ const CommentList = props => {
     }
   };
 
-  //아이콘창 켜기 기능
-  const onIcon = (e, id) => {
-    e.stopPropagation();
+  //켜기 기능
+  const onItem = (id, item) => {
     const copyList = [...Comments];
-    copyList.find(comment => comment.comment_id === id).icon_selected = true;
+    copyList.find(comment => comment.comment_id === id)[
+      item + '_selected'
+    ] = true;
     setComments(copyList);
     console.log('Page', Page.length);
   };
 
-  //아이콘창 닫기 기능
-  const offIcon = id => {
+  //닫기 기능
+  const offItem = (id, item) => {
     const copyList = [...Comments];
-    copyList.find(comment => comment.comment_id === id).icon_selected = false;
-    setComments(copyList);
-  };
-
-  //답글창 켜기 기능
-  const onReply = id => {
-    const copyList = [...Comments];
-    copyList.find(comment => comment.comment_id === id).reply_selected = true;
-    setComments(copyList);
-  };
-
-  //답글창 닫기 기능
-  const offReply = id => {
-    const copyList = [...Comments];
-    copyList.find(comment => comment.comment_id === id).reply_selected = false;
+    copyList.find(comment => comment.comment_id === id)[
+      item + '_selected'
+    ] = false;
     setComments(copyList);
   };
 
@@ -140,30 +139,6 @@ const CommentList = props => {
     copyList.find(comment => comment.comment_id === id).edit_selected = true;
     setComments(copyList);
     setEditComment(text);
-  };
-
-  //댓글 수정창 닫기 기능
-  const offEdit = id => {
-    const copyList = [...Comments];
-    copyList.find(comment => comment.comment_id === id).edit_selected = false;
-    setComments(copyList);
-  };
-
-  //댓글 삭제 기능
-  const onDelete = async (e, commentId) => {
-    e.preventDefault();
-
-    if (window.confirm('정말 댓글을 삭제하겠습니까?')) {
-      try {
-        await commentHttp.deleteComment(commentId, userId);
-        alert('댓글이 삭제되었습니다.');
-        window.location.reload();
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      return;
-    }
   };
 
   return (
@@ -190,7 +165,7 @@ const CommentList = props => {
                 <EditButton
                   src='/image/edit-icon.png'
                   alt='edit-button'
-                  onClick={e => onIcon(e, comment.comment_id)}
+                  onClick={()=> onItem(comment.comment_id, 'icon')}
                 />
 
                 {comment.icon_selected && (
@@ -212,18 +187,17 @@ const CommentList = props => {
                             작성글 보기
                           </div>
                           <div
-                            onClick={() =>
+                            onClick={()=>
                               onEdit(comment.comment_id, comment.text)
                             }
                           >
                             수정하기
                           </div>
-                          <div onClick={e => onDelete(e, comment.comment_id)}>
-                            삭제하기
-                          </div>
+                          {/* <div onClick={e => onDelete(e, comment.comment_id)}> */}
+                          <div onClick={() => onItem(comment.comment_id, 'modal')}>삭제하기</div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={() => offIcon(comment.comment_id)}
+                          onClick={() => offItem(comment.comment_id, 'icon')}
                         />
                       </>
                     ) : (
@@ -244,7 +218,7 @@ const CommentList = props => {
                           </div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={() => offIcon(comment.comment_id)}
+                          onClick={()=> offItem(comment.comment_id, 'icon')}
                         />
                       </>
                     )}
@@ -259,17 +233,15 @@ const CommentList = props => {
                     type='text'
                     onChange={e => setEditComment(e.currentTarget.value)}
                   />
-                  <Edit2Button
-                    left='86.5%'
+                  <Edit1Button
                     onClick={e =>
                       submitEdit(e, comment.comment_id, comment.text)
                     }
                   >
                     확인
-                  </Edit2Button>
+                  </Edit1Button>
                   <Edit2Button
-                    left='91%'
-                    onClick={() => offEdit(comment.comment_id)}
+                    onClick={()=> offItem(comment.comment_id, 'edit')}
                   >
                     취소
                   </Edit2Button>
@@ -278,11 +250,11 @@ const CommentList = props => {
             </ContentBlock>
 
             {comment.reply_selected ? (
-              <ReplyText onClick={() => offReply(comment.comment_id)}>
+              <ReplyText onClick={()=> offItem(comment.comment_id, 'reply')}>
                 {`대댓글 닫기 (${comment.replyCount})`}
               </ReplyText>
             ) : (
-              <ReplyText onClick={() => onReply(comment.comment_id)}>
+              <ReplyText onClick={()=> onItem(comment.comment_id, 'reply')}>
                 {`대댓글 보기 (${comment.replyCount})`}
               </ReplyText>
             )}
@@ -297,13 +269,18 @@ const CommentList = props => {
               </ReplyWrap>
             )}
           </CommentBlock>
+          {comment.modal_selected && (
+            <CommentDelete
+              offItem={offItem}
+              commentId={comment.comment_id}
+              userId={userId}
+            />
+          )}
         </CommentWrap>
       ))}
 
-    
       {/* 페이지 네이션 */}
-      {Comments.length !== 0
-      &&
+      {Comments.length !== 0 && (
         <Nav>
           {SelectedButton > 0 && (
             <Button onClick={() => firstList()}>
@@ -331,8 +308,7 @@ const CommentList = props => {
             </Button>
           )}
         </Nav>
-      }
-      
+      )}
 
       {/* 댓글 작성 컴포넌트 */}
       <Line />
@@ -356,6 +332,10 @@ const CommentWrap = styled.div`
   grid-template-columns: 6% 93%;
   justify-content: space-between;
   margin: 20px 0 40px 0;
+
+  @media screen and (max-width: 1700px) {
+    width: 1300px;
+  }
 `;
 
 const Profile = styled.div`
@@ -422,7 +402,6 @@ const ContentText = styled.div`
   font-size: 15px;
   display: block;
   border: 2px solid #f0f0f0;
-  width: 1286px;
   padding: 24px 16px;
   border-radius: 10px;
   box-sizing: border-box;
@@ -441,6 +420,8 @@ const EditBoxBack = styled.div`
   height: 100vh;
   top: 0;
   left: 0;
+  overflow: hidden;
+  z-index: 20;
 `;
 
 const EditBox = styled.div`
@@ -510,6 +491,30 @@ const EditBlock = styled.input`
     letter-spacing: 2px;
     color: #aaaaaa;
   }
+
+  @media screen and (max-width: 1700px) {
+    width: 1184px;
+  }
+`;
+
+const Edit1Button = styled.div`
+  background-color: #ff4122;
+  width: 20px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  position: absolute;
+  top: 49%;
+  left: 88%;
+  padding: 5px 14px;
+  border-radius: 5px;
+  transition: 0.2s;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    top: 45%;
+  }
 `;
 
 const Edit2Button = styled.div`
@@ -520,7 +525,7 @@ const Edit2Button = styled.div`
   font-weight: 500;
   position: absolute;
   top: 49%;
-  left: ${props => props.left};
+  left: 92.3%;
   padding: 5px 14px;
   border-radius: 5px;
   transition: 0.2s;

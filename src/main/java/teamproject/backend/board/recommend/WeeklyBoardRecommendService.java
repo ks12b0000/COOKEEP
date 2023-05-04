@@ -26,13 +26,14 @@ public class WeeklyBoardRecommendService extends BoardBannerRecommendService{
     public Long update(Long id) {
         Long randomId = getRandomId();
         delete(id);
-        if(randomId != null) insert(id, boardRepository.findById(randomId));
+        if(randomId != null) insert(randomId, boardRepository.findById(randomId));
         return randomId;
     }
 
     @Override
     public List<Long> updateAll() {
         List<Long> randomIdList = getRandomIdList();
+        deleteAll();
 
         for(Long id : randomIdList){
             Optional<Board> board = boardRepository.findById(id);
@@ -67,7 +68,7 @@ public class WeeklyBoardRecommendService extends BoardBannerRecommendService{
         if(allIdList.size() < this.size + 1) return null;
 
         Long randomId = allIdList.get(random.nextInt(allIdList.size() - 1));
-        while (!recommendBanners.containsKey(randomId)){
+        while (recommendBanners.containsKey(randomId)){
             randomId = allIdList.get(random.nextInt(allIdList.size() - 1));
         }
 

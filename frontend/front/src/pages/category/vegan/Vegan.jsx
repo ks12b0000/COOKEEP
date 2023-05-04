@@ -24,7 +24,7 @@ const ButtonWrap = styled.div`
 function Vegan() {
 
     const Props ={
-        title:'비건 컨텐츠',
+        title:'비건',
         categoryName:'비건'
     }
     return (
