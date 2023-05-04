@@ -4,11 +4,20 @@ import Http from "./http";
 
 class CategoryHttp extends Http {
   //카테고리 리스트 목록조회
-  getCategoryPostList = async (bool, pages, categoryName) => {
+  getCategoryPostList = async (bool, pages, categoryName,allText) => {
     if (bool) {
       try {
         const { data } = await this.axios.get(
-          `board/list?page=${pages}&category=${categoryName}&size=10`
+          `board/list?category=${categoryName}&page=${pages}&size=10`
+        );
+        return data;
+      } catch (err) {
+        throw err;
+      }
+    }else{
+      try {
+        const { data } = await this.axios.get(
+            `/board/list?category=${categoryName}&${allText}&size=10`
         );
         return data;
       } catch (err) {
@@ -55,6 +64,17 @@ class CategoryHttp extends Http {
       throw err;
     }
   };
+
+  //더보기 좋아요 많은순기
+  getMainLikeMore = async () => {
+    try {
+      const { data } = await this.axios.get(`/main/best/liked/list/more`);
+      return data;
+    } catch (err) {
+      throw err;
+    }
+  };
+
   //댓글 많은순 조회
   getCommented = async () => {
     try {
@@ -65,7 +85,15 @@ class CategoryHttp extends Http {
     }
   };
 
-
+  //더보기 댓글많은순 조회
+  getCommentedMore =async () => {
+    try{
+      const {data} = await  this.axios.get(`/main/best/viewed/list/more`);
+      return data;
+    }catch (err) {
+      throw err;
+    }
+  }
   //배너 조회
 
   getBanner  = async () =>{
@@ -109,7 +137,17 @@ class CategoryHttp extends Http {
   //좋아요 여부 확인
   getisLiked = async (boardId, userId) => {
     try {
-      return await this.axios.get(`board/${boardId}/like/${userId}`);
+        return await this.axios.get(`board/${boardId}/like/${userId}`);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //좋ㅇ하요 복수 확인
+  getisLikeds = async (boardId, userId) => {
+    let boardIds= `boardIds=${boardId}`;
+    try {
+      return await this.axios.get(`/like/${userId}/board?${boardIds}`);
     } catch (err) {
       throw err;
     }

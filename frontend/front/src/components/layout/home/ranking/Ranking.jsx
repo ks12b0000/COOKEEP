@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import {color} from "../../../../constants/color";
 import IsNonData from "../../../atomic/isNonData/IsNonData";
 import Post from "../../../post/Post";
+import {Link} from "react-router-dom";
 
 function Ranking({commented}) {
     return(
@@ -10,6 +11,7 @@ function Ranking({commented}) {
             <RankingUl>
                 {commented.length === 0 ? <IsNonData text='데이터가 존재하지 않습니다.' />: <Post data={commented} /> }
             </RankingUl>
+            <MoreBtn><Link to="rangking">더보기  <img src={`${process.env.PUBLIC_URL}/image/moreArrow.png`} /></Link></MoreBtn>
         </RankingWrap>
 
 )
@@ -17,11 +19,27 @@ function Ranking({commented}) {
 export default Ranking;
 
 const RankingWrap = styled.section`
+  position:relative;
   width:1400px;
   margin:48px auto 16px;
   @media screen and (max-width: 1700px) {
        width: 1300px;
     }
+`
+const MoreBtn = styled.div`
+  position: absolute;
+  top:0;
+  right:0;
+  a{
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 23px;
+    color: #838485;
+  }
+  img{
+    vertical-align: unset;
+    padding-left:5px;
+  }
 `
 const RankingTitle = styled.h1`
   display: flex;

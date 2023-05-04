@@ -12,7 +12,7 @@ const categoryHttp = new CategoryHttp();
 function CateItem({cateItemName}) {
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-
+    const [allText,setAllText] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
     const onChangePagination = (e,p)=> {
         setCurrentPage(p - 1)
@@ -23,25 +23,35 @@ function CateItem({cateItemName}) {
     useEffect(() => {
         (async () => {
             try {
-                const { result } = await categoryHttp.getCategoryPostList(true, currentPage, cateItemName);
-                setPosts(result.boards);
-                setTotalCount(result.total);
+                if(allText) {
+                    const { result } = await categoryHttp.getCategoryPostList(false, currentPage, cateItemName,allText);
+                    setPosts(result.boards);
+                    setTotalCount(result.total);
+                }else{
+                    const { result } = await categoryHttp.getCategoryPostList(true, currentPage, cateItemName);
+                    setPosts(result.boards);
+                    setTotalCount(result.total);
+                }
+
             } catch (err) {
                 console.log(err);
             }
         })();
-    }, [currentPage]);
+    }, [currentPage,allText]);
+    const FilterPosts = (e) => {
+        setAllText(e.target.value)
+    };
 
 
     return (
         <>
-            {/*<SelectBox>*/}
-            {/*    <select onChange={FilterPosts} defaultValue="8">*/}
-            {/*        <option value="8">8개씩보기</option>*/}
-            {/*        <option value="16">16개씩 보기</option>*/}
-            {/*        <option value="100">100개씩 보기</option>*/}
-            {/*    </select>*/}
-            {/*</SelectBox>*/}
+            <SelectBox>
+                <select onChange={FilterPosts} defaultValue="8">
+                    <option value={`page=${currentPage}`}>최신순</option>
+                    <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
+                    <option value={`liked,desc&page=${currentPage}`}>좋아요순</option>
+                </select>
+            </SelectBox>
             <Ul>
                 {
 

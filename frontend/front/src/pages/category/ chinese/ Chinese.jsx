@@ -3,7 +3,7 @@ import Category from "../Category";
 function Chinese() {
 
     const Props ={
-        title:'중식컨텐츠입니다',
+        title:'중식',
         categoryName:'중식'
     }
     return (

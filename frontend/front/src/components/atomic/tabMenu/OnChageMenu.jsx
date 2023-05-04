@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import {useEffect, useState} from "react";
 import onChangeSearch from '../../../asset/image/onchangeSeaarch.png'
 import SearchHttp from "../../../http/searchHttp";
+import {useNavigate} from "react-router-dom";
 
 const OnChangeBox = styled.div`
   position: absolute;
@@ -37,6 +38,7 @@ const List = styled.div`
 const client = new SearchHttp();
 function OnChangeMenu({value,tag}) {
     const [autoList,setAutoList] =useState([])
+    const navigation = useNavigate();
     const tagData = async () => {
         try {
             const res = await client.getAutoSearchTag(value);
@@ -57,16 +59,24 @@ function OnChangeMenu({value,tag}) {
             console.log(err);
         }
     }
+
+    const NavigationList = (name) => {
+        navigation(`/search/${name}`)
+    }
+
+    const NavigationTag = (name) => {
+        navigation(`/searchTag/${name}`)
+    }
     useEffect(() => {
         tag ? tagData() : listData()
     },[value,tag])
     return(
         <OnChangeBox>
             { !tag ? autoList.map((item,index) => (
-                <List key={index}> <div><img src={onChangeSearch} alt=""/></div>{item.keyword}</List>
+                <List key={index} onClick={()=>NavigationList(item.keyword)}> <div><img src={onChangeSearch} alt=""/></div>{item.keyword}</List>
             ))
             : autoList.map((item,index) => (
-                    <List key={index}> <div><img src={onChangeSearch} alt=""/></div>{item.title}</List>
+                    <List key={index} onClick={() => NavigationTag(item.keyword)}> <div><img src={onChangeSearch} alt=""/></div>{item.keyword}</List>
                 ))
             }
 

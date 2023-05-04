@@ -4,7 +4,7 @@ import Category from "../Category";
 
 function Korean() {
     const Props ={
-        title:'한식 컨텐츠',
+        title:'한식',
         categoryName:'한식'
     }
     return (
