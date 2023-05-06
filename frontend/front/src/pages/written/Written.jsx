@@ -138,6 +138,10 @@ const Wrap = styled.div`
   border-radius: 10px;
   padding: 30px;
   box-sizing: border-box;
+
+  @media screen and (max-width: 1700px) {
+    width: 1300px;
+  }
 `;
 
 const Title = styled.div`
