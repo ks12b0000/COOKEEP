@@ -17,12 +17,7 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    @Query("select new teamproject.backend.board.dto.BoardResponseInCardFormat(b.boardId, b.category.categoryName, " +
-            "b.title, b.user.nickname, b.createDate, b.thumbnail, b.commented, b.liked, b.view) " +
-            "from Board b " +
-            "where b.category = :category")
-    Page<BoardResponseInCardFormat> findByCategory(Pageable pageable, FoodCategory category);
-
+    Page<Board> findByCategory(Pageable pageable, FoodCategory category);
     @Query("select new teamproject.backend.board.dto.BoardResponseInCardFormat(b.boardId, b.category.categoryName, " +
             "b.title, b.user.nickname, b.createDate, b.thumbnail, b.commented, b.liked, b.view) " +
             "from Board b ")
