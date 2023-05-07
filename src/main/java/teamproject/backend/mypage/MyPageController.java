@@ -12,6 +12,7 @@ import teamproject.backend.mypage.dto.*;
 import teamproject.backend.response.BaseResponse;
 import teamproject.backend.response.ValidationSequence;
 import teamproject.backend.user.UserService;
+import teamproject.backend.user.dto.GetUserSameRes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -193,5 +194,21 @@ public class MyPageController {
         GetLikeAndCommentByUserResponse getCommentByUserResponse = myPageService.commentByUser(pageable, user_id);
 
         return new BaseResponse("내가 댓글 단 글 목록을 불러왔습니다.", getCommentByUserResponse);
+    }
+
+    /**
+     * 닉네임 중복체크
+     * [GET] /user/nickname/duplicate?nickName=
+     *
+     * @param nickName
+     * @return
+     */
+    @GetMapping("/user/nickname/duplicate")
+    public BaseResponse<GetUserSameRes> checkEmailDuplicate(@RequestParam String nickName) {
+
+        boolean nickNameDuplicate = myPageService.checkNickNameDuplicate(nickName);
+
+        GetUserSameRes res = new GetUserSameRes(nickNameDuplicate);
+        return new BaseResponse<>("사용 가능한 닉네임 입니다.", res);
     }
 }
