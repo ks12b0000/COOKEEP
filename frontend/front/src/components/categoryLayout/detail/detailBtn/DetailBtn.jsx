@@ -85,7 +85,7 @@ function DetailBtn({board_id}) {
             </IconWrap>
             {open &&
                 <MenuList>
-                    <li onClick={() => console.log('hhhh')}>수정하기</li>
+                    <li onClick={() => navigation(`/${board_id}/edit`)}>수정하기</li>
                     <li onClick={deleteModal}>삭제하기</li>
                 </MenuList>
             }

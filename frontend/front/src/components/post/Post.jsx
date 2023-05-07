@@ -6,7 +6,6 @@ import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 const categoryHttp = new CategoryHttp();
 function Post({data,currentPage}) {
-    const boradId  =data.map((item) => item.board_id);
 
 
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
@@ -16,9 +15,12 @@ function Post({data,currentPage}) {
     const [IsLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
+        let boradId  =data.map((item) => item.board_id);
+
             (async () => {
                 {
                     try {
+
                             const res = await categoryHttp.getisLikeds(boradId, userId);
                             setIsLiked(res.data.result.map((item) => item.like));
                     } catch (err) {
@@ -26,9 +28,9 @@ function Post({data,currentPage}) {
                     }
                 }
             })()
-    }, [(boradId[0] > 0 && isLoggedIn) || currentPage]);
+    }, [ data ]);
 
-    console.log(currentPage)
+
 
     return(
         <>

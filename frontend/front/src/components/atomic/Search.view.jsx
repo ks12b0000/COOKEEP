@@ -4,7 +4,7 @@ import TabMenu from "./tabMenu/TabMenu";
 import OnChangeMenu from "./tabMenu/OnChageMenu";
 import {useEffect, useState} from "react";
 import SearchHttp from "../../http/searchHttp";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useNavigate} from "react-router";
 
 const SearchContainer = styled.div`
@@ -54,6 +54,7 @@ function SearchView({bottom,onFocus,onBlur,contents,tagContents}) {
     const [value,setValue] =useState(contents ? contents : tagContents ? tagContents : "");
     const [tag,setTag] = useState(tagContents? tagContents : false);
     const navigation = useNavigate();
+    const contents2 = useParams()
     const handleTag = () => {
         setTag(!tag)
     }
@@ -88,8 +89,8 @@ function SearchView({bottom,onFocus,onBlur,contents,tagContents}) {
                     <Tag onClick={handleTag}>#</Tag>
 
                     {tag && <TagSearch>#</TagSearch> }
-                    {bottom || value === ""  &&  <TabMenu /> }
-                    {value.length >= 1 && <OnChangeMenu value={value} tag={tag} /> }
+                    { bottom || value === ""  &&  <TabMenu /> }
+                    {value.length >= 1  &&  value !== contents2.contents   && <OnChangeMenu value={value} tag={tag} contents={contents} /> }
                 </InputWrap>
                 {tag ?   <button onClick={() => TagSearchClick(value)}>태그검색</button> :  <Link to={`/search${value ?  '/'+ value : '/null' }`}><button>검색</button></Link> }
 
