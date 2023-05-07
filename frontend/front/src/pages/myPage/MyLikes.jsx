@@ -10,7 +10,21 @@ import {
   Arrow,
   DoubleArrow,
 } from '../../components/comment/CommentList';
-import { Wrap, Text, BoxWrap, PageWrap, RedIconWrap, RedIcon, IconText, EmptyText, ContentsWrap, ContentsText, ContentsArrow, Nav } from './MyPosts';
+import {
+  Wrap,
+  Text,
+  BoxWrap,
+  PageWrap,
+  RedIconWrap,
+  RedIcon,
+  IconText,
+  EmptyText,
+  ContentsWrap,
+  ContentsText,
+  ContentsArrow,
+  Nav,
+} from './MyPosts';
+import Alert from '../../components/atomic/modal/Alert';
 
 const authHttp = new AuthHttp();
 
@@ -32,6 +46,7 @@ const MyLikes = () => {
   const [Count, setCount] = useState(0);
   const [IsEdit, setIsEdit] = useState(false);
   const [BoardIdList, setBoardIdList] = useState([]);
+  const [IsModal, setIsModal] = useState(false);
 
   useEffect(() => {
     onMypage();
@@ -64,16 +79,14 @@ const MyLikes = () => {
   };
 
   //좋아요 한 게시글 리스트 다중삭제
-  const onDeletLikeList = async e => {
-    e.preventDefault();
-
-    const params = {
-      "boardIdList" : BoardIdList
-    }
+  const onDeletLikeList = async () => {
+    const num = BoardIdList;
+    console.log('num', num);
 
     try {
-      const res = await authHttp.deleteLikeList(userId, params);
+      const res = await authHttp.deleteLikeList(userId, num);
       console.log(res);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -124,12 +137,39 @@ const MyLikes = () => {
   };
 
   //편집모드 닫기
-  const offEdit = (e) => {
+  const offEdit = e => {
     e.preventDefault();
 
     setIsEdit(false);
     setBoardIdList([]);
-  }
+  };
+
+  const offModal = () => {
+    setIsModal(false);
+  };
+
+  const Props = {
+    body: {
+      text: '삭제하시겠습니까?',
+      icon: (
+        <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt='' />
+      ),
+      subText: <>삭제하면 복구가 불가능 합니다.</>,
+    },
+
+    buttons: {
+      btn: [
+        {
+          text: '취소',
+          onClick: offModal,
+        },
+        {
+          text: '삭제',
+          onClick: onDeletLikeList,
+        },
+      ],
+    },
+  };
 
   return (
     <Layout>
@@ -160,7 +200,7 @@ const MyLikes = () => {
                         border='1px solid #FF4122'
                         color='#FF4122'
                         marginRight
-                        onClick={(e) => offEdit(e)}
+                        onClick={e => offEdit(e)}
                       >
                         취소
                       </EditButton>
@@ -169,7 +209,7 @@ const MyLikes = () => {
                           backColor='#FF4122'
                           border='1px solid #FF4122'
                           color='white'
-                          onClick={e => onDeletLikeList(e)}
+                          onClick={() => setIsModal(true)}
                         >
                           삭제
                         </EditButton>
@@ -221,7 +261,8 @@ const MyLikes = () => {
                               )}
                             </>
                           )}
-                          <ContentsBox include={BoardIdList.includes(like.board_id)}
+                          <ContentsBox
+                            include={BoardIdList.includes(like.board_id)}
                             onClick={() => {
                               window.open(
                                 `https://www.teamprojectvv.shop/category/${like.board_id}`,
@@ -229,7 +270,9 @@ const MyLikes = () => {
                               );
                             }}
                           >
-                            <ContentsText>{like.title} ({like.commented})</ContentsText>
+                            <ContentsText>
+                              {like.title} ({like.commented})
+                            </ContentsText>
                             <ContentsArrow src='/image/mypage-alarms-arrow.png' />
                           </ContentsBox>
                         </ImgTextWrap>
@@ -266,6 +309,7 @@ const MyLikes = () => {
                   </>
                 )}
               </PageWrap>
+              {IsModal && <Alert {...Props} />}
             </BoxWrap>
           </>
         ) : (
@@ -323,7 +367,8 @@ const CheckImg = styled.img`
 const ContentsBox = styled.div`
   width: 100%;
   height: 5.8vh;
-  border: ${props=>props.include?'1px solid #FFA590':'1px solid #ced4da'};
+  border: ${props =>
+    props.include ? '1px solid #FFA590' : '1px solid #ced4da'};
   border-radius: 10px;
   margin: 5px 0;
   margin-top: ${props => props.marginTop};
@@ -334,7 +379,7 @@ const ContentsBox = styled.div`
   cursor: pointer;
   transition: 0.2s;
   position: relative;
-  background-color: ${props=>props.include?'#FFECE8':'white'};
+  background-color: ${props => (props.include ? '#FFECE8' : 'white')};
 
   &:hover {
     border: 1px solid #ffa590;

@@ -70,11 +70,10 @@ class AuthHttp extends Http {
   };
 
   //마이페이지 좋아요 다중 삭제
-  deleteLikeList = async (user_id, params) => {
+  deleteLikeList = async (user_id, board_ids) => {
     try {
       const res = await this.axios.delete(
-        `/auth/user/like/list/${user_id}`,
-        params
+        `/auth/user/${user_id}/like/list?boardIds=${board_ids}`
       );
       return res;
     } catch (err) {
@@ -142,6 +141,16 @@ class AuthHttp extends Http {
         formdata,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //프로필 사진 조회
+  getProfile = async user_id => {
+    try {
+      const res = await this.axios.get(`/image?image_id={}}`);
       return res;
     } catch (err) {
       throw err;
