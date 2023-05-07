@@ -3,10 +3,28 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import AuthHttp from '../../http/authHttp';
-import Layout from "../../components/layout/Layout";
+import Layout from '../../components/layout/Layout';
 import MypageNav from '../../components/mypage/myPageNav';
-import { Button, Arrow, DoubleArrow } from '../../components/comment/CommentList';
-import { Wrap, Text, BoxWrap, PageWrap, RedIconWrap, RedIcon, IconText, EmptyText, ContentsWrap, ContentsText, ContentsBox, ContentsArrow, Nav } from './MyPosts'
+import {
+  Button,
+  Arrow,
+  DoubleArrow,
+} from '../../components/comment/CommentList';
+import {
+  Wrap,
+  Text,
+  BoxWrap,
+  PageWrap,
+  RedIconWrap,
+  RedIcon,
+  IconText,
+  EmptyText,
+  ContentsWrap,
+  ContentsText,
+  ContentsBox,
+  ContentsArrow,
+  Nav,
+} from './MyPosts';
 
 const authHttp = new AuthHttp();
 
@@ -26,7 +44,7 @@ const MyAlarms = () => {
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
   const [Count, setCount] = useState(0);
-  
+
   useEffect(() => {
     onMypage();
     getAlarmList();
@@ -35,6 +53,7 @@ const MyAlarms = () => {
   const onMypage = async () => {
     try {
       const res = await authHttp.getMypage(userId);
+      console.log(res);
       setUserInfo(res.data.result);
     } catch (err) {
       console.log(err);
@@ -43,10 +62,7 @@ const MyAlarms = () => {
 
   const getAlarmList = async () => {
     try {
-      const res = await authHttp.getAlarmList(
-        userId,
-        SelectedButton,
-      );
+      const res = await authHttp.getAlarmList(userId, SelectedButton);
       console.log(res);
       setAlarms(res.data.result.notificationList);
       setCount(res.data.result.total);
@@ -60,7 +76,7 @@ const MyAlarms = () => {
 
   // 페이지 네이션 함수
   //넘버 버튼으로 페이지 불러오기
-  const pageList = (pageNum) => {
+  const pageList = pageNum => {
     setSelectedButton(pageNum);
   };
 
@@ -95,72 +111,80 @@ const MyAlarms = () => {
   return (
     <Layout>
       <Wrap>
-      <Text>마이페이지</Text>
-      {username === UserInfo.username ? (
-        <>           
+        <Text>마이페이지</Text>
+        {username === UserInfo.username ? (
+          <>
             <BoxWrap>
-              <MypageNav userNickName={UserInfo.nickname} userName={UserInfo.username} userEmail={UserInfo.email} categoryName='alarms' userId={userId} />
+              <MypageNav
+                userNickName={UserInfo.nickname}
+                userName={UserInfo.username}
+                userEmail={UserInfo.email}
+                categoryName='alarms'
+                userId={userId}
+              />
               <PageWrap>
                 <RedIconWrap>
                   <RedIcon>
-                    <img src='/image/mypage-alarm-r.png' alt='icon'/>
+                    <img src='/image/mypage-alarm-r.png' alt='icon' />
                   </RedIcon>
                   <IconText>댓글 알림</IconText>
                 </RedIconWrap>
-                {Alarms.length === 0
-                  ?
+                {Alarms.length === 0 ? (
                   <EmptyText>댓글 알림이 없습니다.</EmptyText>
-                  :
+                ) : (
                   <>
                     <ContentsWrap>
-                      {Alarms.map((alarm) => (
-                        <ContentsBox onClick={() => {window.open(alarm.notification_url, '_self')}} key={alarm.notification_id}>
+                      {Alarms.map(alarm => (
+                        <ContentsBox
+                          onClick={() => {
+                            window.open(alarm.notification_url, '_self');
+                          }}
+                          key={alarm.notification_id}
+                        >
                           <ContentsText>{alarm.message}</ContentsText>
-                          <ContentsArrow src='/image/mypage-alarms-arrow.png'/>
+                          <ContentsArrow src='/image/mypage-alarms-arrow.png' />
                         </ContentsBox>
                       ))}
                     </ContentsWrap>
 
                     <Nav>
-                    {SelectedButton > 0 && (
-                      <Button onClick={() => firstList()}>
-                        <DoubleArrow url='/image/double-arrow-left.png' />
+                      {SelectedButton > 0 && (
+                        <Button onClick={() => firstList()}>
+                          <DoubleArrow url='/image/double-arrow-left.png' />
+                        </Button>
+                      )}
+                      <Button onClick={() => leftList()}>
+                        <Arrow url='/image/arrow-left.png' />
                       </Button>
-                    )}
-                    <Button onClick={() => leftList()}>
-                      <Arrow url='/image/arrow-left.png' />
-                    </Button>
-                    {Page.map((page, i) => (
-                      <Button
-                        key={i}
-                        onClick={() => pageList(page)}
-                        aria-current={page === SelectedButton ? 'true' : null}
-                      >
-                        {page + 1}
+                      {Page.map((page, i) => (
+                        <Button
+                          key={i}
+                          onClick={() => pageList(page)}
+                          aria-current={page === SelectedButton ? 'true' : null}
+                        >
+                          {page + 1}
+                        </Button>
+                      ))}
+                      <Button onClick={() => rightList()}>
+                        <Arrow url='/image/arrow-right.png' />
                       </Button>
-                    ))}
-                    <Button onClick={() => rightList()}>
-                      <Arrow url='/image/arrow-right.png' />
-                    </Button>
-                    {SelectedButton < Page.length - 1 && (
-                      <Button onClick={() => lastList()}>
-                        <DoubleArrow url='/image/double-arrow-right.png' />
-                      </Button>
-                    )}
-                  </Nav>
+                      {SelectedButton < Page.length - 1 && (
+                        <Button onClick={() => lastList()}>
+                          <DoubleArrow url='/image/double-arrow-right.png' />
+                        </Button>
+                      )}
+                    </Nav>
                   </>
-                }
+                )}
               </PageWrap>
             </BoxWrap>
-        </>
-      ) : 
-      (
-        navigate('/notfound')
-          )}
+          </>
+        ) : (
+          navigate('/notfound')
+        )}
       </Wrap>
     </Layout>
   );
 };
-
 
 export default MyAlarms;
