@@ -83,8 +83,8 @@ const client = new SearchHttp();
  function TabMenu() {
      const navigation = useNavigate();
      const [value, setValue] = React.useState('1');
-     const [topActive,setTopActive] = useState('테스');
-     const [tagActive,setTagActive] = useState('테스트');
+     const [topActive,setTopActive] = useState('테스트');
+     const [tagActive,setTagActive] = useState('태그1');
      const [top,setTop] = useState([]);
      const [tag,setTag] = useState([])
 
