@@ -57,7 +57,7 @@ function Banner() {
     return(
         <BannerWrap >
           <Swiper
-              loop={true}
+              loop={false}
               allowTouchMove={false}
               ref={swiperRef}
               spaceBetween={30}
