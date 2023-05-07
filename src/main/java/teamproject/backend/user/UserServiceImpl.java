@@ -6,9 +6,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
-import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
@@ -18,7 +16,6 @@ import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.Optional;
 
@@ -33,7 +30,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final CookieService cookieService;
-    private final NotificationRepository notificationRepository;
     private final S3DAO s3DAO;
     private static final String DEFAULT_USER_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/default_user_image.png";
 
@@ -50,13 +46,10 @@ public class UserServiceImpl implements UserService, SocialUserService {
         String password = joinRequest.getPassword();
         String salt = SHA256.getSalt();
         String nickname = getRandomNickname();
-        if(nickname == null) nickname = username;
-
         password = SHA256.encrypt(password, salt);
 
-        if (checkIdDuplicate(username)){}
-
         User user = new User(username, nickname, email, password, salt);
+
         user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
@@ -69,11 +62,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Transactional
     public SocialUserInfo joinBySocial(String username, String email){
         checkEmailDuplicate(email);
-
-        User user = new User(username, email, username);
+        String password = username;
+        String salt = SHA256.getSalt();
         String nickname = getRandomNickname();
-        if(nickname == null) nickname = username;
-        user.updateNickname(nickname);
+        password = SHA256.encrypt(password, salt);
+
+        User user = new User(username, nickname, email, password, salt);
+
         user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
@@ -299,21 +294,23 @@ public class UserServiceImpl implements UserService, SocialUserService {
     }
 
     @Override
+    @Transactional
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
         Optional<User> user = userRepository.findById(userId);
+
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
 
-        if(image == null && !user.get().getImageURL().equals(DEFAULT_USER_IMAGE_URL)){
+        if(image == null){
+            s3DAO.delete(user.get().getImageURL());
             user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
-            s3DAO.delete(""+userId);
             return;
         }
-
-        if(s3DAO.isExist(""+userId)){
-            s3DAO.delete(""+userId);
+        String fileName = userId + "." + image.getOriginalFilename().split("\\.")[1];
+        if(s3DAO.isExist(fileName)){
+            s3DAO.delete(fileName);
         }
-        s3DAO.upload(""+userId, image);
+        s3DAO.upload(fileName, image);
 
-        user.get().setImageURL(s3DAO.getURL("" + userId));
+        user.get().setImageURL(s3DAO.getURL(fileName));
     }
 }

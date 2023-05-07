@@ -156,9 +156,9 @@ public class MyPageController {
     }
 
 
-    @DeleteMapping("/auth/user/like/list/{user_id}")
-    public BaseResponse deleteBoardLikesByUser(@RequestBody DeleteBoardLikesRequest request, @PathVariable Long user_id) {
-        myPageService.deleteBoardLikes(request, user_id);
+    @DeleteMapping("/auth/user/{user_id}/like/list")
+    public BaseResponse deleteBoardLikesByUser(@PathVariable Long user_id, @RequestParam List<Long> boardIds) {
+        myPageService.deleteBoardLikes(boardIds, user_id);
         return new BaseResponse("선택한 유저의 좋아요를 삭제했습니다.");
     }
 
@@ -176,7 +176,7 @@ public class MyPageController {
     }
 
     @PostMapping("/auth/user/image/{user_id}")
-    public BaseResponse uploadUserImage(@PathVariable Long user_id, MultipartFile image) throws IOException {
+    public BaseResponse uploadUserImage(@PathVariable Long user_id, @RequestBody MultipartFile image) throws IOException {
         userService.uploadImage(user_id, image);
 
         return new BaseResponse("유저 사진을 교체했습니다.");

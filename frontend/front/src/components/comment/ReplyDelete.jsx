@@ -3,17 +3,17 @@ import CommentHttp from '../../http/commentHttp';
 
 const commentHttp = new CommentHttp();
 
-const CommentDelete = ({ offItem, commentId, userId }) => {
+const ReplyDelete = ({ offItem, replyId, userId }) => {
 
   const handleClick = () => {
     // offItem 함수 호출
-    offItem(commentId, 'modal');
+    offItem(replyId, 'modal');
   };
 
   //댓글 삭제 기능
   const onDelete = async () => {
     try {
-      await commentHttp.deleteComment(commentId, userId);
+      await commentHttp.deleteReply(replyId, userId);
       window.location.reload();
     } catch (err) {
       console.log(err);
@@ -50,4 +50,4 @@ const CommentDelete = ({ offItem, commentId, userId }) => {
   );
 };
 
-export default CommentDelete;
+export default ReplyDelete;

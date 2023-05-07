@@ -21,6 +21,7 @@ public class BoardCommentResponse {
     private boolean edit_selected = false;
     private boolean reply_selected = false;
     private boolean icon_selected = false;
+    private boolean modal_selected = false;
 
     public BoardCommentResponse(Long comment_id, String user_name, Long user_id, Date create_date, String text, Integer replyCount) {
         this.comment_id = comment_id;

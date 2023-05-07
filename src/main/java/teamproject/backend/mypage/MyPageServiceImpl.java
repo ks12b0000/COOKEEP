@@ -209,10 +209,11 @@ public class MyPageServiceImpl implements MyPageService {
 
 
     @Override
-    public void deleteBoardLikes(DeleteBoardLikesRequest request, Long userId){
+    @Transactional
+    public void deleteBoardLikes(List<Long> boardIds, Long userId){
         User user = myPageRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
-        for(Long boardId : request.getBoardIdList()){
+        for(Long boardId : boardIds){
             Optional<Board> board = boardRepository.findById(boardId);
             if(board.isPresent()){
                 if(likeBoardRepository.existsByBoardAndUser(board.get(), user)){

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
+import ReplyDelete from './ReplyDelete';
 
 const commentHttp = new CommentHttp();
 
@@ -100,8 +101,7 @@ const ReplyList = props => {
   };
 
   //켜기 기능
-  const onItem = (e, id, item) => {
-    e.stopPropagation();
+  const onItem = (id, item) => {
     const copyList = [...Replys];
     copyList.find(reply => reply.reply_id === id)[item + '_selected'] = true;
     setReplys(copyList);
@@ -109,16 +109,14 @@ const ReplyList = props => {
   };
 
   //닫기 기능
-  const offItem = (e, id, item) => {
-    e.stopPropagation();
+  const offItem = (id, item) => {
     const copyList = [...Replys];
     copyList.find(reply => reply.reply_id === id)[item + '_selected'] = false;
     setReplys(copyList);
   };
 
   //댓글 수정창 켜기 기능
-  const onEdit = (e, id, text) => {
-    e.stopPropagation();
+  const onEdit = (id, text) => {
     const copyList = [...Replys];
     copyList.find(reply => reply.reply_id === id).edit_selected = true;
     setReplys(copyList);
@@ -171,7 +169,7 @@ const ReplyList = props => {
                 <EditButton
                   src='/image/edit-icon.png'
                   alt='edit-button'
-                  onClick={e => onItem(e, reply.reply_id, 'icon')}
+                  onClick={()=> onItem(reply.reply_id, 'icon')}
                 />
                 {reply.icon_selected && (
                   <>
@@ -192,16 +190,14 @@ const ReplyList = props => {
                             작성글 보기
                           </div>
                           <div
-                            onClick={e => onEdit(e, reply.reply_id, reply.text)}
+                            onClick={()=> onEdit(reply.reply_id, reply.text)}
                           >
                             수정하기
                           </div>
-                          <div onClick={e => onDelete(e, reply.reply_id)}>
-                            삭제하기
-                          </div>
+                          <div onClick={() => onItem(reply.reply_id, 'modal')}>삭제하기</div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={e => offItem(e, reply.reply_id, 'icon')}
+                          onClick={()=> offItem(reply.reply_id, 'icon')}
                         />
                       </>
                     ) : (
@@ -222,7 +218,7 @@ const ReplyList = props => {
                           </div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={e => offItem(e, reply.reply_id, 'icon')}
+                          onClick={()=> offItem(reply.reply_id, 'icon')}
                         />
                       </>
                     )}
@@ -237,15 +233,13 @@ const ReplyList = props => {
                     type='text'
                     onChange={e => setEditComment(e.currentTarget.value)}
                   />
-                  <Edit2Button
-                    left='87%'
+                  <Edit1Button
                     onClick={e => submitEdit(e, reply.reply_id, reply.text)}
                   >
                     확인
-                  </Edit2Button>
+                  </Edit1Button>
                   <Edit2Button
-                    left='92%'
-                    onClick={e => offItem(e, reply.reply_id, 'edit')}
+                    onClick={()=> offItem(reply.reply_id, 'edit')}
                   >
                     취소
                   </Edit2Button>
@@ -253,6 +247,13 @@ const ReplyList = props => {
               )}
             </ContentBlock>
           </CommentBlock>
+          {reply.modal_selected && (
+            <ReplyDelete
+              offItem={offItem}
+              replyId={reply.reply_id}
+              userId={userId}
+            />
+          )}
         </CommentWrap>
       ))}
 
@@ -478,6 +479,34 @@ const EditBlock = styled.input`
     letter-spacing: 2px;
     color: #aaaaaa;
   }
+
+  @media screen and (max-width: 1700px) {
+    width: 1054px;
+  }
+`;
+
+const Edit1Button = styled.div`
+  background-color: #ff4122;
+  width: 20px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  position: absolute;
+  top: 56%;
+  left: 87%;
+  padding: 5px 14px;
+  border-radius: 5px;
+  transition: 0.2s;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    top: 52%;
+  }
+
+  @media screen and (max-width: 1700px) {
+    left: 90%;
+  }
 `;
 
 const Edit2Button = styled.div`
@@ -487,8 +516,8 @@ const Edit2Button = styled.div`
   font-size: 11px;
   font-weight: 500;
   position: absolute;
-  top: 57%;
-  left: ${props => props.left};
+  top: 56%;
+  left: 92%;
   padding: 5px 14px;
   border-radius: 5px;
   transition: 0.2s;
@@ -497,6 +526,10 @@ const Edit2Button = styled.div`
 
   &:hover {
     top: 52%;
+  }
+
+  @media screen and (max-width: 1700px) {
+    left: 95%;
   }
 `;
 

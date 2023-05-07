@@ -116,8 +116,10 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardListResponseByCategory findBoardListByFoodCategoryName(Pageable pageable, String categoryName) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
-        Page<BoardResponseInCardFormat> boards = boardRepository.findByCategory(pageable, foodCategory);
-        return new BoardListResponseByCategory(boards.getContent(), boards.getTotalPages());
+        //Page<BoardResponseInCardFormat> boards = boardRepository.findByCategory(pageable, foodCategory);
+        Page<Board> boards = boardRepository.findByCategory(pageable, foodCategory);
+
+        return new BoardListResponseByCategory(getBoardResponsesInCardFormat(boards.getContent(), boards.getSize()), boards.getTotalPages());
     }
 
     @Override
