@@ -50,9 +50,9 @@ const TagSearch = styled.span`
     color: #222;
   
   `
-function SearchView({bottom,onFocus,onBlur}) {
-    const [value,setValue] =useState("");
-    const [tag,setTag] = useState(false);
+function SearchView({bottom,onFocus,onBlur,contents,tagContents}) {
+    const [value,setValue] =useState(contents ? contents : tagContents ? tagContents : "");
+    const [tag,setTag] = useState(tagContents? tagContents : false);
     const navigation = useNavigate();
     const handleTag = () => {
         setTag(!tag)
@@ -88,7 +88,7 @@ function SearchView({bottom,onFocus,onBlur}) {
                     <Tag onClick={handleTag}>#</Tag>
 
                     {tag && <TagSearch>#</TagSearch> }
-                    {bottom || value === "" &&  <TabMenu /> }
+                    {bottom || value === ""  &&  <TabMenu /> }
                     {value.length >= 1 && <OnChangeMenu value={value} tag={tag} /> }
                 </InputWrap>
                 {tag ?   <button onClick={() => TagSearchClick(value)}>태그검색</button> :  <Link to={`/search${value ?  '/'+ value : '/null' }`}><button>검색</button></Link> }

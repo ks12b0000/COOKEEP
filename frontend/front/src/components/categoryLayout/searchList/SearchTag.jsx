@@ -29,7 +29,7 @@ function SearchTag() {
 
     return (
         <>
-            <Header />
+            <Header tagContents ={contents} />
             <Container>
               {/*<SelectBox>*/}
               {/*    <select onChange={FilterPosts} defaultValue="8">*/}

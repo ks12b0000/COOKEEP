@@ -5,9 +5,9 @@ import CategoryHttp from "../../http/categoryHttp";
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 const categoryHttp = new CategoryHttp();
-function Post({data}) {
+function Post({data,currentPage}) {
     const boradId  =data.map((item) => item.board_id);
-    console.log(boradId);
+
 
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
     const { isLoggedIn } = useSelector(
@@ -26,9 +26,9 @@ function Post({data}) {
                     }
                 }
             })()
-    }, [(boradId[0] > 0 && isLoggedIn)]);
+    }, [(boradId[0] > 0 && isLoggedIn) || currentPage]);
 
-
+    console.log(currentPage)
 
     return(
         <>
