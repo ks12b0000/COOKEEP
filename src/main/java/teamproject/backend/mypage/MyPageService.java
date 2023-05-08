@@ -36,4 +36,6 @@ public interface MyPageService {
     public GetLikeAndCommentByUserResponse commentByUser(Pageable pageable, Long user_id);
 
     boolean checkNickNameDuplicate(String nickName);
+
+    public void confirmationUpdateNotification(Long notificationId);
 }
