@@ -211,4 +211,19 @@ public class MyPageController {
         GetUserSameRes res = new GetUserSameRes(nickNameDuplicate);
         return new BaseResponse<>("사용 가능한 닉네임 입니다.", res);
     }
+
+    /**
+     * 알림 확인여부
+     * [PUT] /auth/notification/update/check
+     *
+     * @param notificationId
+     * @return
+     */
+    @PutMapping("/auth/notification/update/confirmation")
+    public BaseResponse updateCheck(@RequestParam Long notificationId) {
+
+        myPageService.confirmationUpdateNotification(notificationId);
+
+        return new BaseResponse("알림을 확인했습니다.");
+    }
 }

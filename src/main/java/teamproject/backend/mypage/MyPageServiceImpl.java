@@ -305,4 +305,15 @@ public class MyPageServiceImpl implements MyPageService {
             throw new BaseException(DUPLICATE_NICKNAME); // 중복 O
         }
     }
+
+    /**
+     * 알림 확인여부
+     * @return
+     */
+    @Override
+    @Transactional
+    public void confirmationUpdateNotification(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new BaseException(NOT_NOTIFICATION));
+        notification.updateConfirmation();
+    }
 }
