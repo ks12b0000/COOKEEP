@@ -2,6 +2,7 @@ package teamproject.backend.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -305,7 +306,8 @@ public class UserServiceImpl implements UserService, SocialUserService {
             user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
             return;
         }
-        String fileName = userId + "." + image.getOriginalFilename().split("\\.")[1];
+        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+        String fileName = userId + "." + extension;
         if(s3DAO.isExist(fileName)){
             s3DAO.delete(fileName);
         }
