@@ -29,8 +29,6 @@ jobs:
         spring.datasource.url: ${{ secrets.DB_URL }} 
         spring.datasource.username: ${{ secrets.DB_USERNAME }} 
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-#         spring.mail.username: ${{secrets.MASTER_EMAIL}}
-#         spring.mail.password: ${{secrets.MASTER_EMAIL_PW}}
         cloud.aws.credentials.accessKey: ${{secrets.S3_ACCESSKEY}}
         cloud.aws.credentials.secretKey: ${{secrets.S3_SECRETKEY}}
         cloud.aws.s3.bucket: ${{secrets.S3_BUCKET}}
@@ -41,29 +39,10 @@ jobs:
         GOOGLE_API_ID: ${{secrets.GOOGLE_API_ID}}
         GOOGLE_API_SECRET: ${{secrets.GOOGLE_API_SECRET}}
         JWT_SECRET_KEY: ${{secrets.JWT_SECRET_KEY}}
-#     - name: Create env file
-#       env:
-#         REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
-#         REACT_APP_KAKAO_REST_KEY: ${{ secrets.REACT_APP_KAKAO_REST_KEY }}
-#         REACT_APP_GOOGLE_REST_KEY: ${{ secrets.REACT_APP_GOOGLE_REST_KEY }}
-#         REACT_APP_NAVER_REST_KEY: ${{ secrets.REACT_APP_NAVER_REST_KEY }}
-#       run: |
-#         touch .env
-#         echo REACT_APP_API_BASE_URL="$REACT_APP_API_BASE_URL" >> .env
-#         echo REACT_APP_KAKAO_REST_KEY="$REACT_APP_KAKAO_REST_KEY" >> .env
-#         echo REACT_APP_GOOGLE_REST_KEY="$REACT_APP_GOOGLE_REST_KEY" >> .env
-#         echo REACT_APP_NAVER_REST_KEY="$REACT_APP_NAVER_REST_KEY" >> .env
-#         cat .env | head -n 1
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew clean build -x test
-#     - name: Build with Gradle
-#       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1 # 수정해야함
-#       env:
-#         working-directory: ./backend
-#       with:
-#         arguments: build
     - name: Docker build 
       run: |
        docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
