@@ -2,13 +2,12 @@ package teamproject.backend.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
-import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
@@ -18,7 +17,6 @@ import teamproject.backend.utils.SHA256;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.Optional;
 
@@ -297,21 +295,24 @@ public class UserServiceImpl implements UserService, SocialUserService {
     }
 
     @Override
+    @Transactional
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
         Optional<User> user = userRepository.findById(userId);
+
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
 
-        if(image == null && !user.get().getImageURL().equals(DEFAULT_USER_IMAGE_URL)){
+        if(image == null){
+            s3DAO.delete(user.get().getImageURL());
             user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
-            s3DAO.delete(""+userId);
             return;
         }
-
-        if(s3DAO.isExist(""+userId)){
-            s3DAO.delete(""+userId);
+        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+        String fileName = userId + "." + extension;
+        if(s3DAO.isExist(fileName)){
+            s3DAO.delete(fileName);
         }
-        s3DAO.upload(""+userId, image);
+        s3DAO.upload(fileName, image);
 
-        user.get().setImageURL(s3DAO.getURL("" + userId));
+        user.get().setImageURL(s3DAO.getURL(fileName));
     }
 }

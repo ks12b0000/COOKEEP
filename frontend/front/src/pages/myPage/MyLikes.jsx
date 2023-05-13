@@ -10,6 +10,21 @@ import {
   Arrow,
   DoubleArrow,
 } from '../../components/comment/CommentList';
+import {
+  Wrap,
+  Text,
+  BoxWrap,
+  PageWrap,
+  RedIconWrap,
+  RedIcon,
+  IconText,
+  EmptyText,
+  ContentsWrap,
+  ContentsText,
+  ContentsArrow,
+  Nav,
+} from './MyPosts';
+import Alert from '../../components/atomic/modal/Alert';
 
 const authHttp = new AuthHttp();
 
@@ -31,6 +46,7 @@ const MyLikes = () => {
   const [Count, setCount] = useState(0);
   const [IsEdit, setIsEdit] = useState(false);
   const [BoardIdList, setBoardIdList] = useState([]);
+  const [IsModal, setIsModal] = useState(false);
 
   useEffect(() => {
     onMypage();
@@ -51,7 +67,7 @@ const MyLikes = () => {
   const getLikeList = async () => {
     try {
       const res = await authHttp.getLikeList(userId, SelectedButton);
-      console.log(res);
+      console.log('좋아요한 게시글 리스트', res);
       setLikes(res.data.result.commentList);
       setCount(res.data.result.total);
       const arrayLength = res.data.result.total;
@@ -63,16 +79,14 @@ const MyLikes = () => {
   };
 
   //좋아요 한 게시글 리스트 다중삭제
-  const onDeletLikeList = async e => {
-    e.preventDefault();
-
-    const params = {
-      'boardIdList' : BoardIdList
-    }
+  const onDeletLikeList = async () => {
+    const num = BoardIdList;
+    console.log('num', num);
 
     try {
-      const res = await authHttp.deleteLikeList(userId, params);
+      const res = await authHttp.deleteLikeList(userId, num);
       console.log(res);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -122,6 +136,41 @@ const MyLikes = () => {
     }
   };
 
+  //편집모드 닫기
+  const offEdit = e => {
+    e.preventDefault();
+
+    setIsEdit(false);
+    setBoardIdList([]);
+  };
+
+  const offModal = () => {
+    setIsModal(false);
+  };
+
+  const Props = {
+    body: {
+      text: '삭제하시겠습니까?',
+      icon: (
+        <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt='' />
+      ),
+      subText: <>삭제하면 복구가 불가능 합니다.</>,
+    },
+
+    buttons: {
+      btn: [
+        {
+          text: '취소',
+          onClick: offModal,
+        },
+        {
+          text: '삭제',
+          onClick: onDeletLikeList,
+        },
+      ],
+    },
+  };
+
   return (
     <Layout>
       <Wrap>
@@ -151,7 +200,7 @@ const MyLikes = () => {
                         border='1px solid #FF4122'
                         color='#FF4122'
                         marginRight
-                        onClick={() => setIsEdit(false)}
+                        onClick={e => offEdit(e)}
                       >
                         취소
                       </EditButton>
@@ -160,7 +209,7 @@ const MyLikes = () => {
                           backColor='#FF4122'
                           border='1px solid #FF4122'
                           color='white'
-                          onClick={e => onDeletLikeList(e)}
+                          onClick={() => setIsModal(true)}
                         >
                           삭제
                         </EditButton>
@@ -190,7 +239,7 @@ const MyLikes = () => {
                   <EmptyText>좋아요 누른 글이 없습니다.</EmptyText>
                 ) : (
                   <>
-                    <ContentsWrap>
+                    <ContentsWrap marginTop>
                       {Likes.map(like => (
                         <ImgTextWrap key={like.board_id}>
                           {IsEdit && (
@@ -213,6 +262,7 @@ const MyLikes = () => {
                             </>
                           )}
                           <ContentsBox
+                            include={BoardIdList.includes(like.board_id)}
                             onClick={() => {
                               window.open(
                                 `https://www.teamprojectvv.shop/category/${like.board_id}`,
@@ -220,7 +270,9 @@ const MyLikes = () => {
                               );
                             }}
                           >
-                            <ContentsText>{like.title}</ContentsText>
+                            <ContentsText>
+                              {like.title} ({like.commented})
+                            </ContentsText>
                             <ContentsArrow src='/image/mypage-alarms-arrow.png' />
                           </ContentsBox>
                         </ImgTextWrap>
@@ -257,6 +309,7 @@ const MyLikes = () => {
                   </>
                 )}
               </PageWrap>
+              {IsModal && <Alert {...Props} />}
             </BoxWrap>
           </>
         ) : (
@@ -267,49 +320,13 @@ const MyLikes = () => {
   );
 };
 
-export const Wrap = styled.div`
-  width: 1440px;
-  margin: 0 auto;
-  height: 73vh;
-  margin-bottom: 10vh;
-
-  @media screen and (max-width: 1700px) {
-    width: 1300px;
-  }
-`;
-
-export const Text = styled.div`
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  margin-top: 3vh;
-  color: #ed3419;
-`;
-
-export const BoxWrap = styled.div`
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  display: grid;
-  grid-template-columns: 25% 73%;
-  justify-content: space-between;
-`;
-
-export const PageWrap = styled.div`
-  width: 100%;
-  height: 100%;
-  border: 1px solid #ff6242;
-  border-radius: 10px;
-  padding: 30px 25px;
-  box-sizing: border-box;
-  position: relative;
-`;
-
 const TopWrap = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  top: -10px;
 `;
 
 const EditButton = styled.div`
@@ -333,42 +350,6 @@ const ButtonWrap = styled.div`
   justify-content: space-between;
 `;
 
-export const RedIconWrap = styled.div`
-  display: flex;
-`;
-
-export const RedIcon = styled.div`
-  width: 23px;
-  height: 23px;
-  padding-top: 2px;
-  box-sizing: border-box;
-`;
-
-export const IconText = styled.div`
-  font-size: 18px;
-  font-weight: 800;
-  color: #fb3b1e;
-  margin-left: 6px;
-`;
-
-export const EmptyText = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  position: relative;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 700;
-  color: #fb3b1e;
-  top: -15px;
-`;
-
-export const ContentsWrap = styled.div`
-  margin-top: 30px;
-`;
-
 const ImgTextWrap = styled.div`
   display: flex;
   align-items: center;
@@ -383,12 +364,13 @@ const CheckImg = styled.img`
   }
 `;
 
-export const ContentsBox = styled.div`
+const ContentsBox = styled.div`
   width: 100%;
   height: 5.8vh;
-  border: 1px solid #ced4da;
+  border: ${props =>
+    props.include ? '1px solid #FFA590' : '1px solid #ced4da'};
   border-radius: 10px;
-  margin: 10px 0;
+  margin: 5px 0;
   margin-top: ${props => props.marginTop};
   display: flex;
   align-items: center;
@@ -397,6 +379,7 @@ export const ContentsBox = styled.div`
   cursor: pointer;
   transition: 0.2s;
   position: relative;
+  background-color: ${props => (props.include ? '#FFECE8' : 'white')};
 
   &:hover {
     border: 1px solid #ffa590;
@@ -406,31 +389,6 @@ export const ContentsBox = styled.div`
     background-color: #f0f0f0;
     border: 1px solid #ff4122;
   }
-`;
-
-export const ContentsText = styled.div`
-  font-weight: 400;
-  font-size: 13px;
-`;
-
-const ContentsArrow = styled.img`
-  position: absolute;
-  top: 50%;
-  left: 97%;
-  transform: translate(0, -50%);
-`;
-
-//페이지네이션
-export const Nav = styled.nav`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  margin: 16px;
-  top: 90.6%;
-  left: 50%;
-  transform: translate(-50%, 0);
 `;
 
 export default MyLikes;

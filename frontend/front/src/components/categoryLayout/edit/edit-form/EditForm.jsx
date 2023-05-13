@@ -8,10 +8,10 @@ import CategoryHttp from "../../../../http/categoryHttp";
 import WriteHttp from "../../../../http/writeHttp";
 import {useParams} from "react-router-dom";
 import Quill from "../../writing/Quill";
-
+const categoryHttp = new CategoryHttp();
+const writeHttp = new WriteHttp();
 function EditForm() {
-    const categoryHttp = new CategoryHttp();
-    const writeHttp = new WriteHttp();
+
     //hook from 가져오기
     const {
         handleSubmit,
@@ -24,29 +24,31 @@ function EditForm() {
 
 
     const [categoryList,setCategoryList] = useState([]);
+    const [categoryError,setCategoryError] = useState(false);
     const [categoryValue, setCategoryValue] = useState('한식');
+
     const [board,setBoard] = useState([]);
     const [boardId,setBoardId] = useState(null);
+
     const [title, setTitle] = useState("");
-    const realTitle = title.length < 5 ? 1:0 ;
+    const [titleError,setTitleError] = useState(false);
     const [tag,setTag] = useState('');
-    const realTag = tag.length < 5 ? 1:0 ;
+
 
 
     const [footText,setFootText]  =useState('');
-    const isError = footText.length < 12 ? 1 : 0;
+
     const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
     const [error, setError] = useState(false);
 
+    const onCheckEnter = (e) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+        }
+    }
 
     const disableState = () =>{
-        let isData = true;
-        if(title.length >= 5 && tag.length >= 5){
-            isData = false;
-            return  isData;
-        }
 
-        return  isData;
 
     }
     //카테고리
@@ -69,7 +71,8 @@ function EditForm() {
        navigate(-1)
     }
     //수정
-    const onPatchSubmit = async () => {
+    const onPatchSubmit = async (e) => {
+        e.preventDefault();
         const FormData = {
           category:categoryValue,
           title,
@@ -78,14 +81,15 @@ function EditForm() {
           thumbnail:imagePreview,
           tags:tag
         }
-       try {
-           await categoryHttp.patchForm(boardId,FormData)
-           alert('글 수정이 완료되었습니다.');
-           navigate(-1);
-       }
-       catch (err){
-            alert('작성한 유저가 아닙니다.')
-       }
+        console.log(FormData)
+       // try {
+       //     // await categoryHttp.patchForm(boardId,FormData)
+       //     // alert('글 수정이 완료되었습니다.');
+       //     // navigate(-1);
+       // }
+       // catch (err){
+       //      alert('작성한 유저가 아닙니다.')
+       // }
     }
     useEffect(() => {
         (async () => {
@@ -95,6 +99,8 @@ function EditForm() {
                 alert('잘못된 요청입니다.');
                 return false;
             }
+
+            console.log(board)
             setCategoryList(categoryMenu.result);
             setBoard(board.result);
             setCategoryValue(board.result.category)
@@ -124,27 +130,28 @@ function EditForm() {
 
 
     return(
-        <form onSubmit={handleSubmit(onPatchSubmit)}>
+        <form onKeyPress={onCheckEnter} >
             <InputBox>
                 <label htmlFor="">카테고리</label>
-                <select name="category" value={categoryValue} onChange={onChange}>
+                <select name="category" value={categoryValue} onChange={onChange} >
+                    <option value="카테고리" disabled >카테고리</option>
                     {categoryList.map((categoryName,index) => {
                         return(
                             <option value={categoryName.name} key={index} >{categoryName.name}</option>
                         )
                     })}
-
                 </select>
+                {categoryError &&  <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>카테고리를 선택해주세요.</ErrorText> }
+                <TitleInput>
+                    <input name="title" type="text" placeholder="제목을 입력해주세요"   value={title}  onChange={TitleOnChange}  />
+                    {titleError && <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>최소 5자 이상 입력해주세요 !! </ErrorText> }
+                </TitleInput>
             </InputBox>
-            <TitleInput>
-                <label htmlFor="">제목</label>
-                <input  name="title" type="title" value={title}  onChange={TitleOnChange} placeholder="제목을 입력해주세요"  />
-                {realTitle ? <ErrorText>최소 5자 이상입력해주세요!!</ErrorText> : null }
-            </TitleInput>
+
             <TagInput>
                 <label htmlFor="" >태그</label>
                 <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="원하시는 태그를 입력해주세요"/>
-                {realTag ? <ErrorText>최소 5자 이상 입력해주세요!!</ErrorText> : null}
+
             </TagInput>
             <Upload>
                 <label htmlFor="">썸네일</label>
@@ -161,7 +168,7 @@ function EditForm() {
             </InputBox>
             <ButtonsWrap>
                 <CancelButton  onClick={cancel}> <span>취소</span></CancelButton>
-                <WritingButton type="submit" disabled={disableState()}>저장</WritingButton>
+                <WritingButton  disabled={disableState()} onClick={(e) => onPatchSubmit(e)}>저장</WritingButton>
             </ButtonsWrap>
         </form>
     )

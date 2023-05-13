@@ -48,8 +48,8 @@ const Container = styled.div`
 
 
 
-function Header({color,categoryName}) {
-    const [searchOn,setSearchOn] =useState(false);
+function Header({color,categoryName,contents,tagContents}) {
+    const [searchOn,setSearchOn] =useState(contents || tagContents  ? true : false);
     const [bottom,setBottom] =useState(false);
 
     const HandleSearch  = () => {
@@ -67,7 +67,7 @@ function Header({color,categoryName}) {
             <HeaderContainer >
               <Container >
                 <Logo />
-                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} /> :    <Nav  categoryName = {categoryName} />}
+                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} contents={contents} tagContents={tagContents} /> :    <Nav  categoryName = {categoryName} />}
                 <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn}/>
               </Container>
             </HeaderContainer>

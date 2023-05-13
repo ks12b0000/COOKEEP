@@ -8,7 +8,7 @@ class CategoryHttp extends Http {
     if (bool) {
       try {
         const { data } = await this.axios.get(
-          `board/list?category=${categoryName}&page=${pages}&size=10`
+          `board/list?category=${categoryName}&page=${pages}&size=20`
         );
         return data;
       } catch (err) {
@@ -17,7 +17,7 @@ class CategoryHttp extends Http {
     }else{
       try {
         const { data } = await this.axios.get(
-            `/board/list?category=${categoryName}&${allText}&size=10`
+            `/board/list?category=${categoryName}&${allText}&size=20`
         );
         return data;
       } catch (err) {

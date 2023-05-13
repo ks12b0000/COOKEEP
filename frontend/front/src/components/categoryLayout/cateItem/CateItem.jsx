@@ -55,7 +55,7 @@ function CateItem({cateItemName}) {
             <Ul>
                 {
 
-                    posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts}/>
+                    posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts} currentPage={currentPage}/>
                 }
             </Ul>
            <PaginationWrap > <Pagination  count={totalCount}  page={currentPage + 1 }   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton /></PaginationWrap>

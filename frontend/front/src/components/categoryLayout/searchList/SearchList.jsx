@@ -24,7 +24,7 @@ function SearchList() {
     },[contents])
     return (
         <>
-            <Header />
+            <Header  contents={contents}/>
             <Container>
 
 

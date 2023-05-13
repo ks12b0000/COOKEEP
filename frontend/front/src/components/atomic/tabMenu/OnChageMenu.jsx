@@ -36,7 +36,7 @@ const List = styled.div`
   }
 `
 const client = new SearchHttp();
-function OnChangeMenu({value,tag}) {
+function OnChangeMenu({value,tag,contents}) {
     const [autoList,setAutoList] =useState([])
     const navigation = useNavigate();
     const tagData = async () => {
