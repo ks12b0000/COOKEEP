@@ -39,13 +39,8 @@ public class Notification {
     @Column
     private String notification_url;
 
-
-    public Notification(User user, String message, String notification_url) {
-        this.user = user;
-        this.message = message;
-        this.createDate = new Date(System.currentTimeMillis());
-        this.notification_url = notification_url;
-    }
+    @Column(nullable = false)
+    private boolean confirmation;
 
     public Notification (User user, String message, String notification_url, Board board) {
         this.user = user;
@@ -53,6 +48,7 @@ public class Notification {
         this.createDate = new Date(System.currentTimeMillis());
         this.notification_url = notification_url;
         this.board = board;
+        this.confirmation = false;
     }
 
     public NotificationResponse toDto(){
@@ -62,6 +58,11 @@ public class Notification {
                 .message(message)
                 .createDate(createDate)
                 .notification_url(notification_url)
+                .confirmation(confirmation)
                 .build();
+    }
+
+    public void updateConfirmation() {
+        this.confirmation = true;
     }
 }
