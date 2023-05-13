@@ -120,11 +120,7 @@ public class UserServiceTest {
     @DisplayName("이메일로 아이디 찾기.")
     void findByUserId() {
         // given
-        JoinRequest dto = new JoinRequest("test1234", "test1234@gmail.com", "test1234");
-        User user = new User(dto.getUsername(), "testNick12", dto.getEmail(), dto.getPassword(), null);
-        when(userRepository.save(any())).thenReturn(user);
-        userService.join(dto);
-
+        User user = new User("test1234", "testNick12", "test1234@gmail.com", "test1234", null);
 
         FindIdRequest findIdRequest = new FindIdRequest("test1234@gmail.com");
         FindIdRequest findIdRequest2 = new FindIdRequest("test12342@gmail.com");
@@ -142,4 +138,42 @@ public class UserServiceTest {
         );
     }
 
+    @Test
+    @DisplayName("중복된 이메일이 있는지 확인.")
+    void checkEmailDuplicate() {
+        // given
+        User user = new User("test1234", "test122", "test1234@gmail.com", "test1234", null);
+
+        // stub 행동정의 (가설)
+        when(userRepository.findByEmail("test1234@gmail.com")).thenReturn(user);
+
+        // when
+
+        // then
+        assertAll (
+                () -> assertThatThrownBy(() -> userService.checkEmailDuplicate("test1234@gmail.com")).hasMessage("중복된 이메일이 있습니다."),
+                () -> assertThat(userService.checkIdDuplicate("test1222222@gmail.com")).isFalse()
+        );
+    }
+
+    @Test
+    @DisplayName("유저 아이디랑 이메일을 활용하여 임시 비밀번호로 변경")
+    void temporaryPassword() {
+        // given
+        User user = new User("test1234", "testNick12", "test1234@gmail.com", "test1234", null);
+
+        FindPwRequest findPwRequest = new FindPwRequest("test1234", "test1234@gmail.com");
+
+        // stub 행동정의 (가설)
+        when(userRepository.findByUsernameAndEmail(findPwRequest.getUsername(), findPwRequest.getEmail())).thenReturn(user);
+
+        // when
+        FindPwResponse findPwResponse = userService.findByUserPw(findPwRequest);
+
+        // then
+        // user 비밀번호랑 바뀐 비밀번호랑 다르면 맞음.
+        log.info("userPassword = {}", user.getPassword());
+        log.info("updatePassword = {}", findPwResponse.getPassword());
+        assertThat(findPwResponse.getPassword()).isNotEqualTo(user.getPassword());
+    }
 }
