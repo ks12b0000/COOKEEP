@@ -15,28 +15,34 @@ import {
   RedIcon,
   IconText,
 } from './MyPosts';
+import Alert from '../../components/atomic/modal/Alert';
 
 const authHttp = new AuthHttp();
 
 const MyAccount = () => {
   const params = useParams();
-  const { userId } = params;
+  let { userId } = params;
+  userId = parseInt(userId);
+  const userId2 = useSelector(
+    state => state.persistedReducer.userReducer.userId
+  );
 
   const navigate = useNavigate();
-
-  const username = useSelector(
-    state => state.persistedReducer.userReducer.username
-  );
 
   const isSocialLogin = useSelector(
     state => state.persistedReducer.userReducer.isSocialLogin
   );
 
   const [UserInfo, setUserInfo] = useState([]);
+  const [IsModal, setIsModal] = useState(false);
 
   useEffect(() => {
     onMypage();
-  }, []);
+
+    if (userId !== userId2) {
+      navigate('/notfound');
+    }
+  }, [UserInfo]);
 
   const onMypage = async () => {
     try {
@@ -48,81 +54,108 @@ const MyAccount = () => {
     }
   };
 
+  //회원탈퇴 기능
+  const onDeleteUser = async () => {
+    try {
+      const res = await authHttp.deleteUser(userId);
+      console.log(res);
+      alert('회원 탈퇴가 완료되었습니다. 메인 화면으로 이동합니다.');
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //모달창 끄기
+  const offModal = () => {
+    setIsModal(false);
+  };
+
+  const Props = {
+    body: {
+      text: '정말 탈퇴하시겠습니까?',
+      icon: (
+        <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt='' />
+      ),
+      subText: <>탈퇴하면 회원 정보가 삭제되어 다시 복구가 어렵습니다.</>,
+    },
+
+    buttons: {
+      btn: [
+        {
+          text: '취소',
+          onClick: offModal,
+        },
+        {
+          text: '탈퇴',
+          onClick: onDeleteUser,
+        },
+      ],
+    },
+  };
+
   return (
     <Layout>
       <Wrap>
         <Text>마이페이지</Text>
-        {username === UserInfo.username ? (
-          <>
-            <BoxWrap>
-              <MypageNav
-                userNickName={UserInfo.nickname}
-                userName={UserInfo.username}
-                userEmail={UserInfo.email}
-                categoryName='account'
-                userId={userId}
-              />
-              <PageWrap>
-                <RedIconWrap>
-                  <RedIcon>
-                    <img src='/image/mypage-account-r.png' alt='icon' />
-                  </RedIcon>
-                  <IconText>설정</IconText>
-                </RedIconWrap>
-                {isSocialLogin ? (
-                  <AccountWrap>
-                    <ProfileRound marginBottom>
-                      <img />
-                    </ProfileRound>
-                    <UserInfoBox>
-                      <UserInfoWrap>
-                        <InfoTitle>닉네임</InfoTitle>
-                        <InfoText>today123</InfoText>
-                      </UserInfoWrap>
-                      <UserInfoWrap marginBottom>
-                        <InfoTitle>이메일</InfoTitle>
-                        <InfoText>today123</InfoText>
-                      </UserInfoWrap>
-                    </UserInfoBox>
-                    <Button button>프로필 수정</Button>
-                    <Button>회원 탈퇴</Button>
-                  </AccountWrap>
-                ) : (
-                  <AccountWrap>
-                    <ProfileRound>
-                      <img />
-                    </ProfileRound>
-                    <UserInfoBox>
-                      <UserInfoWrap>
-                        <InfoTitle>닉네임</InfoTitle>
-                        <InfoText>today123</InfoText>
-                      </UserInfoWrap>
-                      <UserInfoWrap>
-                        <InfoTitle>아이디</InfoTitle>
-                        <InfoText>today123</InfoText>
-                      </UserInfoWrap>
-                      <UserInfoWrap marginBottom>
-                        <InfoTitle>이메일</InfoTitle>
-                        <InfoText>today123</InfoText>
-                      </UserInfoWrap>
-                    </UserInfoBox>
-                    <Button
-                      button
-                      onClick={() =>
-                        navigate(`/mypage/changeuserinfo/${userId}`)
-                      }
-                    >
-                      프로필 수정
-                    </Button>
-                    <Button>회원 탈퇴</Button>
-                  </AccountWrap>
-                )}
-              </PageWrap>
-            </BoxWrap>
-          </>
-        ) : (
-          navigate('/notfound')
-        )}
+        <BoxWrap>
+          <MypageNav
+            userNickName={UserInfo.nickname}
+            userName={UserInfo.username}
+            userEmail={UserInfo.email}
+            categoryName='account'
+            userId={userId}
+            userImage={UserInfo.user_image}
+          />
+          <PageWrap>
+            <RedIconWrap>
+              <RedIcon>
+                <img src='/image/mypage-account-r.png' alt='icon' />
+              </RedIcon>
+              <IconText>설정</IconText>
+            </RedIconWrap>
+            <AccountWrap>
+              <ProfileRound>
+                <Img src={UserInfo.user_image} />
+              </ProfileRound>
+              {isSocialLogin ? (
+                <UserInfoBox>
+                  <UserInfoWrap>
+                    <InfoTitle>닉네임</InfoTitle>
+                    <InfoText>{UserInfo.nickname}</InfoText>
+                  </UserInfoWrap>
+                  <UserInfoWrap marginBottom>
+                    <InfoTitle>이메일</InfoTitle>
+                    <InfoText>{UserInfo.email}</InfoText>
+                  </UserInfoWrap>
+                </UserInfoBox>
+              ) : (
+                <UserInfoBox>
+                  <UserInfoWrap>
+                    <InfoTitle>닉네임</InfoTitle>
+                    <InfoText>{UserInfo.nickname}</InfoText>
+                  </UserInfoWrap>
+                  <UserInfoWrap>
+                    <InfoTitle>아이디</InfoTitle>
+                    <InfoText>{UserInfo.username}</InfoText>
+                  </UserInfoWrap>
+                  <UserInfoWrap marginBottom>
+                    <InfoTitle>이메일</InfoTitle>
+                    <InfoText>{UserInfo.email}</InfoText>
+                  </UserInfoWrap>
+                </UserInfoBox>
+              )}
+              <Button
+                button
+                onClick={() => navigate(`/mypage/changeuserinfo/${userId}`)}
+              >
+                프로필 수정
+              </Button>
+              <Button onClick={() => setIsModal(true)}>회원 탈퇴</Button>
+            </AccountWrap>
+          </PageWrap>
+          {IsModal && <Alert {...Props} />}
+        </BoxWrap>
       </Wrap>
     </Layout>
   );
@@ -135,6 +168,9 @@ export const AccountWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: ${props => (props.top ? '10px' : '15px')};
+  left: 0;
 `;
 
 export const ProfileRound = styled.div`
@@ -144,6 +180,7 @@ export const ProfileRound = styled.div`
   border-radius: 50px;
   margin-bottom: ${props => (props.marginBottom ? '36px' : '20px')};
   overflow: hidden;
+  position: relative;
 
   @media screen and (max-width: 1700px) {
     width: 80px;
@@ -151,6 +188,18 @@ export const ProfileRound = styled.div`
     margin-bottom: ${props => (props.marginBottom ? '30px' : '15px')};
   }
 `;
+
+const Img = styled.img`
+  height: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  @media screen and (max-width: 1700px) {
+    height: 80px;
+  }
+`
 
 export const UserInfoBox = styled.div`
   display: flex;

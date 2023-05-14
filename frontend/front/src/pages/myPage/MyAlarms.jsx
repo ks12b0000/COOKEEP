@@ -30,13 +30,13 @@ const authHttp = new AuthHttp();
 
 const MyAlarms = () => {
   const params = useParams();
-  const { userId } = params;
+  let { userId } = params;
+  userId = parseInt(userId);
+  const userId2 = useSelector(
+    state => state.persistedReducer.userReducer.userId
+  );
 
   const navigate = useNavigate();
-
-  const username = useSelector(
-    state => state.persistedReducer.userReducer.username
-  );
 
   const [UserInfo, setUserInfo] = useState([]);
 
@@ -48,6 +48,10 @@ const MyAlarms = () => {
   useEffect(() => {
     onMypage();
     getAlarmList();
+
+    if (userId !== userId2) {
+      navigate('/notfound');
+    }
   }, [SelectedButton]);
 
   const onMypage = async () => {
@@ -112,76 +116,71 @@ const MyAlarms = () => {
     <Layout>
       <Wrap>
         <Text>마이페이지</Text>
-        {username === UserInfo.username ? (
-          <>
-            <BoxWrap>
-              <MypageNav
-                userNickName={UserInfo.nickname}
-                userName={UserInfo.username}
-                userEmail={UserInfo.email}
-                categoryName='alarms'
-                userId={userId}
-              />
-              <PageWrap>
-                <RedIconWrap>
-                  <RedIcon>
-                    <img src='/image/mypage-alarm-r.png' alt='icon' />
-                  </RedIcon>
-                  <IconText>댓글 알림</IconText>
-                </RedIconWrap>
-                {Alarms.length === 0 ? (
-                  <EmptyText>댓글 알림이 없습니다.</EmptyText>
-                ) : (
-                  <>
-                    <ContentsWrap>
-                      {Alarms.map(alarm => (
-                        <ContentsBox
-                          onClick={() => {
-                            window.open(alarm.notification_url, '_self');
-                          }}
-                          key={alarm.notification_id}
-                        >
-                          <ContentsText>{alarm.message}</ContentsText>
-                          <ContentsArrow src='/image/mypage-alarms-arrow.png' />
-                        </ContentsBox>
-                      ))}
-                    </ContentsWrap>
+        <BoxWrap>
+          <MypageNav
+            userNickName={UserInfo.nickname}
+            userName={UserInfo.username}
+            userEmail={UserInfo.email}
+            categoryName='alarms'
+            userId={userId}
+            userImage={UserInfo.user_image}
+          />
+          <PageWrap>
+            <RedIconWrap>
+              <RedIcon>
+                <img src='/image/mypage-alarm-r.png' alt='icon' />
+              </RedIcon>
+              <IconText>댓글 알림</IconText>
+            </RedIconWrap>
+            {Alarms.length === 0 ? (
+              <EmptyText>댓글 알림이 없습니다.</EmptyText>
+            ) : (
+              <>
+                <ContentsWrap>
+                  {Alarms.map(alarm => (
+                    <ContentsBox
+                      onClick={() => {
+                        window.open(alarm.notification_url, '_self');
+                      }}
+                      key={alarm.notification_id}
+                    >
+                      <ContentsText>{alarm.message}</ContentsText>
+                      <ContentsArrow src='/image/mypage-alarms-arrow.png' />
+                    </ContentsBox>
+                  ))}
+                </ContentsWrap>
 
-                    <Nav>
-                      {SelectedButton > 0 && (
-                        <Button onClick={() => firstList()}>
-                          <DoubleArrow url='/image/double-arrow-left.png' />
-                        </Button>
-                      )}
-                      <Button onClick={() => leftList()}>
-                        <Arrow url='/image/arrow-left.png' />
-                      </Button>
-                      {Page.map((page, i) => (
-                        <Button
-                          key={i}
-                          onClick={() => pageList(page)}
-                          aria-current={page === SelectedButton ? 'true' : null}
-                        >
-                          {page + 1}
-                        </Button>
-                      ))}
-                      <Button onClick={() => rightList()}>
-                        <Arrow url='/image/arrow-right.png' />
-                      </Button>
-                      {SelectedButton < Page.length - 1 && (
-                        <Button onClick={() => lastList()}>
-                          <DoubleArrow url='/image/double-arrow-right.png' />
-                        </Button>
-                      )}
-                    </Nav>
-                  </>
-                )}
-              </PageWrap>
-            </BoxWrap>
-          </>
-        ) : (
-          navigate('/notfound')
-        )}
+                <Nav>
+                  {SelectedButton > 0 && (
+                    <Button onClick={() => firstList()}>
+                      <DoubleArrow url='/image/double-arrow-left.png' />
+                    </Button>
+                  )}
+                  <Button onClick={() => leftList()}>
+                    <Arrow url='/image/arrow-left.png' />
+                  </Button>
+                  {Page.map((page, i) => (
+                    <Button
+                      key={i}
+                      onClick={() => pageList(page)}
+                      aria-current={page === SelectedButton ? 'true' : null}
+                    >
+                      {page + 1}
+                    </Button>
+                  ))}
+                  <Button onClick={() => rightList()}>
+                    <Arrow url='/image/arrow-right.png' />
+                  </Button>
+                  {SelectedButton < Page.length - 1 && (
+                    <Button onClick={() => lastList()}>
+                      <DoubleArrow url='/image/double-arrow-right.png' />
+                    </Button>
+                  )}
+                </Nav>
+              </>
+            )}
+          </PageWrap>
+        </BoxWrap>
       </Wrap>
     </Layout>
   );
