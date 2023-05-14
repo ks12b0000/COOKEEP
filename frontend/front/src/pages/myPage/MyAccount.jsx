@@ -42,7 +42,7 @@ const MyAccount = () => {
     if (userId !== userId2) {
       navigate('/notfound');
     }
-  }, [UserInfo]);
+  }, []);
 
   const onMypage = async () => {
     try {

@@ -145,7 +145,9 @@ const ReplyList = props => {
       <ReplyArrow src='/image/reply-arrow.png' Length={Replys.length} />
       {Replys?.map(reply => (
         <CommentWrap key={reply.reply_id}>
-          <Profile />
+                    <Profile>
+            <Img src={reply.user_image}/>
+          </Profile>
           <CommentBlock>
             <TextWrap>
               <TextBlock>
@@ -324,8 +326,17 @@ const Profile = styled.div`
   height: 70px;
   border-radius: 70px;
   background-color: #ced4da;
-  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
 `;
+
+const Img = styled.img`
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
 
 const CommentBlock = styled.div`
   width: 100%;

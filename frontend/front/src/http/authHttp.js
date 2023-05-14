@@ -94,6 +94,19 @@ class AuthHttp extends Http {
     }
   };
 
+  //닉네임 변경
+  putUpdateNickname = async (user_id, params) => {
+    try {
+      const res = await this.axios.put(
+        `auth/user/update/nickname/${user_id}`,
+        params
+      );
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  };
+
   //아이디 변경
   putUpdateUsername = async (user_id, params) => {
     try {

@@ -15,6 +15,7 @@ const Written = () => {
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
   const [Username, setUsername] = useState('');
+  const [UserPicture, setUserPicture] = useState('');
 
   useEffect(() => {
     onWrittenPage();
@@ -29,6 +30,7 @@ const Written = () => {
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
       setUsername(res.data.result.username)
+      setUserPicture(res.data.result.userPicture)
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -74,7 +76,9 @@ const Written = () => {
       <Wrap>
         <Title onClick={() => console.log(WrittenList)}>작성글 보기</Title>
         <UserBlock>
-          <UserImg></UserImg>
+          <Profile>
+            <Img src={UserPicture} />
+          </Profile>
           <UserText>
             <span>닉네임</span>{Username}
           </UserText>
@@ -157,13 +161,23 @@ const UserBlock = styled.div`
   margin-bottom: 15px;
 `;
 
-const UserImg = styled.div`
+const Profile = styled.div`
   width: 60px;
   height: 60px;
-  border-radius: 50px;
-  background-color: #d9d9d9;
-  margin-right: 24px;
+  border-radius: 60px;
+  background-color: #ced4da;
+  position: relative;
+  overflow: hidden;
+  margin-right: 20px;
 `;
+
+const Img = styled.img`
+  height: 60px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
 
 const UserText = styled.div`
   font-size: 15px;
