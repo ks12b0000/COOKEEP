@@ -146,7 +146,9 @@ const CommentList = props => {
       <CommentTitle>{`댓글 (${Count})`}</CommentTitle>
       {Comments?.map(comment => (
         <CommentWrap key={comment.comment_id}>
-          <Profile />
+          <Profile>
+            <Img src={comment.user_image}/>
+          </Profile>
           <CommentBlock>
             {/* 상단 작성자 이름 */}
             <UserNameWrap>
@@ -343,7 +345,17 @@ const Profile = styled.div`
   height: 70px;
   border-radius: 70px;
   background-color: #ced4da;
+  position: relative;
+  overflow: hidden;
 `;
+
+const Img = styled.img`
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
 
 const CommentBlock = styled.div`
   width: 100%;
