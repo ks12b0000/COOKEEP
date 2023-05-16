@@ -157,7 +157,7 @@ function WritingForm() {
 
 
 
-       if( imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png") {
+       if( imagePreview.length === 0 ) {
            alert('썸네일을 등록해주세요');
            setError(true)
            return false;
@@ -207,7 +207,7 @@ function WritingForm() {
     return (
         <>
             <form  onKeyPress={onCheckEnter} >
-                 <Title>글쓰기</Title>
+                <Title>글쓰기</Title>
                 <InputBox>
                     <select name="category" value={categoryValue} onChange={onChange} >
                         <option value="카테고리" disabled >카테고리</option>
@@ -228,21 +228,15 @@ function WritingForm() {
                 </QuillBox>
                 <TagInput>
                     <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
-
                 </TagInput>
                 <Upload>
-                 
                     <InputFile htmlFor="input-file">썸네일을 등록해주세요</InputFile>
                     <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
-
-
                     {error && <ErrorText style={{ color: "red" }}><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>썸네일을 등록해주세요</ErrorText>}
                 </Upload>
-
                 <IMgWrap>
                     {imagePreview && <UploadImg img={imagePreview} onClick={ImgSelect} imgIndex={imgIndex}/>}
                 </IMgWrap>
-
                 <ButtonsWrap>
                     <CancelButton onClick={cancel}>취소</CancelButton>
                     <WritingButton onClick={CreateOpen} >등록</WritingButton>
