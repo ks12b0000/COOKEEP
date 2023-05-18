@@ -49,7 +49,7 @@ function CateItem({cateItemName}) {
                 <select onChange={FilterPosts} defaultValue="8">
                     <option value={`page=${currentPage}`}>최신순</option>
                     <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
-                    <option value={`liked,desc&page=${currentPage}`}>좋아요순</option>
+                    <option value={`sort=liked,desc&page=${currentPage}`}>좋아요순</option>
                 </select>
             </SelectBox>
             <Ul>

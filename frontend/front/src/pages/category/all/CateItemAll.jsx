@@ -50,7 +50,7 @@ function CateItemAll() {
                     <select onChange={FilterPosts} >
                         <option value={`page=${currentPage}`}>최신순</option>
                         <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
-                        <option value={`liked,desc&page=${currentPage}`}>좋아요순</option>
+                        <option value={`sort=liked,desc&page=${currentPage}`}>좋아요순</option>
                     </select>
                 </SelectBox>
                 <Ul>
