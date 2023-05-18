@@ -125,20 +125,6 @@ public class MainPageController {
         return new BaseResponse("성공적으로 글을 가져왔습니다.", pages);
     }
 
-    /**
-     * 알림 목록 가져오기
-     * [GET] /auth/main/user/notification/list/{user_id}
-     * @param user_id
-     * @return
-     */
-    @GetMapping("/auth/main/user/notification/list/{user_id}")
-    public BaseResponse notificationList(@PathVariable Long user_id, @SortDefault(sort = "createDate", direction = Sort.Direction.DESC) Sort sort) {
-        GetNotificationResponse getNotificationResponse = mainPageService.notificationByUser(user_id, sort);
-
-        return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
-    }
-
-
     @GetMapping("/main/recommend/board/weekly/list")
     public BaseResponse weeklyBoardRecommend(){
         List<BoardResponseInBannerFormat> list = weeklyRecommendService.getRecommend();

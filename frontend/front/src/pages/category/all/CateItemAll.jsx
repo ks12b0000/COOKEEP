@@ -18,12 +18,13 @@ function CateItemAll() {
     const [allText,setAllText] = useState(0);
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-
     const [totalCount, setTotalCount] = useState(0);
+
     const onChangePagination = (e,p)=> {
         setCurrentPage(p - 1)
-
     };
+
+
         useEffect(() => {
             (async () => {
                 try {
@@ -54,10 +55,7 @@ function CateItemAll() {
                     </select>
                 </SelectBox>
                 <Ul>
-                    {
-
-                        posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts} currentPag={currentPage}/>
-                    }
+                    {posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts} currentPag={currentPage}/>}
                 </Ul>
                 <PaginationWrap > <Pagination  count={totalCount}  page={currentPage + 1 }   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton /></PaginationWrap>
             </>

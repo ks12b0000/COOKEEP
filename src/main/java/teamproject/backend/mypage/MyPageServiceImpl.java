@@ -17,6 +17,7 @@ import teamproject.backend.mypage.dto.*;
 import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.RandomNickName;
+import teamproject.backend.user.UserRepository;
 import teamproject.backend.utils.S3.S3DAO;
 import teamproject.backend.utils.SHA256;
 
@@ -45,6 +46,7 @@ public class MyPageServiceImpl implements MyPageService {
     private final BoardCommentRepository boardCommentRepository;
 
     private final S3DAO s3DAO;
+    private final UserRepository userRepository;
 
 
     /**
@@ -286,5 +288,32 @@ public class MyPageServiceImpl implements MyPageService {
                 .build();
 
         return getCommentByUserResponse;
+    }
+
+    /**
+     * 닉네임 중복체크
+     * @param nickName
+     * @return
+     */
+    @Override
+    public boolean checkNickNameDuplicate(String nickName) {
+        User user = userRepository.findByNickname(nickName);
+
+        if(user == null){
+            return false; // 중복 X
+        } else {
+            throw new BaseException(DUPLICATE_NICKNAME); // 중복 O
+        }
+    }
+
+    /**
+     * 알림 확인여부
+     * @return
+     */
+    @Override
+    @Transactional
+    public void confirmationUpdateNotification(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new BaseException(NOT_NOTIFICATION));
+        notification.updateConfirmation();
     }
 }

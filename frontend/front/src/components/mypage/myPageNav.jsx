@@ -9,7 +9,9 @@ const MypageNav = props => {
   return (
     <Wrap>
       <UserWrap>
-        <UserImg />
+        <UserImg>
+          <Img src={props.userImage} />
+        </UserImg>
         <UserInfo>
           <div>
             <span>닉네임</span>
@@ -115,9 +117,21 @@ const UserImg = styled.div`
   border-radius: 50px;
   background-color: #d9d9d9;
   margin-right: 24px;
+  overflow: hidden;
+  position: relative;
+`;
+
+const Img = styled.img`
+  height: 80px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const UserInfo = styled.div`
+  position: relative;
+  top: 7px;
   div {
     color: #5a5c5f;
     font-size: 14px;

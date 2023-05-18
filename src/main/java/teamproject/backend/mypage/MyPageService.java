@@ -34,4 +34,8 @@ public interface MyPageService {
     public List<String> suggestNickname(int size);
 
     public GetLikeAndCommentByUserResponse commentByUser(Pageable pageable, Long user_id);
+
+    boolean checkNickNameDuplicate(String nickName);
+
+    public void confirmationUpdateNotification(Long notificationId);
 }
