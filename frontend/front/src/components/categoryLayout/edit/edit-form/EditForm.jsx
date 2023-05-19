@@ -21,7 +21,7 @@ function EditForm() {
 
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
     const navigate = useNavigate();
-
+    const [quillValue,setQuillValue] = useState("안녕");
 
     const [categoryList,setCategoryList] = useState([]);
     const [categoryError,setCategoryError] = useState(false);
@@ -53,7 +53,6 @@ function EditForm() {
     }
     //카테고리
     const onChange = (e) =>{
-
         setCategoryValue(e.target.value);
     }
     //타이틀
@@ -107,7 +106,7 @@ function EditForm() {
             setTitle(board.result.title);
             setTag(board.result.tags);
             setImagePreview(board.result.thumbnail);
-            setFootText(board.result.text);
+            setQuillValue(board.result.text);
             setBoardId(board.result.board_id);
         })()
     },[])
@@ -119,6 +118,7 @@ function EditForm() {
 
     const imageChange = async (e) => {
         const files = e.target.files; // FileList 객체
+        console.log(files[0]);
         try {
             const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id:userId  });
             setImagePreview(result.url);
@@ -128,11 +128,17 @@ function EditForm() {
     };
 
 
+    const Props = {
+        quillValue,
+        setQuillValue,
 
+
+
+    }
     return(
         <form onKeyPress={onCheckEnter} >
+            <Title>글 수정하기</Title>
             <InputBox>
-                <label htmlFor="">카테고리</label>
                 <select name="category" value={categoryValue} onChange={onChange} >
                     <option value="카테고리" disabled >카테고리</option>
                     {categoryList.map((categoryName,index) => {
@@ -147,25 +153,21 @@ function EditForm() {
                     {titleError && <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>최소 5자 이상 입력해주세요 !! </ErrorText> }
                 </TitleInput>
             </InputBox>
-
+            <QuillBox>
+                <Quill  {...Props}/>
+            </QuillBox>
             <TagInput>
-                <label htmlFor="" >태그</label>
-                <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="원하시는 태그를 입력해주세요"/>
+                <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
 
             </TagInput>
             <Upload>
-                <label htmlFor="">썸네일</label>
-                <InputFile htmlFor="input-file">파일 선택</InputFile>
+
+                <InputFile htmlFor="input-file">썸네일을 등록해주세요</InputFile>
                 <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
-                <IMGBOX>
-                    <img src={imagePreview} alt={imagePreview} />
-                </IMGBOX>
+
+                {error && <ErrorText style={{ color: "red" }}><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>썸네일을 등록해주세요</ErrorText>}
             </Upload>
-            {error && <p style={{ color: "red" }}>이미지를 업로드!!!</p>}
-            <InputBox>
-                <label htmlFor="">본문</label>
-                <Quill />
-            </InputBox>
+
             <ButtonsWrap>
                 <CancelButton  onClick={cancel}> <span>취소</span></CancelButton>
                 <WritingButton  disabled={disableState()} onClick={(e) => onPatchSubmit(e)}>저장</WritingButton>
@@ -175,7 +177,45 @@ function EditForm() {
 }
 export default EditForm;
 //스타일
+const Title = styled.h1`
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  color: #ED3419;
+`
 
+const QuillBox = styled.div`
+    
+  
+   .quill {
+    
+     
+     .ql-toolbar.ql-snow{
+       border:none;
+       .ql-picker-label{
+         color:#CED4DA;
+        
+       }
+     }
+     .ql-container.ql-snow{
+       border:none;
+     }
+
+     .ql-snow .ql-stroke{
+       stroke:#CED4DA;
+     
+     }
+     .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill{
+       stroke:#CED4DA;
+       fill:#CED4DA;
+     }
+     .ql-editor.ql-blank::before{
+       color:#CED4DA;
+     }
+   }
+
+`
 const ErrorText = styled.span`
     position: absolute;
     bottom:-5px;
@@ -185,171 +225,177 @@ const ErrorText = styled.span`
     color:red;
     font-size: 14px;
 `
-const TitleInput = styled.fieldset`
+const TitleInput = styled.div`
+  width: 100%;
   position: relative;
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  border: none;
-  label {
-    font-size: 20px;
-    font-weight: 500;
-  }
-
-  input {
+  input{
     width: 100%;
-    margin: 20px 0;
-    padding: 20px 25px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    border-radius: 10px;
-    &:focus {
-      outline: none;
-    }
   }
-  
 `
 const TagInput = styled.fieldset`
   position: relative;
-  margin-top: 20px;
+
   display: flex;
   flex-direction: column;
+  border: none;
+  label {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    color: #CED4DA;
+  }
+
+  input {
+    padding: 10px 12px;
+    box-sizing: border-box;
+    width: 250px;
+    height: 48px;
+    border: 1px solid #CED4DA;
+    border-radius: 5px;
+    &::placeholder{
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 23px;
+      color: #CED4DA;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+      border:1px solid #FFA590;
+    }
+  }
+
+`
+const InputBox = styled.fieldset`
+  position: relative;
+  margin-top: 24px;
+  display: flex;
+  gap:24px;
+  flex-direction: row;
   border: none;
   label {
     font-size: 20px;
     font-weight: 500;
   }
 
-  input {
-    width: 100%;
-    margin: 20px 0;
-    padding: 20px 25px;
-    border: 1px solid #ccc;
+  select {
+
+    width: 137px;
+    height: 48px;
     box-sizing: border-box;
-    border-radius: 10px;
+    border: 1px solid #CED4DA;
+    padding:12px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    -webkit-appearance: none; /* for chrome */
+    -moz-appearance: none; /*for firefox*/
+    appearance: none;
+    background: url('https://i.imgur.com/Adb9Pdi.png') 90% / 12px no-repeat;
+    cursor: pointer;
     &:focus {
       outline: none;
     }
-  }
-  
-`
-const InputBox = styled.fieldset`
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    border: none;
-    label {
-        font-size: 20px;
-        font-weight: 500;
-    }
 
-    select {
-        margin: 20px 0;
-        padding: 20px 25px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        -webkit-appearance: none; /* for chrome */
-        -moz-appearance: none; /*for firefox*/
-        appearance: none;
-        background: url("https://i.imgur.com/e60gpgR.png") 98% / 12px no-repeat;
-        cursor: pointer;
-        &:focus {
-            outline: none;
-        }
+
+
+  }
+  input {
+    height: 48px;
+    flex-grow: 1;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #CED4DA;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+
+    &::placeholder {
+      color: #CED4DA;
     }
-    input {
-        margin: 20px 0;
-        padding: 20px 25px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        &:focus {
-            outline: none;
-        }
+    &:focus {
+      outline: none;
+      box-shadow: none;
+      border:1px solid #FFA590;
     }
+  }
 `;
-const Ckedit = styled.div`
-    height: 500px;
-    margin-top: 20px;
-`;
+
 const ButtonsWrap = styled.div`
-    display: flex;
-    width: 100%;
-    gap: 20px;
-    justify-content: end;
+  margin-top:42px;
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  justify-content: end;
 `;
 const CancelButton = styled.div`
-    cursor: pointer;
-    text-align: center;
-    min-width: 100px;
-    width: auto;
-    height: 45px;
-    line-height: 45px;
-    border: 1px solid #222222;
-    box-sizing: border-box;
-    background: #fff;
-    &[disabled]{
-      background:#ccc;
-      &:hover{
-        background:#ccc;
-      }
-    }
-    &:hover {
-        background: #35c5f0;
-        border: none;
-       
-    }
-  
+  cursor: pointer;
+  text-align: center;
+  width: 130px;
+  height: 48px;
+  line-height: 48px;
+  border:1px solid #FF4122;;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 16px;
+  box-sizing: border-box;
+  color:#FF4122;
+  &:hover {
+
+    background: red;
+    color:#ffffff;
+    border: none;
+
+  }
+
 `;
 const WritingButton = styled.button`
-    cursor: pointer;
-    min-width: 100px;
-    width: auto;
-    padding: 10px;
-    height: 45px;
-    border: 1px solid #222222;
-    background: #fff;
-    &[disabled]{
-      background:#ccc;
-      &:hover{
-        background:#ccc;
-      }
-    }
-    &:hover {
-        background: #35c5f0;
-        border: none;
-        span {
-            color: #fff;
-        }
-    }
+  cursor: pointer;
+  width: 130px;
+  height: 48px;
+  line-height: 48px;
+  background: #FF4122;
+  border-radius: 5px;
+  border:none;
+  font-weight: 600;
+  font-size: 16px;
+  color:#ffffff;
+
+  &:hover {
+    background: red;
+    border: none;
     span {
-        color: #222222;
-        font-size: 16px;
-        font-weight: 600;
-        letter-spacing: 0.7px;
-        font-family: "Pretendard";
+      color: #fff;
     }
+  }
+
 `;
 const Upload = styled.fieldset`
-    margin-top: 20px;
+  position: relative;
+  margin-top: 34px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: none;
+  label {
     display: flex;
     align-items: center;
-    gap: 20px;
-    border: none;
-    label {
-        font-size: 20px;
-        font-weight: 500;
-    }
-`;
-const IMGBOX = styled.div`
-    width: 150px;
-    height: 150px;
+    padding:12px;
+    width: 250px;
+    box-sizing: border-box;
+    height: 48px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+    color: #CED4DA;
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+  }
 `;
+
+
 const InputFile = styled.label`
     font-size: 16px !important;
     padding: 6px 25px;
