@@ -44,7 +44,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-/*
+
 jar {
 	enabled = false
 }
@@ -93,8 +93,7 @@ task buildReact(type: Exec) {
 		commandLine "npm", "run-script", "build"
 	}
 }
-*/
-/*
+
 task installReact(type: Exec) {
 	workingDir "$webappDir"
 	inputs.dir "$webappDir"
@@ -106,4 +105,4 @@ task installReact(type: Exec) {
 		commandLine "npm", "audit", "fix"
 		commandLine 'npm', 'install'
 	}
-}*/
+}
