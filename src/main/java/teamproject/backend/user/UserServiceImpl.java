@@ -315,4 +315,11 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
         user.get().setImageURL(s3DAO.getURL(fileName));
     }
+
+    @Override
+    public FindUserImageResponse findUserImageByUserId(Long id){
+        Optional<User> user = userRepository.findById(id);
+        if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
+        return new FindUserImageResponse(id, user.get().getImageURL());
+    }
 }
