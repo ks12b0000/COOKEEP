@@ -11,7 +11,7 @@ class AuthHttp extends Http {
     }
   };
 
-  // 마이페이지
+  //마이페이지
   getMypage = async id => {
     try {
       const res = await this.axios.get(`auth/user/mypage?user_id=${id}`);
@@ -21,7 +21,17 @@ class AuthHttp extends Http {
     }
   };
 
-  // 마이페이지 알림 리스트 불러오기
+  //유저 이미지 조회
+  getUserImage = async id => {
+    try {
+      const res = await this.axios.get(`/auth/user/image/${id}`);
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //마이페이지 알림 리스트 불러오기
   getAlarmList = async (user_id, num) => {
     try {
       const res = await this.axios.get(
@@ -154,16 +164,6 @@ class AuthHttp extends Http {
         formdata,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
-      return res;
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  //프로필 사진 조회
-  getProfile = async user_id => {
-    try {
-      const res = await this.axios.get(`/image?image_id={}}`);
       return res;
     } catch (err) {
       throw err;
