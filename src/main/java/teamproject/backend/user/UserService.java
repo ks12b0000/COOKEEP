@@ -27,4 +27,6 @@ public interface UserService {
     public FindPwResponse findByUserPw(FindPwRequest findPwRequest);
 
     void uploadImage(Long userId, MultipartFile image) throws IOException;
+
+    FindUserImageResponse findUserImageByUserId(Long id);
 }

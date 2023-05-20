@@ -14,6 +14,7 @@ import CancelPopup from "../popup/CancelPopup";
 import CreatePopup from "../popup/CreatePopup";
 import LoadingPopup from "../popup/LoadingPopup";
 import CompletePopup from "../popup/CompletePopup";
+import UploadImg from "../../../atomic/UploadImg";
 
 
 
@@ -48,7 +49,8 @@ function WritingForm() {
     const [titleError,setTitleError] = useState(false);
     const [tag,setTag] = useState('');
     const [tagError,setTagError] = useState(false);
-    const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
+    const [imagePreview, setImagePreview] = useState([]);
+    const [imgIndex,setImgIndex] =useState(0);
     const [error, setError] = useState(false);
 
     const onCheckEnter = (e) => {
@@ -89,16 +91,26 @@ function WritingForm() {
     }, [imagePreview]);
 
     const imageChange = async (e) => {
-        const files = e.target.files; // FileList 객체
+        if(imagePreview.length >= 3 || e.target.files.length === 3){
+            alert('이미지는 3개이상 넣을실수없어요 ') ;
+            return false;
+        }
 
+        const files = e.target.files; // FileList 객체
         try {
-            const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id:userId  });
-            setImagePreview(result.url);
+                const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id:userId  });
+                setImagePreview((prevState) => {
+                    return [...prevState, {url: result.url}]
+                })
         } catch (err) {
             alert("파일 크기는 1메가로 지정되어있씁니다.");
         }
     };
 
+    console.log(imagePreview);
+    const ImgSelect = (index) => {
+        setImgIndex(index);
+    }
 
     const onSubmit =  () => {
         const FormData = {
@@ -106,7 +118,7 @@ function WritingForm() {
             title,
             text:quillValue,
             user_id:userId,
-            thumbnail:imagePreview,
+            thumbnail:imagePreview[imgIndex].url,
             tags:tag
         }
         setIsLoading(true)
@@ -123,7 +135,6 @@ function WritingForm() {
 
 
     };
-
    const CreateOpen = (e) => {
        e.preventDefault();
 
@@ -146,7 +157,7 @@ function WritingForm() {
 
 
 
-       if( imagePreview === "https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png") {
+       if( imagePreview.length === 0 ) {
            alert('썸네일을 등록해주세요');
            setError(true)
            return false;
@@ -157,6 +168,7 @@ function WritingForm() {
 
        setCreateIsOpen(true);
    }
+
     const Props = {
         quillValue,
         setQuillValue,
@@ -195,7 +207,7 @@ function WritingForm() {
     return (
         <>
             <form  onKeyPress={onCheckEnter} >
-                 <Title>글쓰기</Title>
+                <Title>글쓰기</Title>
                 <InputBox>
                     <select name="category" value={categoryValue} onChange={onChange} >
                         <option value="카테고리" disabled >카테고리</option>
@@ -216,16 +228,15 @@ function WritingForm() {
                 </QuillBox>
                 <TagInput>
                     <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
-
                 </TagInput>
                 <Upload>
-                 
                     <InputFile htmlFor="input-file">썸네일을 등록해주세요</InputFile>
                     <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
-
                     {error && <ErrorText style={{ color: "red" }}><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>썸네일을 등록해주세요</ErrorText>}
                 </Upload>
-
+                <IMgWrap>
+                    {imagePreview && <UploadImg img={imagePreview} onClick={ImgSelect} imgIndex={imgIndex}/>}
+                </IMgWrap>
                 <ButtonsWrap>
                     <CancelButton onClick={cancel}>취소</CancelButton>
                     <WritingButton onClick={CreateOpen} >등록</WritingButton>
@@ -245,6 +256,9 @@ function WritingForm() {
 
 
 export default WritingForm;
+const IMgWrap = styled.div`
+
+`
 
 const TitleInput = styled.div`
   width: 100%;

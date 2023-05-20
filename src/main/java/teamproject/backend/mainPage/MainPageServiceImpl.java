@@ -13,7 +13,6 @@ import teamproject.backend.domain.*;
 import teamproject.backend.mainPage.dto.*;
 import teamproject.backend.mypage.MyPageRepository;
 import teamproject.backend.mypage.dto.GetNotificationResponse;
-import teamproject.backend.mypage.dto.NotificationResponse;
 import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.tag.TagRepository;
@@ -97,21 +96,6 @@ public class MainPageServiceImpl implements MainPageService {
         GetTop10SearchList getTop10SearchList = GetTop10SearchList.builder().top10SearchLists(searchLists).build();
 
         return getTop10SearchList;
-    }
-
-    /**
-     * 알림 목록 가져오기
-     * @param user_id
-     * @return
-     */
-    @Override
-    public GetNotificationResponse notificationByUser(Long user_id, Sort sort) {
-        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        List<NotificationResponse> notificationList = notificationRepository.findByUser(user, sort).stream().map(Notification::toDto).collect(Collectors.toList());
-
-        GetNotificationResponse getNotificationResponse = GetNotificationResponse.builder().notificationList(notificationList).build();
-
-        return getNotificationResponse;
     }
 
     /**

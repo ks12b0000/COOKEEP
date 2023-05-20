@@ -6,7 +6,8 @@ import {Link} from "react-router-dom";
 import Buttons from "../../components/atomic/Buttons";
 import styled from "@emotion/styled";
 import Banner from "../../components/layout/home/banner/Banner";
-
+import {useSelector} from "react-redux";
+import { useNavigate } from "react-router";
 const Container = styled.section`
   width: 1440px;
   min-height: 800px;
@@ -30,7 +31,18 @@ const ButtonWrap = styled.div`
 `;
 function Category({title,categoryName}){
 
+    const {isLoggedIn} = useSelector(state => state.persistedReducer.userReducer);
+    const navigation = useNavigate()
 
+   const Writing =() => {
+        if(!isLoggedIn){
+        alert('로그인유저가아닙니다');
+        navigation('/login');
+        return false;
+        }
+        navigation('writing');
+
+   }
     return(
         <Layout>
             <Container>
@@ -38,8 +50,8 @@ function Category({title,categoryName}){
                     <h1>{title}</h1>
                     <CateItem cateItemName={categoryName}/>
                     <ButtonWrap>
-                        <div>
-                            <Link to="writing">
+                        <div onClick={Writing}>
+                            <Link>
                                 <Buttons text="글쓰기" />
                             </Link>
                         </div>
