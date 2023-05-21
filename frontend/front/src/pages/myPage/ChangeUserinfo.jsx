@@ -156,7 +156,7 @@ const ChangeUserinfo = () => {
 
       dispatch(
         changeUserImg({
-          userImg: 'res.data.result.user_image',
+          userImg: res.data.result.url,
         })
       );
     } catch (err) {
