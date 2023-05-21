@@ -18,7 +18,7 @@ import {
   IconText,
 } from './MyPosts';
 import { AccountWrap, ProfileRound, Button } from './MyAccount';
-import LoadingAnimation from '../../components/animation/Loading';
+import LoadingPopup from '../../components/categoryLayout/writing/popup/LoadingPopup';
 
 const authHttp = new AuthHttp();
 const userHttp = new UserHttp();
@@ -744,10 +744,7 @@ const ChangeUserinfo = () => {
         </BoxWrap>
         {isUpdateCompleted && (
           <LoaderBack>
-            <LoaderModal>
-              <LoadingAnimation />
-              <ModalText>변경사항을 저장 중입니다.</ModalText>
-            </LoaderModal>
+            <LoadingPopup />
           </LoaderBack>
         )}
       </Wrap>
