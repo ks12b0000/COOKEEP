@@ -18,7 +18,7 @@ import {
   IconText,
 } from './MyPosts';
 import { AccountWrap, ProfileRound, Button } from './MyAccount';
-import LoadingAnimation from '../../components/animation/Loading';
+import LoadingPopup from '../../components/categoryLayout/writing/popup/LoadingPopup';
 
 const authHttp = new AuthHttp();
 const userHttp = new UserHttp();
@@ -135,6 +135,15 @@ const ChangeUserinfo = () => {
 
     //Preview sate값 저장
     const file = previewRef.current.files[0];
+
+    // max 사이즈 제한
+    const fileSize = file.size;
+    const maxSize = 1 * 1024 * 1024;
+    if (fileSize > maxSize) {
+      alert('파일 크기가 1MB 제한을 초과합니다.');
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -156,11 +165,12 @@ const ChangeUserinfo = () => {
 
       dispatch(
         changeUserImg({
-          userImg: 'res.data.result.user_image',
+          userImg: res.data.result.url,
         })
       );
     } catch (err) {
       console.log(err);
+      alert(err.message);
     }
   };
 
@@ -734,10 +744,7 @@ const ChangeUserinfo = () => {
         </BoxWrap>
         {isUpdateCompleted && (
           <LoaderBack>
-            <LoaderModal>
-              <LoadingAnimation />
-              <ModalText>변경사항을 저장 중입니다.</ModalText>
-            </LoaderModal>
+            <LoadingPopup />
           </LoaderBack>
         )}
       </Wrap>
