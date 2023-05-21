@@ -135,6 +135,15 @@ const ChangeUserinfo = () => {
 
     //Preview sate값 저장
     const file = previewRef.current.files[0];
+
+    // max 사이즈 제한
+    const fileSize = file.size;
+    const maxSize = 1 * 1024 * 1024;
+    if (fileSize > maxSize) {
+      alert('파일 크기가 1MB 제한을 초과합니다.');
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -161,6 +170,7 @@ const ChangeUserinfo = () => {
       );
     } catch (err) {
       console.log(err);
+      alert(err.message);
     }
   };
 
