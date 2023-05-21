@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,7 +44,7 @@ const MyAccount = () => {
     }
   }, []);
 
-  const onMypage = async () => {
+  const onMypage = useCallback(async () => {
     try {
       const res = await authHttp.getMypage(userId);
       setUserInfo(res.data.result);
@@ -52,7 +52,7 @@ const MyAccount = () => {
     } catch (err) {
       console.log(err);
     }
-  };
+  }, []);
 
   //회원탈퇴 기능
   const onDeleteUser = async () => {
@@ -199,7 +199,7 @@ const Img = styled.img`
   @media screen and (max-width: 1700px) {
     height: 80px;
   }
-`
+`;
 
 export const UserInfoBox = styled.div`
   display: flex;
