@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.User;
+import teamproject.backend.mypage.dto.UploadUserImageResponse;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
@@ -296,7 +297,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
     @Override
     @Transactional
-    public void uploadImage(Long userId, MultipartFile image) throws IOException {
+    public UploadUserImageResponse uploadImage(Long userId, MultipartFile image) throws IOException {
         Optional<User> user = userRepository.findById(userId);
 
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
@@ -304,7 +305,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         if(image == null){
             s3DAO.delete(user.get().getImageURL());
             user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
-            return;
+            return new UploadUserImageResponse(true, DEFAULT_USER_IMAGE_URL);
         }
         String extension = FilenameUtils.getExtension(image.getOriginalFilename());
         String fileName = userId + "." + extension;
@@ -312,8 +313,9 @@ public class UserServiceImpl implements UserService, SocialUserService {
             s3DAO.delete(fileName);
         }
         s3DAO.upload(fileName, image);
-
-        user.get().setImageURL(s3DAO.getURL(fileName));
+        String url = s3DAO.getURL(fileName);
+        user.get().setImageURL(url);
+        return new UploadUserImageResponse(true, url);
     }
 
     @Override

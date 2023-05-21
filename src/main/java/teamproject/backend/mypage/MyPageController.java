@@ -178,9 +178,9 @@ public class MyPageController {
 
     @PostMapping("/auth/user/image/{user_id}")
     public BaseResponse uploadUserImage(@PathVariable Long user_id, @RequestBody MultipartFile image) throws IOException {
-        userService.uploadImage(user_id, image);
+        UploadUserImageResponse response = userService.uploadImage(user_id, image);
 
-        return new BaseResponse("유저 사진을 교체했습니다.");
+        return new BaseResponse("유저 사진을 교체했습니다.", response);
     }
 
     /**
