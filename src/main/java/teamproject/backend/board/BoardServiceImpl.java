@@ -245,9 +245,9 @@ public class BoardServiceImpl implements BoardService{
      * @return
      */
     public BoardListResponseAll findBoarListByAll(Pageable pageable) {
-        Page<BoardResponseInCardFormat> boards = boardRepository.findCardByAll(pageable);
+        Page<Board> boards = boardRepository.findAll(pageable);
 
-        return new BoardListResponseAll(boards.getContent(), boards.getTotalPages());
+        return new BoardListResponseAll(getBoardResponsesInCardFormat(boards.getContent(), boards.getSize()), boards.getTotalPages());
     }
 
     /**
