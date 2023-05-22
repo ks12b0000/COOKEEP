@@ -1,8 +1,13 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 const MypageNav = props => {
+  const isSocialLogin = useSelector(
+    state => state.persistedReducer.userReducer.isSocialLogin
+  );
+
   const navigate = useNavigate();
   const [userInfo, serUserInfo] = useState([]);
 
@@ -17,10 +22,12 @@ const MypageNav = props => {
             <span>닉네임</span>
             {props.userNickName}
           </div>
-          <div>
-            <span>아이디</span>
-            {props.userName}
-          </div>
+          {isSocialLogin === false && (
+            <div>
+              <span>아이디</span>
+              {props.userName}
+            </div>
+          )}
           <div>
             <span>이메일</span>
             {props.userEmail}

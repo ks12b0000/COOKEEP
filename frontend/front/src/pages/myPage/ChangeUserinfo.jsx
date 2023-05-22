@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
+import { changeUserImg } from '../../redux/reducer/userSlice';
 import AuthHttp from '../../http/authHttp';
 import UserHttp from '../../http/userHttp';
 import Layout from '../../components/layout/Layout';
@@ -17,12 +18,14 @@ import {
   IconText,
 } from './MyPosts';
 import { AccountWrap, ProfileRound, Button } from './MyAccount';
+import LoadingPopup from '../../components/categoryLayout/writing/popup/LoadingPopup';
 
 const authHttp = new AuthHttp();
 const userHttp = new UserHttp();
 
 const ChangeUserinfo = () => {
   const params = useParams();
+  const dispatch = useDispatch();
   let { userId } = params;
   userId = parseInt(userId);
   const userId2 = useSelector(
@@ -93,6 +96,19 @@ const ChangeUserinfo = () => {
   //현재 비밀번호 일치 여부
   const [IsPasswordRight, setIsPasswordRight] = useState(false);
 
+  //완료시 화면이동
+  const [isUpdateCompleted, setIsUpdateCompleted] = useState(false);
+
+  useEffect(() => {
+    if (isUpdateCompleted) {
+      const timeout = setTimeout(() => {
+        navigate(`/mypage/account/${userId}`);
+      }, 3000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isUpdateCompleted, navigate, userId]);
+
   useEffect(() => {
     onMypage();
 
@@ -119,6 +135,15 @@ const ChangeUserinfo = () => {
 
     //Preview sate값 저장
     const file = previewRef.current.files[0];
+
+    // max 사이즈 제한
+    const fileSize = file.size;
+    const maxSize = 1 * 1024 * 1024;
+    if (fileSize > maxSize) {
+      alert('파일 크기가 1MB 제한을 초과합니다.');
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -137,8 +162,15 @@ const ChangeUserinfo = () => {
     try {
       const res = await authHttp.postProfile(userId, Profile);
       console.log(res);
+
+      dispatch(
+        changeUserImg({
+          userImg: res.data.result.url,
+        })
+      );
     } catch (err) {
       console.log(err);
+      alert(err.message);
     }
   };
 
@@ -254,7 +286,7 @@ const ChangeUserinfo = () => {
       }
     }
 
-    navigate(`/mypage/account/${userId}`);
+    setIsUpdateCompleted(true);
   };
 
   // 닉네임 업데이트 및 중복확인
@@ -710,6 +742,11 @@ const ChangeUserinfo = () => {
             <SubmitButton onClick={e => onSubmit(e)}>저장</SubmitButton>
           </PageWrap>
         </BoxWrap>
+        {isUpdateCompleted && (
+          <LoaderBack>
+            <LoadingPopup />
+          </LoaderBack>
+        )}
       </Wrap>
     </Layout>
   );
@@ -959,6 +996,37 @@ const SubmitButton = styled.div`
     height: 35px;
     font-size: 14px;
   }
+`;
+
+const LoaderBack = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoaderModal = styled.div`
+  width: 400px;
+  height: 270px;
+  background-color: white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding-bottom: 30px;
+`;
+
+const ModalText = styled.div`
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
 `;
 
 export default ChangeUserinfo;
