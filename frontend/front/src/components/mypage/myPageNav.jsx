@@ -1,24 +1,33 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 const MypageNav = props => {
+  const isSocialLogin = useSelector(
+    state => state.persistedReducer.userReducer.isSocialLogin
+  );
+
   const navigate = useNavigate();
   const [userInfo, serUserInfo] = useState([]);
 
   return (
     <Wrap>
       <UserWrap>
-        <UserImg />
+        <UserImg>
+          <Img src={props.userImage} />
+        </UserImg>
         <UserInfo>
           <div>
             <span>닉네임</span>
             {props.userNickName}
           </div>
-          <div>
-            <span>아이디</span>
-            {props.userName}
-          </div>
+          {isSocialLogin === false && (
+            <div>
+              <span>아이디</span>
+              {props.userName}
+            </div>
+          )}
           <div>
             <span>이메일</span>
             {props.userEmail}
@@ -115,9 +124,21 @@ const UserImg = styled.div`
   border-radius: 50px;
   background-color: #d9d9d9;
   margin-right: 24px;
+  overflow: hidden;
+  position: relative;
+`;
+
+const Img = styled.img`
+  height: 80px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const UserInfo = styled.div`
+  position: relative;
+  top: 7px;
   div {
     color: #5a5c5f;
     font-size: 14px;

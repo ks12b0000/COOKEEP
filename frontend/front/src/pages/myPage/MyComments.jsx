@@ -30,13 +30,13 @@ const authHttp = new AuthHttp();
 
 const MyComments = () => {
   const params = useParams();
-  const { userId } = params;
+  let { userId } = params;
+  userId = parseInt(userId);
+  const userId2 = useSelector(
+    state => state.persistedReducer.userReducer.userId
+  );
 
   const navigate = useNavigate();
-
-  const username = useSelector(
-    state => state.persistedReducer.userReducer.username
-  );
 
   const [UserInfo, setUserInfo] = useState([]);
 
@@ -48,6 +48,10 @@ const MyComments = () => {
   useEffect(() => {
     onMypage();
     getCommentList();
+
+    if (userId !== userId2) {
+      navigate('/notfound');
+    }
   }, [SelectedButton]);
 
   const onMypage = async () => {
@@ -111,81 +115,76 @@ const MyComments = () => {
     <Layout>
       <Wrap>
         <Text>마이페이지</Text>
-        {username === UserInfo.username ? (
-          <>
-            <BoxWrap>
-              <MypageNav
-                userNickName={UserInfo.nickname}
-                userName={UserInfo.username}
-                userEmail={UserInfo.email}
-                categoryName='comments'
-                userId={userId}
-              />
-              <PageWrap>
-                <RedIconWrap>
-                  <RedIcon>
-                    <img src='/image/mypage-comment-r.png' alt='icon' />
-                  </RedIcon>
-                  <IconText>내가 댓글 단 글</IconText>
-                </RedIconWrap>
-                {Comments.length === 0 ? (
-                  <EmptyText>내가 댓글 단 글이 없습니다.</EmptyText>
-                ) : (
-                  <>
-                    <ContentsWrap>
-                      {Comments.map(comment => (
-                        <ContentsBox
-                          onClick={() => {
-                            window.open(
-                              `https://www.teamprojectvv.shop/category/${comment.board_id}`,
-                              '_self'
-                            );
-                          }}
-                          key={comment.board_id}
-                        >
-                          <ContentsText>
-                            {comment.title} ({comment.commented})
-                          </ContentsText>
-                          <ContentsArrow src='/image/mypage-alarms-arrow.png' />
-                        </ContentsBox>
-                      ))}
-                    </ContentsWrap>
+        <BoxWrap>
+          <MypageNav
+            userNickName={UserInfo.nickname}
+            userName={UserInfo.username}
+            userEmail={UserInfo.email}
+            categoryName='comments'
+            userId={userId}
+            userImage={UserInfo.user_image}
+          />
+          <PageWrap>
+            <RedIconWrap>
+              <RedIcon>
+                <img src='/image/mypage-comment-r.png' alt='icon' />
+              </RedIcon>
+              <IconText>내가 댓글 단 글</IconText>
+            </RedIconWrap>
+            {Comments.length === 0 ? (
+              <EmptyText>내가 댓글 단 글이 없습니다.</EmptyText>
+            ) : (
+              <>
+                <ContentsWrap>
+                  {Comments.map(comment => (
+                    <ContentsBox
+                      onClick={() => {
+                        window.open(
+                          `https://www.teamprojectvv.shop/category/${comment.board_id}`,
+                          '_self'
+                        );
+                      }}
+                      key={comment.board_id}
+                    >
+                      <ContentsText>
+                        {comment.title} ({comment.commented})
+                      </ContentsText>
+                      <ContentsArrow src='/image/mypage-alarms-arrow.png' />
+                    </ContentsBox>
+                  ))}
+                </ContentsWrap>
 
-                    <Nav>
-                      {SelectedButton > 0 && (
-                        <Button onClick={() => firstList()}>
-                          <DoubleArrow url='/image/double-arrow-left.png' />
-                        </Button>
-                      )}
-                      <Button onClick={() => leftList()}>
-                        <Arrow url='/image/arrow-left.png' />
-                      </Button>
-                      {Page.map((page, i) => (
-                        <Button
-                          key={i}
-                          onClick={() => pageList(page)}
-                          aria-current={page === SelectedButton ? 'true' : null}
-                        >
-                          {page + 1}
-                        </Button>
-                      ))}
-                      <Button onClick={() => rightList()}>
-                        <Arrow url='/image/arrow-right.png' />
-                      </Button>
-                      {SelectedButton < Page.length - 1 && (
-                        <Button onClick={() => lastList()}>
-                          <DoubleArrow url='/image/double-arrow-right.png' />
-                        </Button>
-                      )}
-                    </Nav>
-                  </>
-                )}
-              </PageWrap>
-            </BoxWrap>
-          </>
-        ) : (
-          navigate('/notfound')
-        )}
+                <Nav>
+                  {SelectedButton > 0 && (
+                    <Button onClick={() => firstList()}>
+                      <DoubleArrow url='/image/double-arrow-left.png' />
+                    </Button>
+                  )}
+                  <Button onClick={() => leftList()}>
+                    <Arrow url='/image/arrow-left.png' />
+                  </Button>
+                  {Page.map((page, i) => (
+                    <Button
+                      key={i}
+                      onClick={() => pageList(page)}
+                      aria-current={page === SelectedButton ? 'true' : null}
+                    >
+                      {page + 1}
+                    </Button>
+                  ))}
+                  <Button onClick={() => rightList()}>
+                    <Arrow url='/image/arrow-right.png' />
+                  </Button>
+                  {SelectedButton < Page.length - 1 && (
+                    <Button onClick={() => lastList()}>
+                      <DoubleArrow url='/image/double-arrow-right.png' />
+                    </Button>
+                  )}
+                </Nav>
+              </>
+            )}
+          </PageWrap>
+        </BoxWrap>
       </Wrap>
     </Layout>
   );

@@ -27,15 +27,6 @@ const CommentList = props => {
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
   const [Count, setCount] = useState(0);
-  // const [IsModal, setIsModal] = useState(false);
-
-  // const onModal = () => {
-  //   setIsModal(true);
-  // };
-
-  // const changeModal = state => {
-  //   setIsModal(state);
-  // };
 
   useEffect(() => {
     getList();
@@ -52,7 +43,7 @@ const CommentList = props => {
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
-      console.log('댓글리스트', res);
+      console.log('뎃글 리스트', res);
     } catch (err) {
       console.log(err);
     }
@@ -141,20 +132,34 @@ const CommentList = props => {
     setEditComment(text);
   };
 
+  //오늘 날짜 구하기
+  const currentDate = new Date();
+
+  const year = currentDate.getFullYear(); // 년도
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월 (0부터 시작하므로 +1 필요)
+  const day = String(currentDate.getDate()).padStart(2, '0'); // 일
+
+  const formattedDate = `${year}.${month}.${day}`;
+
   return (
     <>
       <CommentTitle>{`댓글 (${Count})`}</CommentTitle>
       {Comments?.map(comment => (
         <CommentWrap key={comment.comment_id}>
-          <Profile />
+          <Profile>
+            <Img src={comment.user_image} />
+          </Profile>
           <CommentBlock>
             {/* 상단 작성자 이름 */}
             <UserNameWrap>
               <UsernameText>{comment.user_name}</UsernameText>
               {props.userName === comment.user_name && <Author>작성자</Author>}
             </UserNameWrap>
-            <Time>{comment.create_date}</Time>
-
+            {formattedDate === comment.create_date ? (
+              <TimeStyled>{comment.create_time}</TimeStyled>
+            ) : (
+              <TimeStyled>{comment.create_date}</TimeStyled>
+            )}
             <ContentBlock>
               <ContentTextWrap>
                 {username === comment.user_name ? (
@@ -165,7 +170,7 @@ const CommentList = props => {
                 <EditButton
                   src='/image/edit-icon.png'
                   alt='edit-button'
-                  onClick={()=> onItem(comment.comment_id, 'icon')}
+                  onClick={() => onItem(comment.comment_id, 'icon')}
                 />
 
                 {comment.icon_selected && (
@@ -187,14 +192,18 @@ const CommentList = props => {
                             작성글 보기
                           </div>
                           <div
-                            onClick={()=>
+                            onClick={() =>
                               onEdit(comment.comment_id, comment.text)
                             }
                           >
                             수정하기
                           </div>
                           {/* <div onClick={e => onDelete(e, comment.comment_id)}> */}
-                          <div onClick={() => onItem(comment.comment_id, 'modal')}>삭제하기</div>
+                          <div
+                            onClick={() => onItem(comment.comment_id, 'modal')}
+                          >
+                            삭제하기
+                          </div>
                         </EditBox>
                         <EditBoxBack
                           onClick={() => offItem(comment.comment_id, 'icon')}
@@ -218,7 +227,7 @@ const CommentList = props => {
                           </div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={()=> offItem(comment.comment_id, 'icon')}
+                          onClick={() => offItem(comment.comment_id, 'icon')}
                         />
                       </>
                     )}
@@ -241,7 +250,7 @@ const CommentList = props => {
                     확인
                   </Edit1Button>
                   <Edit2Button
-                    onClick={()=> offItem(comment.comment_id, 'edit')}
+                    onClick={() => offItem(comment.comment_id, 'edit')}
                   >
                     취소
                   </Edit2Button>
@@ -250,11 +259,11 @@ const CommentList = props => {
             </ContentBlock>
 
             {comment.reply_selected ? (
-              <ReplyText onClick={()=> offItem(comment.comment_id, 'reply')}>
+              <ReplyText onClick={() => offItem(comment.comment_id, 'reply')}>
                 {`대댓글 닫기 (${comment.replyCount})`}
               </ReplyText>
             ) : (
-              <ReplyText onClick={()=> onItem(comment.comment_id, 'reply')}>
+              <ReplyText onClick={() => onItem(comment.comment_id, 'reply')}>
                 {`대댓글 보기 (${comment.replyCount})`}
               </ReplyText>
             )}
@@ -343,6 +352,16 @@ const Profile = styled.div`
   height: 70px;
   border-radius: 70px;
   background-color: #ced4da;
+  position: relative;
+  overflow: hidden;
+`;
+
+const Img = styled.img`
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const CommentBlock = styled.div`
@@ -376,7 +395,7 @@ const Author = styled.div`
   align-items: center;
 `;
 
-const Time = styled.div`
+const TimeStyled = styled.div`
   font-size: 12px;
   color: #cbcbcb;
   font-weight: 400;

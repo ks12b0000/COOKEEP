@@ -191,4 +191,10 @@ public class UserController {
 
         return new BaseResponse("비밀번호 찾기에 성공했습니다.", findPwResponse);
     }
+
+    @GetMapping("/auth/user/image/{user_id}")
+    public BaseResponse findUserImage(@PathVariable Long user_id){
+        FindUserImageResponse response = userService.findUserImageByUserId(user_id);
+        return new BaseResponse("유저 이미지를 조회했습니다.", response);
+    }
 }

@@ -17,6 +17,7 @@ public class BoardCommentReplyResponse {
     private Long user_id;
     private String user_image;
     private String create_date;
+    private String create_time;
     private String text;
     private boolean edit_selected = false;
     private boolean icon_selected = false;
@@ -25,6 +26,7 @@ public class BoardCommentReplyResponse {
     public BoardCommentReplyResponse(BoardCommentReply reply) {
         this.reply_id = reply.getBoardCommentReplyId();
         this.user_name = reply.getUser().getNickname();
+        this.create_time = asStringToTime(reply.getCreateDate());
         this.create_date = asString(reply.getCreateDate());
         this.text = reply.getText();
     }
@@ -35,11 +37,17 @@ public class BoardCommentReplyResponse {
         this.user_id = user_id;
         this.user_image = user_image;
         this.create_date = asString(create_date);
+        this.create_time = asStringToTime(create_date);
         this.text = text;
     }
 
     private String asString(Date date){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+        return format.format(date);
+    }
+
+    private String asStringToTime(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         return format.format(date);
     }
 }

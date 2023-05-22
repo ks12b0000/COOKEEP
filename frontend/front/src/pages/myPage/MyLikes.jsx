@@ -30,13 +30,13 @@ const authHttp = new AuthHttp();
 
 const MyLikes = () => {
   const params = useParams();
-  const { userId } = params;
+  let { userId } = params;
+  userId = parseInt(userId);
+  const userId2 = useSelector(
+    state => state.persistedReducer.userReducer.userId
+  );
 
   const navigate = useNavigate();
-
-  const username = useSelector(
-    state => state.persistedReducer.userReducer.username
-  );
 
   const [UserInfo, setUserInfo] = useState([]);
 
@@ -51,6 +51,10 @@ const MyLikes = () => {
   useEffect(() => {
     onMypage();
     getLikeList();
+
+    if (userId !== userId2) {
+      navigate('/notfound');
+    }
   }, [SelectedButton]);
 
   //유저 정보 불러오기
@@ -79,7 +83,7 @@ const MyLikes = () => {
   };
 
   //좋아요 한 게시글 리스트 다중삭제
-  const onDeletLikeList = async () => {
+  const onDeleteLikeList = async () => {
     const num = BoardIdList;
     console.log('num', num);
 
@@ -165,7 +169,7 @@ const MyLikes = () => {
         },
         {
           text: '삭제',
-          onClick: onDeletLikeList,
+          onClick: onDeleteLikeList,
         },
       ],
     },
@@ -175,146 +179,137 @@ const MyLikes = () => {
     <Layout>
       <Wrap>
         <Text>마이페이지</Text>
-        {username === UserInfo.username ? (
-          <>
-            <BoxWrap>
-              <MypageNav
-                userNickName={UserInfo.nickname}
-                userName={UserInfo.username}
-                userEmail={UserInfo.email}
-                categoryName='likes'
-                userId={userId}
-              />
-              <PageWrap>
-                <TopWrap>
-                  <RedIconWrap>
-                    <RedIcon>
-                      <img src='/image/mypage-like-r.png' alt='icon' />
-                    </RedIcon>
-                    <IconText>내가 좋아요한 글</IconText>
-                  </RedIconWrap>
-                  {IsEdit ? (
-                    <ButtonWrap>
-                      <EditButton
-                        backColor='white'
-                        border='1px solid #FF4122'
-                        color='#FF4122'
-                        marginRight
-                        onClick={e => offEdit(e)}
-                      >
-                        취소
-                      </EditButton>
-                      {BoardIdList.length !== 0 ? (
-                        <EditButton
-                          backColor='#FF4122'
-                          border='1px solid #FF4122'
-                          color='white'
-                          onClick={() => setIsModal(true)}
-                        >
-                          삭제
-                        </EditButton>
-                      ) : (
-                        <EditButton
-                          backColor='#F0F0F0'
-                          border='1px solid #F0F0F0'
-                          color='white'
-                          cursor='true'
-                        >
-                          삭제
-                        </EditButton>
-                      )}
-                    </ButtonWrap>
-                  ) : (
+        <BoxWrap>
+          <MypageNav
+            userNickName={UserInfo.nickname}
+            userName={UserInfo.username}
+            userEmail={UserInfo.email}
+            categoryName='likes'
+            userId={userId}
+            userImage={UserInfo.user_image}
+          />
+          <PageWrap>
+            <TopWrap>
+              <RedIconWrap>
+                <RedIcon>
+                  <img src='/image/mypage-like-r.png' alt='icon' />
+                </RedIcon>
+                <IconText>내가 좋아요한 글</IconText>
+              </RedIconWrap>
+              {IsEdit ? (
+                <ButtonWrap>
+                  <EditButton
+                    backColor='white'
+                    border='1px solid #FF4122'
+                    color='#FF4122'
+                    marginRight
+                    onClick={e => offEdit(e)}
+                  >
+                    취소
+                  </EditButton>
+                  {BoardIdList.length !== 0 ? (
                     <EditButton
                       backColor='#FF4122'
                       border='1px solid #FF4122'
                       color='white'
-                      onClick={() => setIsEdit(true)}
+                      onClick={() => setIsModal(true)}
                     >
-                      편집
+                      삭제
+                    </EditButton>
+                  ) : (
+                    <EditButton
+                      backColor='#F0F0F0'
+                      border='1px solid #F0F0F0'
+                      color='white'
+                      cursor='true'
+                    >
+                      삭제
                     </EditButton>
                   )}
-                </TopWrap>
-                {Likes.length === 0 ? (
-                  <EmptyText>좋아요 누른 글이 없습니다.</EmptyText>
-                ) : (
-                  <>
-                    <ContentsWrap marginTop>
-                      {Likes.map(like => (
-                        <ImgTextWrap key={like.board_id}>
-                          {IsEdit && (
-                            <>
-                              {BoardIdList.includes(like.board_id) ? (
-                                <CheckImg
-                                  src='/image/mylike-check.png'
-                                  onClick={e =>
-                                    handleBoardIdList(like.board_id)
-                                  }
-                                />
-                              ) : (
-                                <CheckImg
-                                  src='/image/mylike-check-x.png'
-                                  onClick={e =>
-                                    handleBoardIdList(like.board_id)
-                                  }
-                                />
-                              )}
-                            </>
+                </ButtonWrap>
+              ) : (
+                <EditButton
+                  backColor='#FF4122'
+                  border='1px solid #FF4122'
+                  color='white'
+                  onClick={() => setIsEdit(true)}
+                >
+                  편집
+                </EditButton>
+              )}
+            </TopWrap>
+            {Likes.length === 0 ? (
+              <EmptyText top>좋아요 누른 글이 없습니다.</EmptyText>
+            ) : (
+              <>
+                <ContentsWrap marginTop>
+                  {Likes.map(like => (
+                    <ImgTextWrap key={like.board_id}>
+                      {IsEdit && (
+                        <>
+                          {BoardIdList.includes(like.board_id) ? (
+                            <CheckImg
+                              src='/image/mylike-check.png'
+                              onClick={e => handleBoardIdList(like.board_id)}
+                            />
+                          ) : (
+                            <CheckImg
+                              src='/image/mylike-check-x.png'
+                              onClick={e => handleBoardIdList(like.board_id)}
+                            />
                           )}
-                          <ContentsBox
-                            include={BoardIdList.includes(like.board_id)}
-                            onClick={() => {
-                              window.open(
-                                `https://www.teamprojectvv.shop/category/${like.board_id}`,
-                                '_self'
-                              );
-                            }}
-                          >
-                            <ContentsText>
-                              {like.title} ({like.commented})
-                            </ContentsText>
-                            <ContentsArrow src='/image/mypage-alarms-arrow.png' />
-                          </ContentsBox>
-                        </ImgTextWrap>
-                      ))}
-                    </ContentsWrap>
+                        </>
+                      )}
+                      <ContentsBox
+                        include={BoardIdList.includes(like.board_id)}
+                        onClick={() => {
+                          window.open(
+                            `https://www.teamprojectvv.shop/category/${like.board_id}`,
+                            '_self'
+                          );
+                        }}
+                      >
+                        <ContentsText>
+                          {like.title} ({like.commented})
+                        </ContentsText>
+                        <ContentsArrow src='/image/mypage-alarms-arrow.png' />
+                      </ContentsBox>
+                    </ImgTextWrap>
+                  ))}
+                </ContentsWrap>
 
-                    <Nav>
-                      {SelectedButton > 0 && (
-                        <Button onClick={() => firstList()}>
-                          <DoubleArrow url='/image/double-arrow-left.png' />
-                        </Button>
-                      )}
-                      <Button onClick={() => leftList()}>
-                        <Arrow url='/image/arrow-left.png' />
-                      </Button>
-                      {Page.map((page, i) => (
-                        <Button
-                          key={i}
-                          onClick={() => pageList(page)}
-                          aria-current={page === SelectedButton ? 'true' : null}
-                        >
-                          {page + 1}
-                        </Button>
-                      ))}
-                      <Button onClick={() => rightList()}>
-                        <Arrow url='/image/arrow-right.png' />
-                      </Button>
-                      {SelectedButton < Page.length - 1 && (
-                        <Button onClick={() => lastList()}>
-                          <DoubleArrow url='/image/double-arrow-right.png' />
-                        </Button>
-                      )}
-                    </Nav>
-                  </>
-                )}
-              </PageWrap>
-              {IsModal && <Alert {...Props} />}
-            </BoxWrap>
-          </>
-        ) : (
-          navigate('/notfound')
-        )}
+                <Nav>
+                  {SelectedButton > 0 && (
+                    <Button onClick={() => firstList()}>
+                      <DoubleArrow url='/image/double-arrow-left.png' />
+                    </Button>
+                  )}
+                  <Button onClick={() => leftList()}>
+                    <Arrow url='/image/arrow-left.png' />
+                  </Button>
+                  {Page.map((page, i) => (
+                    <Button
+                      key={i}
+                      onClick={() => pageList(page)}
+                      aria-current={page === SelectedButton ? 'true' : null}
+                    >
+                      {page + 1}
+                    </Button>
+                  ))}
+                  <Button onClick={() => rightList()}>
+                    <Arrow url='/image/arrow-right.png' />
+                  </Button>
+                  {SelectedButton < Page.length - 1 && (
+                    <Button onClick={() => lastList()}>
+                      <DoubleArrow url='/image/double-arrow-right.png' />
+                    </Button>
+                  )}
+                </Nav>
+              </>
+            )}
+          </PageWrap>
+          {IsModal && <Alert {...Props} />}
+        </BoxWrap>
       </Wrap>
     </Layout>
   );

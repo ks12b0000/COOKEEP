@@ -2,6 +2,7 @@ package teamproject.backend.user;
 
 import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.User;
+import teamproject.backend.mypage.dto.UploadUserImageResponse;
 import teamproject.backend.user.dto.*;
 
 import javax.servlet.http.Cookie;
@@ -26,5 +27,7 @@ public interface UserService {
 
     public FindPwResponse findByUserPw(FindPwRequest findPwRequest);
 
-    void uploadImage(Long userId, MultipartFile image) throws IOException;
+    UploadUserImageResponse uploadImage(Long userId, MultipartFile image) throws IOException;
+
+    FindUserImageResponse findUserImageByUserId(Long id);
 }

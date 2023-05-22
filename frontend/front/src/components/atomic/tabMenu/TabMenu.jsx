@@ -83,8 +83,8 @@ const client = new SearchHttp();
  function TabMenu() {
      const navigation = useNavigate();
      const [value, setValue] = React.useState('1');
-     const [topActive,setTopActive] = useState('테스트');
-     const [tagActive,setTagActive] = useState('태그1');
+     const [topActive,setTopActive] = useState(null);
+     const [tagActive,setTagActive] = useState(null);
      const [top,setTop] = useState([]);
      const [tag,setTag] = useState([])
 
@@ -112,7 +112,9 @@ const client = new SearchHttp();
              }
 
              setTop(topList.data.result.top10SearchLists);
+             setTopActive(topList.data.result.top10SearchLists[0].keyword)
              setTag(tagList.data.result.top10TagLists);
+             setTagActive(tagList.data.result.top10TagLists[0].tag_name)
 
          })()
      },[])

@@ -140,12 +140,23 @@ const ReplyList = props => {
     }
   };
 
+  //오늘 날짜 구하기
+  const currentDate = new Date();
+
+  const year = currentDate.getFullYear(); // 년도
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월 (0부터 시작하므로 +1 필요)
+  const day = String(currentDate.getDate()).padStart(2, '0'); // 일
+
+  const formattedDate = `${year}.${month}.${day}`;
+
   return (
     <Wrap>
       <ReplyArrow src='/image/reply-arrow.png' Length={Replys.length} />
       {Replys?.map(reply => (
         <CommentWrap key={reply.reply_id}>
-          <Profile />
+          <Profile>
+            <Img src={reply.user_image} />
+          </Profile>
           <CommentBlock>
             <TextWrap>
               <TextBlock>
@@ -155,7 +166,11 @@ const ReplyList = props => {
                     <Author>작성자</Author>
                   )}
                 </UserNameWrap>
-                <Time>{reply.create_date}</Time>
+                {formattedDate === reply.create_date ? (
+                  <TimeStyled>{reply.create_time}</TimeStyled>
+                ) : (
+                  <TimeStyled>{reply.create_date}</TimeStyled>
+                )}
               </TextBlock>
             </TextWrap>
 
@@ -169,7 +184,7 @@ const ReplyList = props => {
                 <EditButton
                   src='/image/edit-icon.png'
                   alt='edit-button'
-                  onClick={()=> onItem(reply.reply_id, 'icon')}
+                  onClick={() => onItem(reply.reply_id, 'icon')}
                 />
                 {reply.icon_selected && (
                   <>
@@ -190,14 +205,16 @@ const ReplyList = props => {
                             작성글 보기
                           </div>
                           <div
-                            onClick={()=> onEdit(reply.reply_id, reply.text)}
+                            onClick={() => onEdit(reply.reply_id, reply.text)}
                           >
                             수정하기
                           </div>
-                          <div onClick={() => onItem(reply.reply_id, 'modal')}>삭제하기</div>
+                          <div onClick={() => onItem(reply.reply_id, 'modal')}>
+                            삭제하기
+                          </div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={()=> offItem(reply.reply_id, 'icon')}
+                          onClick={() => offItem(reply.reply_id, 'icon')}
                         />
                       </>
                     ) : (
@@ -218,7 +235,7 @@ const ReplyList = props => {
                           </div>
                         </EditBox>
                         <EditBoxBack
-                          onClick={()=> offItem(reply.reply_id, 'icon')}
+                          onClick={() => offItem(reply.reply_id, 'icon')}
                         />
                       </>
                     )}
@@ -238,9 +255,7 @@ const ReplyList = props => {
                   >
                     확인
                   </Edit1Button>
-                  <Edit2Button
-                    onClick={()=> offItem(reply.reply_id, 'edit')}
-                  >
+                  <Edit2Button onClick={() => offItem(reply.reply_id, 'edit')}>
                     취소
                   </Edit2Button>
                 </>
@@ -297,7 +312,7 @@ const Wrap = styled.div`
   width: 1270px;
   height: auto;
   position: relative;
-`
+`;
 
 const CommentWrap = styled.div`
   width: 1270px;
@@ -315,7 +330,7 @@ const CommentWrap = styled.div`
 
 const ReplyArrow = styled.img`
   position: absolute;
-  top: ${props=>props.Length?'34px':'14px'};
+  top: ${props => (props.Length ? '34px' : '14px')};
   left: -70px;
 `;
 
@@ -324,7 +339,16 @@ const Profile = styled.div`
   height: 70px;
   border-radius: 70px;
   background-color: #ced4da;
-  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+`;
+
+const Img = styled.img`
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const CommentBlock = styled.div`
@@ -360,7 +384,7 @@ const Author = styled.div`
   align-items: center;
 `;
 
-const Time = styled.div`
+const TimeStyled = styled.div`
   font-size: 12px;
   color: #cbcbcb;
   font-weight: 400;

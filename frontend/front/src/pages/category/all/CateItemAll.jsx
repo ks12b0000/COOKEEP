@@ -18,12 +18,13 @@ function CateItemAll() {
     const [allText,setAllText] = useState(0);
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-
     const [totalCount, setTotalCount] = useState(0);
+
     const onChangePagination = (e,p)=> {
         setCurrentPage(p - 1)
-
     };
+
+
         useEffect(() => {
             (async () => {
                 try {
@@ -50,14 +51,11 @@ function CateItemAll() {
                     <select onChange={FilterPosts} >
                         <option value={`page=${currentPage}`}>최신순</option>
                         <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
-                        <option value={`liked,desc&page=${currentPage}`}>좋아요순</option>
+                        <option value={`sort=liked,desc&page=${currentPage}`}>좋아요순</option>
                     </select>
                 </SelectBox>
                 <Ul>
-                    {
-
-                        posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts} currentPag={currentPage}/>
-                    }
+                    {posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts} currentPag={currentPage}/>}
                 </Ul>
                 <PaginationWrap > <Pagination  count={totalCount}  page={currentPage + 1 }   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton /></PaginationWrap>
             </>
@@ -66,12 +64,12 @@ function CateItemAll() {
     export default CateItemAll;
     const Ul = styled.ul`
       margin-bottom: 20px;
-    margin-top:30px;
-    min-height: 800px;
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: start;
+      margin-top:30px;
+      min-height: 800px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: start;
     li {
         width: 19%;
         cursor: pointer;

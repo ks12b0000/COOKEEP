@@ -20,6 +20,8 @@ export default Footer;
 const FooterContainer = styled.footer`
     height: 60px;
     background:#777777;
+    width: 100%;
+    overflow-x: hidden;
     >div{
       width: 1200px;
       margin:0 auto;

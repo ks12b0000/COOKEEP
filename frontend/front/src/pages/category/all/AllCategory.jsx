@@ -6,6 +6,8 @@ import Buttons from "../../../components/atomic/Buttons";
 import styled from "@emotion/styled";
 import {color} from "../../../constants/color";
 import CateItemAll from "./CateItemAll";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router";
 const Container = styled.section`
   width: 1440px;
   margin: 24px auto 16px;
@@ -29,7 +31,18 @@ const ButtonWrap = styled.div`
     justify-content: end;
 `;
 function AllCategory() {
+    const {isLoggedIn} = useSelector(state => state.persistedReducer.userReducer);
+    const navigation = useNavigate()
 
+    const Writing =() => {
+        if(!isLoggedIn){
+            alert('로그인유저가아닙니다');
+            navigation('/login');
+            return false;
+        }
+        navigation('writing');
+
+    }
     return (
         <>
             <Layout>
@@ -38,8 +51,8 @@ function AllCategory() {
                         <h1>전체</h1>
                         <CateItemAll  />
                         <ButtonWrap>
-                            <div>
-                                <Link to="writing">
+                            <div onClick={Writing}>
+                                <Link>
                                     <Buttons text="글쓰기" />
                                 </Link>
                             </div>

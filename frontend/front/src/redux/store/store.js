@@ -1,33 +1,46 @@
-import { configureStore, combineReducers, getDefaultMiddleware } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  combineReducers,
+  getDefaultMiddleware,
+} from '@reduxjs/toolkit';
 
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-import { ListSlice } from "../reducer/categoryList";
-import { UserSlice } from "../reducer/userSlice";
+import { ListSlice } from '../reducer/categoryList';
+import { UserSlice } from '../reducer/userSlice';
 
 const persistConfig = {
-    key: "root",
-    version: 0,
-    storage
+  key: 'root',
+  version: 0,
+  storage,
 };
 
 const rootReducer = combineReducers({
-    listReducer: ListSlice.reducer,
-    userReducer: UserSlice.reducer
+  listReducer: ListSlice.reducer,
+  userReducer: UserSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-    reducer: {
-        persistedReducer
+  reducer: {
+    persistedReducer,
+  },
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
-    middleware: getDefaultMiddleware({
-        serializableCheck: {
-            ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-        }
-    })
+  }),
 });
 
 export const persistor = persistStore(store);
