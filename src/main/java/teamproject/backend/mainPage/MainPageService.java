@@ -1,7 +1,10 @@
 package teamproject.backend.mainPage;
 
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import teamproject.backend.board.dto.BoardListResponseAll;
+import teamproject.backend.board.dto.BoardListResponseByCategory;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.domain.BoardTag;
 import teamproject.backend.domain.Tag;
@@ -12,8 +15,8 @@ import java.util.List;
 
 public interface MainPageService {
 
-    public List<BoardResponseInCardFormat> searchList(String keyword);
-    public List<SearchByResponse> searchTagList(String keyword);
+    public BoardListResponseAll searchList(String keyword, Pageable pageable);
+    public SearchListResponseAll searchTagList(String keyword, Pageable pageable);
     public GetTop10TagList top10TagList();
     public GetTop10SearchList top10SearchList();
     public GetAutoSearchList autoSearchList(String keyword);

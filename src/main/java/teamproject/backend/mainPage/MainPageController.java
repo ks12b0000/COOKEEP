@@ -3,10 +3,14 @@ package teamproject.backend.mainPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.board.BoardService;
+import teamproject.backend.board.dto.BoardListResponseAll;
+import teamproject.backend.board.dto.BoardListResponseByCategory;
 import teamproject.backend.board.dto.BoardResponseInBannerFormat;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.mainPage.dto.*;
@@ -30,14 +34,16 @@ public class MainPageController {
 
     /**
      * 제목으로 검색 목록
-     * [GET] /main/search/list?keyword=
+     * [GET] /main/search/list?keyword=&page= 최신순 (기본값)
+     * [GET] /main/search/list?keyword=&sort=liked,desc&page= 좋아요순
+     * [GET] /main/search/list?keyword=&sort=commented,desc&page= 댓글순
      * @param keyword
      * @return
      */
     @GetMapping("/main/search/list")
-    public BaseResponse searchList(@RequestParam String keyword) {
+    public BaseResponse searchList(@RequestParam String keyword, @PageableDefault(size = 20, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<BoardResponseInCardFormat> getSearchByResponse = mainPageService.searchList(keyword);
+        BoardListResponseAll getSearchByResponse = mainPageService.searchList(keyword, pageable);
 
         return new BaseResponse("검색 결과를 가져오는데 성공했습니다.", getSearchByResponse);
     }
@@ -45,14 +51,16 @@ public class MainPageController {
 
     /**
      * 태그로 검색 목록
-     * [GET] /main/search/tag/list?keyword=
+     * [GET] /main/search/tag/list?keyword=&page= 최신순 (기본값)
+     * [GET] /main/search/tag/list?keyword=&sort=board.liked,desc&page= 좋아요순
+     * [GET] /main/search/tag/list?keyword=&sort=board.commented,desc&page= 댓글순
      * @param keyword
      * @return
      */
     @GetMapping("/main/search/tag/list")
-    public BaseResponse searchTagList(@RequestParam String keyword) {
+    public BaseResponse searchTagList(@RequestParam String keyword, @PageableDefault(size = 20, sort = "board.createDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<SearchByResponse> getSearchByResponse = mainPageService.searchTagList(keyword);
+        SearchListResponseAll getSearchByResponse = mainPageService.searchTagList(keyword, pageable);
 
         return new BaseResponse("검색 결과를 가져오는데 성공했습니다.", getSearchByResponse);
     }

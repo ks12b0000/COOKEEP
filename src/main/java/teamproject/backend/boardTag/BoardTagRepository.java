@@ -1,5 +1,7 @@
 package teamproject.backend.boardTag;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import teamproject.backend.domain.Board;
@@ -12,5 +14,5 @@ import java.util.List;
 public interface BoardTagRepository extends JpaRepository<BoardTag, Long> {
     List<BoardTag> findByBoard(Board board);
     List<BoardTag> findByTag(Tag tag);
-    List<BoardTag> findByTagContaining(String keyword);
+    Page<BoardTag> findByTag(Tag tag, Pageable pageable);
 }
