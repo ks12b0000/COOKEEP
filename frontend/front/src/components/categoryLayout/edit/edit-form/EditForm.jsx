@@ -8,6 +8,8 @@ import CategoryHttp from "../../../../http/categoryHttp";
 import WriteHttp from "../../../../http/writeHttp";
 import {useParams} from "react-router-dom";
 import Quill from "../../writing/Quill";
+import ImgList from "../../writing/writingForm/ ImgList";
+import EditImgList from "../../writing/writingForm/EditImgList";
 const categoryHttp = new CategoryHttp();
 const writeHttp = new WriteHttp();
 function EditForm() {
@@ -37,9 +39,9 @@ function EditForm() {
 
 
     const [footText,setFootText]  =useState('');
-
-    const [imagePreview, setImagePreview] = useState("https://w7.pngwing.com/pngs/828/705/png-transparent-jpeg-file-interchange-format-file-formats-forma-image-file-formats-text-logo.png");
-    const [error, setError] = useState(false);
+    const [inital,setInital] = useState();
+    const [optionImg,setOptionImg] = useState([]);
+    const [isSelect,setIsSelect] = useState(0);
 
     const onCheckEnter = (e) => {
         if(e.key === 'Enter') {
@@ -77,7 +79,7 @@ function EditForm() {
           title,
           text:footText,
           user_id:userId,
-          thumbnail:imagePreview,
+          thumbnail:optionImg,
           tags:tag
         }
         console.log(FormData)
@@ -90,6 +92,7 @@ function EditForm() {
        //      alert('작성한 유저가 아닙니다.')
        // }
     }
+
     useEffect(() => {
         (async () => {
             const result = await Promise.allSettled([categoryHttp.getCategoryMenu(),categoryHttp.getBoard(id)]);
@@ -105,7 +108,7 @@ function EditForm() {
             setCategoryValue(board.result.category)
             setTitle(board.result.title);
             setTag(board.result.tags);
-            setImagePreview(board.result.thumbnail);
+            setInital(board.result.text);
             setQuillValue(board.result.text);
             setBoardId(board.result.board_id);
         })()
@@ -114,26 +117,16 @@ function EditForm() {
 
     useEffect(() => {
 
-    }, [imagePreview]);
+    }, [optionImg]);
 
-    const imageChange = async (e) => {
-        const files = e.target.files; // FileList 객체
-        console.log(files[0]);
-        try {
-            const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id:userId  });
-            setImagePreview(result.url);
-        } catch (err) {
-            alert("파일 크기는 1메가로 지정되어있씁니다.");
-        }
-    };
+
 
 
     const Props = {
         quillValue,
         setQuillValue,
-
-
-
+        setOptionImg,
+        optionImg,
     }
     return(
         <form onKeyPress={onCheckEnter} >
@@ -158,16 +151,9 @@ function EditForm() {
             </QuillBox>
             <TagInput>
                 <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
-
             </TagInput>
-            <Upload>
 
-                <InputFile htmlFor="input-file">썸네일을 등록해주세요</InputFile>
-                <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
-
-                {error && <ErrorText style={{ color: "red" }}><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>썸네일을 등록해주세요</ErrorText>}
-            </Upload>
-
+            <EditImgList optionImg={optionImg}  setIsSelect={setIsSelect} isSelect={isSelect} inital={inital}/>
             <ButtonsWrap>
                 <CancelButton  onClick={cancel}> <span>취소</span></CancelButton>
                 <WritingButton  disabled={disableState()} onClick={(e) => onPatchSubmit(e)}>저장</WritingButton>
@@ -372,35 +358,4 @@ const WritingButton = styled.button`
     }
   }
 
-`;
-const Upload = styled.fieldset`
-  position: relative;
-  margin-top: 34px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  border: none;
-  label {
-    display: flex;
-    align-items: center;
-    padding:12px;
-    width: 250px;
-    box-sizing: border-box;
-    height: 48px;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 23px;
-    color: #CED4DA;
-
-  }
-`;
-
-
-const InputFile = styled.label`
-    font-size: 16px !important;
-    padding: 6px 25px;
-    border: 1px solid #ccc;
-    color: #aaa;
-    border-radius: 4px;
-    cursor: pointer;
 `;

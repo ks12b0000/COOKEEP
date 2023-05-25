@@ -1,13 +1,14 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useMemo} from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import WriteHttp from "../../../http/writeHttp";
 import {useSelector} from "react-redux";
 import styled from "@emotion/styled";
-const Quill = ({quillValue,setQuillValue}) => {
+const Quill = ({quillValue,setQuillValue,setOptionImg,optionImg}) => {
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
     const writeHttp = new WriteHttp();
+
 
 
     // 이미지 처리를 하는 핸들러
@@ -26,15 +27,18 @@ const Quill = ({quillValue,setQuillValue}) => {
         input.addEventListener('change', async () => {
 
             const file = input.files[0];
-
-
             // multer에 맞는 형식으로 데이터 만들어준다.
             const formData = new FormData();
             formData.append('img', file); // formData는 키-밸류 구조
             // 백엔드 multer라우터에 이미지를 보낸다.
             try {
                 const {result} = await writeHttp.imgUpload({imageFile: file, user_id:userId });
+
                 const IMG_URL = result.url;
+                setOptionImg((prevState) => {
+                    return [...prevState, {url: result.url,name:file.name}]
+                })
+
                 // 이 URL을 img 태그의 src에 넣은 요소를 현재 에디터의 커서에 넣어주면 에디터 내에서 이미지가 나타난다
                 // src가 base64가 아닌 짧은 URL이기 때문에 데이터베이스에 에디터의 전체 글 내용을 저장할 수있게된다
                 // 이미지는 꼭 로컬 백엔드 uploads 폴더가 아닌 다른 곳에 저장해 URL로 사용하면된다.
@@ -83,6 +87,10 @@ const Quill = ({quillValue,setQuillValue}) => {
     ];
   const quillRef= useRef();
 
+
+  useEffect(() =>{
+
+  },[optionImg])
 
 
 

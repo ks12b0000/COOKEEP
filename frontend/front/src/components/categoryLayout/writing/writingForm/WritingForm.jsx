@@ -15,6 +15,7 @@ import CreatePopup from "../popup/CreatePopup";
 import LoadingPopup from "../popup/LoadingPopup";
 import CompletePopup from "../popup/CompletePopup";
 import UploadImg from "../../../atomic/UploadImg";
+import ImgList from "./ ImgList";
 
 
 
@@ -53,6 +54,9 @@ function WritingForm() {
     const [imgIndex,setImgIndex] =useState(0);
     const [error, setError] = useState(false);
 
+    const [optionImg,setOptionImg] = useState([]);
+    const [isSelect,setIsSelect] = useState(0);
+    console.log(quillValue);
     const onCheckEnter = (e) => {
         if(e.key === 'Enter') {
             e.preventDefault();
@@ -90,24 +94,9 @@ function WritingForm() {
 
     }, [imagePreview]);
 
-    const imageChange = async (e) => {
-        if(imagePreview.length >= 3 || e.target.files.length === 3){
-            alert('이미지는 3개이상 넣을실수없어요 ') ;
-            return false;
-        }
 
-        const files = e.target.files; // FileList 객체
-        try {
-                const { result } = await writeHttp.imgUpload({ imageFile: files[0], user_id:userId  });
-                setImagePreview((prevState) => {
-                    return [...prevState, {url: result.url}]
-                })
-        } catch (err) {
-            alert("파일 크기는 1메가로 지정되어있씁니다.");
-        }
-    };
 
-    console.log(imagePreview);
+
     const ImgSelect = (index) => {
         setImgIndex(index);
     }
@@ -118,7 +107,7 @@ function WritingForm() {
             title,
             text:quillValue,
             user_id:userId,
-            thumbnail:imagePreview[imgIndex].url,
+            thumbnail:isSelect,
             tags:tag
         }
         setIsLoading(true)
@@ -157,7 +146,7 @@ function WritingForm() {
 
 
 
-       if( imagePreview.length === 0 ) {
+       if( isSelect === 0 || isSelect === '0') {
            alert('썸네일을 등록해주세요');
            setError(true)
            return false;
@@ -172,6 +161,8 @@ function WritingForm() {
     const Props = {
         quillValue,
         setQuillValue,
+        setOptionImg,
+        optionImg,
         Cancel:{
             setOpenModal:() => setIsOpen(false),
             body:{
@@ -229,11 +220,8 @@ function WritingForm() {
                 <TagInput>
                     <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
                 </TagInput>
-                <Upload>
-                    <InputFile htmlFor="input-file">썸네일을 등록해주세요</InputFile>
-                    <input type="file" id="input-file" style={{ display: "none" }} onChange={imageChange} accept=".svg, .gif, .jpg, .png" />
-                    {error && <ErrorText style={{ color: "red" }}><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>썸네일을 등록해주세요</ErrorText>}
-                </Upload>
+
+                <ImgList optionImg={optionImg}  setIsSelect={setIsSelect} isSelect={isSelect}/>
                 <IMgWrap>
                     {imagePreview && <UploadImg img={imagePreview} onClick={ImgSelect} imgIndex={imgIndex}/>}
                 </IMgWrap>
@@ -464,34 +452,3 @@ const WritingButton = styled.button`
     }
    
 `;
-const Upload = styled.fieldset`
-    position: relative;
-    margin-top: 34px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    border: none;
-    label {
-      display: flex;
-      align-items: center;
-      padding:12px;
-      width: 250px;
-      box-sizing: border-box;
-      height: 48px;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 23px;
-      color: #CED4DA;
-  
-    }
-`;
-
-const InputFile = styled.label`
-    font-size: 16px !important;
-    padding: 6px 25px;
-    border: 1px solid #ccc;
-    color: #aaa;
-    border-radius: 4px;
-    cursor: pointer;
-`;
-
