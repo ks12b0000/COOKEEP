@@ -6,27 +6,49 @@ import IsNonData from "../../atomic/isNonData/IsNonData";
 import Post from "../../post/Post";
 import Buttons from "../../atomic/Buttons";
 import styled from "@emotion/styled";
+import {Pagination} from "@mui/material";
+import {PaginationWrap} from "../cateItem/CateItem";
 const client = new SearchHttp();
 function SearchList() {
     const { contents } = useParams();
+
     const [List, setList] = useState([])
+    const [allText,setAllText] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [total,setTotal] = useState(0);
     useEffect(() => {
         (async () => {
             try {
-                const res = await client.getAutoList(contents);
-                setList(res.data.result);
+                const res = await client.getAutoList(contents,currentPage,allText);
+                setList(res.data.result.boards);
+                setTotal(res.data.result.total);
             }
             catch (err) {
                 console.log(err);
 
             }
         })()
-    },[contents])
+    },[contents,currentPage,allText])
+
+    const FilterPosts = (e) => {
+        setAllText(e.target.value)
+    };
+
+    const onChangePagination = (e,p)=> {
+        setCurrentPage(p - 1)
+
+    };
     return (
         <>
             <Header  contents={contents}/>
             <Container>
-
+                <SelectBox>
+                    <select onChange={FilterPosts} defaultValue="8">
+                        <option value={`page=${currentPage}`}>최신순</option>
+                        <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
+                        <option value={`sort=liked,desc&page=${currentPage}`}>좋아요순</option>
+                    </select>
+                </SelectBox>
 
                 <Ul>
                     {
@@ -34,6 +56,7 @@ function SearchList() {
                         List.length === 0   ?  <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={List}/>
                     }
                 </Ul>
+                <PaginationWrap > <Pagination  count={total}  page={currentPage + 1 }   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton /></PaginationWrap>
                 <ButtonWrap>
                     <div>
                         <Link to="writing">

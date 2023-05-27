@@ -2,9 +2,12 @@ package teamproject.backend.mainPage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamproject.backend.board.dto.BoardListResponseAll;
 import teamproject.backend.board.dto.BoardListResponseByCategory;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
 import teamproject.backend.boardTag.BoardTagRepository;
@@ -45,17 +48,17 @@ public class MainPageServiceImpl implements MainPageService {
      */
     @Transactional
     @Override
-    public List<BoardResponseInCardFormat> searchList(String keyword) {
-        List<Board> searchList = mainPageRepository.findByTitleContaining(keyword);
+    public BoardListResponseAll searchList(String keyword, Pageable pageable) {
+        Page<Board> searchList = mainPageRepository.findByTitleContaining(keyword, pageable);
 
         if (hasKeywordSearch(keyword)) {
             SearchKeyword searchKeyword = searchRepository.findByKeyword(keyword).get();
             searchKeyword.increaseSearchCount();
-            return getBoardResponsesInCardFormat(searchList, searchList.size());
+            return new BoardListResponseAll(getBoardResponsesInCardFormat(searchList.getContent(), searchList.getSize()), searchList.getTotalPages());
         }
         searchSave(keyword);
 
-        return getBoardResponsesInCardFormat(searchList, searchList.size());
+        return new BoardListResponseAll(getBoardResponsesInCardFormat(searchList.getContent(), searchList.getSize()), searchList.getTotalPages());
     }
 
     /**
@@ -64,12 +67,12 @@ public class MainPageServiceImpl implements MainPageService {
      * @return
      */
     @Override
-    public List<SearchByResponse> searchTagList(String keyword) {
+    public SearchListResponseAll searchTagList(String keyword, Pageable pageable) {
         Tag tag = tagRepository.findByTagName(keyword);
 
-        List<BoardTag> boardTagList = boardTagRepository.findByTag(tag);
+        Page<BoardTag> boardTagList = boardTagRepository.findByTag(tag, pageable);
 
-        return getSearchByResponse(boardTagList, boardTagList.size());
+        return new SearchListResponseAll(getSearchByResponse(boardTagList.getContent(), boardTagList.getSize()), boardTagList.getTotalPages());
     }
 
     /**

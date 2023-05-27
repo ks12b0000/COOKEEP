@@ -7,9 +7,9 @@ class SearchHttp extends Http {
 
     //자동완성 검색 가져오기
 
-    getAutoList = async (keyword) => {
+    getAutoList = async (keyword,page,allText) => {
         try {
-            return await this.axios.get(`/main/search/list?keyword=${keyword}`)
+            return await this.axios.get(`/main/search/list?keyword=${keyword}&${page ? `page=${page}` :allText}`)
         } catch (err) {
             throw  err;
         }
@@ -34,9 +34,9 @@ class SearchHttp extends Http {
         }
     }
 
-        getAutoTag= async (text) => {
+        getAutoTag= async (text,page,allText) => {
         try{
-            return await  this.axios.get(`/main/search/tag/list?keyword=${text}`)
+            return await  this.axios.get(`/main/search/tag/list?keyword=${text}&${page ? `page=${page}` :allText}`)
         }
         catch (err) {
             throw  err;

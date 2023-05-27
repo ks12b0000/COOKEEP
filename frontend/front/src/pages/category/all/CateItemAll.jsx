@@ -64,12 +64,12 @@ function CateItemAll() {
     export default CateItemAll;
     const Ul = styled.ul`
       margin-bottom: 20px;
-    margin-top:30px;
-    min-height: 800px;
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: start;
+      margin-top:30px;
+      min-height: 800px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: start;
     li {
         width: 19%;
         cursor: pointer;

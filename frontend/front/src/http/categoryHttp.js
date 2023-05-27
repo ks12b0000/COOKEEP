@@ -37,7 +37,7 @@ class CategoryHttp extends Http {
   //글 조회
   getBoard = async id => {
     try {
-      const { data } = await this.axios.get(`board?board_id=${id}&size=10`);
+      const { data } = await this.axios.get(`board?board_id=${id}`);
       return data;
     } catch (err) {
       throw err;
