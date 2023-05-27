@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import * as React from 'react';
+import AlarmModal from './AlarmModal';
 
 const userHttp = new UserHttp();
 const authHttp = new AuthHttp();
@@ -23,6 +24,7 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
 
   const [open, setOpen] = useState(false);
   const [UserImage, setUserImage] = useState('');
+  const [AlarmOpen, setAlarmOpen] = useState(false);
 
   useEffect(() => {
     LoginCheck();
@@ -64,6 +66,15 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
     window.location.reload();
   };
 
+  const AlarmToggle = e => {
+    e.preventDefault();
+    if (AlarmOpen) {
+      setAlarmOpen(false);
+    } else {
+      setAlarmOpen(true);
+    }
+  };
+
   return (
     <>
       <GnbContainer className={userInfo.isLoggedIn && 'user'}>
@@ -97,18 +108,27 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
               />
             </li>
 
-            <li>
-              <Link to={'/alarm'}>
+            <LogOut
+              className={AlarmOpen ? 'alarmon' : 'alarm'}
+              onClick={e => AlarmToggle(e)}
+            >
+              {AlarmOpen ? (
                 <img
-                  src={`${process.env.PUBLIC_URL}/image/mypage.png`}
-                  alt='마이페이지'
+                  src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
+                  alt='알람아이콘'
                 />
-              </Link>
-            </li>
+              ) : (
+                <img
+                  src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
+                  alt='알람아이콘'
+                />
+              )}
+              {AlarmOpen && <AlarmModal />}
+            </LogOut>
 
             <LogOut>
-              <div onClick={() => setOpen(!open)}>
-                <UserImg>
+              <div>
+                <UserImg onClick={() => setOpen(!open)}>
                   <Img src={UserImage} />
                 </UserImg>
               </div>
@@ -197,6 +217,7 @@ const MenuList = styled.ul`
     }
   }
 `;
+
 const GnbContainer = styled.ul`
   width: auto;
   display: flex;
@@ -212,10 +233,32 @@ const GnbContainer = styled.ul`
     li {
       width: 44px;
       height: 44px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
       &.search {
         img {
           width: 20px;
           height: 20px;
+        }
+      }
+
+      &.alarm {
+        img {
+          width: 20px;
+          height: 23px;
+        }
+      }
+
+      &.alarmon {
+        width: 44px;
+        height: 44px;
+        background: #ffc9bb;
+        border-radius: 999px;
+
+        img {
+          width: 20px;
+          height: 23px;
         }
       }
     }

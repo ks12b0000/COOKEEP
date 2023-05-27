@@ -195,16 +195,6 @@ const ChangeUserinfo = () => {
             setIsError(false);
           }, 5000);
           return;
-        }
-        if (Nickname.length < 3) {
-          setIsError(true);
-          nicknameRef.current.focus();
-          setNicknameText('닉네임 중복검사를 진행해 주세요');
-          setTimeout(() => {
-            setNicknameText('');
-            setIsError(false);
-          }, 5000);
-          return;
         } else {
           onChangeNickname();
           setIsNicknameDone(true);
@@ -315,6 +305,16 @@ const ChangeUserinfo = () => {
         setNicknameText('');
         setIsError(false);
       }, 5000);
+    }
+    if (Nickname.length < 3) {
+      setIsError(true);
+      nicknameRef.current.focus();
+      setNicknameText('닉네임을 3글자 이상 작성해주세요');
+      setTimeout(() => {
+        setNicknameText('');
+        setIsError(false);
+      }, 5000);
+      return;
     } else {
       try {
         const res = await userHttp.getCheckNickname(Id);
