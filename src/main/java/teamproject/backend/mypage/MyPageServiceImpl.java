@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
 import teamproject.backend.board.BoardService;
@@ -85,7 +86,7 @@ public class MyPageServiceImpl implements MyPageService {
      * @param response
      */
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void updateByUserPw(Long user_id, UpdatePwRequest updatePwRequest, HttpServletResponse response) {
 
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
@@ -103,7 +104,7 @@ public class MyPageServiceImpl implements MyPageService {
      * @param response
      */
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void updateByUserId(Long user_id, UpdateIdRequest updateIdRequest, HttpServletResponse response) {
 
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
@@ -127,7 +128,7 @@ public class MyPageServiceImpl implements MyPageService {
      * @param response
      */
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response) {
 
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
@@ -244,7 +245,7 @@ public class MyPageServiceImpl implements MyPageService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void updateNickname(Long user_id, UpdateNicknameRequest request){
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         String newNickname = request.getNickname();
