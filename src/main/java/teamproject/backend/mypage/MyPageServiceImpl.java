@@ -86,7 +86,7 @@ public class MyPageServiceImpl implements MyPageService {
      * @param response
      */
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void updateByUserPw(Long user_id, UpdatePwRequest updatePwRequest, HttpServletResponse response) {
 
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
@@ -104,7 +104,7 @@ public class MyPageServiceImpl implements MyPageService {
      * @param response
      */
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void updateByUserId(Long user_id, UpdateIdRequest updateIdRequest, HttpServletResponse response) {
 
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
@@ -128,7 +128,7 @@ public class MyPageServiceImpl implements MyPageService {
      * @param response
      */
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response) {
 
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
@@ -245,7 +245,7 @@ public class MyPageServiceImpl implements MyPageService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void updateNickname(Long user_id, UpdateNicknameRequest request){
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         String newNickname = request.getNickname();

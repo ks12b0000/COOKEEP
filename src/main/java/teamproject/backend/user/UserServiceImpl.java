@@ -298,7 +298,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public UploadUserImageResponse uploadImage(Long userId, MultipartFile image) throws IOException {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
