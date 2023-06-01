@@ -9,7 +9,7 @@ function Footer() {
         <LinkWrap>
           <Text>피드백 문의</Text>
           <Text thin>ks12b0000@gmail.com</Text>
-          <a href='https://www.notion.so/COOKEEP-9d7eebcdacde4859bfd7dc428a052aea'>
+          <a href='https://night-triangle-fdc.notion.site/COOKEEP-9d7eebcdacde4859bfd7dc428a052aea'>
             <Text pointer underline>
               프로젝트 소개
             </Text>
