@@ -1,19 +1,23 @@
 package teamproject.backend.mypage;
 
-import org.assertj.core.api.Assertions;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Pageable;
 import teamproject.backend.domain.User;
+import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.user.UserRepository;
+import teamproject.backend.utils.SHA256;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 public class MyPageRepositoryTest {
@@ -47,19 +51,16 @@ public class MyPageRepositoryTest {
     }
 
     @Test
-    @DisplayName("회원탈퇴")
-    void userDelete() {
+    @DisplayName("비밀번호가 일치한 회원 찾기")
+    void checkPassword() {
         // given
         User saveUser = userRepository.save(user);
 
         // when
-        Optional<User> findById = myPageRepository.findById(saveUser.getId());
-        myPageRepository.delete(findById.get());
+        Optional<User> user2 = myPageRepository.findById(saveUser.getId());
+        User findUser = myPageRepository.findByPassword(user2.get().getPassword());
 
         // then
-//        assertAll (
-//                () -> assertThat(findById.isPresent()).isFalse(),
-//                () -> assertThat(saveUser).isNull()
-//        );
+        assertThat(saveUser.getId()).isEqualTo(findUser.getId());
     }
 }

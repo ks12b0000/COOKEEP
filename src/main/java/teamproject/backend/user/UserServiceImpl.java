@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.User;
@@ -20,6 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
@@ -299,19 +301,23 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Transactional
     public UploadUserImageResponse uploadImage(Long userId, MultipartFile image) throws IOException {
         Optional<User> user = userRepository.findById(userId);
-
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
 
+        //기존 이미지 삭제 : 기존 유저의 이미지가 기본이미지(DEFAULT)가 아닐 경우 이미지 삭제
+        String beforeURL = user.get().getImageURL();
+        if(!beforeURL.equals(DEFAULT_USER_IMAGE_URL)){
+            s3DAO.delete(beforeURL);
+        }
+
+        //이미지 null 처리 : 이미지 요청값이 null 일 경우 기본 이미지 url로 교채
         if(image == null){
-            s3DAO.delete(user.get().getImageURL());
             user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
             return new UploadUserImageResponse(true, DEFAULT_USER_IMAGE_URL);
         }
+
+        //이미지 저장 : 이미지 저장 시 (유저_id)-(uuid).확장자(extension)으로 저장.
         String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-        String fileName = userId + "." + extension;
-        if(s3DAO.isExist(fileName)){
-            s3DAO.delete(fileName);
-        }
+        String fileName = userId + "-" + UUID.randomUUID() + "." + extension;
         s3DAO.upload(fileName, image);
         String url = s3DAO.getURL(fileName);
         user.get().setImageURL(url);
