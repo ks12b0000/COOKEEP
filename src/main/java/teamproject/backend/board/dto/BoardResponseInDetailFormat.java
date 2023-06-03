@@ -22,8 +22,9 @@ public class BoardResponseInDetailFormat {
     private Integer commented;
     private Integer liked;
     private Integer view;
+    private String thumbnail;
 
-    public BoardResponseInDetailFormat(Board board, String tags){
+    public BoardResponseInDetailFormat(Board board){
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
@@ -34,6 +35,7 @@ public class BoardResponseInDetailFormat {
         this.commented = board.getCommented();
         this.liked = board.getLiked();
         this.view = board.getView();
+        this.thumbnail = board.getThumbnail();
     }
     private String asString(Date date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
