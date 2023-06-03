@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import teamproject.backend.domain.User;
 
 import javax.persistence.LockModeType;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -18,5 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsUserByNickname(String nickname);
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(value = "select u from User u where u.id =:id")
-    User findByIdForUpdate(Long id);
+    Optional<User> findByIdForUpdate(Long id);
 }
