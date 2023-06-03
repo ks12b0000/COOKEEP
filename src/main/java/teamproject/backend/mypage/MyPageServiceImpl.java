@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
 import teamproject.backend.board.BoardService;
@@ -89,7 +88,7 @@ public class MyPageServiceImpl implements MyPageService {
     @Transactional
     public void updateByUserPw(Long user_id, UpdatePwRequest updatePwRequest, HttpServletResponse response) {
 
-        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        User user = myPageRepository.findByIdForUpdate(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
         String updatePassword = SHA256.encrypt(updatePwRequest.getUpdatePassword(), user.getSalt());
         user.updatePassword(updatePassword);
@@ -107,7 +106,7 @@ public class MyPageServiceImpl implements MyPageService {
     @Transactional
     public void updateByUserId(Long user_id, UpdateIdRequest updateIdRequest, HttpServletResponse response) {
 
-        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        User user = myPageRepository.findByIdForUpdate(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
         String updateUsername = updateIdRequest.getUpdateUsername();
 
@@ -131,7 +130,7 @@ public class MyPageServiceImpl implements MyPageService {
     @Transactional
     public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response) {
 
-        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        User user = myPageRepository.findByIdForUpdate(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
         String updateEmail = updateEmailRequest.getUpdateEmail();
 
@@ -247,7 +246,7 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     @Transactional
     public void updateNickname(Long user_id, UpdateNicknameRequest request){
-        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        User user = myPageRepository.findByIdForUpdate(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         String newNickname = request.getNickname();
 
         if(myPageRepository.existsUserByNickname(newNickname)){
