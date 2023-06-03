@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import teamproject.backend.domain.User;
@@ -300,7 +299,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     @Transactional
     public UploadUserImageResponse uploadImage(Long userId, MultipartFile image) throws IOException {
-        Optional<User> user = userRepository.findById(userId);
+        Optional<User> user = userRepository.findByIdForUpdate(userId);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
 
         //기존 이미지 삭제 : 기존 유저의 이미지가 기본이미지(DEFAULT)가 아닐 경우 이미지 삭제
