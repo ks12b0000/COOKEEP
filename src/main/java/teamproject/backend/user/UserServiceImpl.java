@@ -330,4 +330,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
         return new FindUserImageResponse(id, user.get().getImageURL());
     }
+
+
 }
