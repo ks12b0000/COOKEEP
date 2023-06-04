@@ -16,7 +16,7 @@ public interface MyPageService {
 
     public void updateByUserId(Long user_id, UpdateIdRequest updateIdRequest, HttpServletResponse response);
 
-    public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response);
+    public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest);
 
     public void updateNickname(Long user_id, UpdateNicknameRequest request);
 
