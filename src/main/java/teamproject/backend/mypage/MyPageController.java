@@ -94,9 +94,9 @@ public class MyPageController {
      * @return
      */
     @PutMapping("/auth/user/update/email/{user_id}")
-    public BaseResponse updateEmail(@PathVariable Long user_id, @Validated(ValidationSequence.class) @RequestBody UpdateEmailRequest updateEmailRequest, HttpServletResponse response) {
+    public BaseResponse updateEmail(@PathVariable Long user_id, @Validated(ValidationSequence.class) @RequestBody UpdateEmailRequest updateEmailRequest) {
 
-        myPageService.updateByUserEmail(user_id, updateEmailRequest, response);
+        myPageService.updateByUserEmail(user_id, updateEmailRequest);
 
         return new BaseResponse("이메일 변경에 성공했습니다.");
     }

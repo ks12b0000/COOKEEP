@@ -124,11 +124,10 @@ public class MyPageServiceImpl implements MyPageService {
      * 유저 이메일 변경
      * @param user_id
      * @param updateEmailRequest
-     * @param response
      */
     @Override
     @Transactional
-    public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response) {
+    public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest) {
 
         User user = myPageRepository.findByIdForUpdate(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
@@ -138,7 +137,6 @@ public class MyPageServiceImpl implements MyPageService {
 
         if(updateEmailCheck == null){    // 중복 X
             user.updateEmail(updateEmail);
-            logout(response);
         } else {
             throw new BaseException(DUPLICATE_EMAIL); // 중복 O(중복된 이메일이 있습니다.)
         }
