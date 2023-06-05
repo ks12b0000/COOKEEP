@@ -39,8 +39,8 @@ public class BoardCommentReplyServiceImpl implements BoardCommentReplyService{
 
         boardCommentReplyRepository.save(reply);
         comment.increaseReplyCount();
-        if (comment.getBoard().getUser().getId() != user.getId()) {
-            notificationSave(user, comment.getBoard());
+        if (comment.getUser().getId() != user.getId()) {
+            notificationSave(comment, comment.getBoard());
         }
         return reply.getBoardCommentReplyId();
     }
@@ -93,10 +93,11 @@ public class BoardCommentReplyServiceImpl implements BoardCommentReplyService{
         return user.get();
     }
 
-    private void notificationSave(User user, Board board) {
-        String message = "내가 작성한 글 " + "[" + board.getTitle() + "] 에 " + user.getNickname() + "님이 대댓글을 달았습니다.";
+    private void notificationSave(BoardComment comment, Board board) {
+        String title = "내가 쓴 댓글에 답글이 달렸습니다!";
+        String subTitle = board.getTitle();
         String url = "https://www.teamprojectvv.shop/category/" + board.getBoardId();
-        Notification notification = new Notification(board.getUser(), message, url, board);
+        Notification notification = new Notification(comment.getUser(), title, subTitle, url, "mypage");
         notificationRepository.save(notification);
     }
 }

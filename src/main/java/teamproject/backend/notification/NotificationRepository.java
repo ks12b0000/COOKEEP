@@ -13,6 +13,7 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    Page<Notification> findPageByUser(User user, Pageable pageable);
+    Page<Notification> findPageByUserAndCategory(User user, Pageable pageable, String category);
     List<Notification> findByUser(User user, Sort sort);
+    Page<Notification> findPageByUser(User user, Pageable pageable);
 }
