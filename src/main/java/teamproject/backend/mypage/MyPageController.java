@@ -90,7 +90,6 @@ public class MyPageController {
      * [PUT] /auth/user/update/email/{user_id}
      * @param user_id
      * @param updateEmailRequest
-     * @param response
      * @return
      */
     @PutMapping("/auth/user/update/email/{user_id}")
@@ -165,13 +164,13 @@ public class MyPageController {
 
     /**
      * 알림 목록 가져오기
-     * [GET] /auth/user/notification/list/{user_id}
+     * [GET] /auth/user/notification/list/{user_id}?category=&page=
      * @param user_id
      * @return
      */
     @GetMapping("/auth/user/notification/list/{user_id}")
-    public BaseResponse notificationList(@PathVariable Long user_id, @PageableDefault(size = 8, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, pageable);
+    public BaseResponse notificationList(@PathVariable Long user_id, @PageableDefault(size = 8, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, @RequestParam String category) {
+        GetNotificationResponse getNotificationResponse = myPageService.notificationByUser(user_id, pageable, category);
 
         return new BaseResponse("알림 목록을 불러왔습니다.", getNotificationResponse);
     }
