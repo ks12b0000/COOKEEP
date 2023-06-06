@@ -5,11 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
 import teamproject.backend.mypage.dto.UploadUserImageResponse;
+import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final CookieService cookieService;
     private final S3DAO s3DAO;
     private static final String DEFAULT_USER_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/default_user_image.png";
+    private final NotificationRepository notificationRepository;
 
     /**
      * 회원가입
@@ -57,6 +59,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
+        notificationSave(user);
 
         return user.getId();
     }
@@ -78,6 +81,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         userRepository.save(user);
 
         SocialUserInfo userInfo = new SocialUserInfo(user.getId(), user.getUsername(), user.getEmail());
+        notificationSave(user);
 
         return userInfo;
     }
@@ -300,7 +304,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     @Transactional
     public UploadUserImageResponse uploadImage(Long userId, MultipartFile image) throws IOException {
-        Optional<User> user = userRepository.findById(userId);
+        Optional<User> user = userRepository.findByIdForUpdate(userId);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
 
         //기존 이미지 삭제 : 기존 유저의 이미지가 기본이미지(DEFAULT)가 아닐 경우 이미지 삭제
@@ -329,5 +333,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
         Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
         return new FindUserImageResponse(id, user.get().getImageURL());
+    }
+
+    private void notificationSave(User user) {
+        String title = "🎉" + " 회원가입을 환영합니다!";
+        String subTitle = "지금 닉네임을 변경하고 활동을 시작해 보세요!";
+        String url = "https://www.teamprojectvv.shop/mypage/account/" + user.getId();
+        Notification notification = new Notification(user, title, subTitle, url,"mainpage");
+        notificationRepository.save(notification);
     }
 }

@@ -18,9 +18,12 @@ public class NotificationResponse {
 
     private Long user_id;
 
-    private String message;
+    private String title;
+
+    private String subTitle;
 
     private String createDate;
+    private String createTime;
 
     private String notification_url;
 
@@ -29,18 +32,25 @@ public class NotificationResponse {
     private boolean confirmation;
 
     @Builder
-    public NotificationResponse(Long notification_id, Long user_id, String message, Date createDate, String notification_url, String userNickName, boolean confirmation) {
+    public NotificationResponse(Long notification_id, Long user_id, String title, String subTitle, Date createDate, Date createTime, String notification_url, String userNickName, boolean confirmation) {
         this.notification_id = notification_id;
         this.user_id = user_id;
-        this.message = message;
+        this.title = title;
+        this.subTitle = subTitle;
         this.createDate = asString(createDate);
+        this.createTime = asStringToTime(createTime);
         this.notification_url = notification_url;
         this.userNickName = userNickName;
         this.confirmation = confirmation;
     }
 
     private String asString(Date date){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+        return format.format(date);
+    }
+
+    private String asStringToTime(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         return format.format(date);
     }
 }

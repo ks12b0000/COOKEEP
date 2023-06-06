@@ -25,13 +25,11 @@ public class Notification {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "board_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Board board;
+    @Column
+    private String title;
 
     @Column
-    private String message;
+    private String subTitle;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
@@ -42,21 +40,27 @@ public class Notification {
     @Column(nullable = false)
     private boolean confirmation;
 
-    public Notification (User user, String message, String notification_url, Board board) {
+    @Column
+    private String category;
+
+    public Notification (User user, String title, String subTitle, String notification_url, String category) {
         this.user = user;
-        this.message = message;
+        this.title = title;
+        this.subTitle = subTitle;
         this.createDate = new Date(System.currentTimeMillis());
         this.notification_url = notification_url;
-        this.board = board;
         this.confirmation = false;
+        this.category = category;
     }
 
     public NotificationResponse toDto(){
         return NotificationResponse.builder()
                 .notification_id(id)
                 .user_id(user.getId())
-                .message(message)
+                .title(title)
+                .subTitle(subTitle)
                 .createDate(createDate)
+                .createTime(createDate)
                 .notification_url(notification_url)
                 .confirmation(confirmation)
                 .build();
