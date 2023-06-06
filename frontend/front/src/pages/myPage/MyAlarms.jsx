@@ -66,7 +66,7 @@ const MyAlarms = () => {
 
   const getAlarmList = async () => {
     try {
-      const res = await authHttp.getAlarmList(userId, SelectedButton);
+      const res = await authHttp.getMypageAlarmList(userId, SelectedButton);
       console.log(res);
       setAlarms(res.data.result.notificationList);
       setCount(res.data.result.total);
@@ -144,7 +144,7 @@ const MyAlarms = () => {
                       }}
                       key={alarm.notification_id}
                     >
-                      <ContentsText>{alarm.message}</ContentsText>
+                      <ContentsText>{alarm.title}</ContentsText>
                       <ContentsArrow src='/image/mypage-alarms-arrow.png' />
                     </ContentsBox>
                   ))}

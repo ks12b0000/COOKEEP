@@ -31,11 +31,23 @@ class AuthHttp extends Http {
     }
   };
 
-  //마이페이지 알림 리스트 불러오기
-  getAlarmList = async (user_id, num) => {
+  //메인페이지 알림 리스트 불러오기
+  getMainAlarmList = async (user_id, num) => {
     try {
       const res = await this.axios.get(
-        `auth/user/notification/list/${user_id}?page=${num}`
+        `/auth/user/notification/list/${user_id}?category=&page=${num}`
+      );
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //마이페이지 알림 리스트 불러오기
+  getMypageAlarmList = async (user_id, num) => {
+    try {
+      const res = await this.axios.get(
+        `/auth/user/notification/list/${user_id}?category=mypage&page=${num}`
       );
       return res;
     } catch (err) {

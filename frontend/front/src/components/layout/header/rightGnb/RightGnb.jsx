@@ -108,19 +108,18 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
               />
             </li>
 
-            <LogOut
-              className={AlarmOpen ? 'alarmon' : 'alarm'}
-              onClick={e => AlarmToggle(e)}
-            >
+            <LogOut className={AlarmOpen ? 'alarmon' : 'alarm'}>
               {AlarmOpen ? (
                 <img
                   src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
                   alt='알람아이콘'
+                  onClick={e => AlarmToggle(e)}
                 />
               ) : (
                 <img
                   src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
                   alt='알람아이콘'
+                  onClick={e => AlarmToggle(e)}
                 />
               )}
               {AlarmOpen && <AlarmModal />}
