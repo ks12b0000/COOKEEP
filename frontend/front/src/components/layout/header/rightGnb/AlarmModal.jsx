@@ -119,7 +119,7 @@ const ContentsBox = styled.div`
   grid-template-columns: 5% 80% 5%;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 5px;
+  padding: 20px 5px 20px 15px;
   box-sizing: border-box;
   border-bottom: 0.1px solid rgba(0, 0, 0, 0.2);
 `;
