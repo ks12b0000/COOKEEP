@@ -8,6 +8,7 @@ import ReplyUpload from './ReplyUpload';
 import CommentUpload from './CommentUpload';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CommentDelete from './CommentDelete';
+import Pagination from '../mypage/pagination';
 
 const commentHttp = new CommentHttp();
 
@@ -43,43 +44,15 @@ const CommentList = props => {
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
-      console.log('뎃글 리스트', res);
+      console.log('댓글 리스트', res);
     } catch (err) {
       console.log(err);
     }
   };
 
-  //넘버 버튼으로 페이지 불러오기
-  const pageList = pageNum => {
-    setSelectedButton(pageNum);
-  };
-
-  //left arrow 버튼으로 페이지 불러오기
-  const leftList = () => {
-    if (SelectedButton > 0) {
-      setSelectedButton(prev => prev - 1);
-    }
-  };
-
-  //right arrow 버튼으로 페이지 불러오기
-  const rightList = () => {
-    if (SelectedButton < Page.length - 1) {
-      setSelectedButton(prev => prev + 1);
-    }
-  };
-
-  //첫 페이지로 이동
-  const firstList = () => {
-    if (SelectedButton > 0) {
-      setSelectedButton(0);
-    }
-  };
-
-  //마지막 페이지로 이동
-  const lastList = () => {
-    if (SelectedButton < Page.length - 1) {
-      setSelectedButton(Page.length - 1);
-    }
+  // 페이지 네이션 함수
+  const handlePagination = buttonValue => {
+    setSelectedButton(buttonValue);
   };
 
   // 댓글 수정 기능
@@ -290,33 +263,14 @@ const CommentList = props => {
 
       {/* 페이지 네이션 */}
       {Comments.length !== 0 && (
-        <Nav>
-          {SelectedButton > 0 && (
-            <Button onClick={() => firstList()}>
-              <DoubleArrow url='/image/double-arrow-left.png' />
-            </Button>
-          )}
-          <Button onClick={() => leftList()}>
-            <Arrow url='/image/arrow-left.png' />
-          </Button>
-          {Page.map((page, i) => (
-            <Button
-              key={i}
-              onClick={() => pageList(page)}
-              aria-current={page === SelectedButton ? 'true' : null}
-            >
-              {page + 1}
-            </Button>
-          ))}
-          <Button onClick={() => rightList()}>
-            <Arrow url='/image/arrow-right.png' />
-          </Button>
-          {SelectedButton < Page.length - 1 && (
-            <Button onClick={() => lastList()}>
-              <DoubleArrow url='/image/double-arrow-right.png' />
-            </Button>
-          )}
-        </Nav>
+        <>
+          {/* 페이지네이션 */}
+          <Pagination
+            handlePagination={handlePagination}
+            Page={Page}
+            SelectedButton={SelectedButton}
+          />
+        </>
       )}
 
       {/* 댓글 작성 컴포넌트 */}
@@ -567,66 +521,6 @@ const Line = styled.div`
   height: 0.1px;
   background-color: #ffa590;
   margin: 40px 0;
-`;
-
-//페이지네이션
-export const Nav = styled.nav`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  margin: 16px;
-`;
-
-export const Button = styled.button`
-  border: 1px solid #cbcbcb;
-  position: relative;
-  top: 0;
-  border-radius: 5px;
-  width: 30px;
-  height: 30px;
-  background: white;
-  color: #cbcbcb;
-  font-size: 1rem;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    cursor: pointer;
-    transform: translateY(-3px);
-  }
-
-  &[disabled] {
-    background: white;
-    border: 1px solid #cbcbcb;
-    cursor: revert;
-    transform: revert;
-  }
-
-  &[aria-current] {
-    background: #ff4122;
-    border: 1px solid #ff4122;
-    color: white;
-    font-weight: bold;
-    cursor: revert;
-    transform: revert;
-  }
-`;
-
-export const Arrow = styled.div`
-  width: 8px;
-  height: 14px;
-  background: url(${props => props.url});
-  background-size: 8px;
-`;
-
-export const DoubleArrow = styled.div`
-  width: 14px;
-  height: 12px;
-  background: url(${props => props.url});
-  background-size: 14px;
 `;
 
 export default CommentList;
