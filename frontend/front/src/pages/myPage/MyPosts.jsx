@@ -216,6 +216,7 @@ export const ContentsBox = styled.div`
 export const ContentsText = styled.div`
   font-weight: 400;
   font-size: 13px;
+  opacity: ${props => (props.checked ? '0.4' : '')};
 `;
 
 export const ContentsArrow = styled.img`
@@ -223,6 +224,7 @@ export const ContentsArrow = styled.img`
   top: 50%;
   left: 97%;
   transform: translate(0, -50%);
+  opacity: ${props => (props.checked ? '0.2' : '')};
 `;
 
 //페이지네이션

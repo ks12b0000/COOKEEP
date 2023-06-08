@@ -33,6 +33,27 @@ const AlarmModal = () => {
     }
   };
 
+  const checkedAlarm = async (
+    e,
+    confirmation,
+    notification_id,
+    notification_url
+  ) => {
+    e.preventDefault();
+    if (confirmation === false) {
+      try {
+        const res = await authHttp.putCheckedAlarm(notification_id);
+        console.log(res);
+        window.open(notification_url, '_self');
+      } catch (err) {
+        alert(err);
+      }
+    } else {
+      console.log('이동');
+      window.open(notification_url, '_self');
+    }
+  };
+
   const addPage = e => {
     e.preventDefault();
     if (Page < Total - 1) {
@@ -53,11 +74,21 @@ const AlarmModal = () => {
     <ModalWrap>
       <ConentsWrap>
         {Alarms.map(alarm => (
-          <ContentsBox key={alarm.notification_id}>
-            <RedRound />
+          <ContentsBox
+            key={alarm.notification_id}
+            onClick={e => {
+              checkedAlarm(
+                e,
+                alarm.confirmation,
+                alarm.notification_id,
+                alarm.notification_url
+              );
+            }}
+          >
+            <RedRound checked={alarm.confirmation} />
             <TextWrap>
               <TitleWrap>
-                <Title>{alarm.title}</Title>
+                <Title checked={alarm.confirmation}>{alarm.title}</Title>
               </TitleWrap>
               <SubTitle>{alarm.subTitle}</SubTitle>
               {formattedDate === alarm.createDate ? (
@@ -67,12 +98,7 @@ const AlarmModal = () => {
               )}
             </TextWrap>
             {/* <ArrowWrap> */}
-            <Arrow
-              src='/image/alarm-arrow.png'
-              onClick={() => {
-                window.open(alarm.notification_url, '_self');
-              }}
-            />
+            <Arrow src='/image/alarm-arrow.png' checked={alarm.confirmation} />
             {/* </ArrowWrap> */}
           </ContentsBox>
         ))}
@@ -111,6 +137,7 @@ const ConentsWrap = styled.div`
   overflow-y: scroll;
   top: 0;
   left: 0;
+  cursor: pointer;
 `;
 const ContentsBox = styled.div`
   width: 370px;
@@ -129,6 +156,7 @@ const RedRound = styled.div`
   height: 10px;
   border-radius: 10px;
   background-color: #ff4122;
+  background-color: ${props => (props.checked ? '#cccccc' : '#ff4122')};
 `;
 
 const TextWrap = styled.div`
@@ -151,6 +179,7 @@ const Title = styled.div`
   font-weight: 600;
   text-align: left;
   margin-bottom: 3px;
+  opacity: ${props => (props.checked ? '0.4' : '')};
 `;
 
 const SubTitle = styled.div`
@@ -169,6 +198,7 @@ const Time = styled.div`
 const Arrow = styled.img`
   width: 8px !important ;
   height: 14px !important ;
+  opacity: ${props => (props.checked ? '0.3' : '')};
 `;
 
 const SeeMore = styled.div`

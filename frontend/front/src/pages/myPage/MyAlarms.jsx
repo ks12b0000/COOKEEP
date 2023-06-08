@@ -71,6 +71,26 @@ const MyAlarms = () => {
     }
   };
 
+  const checkedAlarm = async (
+    e,
+    confirmation,
+    notification_id,
+    notification_url
+  ) => {
+    e.preventDefault();
+    if (confirmation === false) {
+      try {
+        const res = await authHttp.putCheckedAlarm(notification_id);
+        console.log(res);
+        window.open(notification_url, '_self');
+      } catch (err) {
+        alert(err);
+      }
+    } else {
+      window.open(notification_url, '_self');
+    }
+  };
+
   // 페이지 네이션 함수
   const handlePagination = buttonValue => {
     setSelectedButton(buttonValue);
@@ -103,13 +123,23 @@ const MyAlarms = () => {
                 <ContentsWrap>
                   {Alarms.map(alarm => (
                     <ContentsBox
-                      onClick={() => {
-                        window.open(alarm.notification_url, '_self');
+                      onClick={e => {
+                        checkedAlarm(
+                          e,
+                          alarm.confirmation,
+                          alarm.notification_id,
+                          alarm.notification_url
+                        );
                       }}
                       key={alarm.notification_id}
                     >
-                      <ContentsText>{alarm.title}</ContentsText>
-                      <ContentsArrow src='/image/mypage-alarms-arrow.png' />
+                      <ContentsText checked={alarm.confirmation}>
+                        {alarm.title}
+                      </ContentsText>
+                      <ContentsArrow
+                        checked={alarm.confirmation}
+                        src='/image/mypage-alarms-arrow.png'
+                      />
                     </ContentsBox>
                   ))}
                 </ContentsWrap>
