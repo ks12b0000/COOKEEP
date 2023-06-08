@@ -6,11 +6,6 @@ import AuthHttp from '../../http/authHttp';
 import Layout from '../../components/layout/Layout';
 import MypageNav from '../../components/mypage/myPageNav';
 import {
-  Button,
-  Arrow,
-  DoubleArrow,
-} from '../../components/comment/CommentList';
-import {
   Wrap,
   Text,
   BoxWrap,
@@ -23,8 +18,8 @@ import {
   ContentsText,
   ContentsBox,
   ContentsArrow,
-  Nav,
 } from './MyPosts';
+import Pagination from '../../components/mypage/pagination';
 
 const authHttp = new AuthHttp();
 
@@ -43,7 +38,6 @@ const MyAlarms = () => {
   const [Alarms, setAlarms] = useState([]);
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
-  const [Count, setCount] = useState(0);
 
   useEffect(() => {
     onMypage();
@@ -69,7 +63,6 @@ const MyAlarms = () => {
       const res = await authHttp.getMypageAlarmList(userId, SelectedButton);
       console.log(res);
       setAlarms(res.data.result.notificationList);
-      setCount(res.data.result.total);
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
       setPage(newArray);
@@ -78,38 +71,29 @@ const MyAlarms = () => {
     }
   };
 
+  const checkedAlarm = async (
+    e,
+    confirmation,
+    notification_id,
+    notification_url
+  ) => {
+    e.preventDefault();
+    if (confirmation === false) {
+      try {
+        const res = await authHttp.putCheckedAlarm(notification_id);
+        console.log(res);
+        window.open(notification_url, '_self');
+      } catch (err) {
+        alert(err);
+      }
+    } else {
+      window.open(notification_url, '_self');
+    }
+  };
+
   // 페이지 네이션 함수
-  //넘버 버튼으로 페이지 불러오기
-  const pageList = pageNum => {
-    setSelectedButton(pageNum);
-  };
-
-  //left arrow 버튼으로 페이지 불러오기
-  const leftList = () => {
-    if (SelectedButton > 0) {
-      setSelectedButton(prev => prev - 1);
-    }
-  };
-
-  //right arrow 버튼으로 페이지 불러오기
-  const rightList = () => {
-    if (SelectedButton < Page.length - 1) {
-      setSelectedButton(prev => prev + 1);
-    }
-  };
-
-  //첫 페이지로 이동
-  const firstList = () => {
-    if (SelectedButton > 0) {
-      setSelectedButton(0);
-    }
-  };
-
-  //마지막 페이지로 이동
-  const lastList = () => {
-    if (SelectedButton < Page.length - 1) {
-      setSelectedButton(Page.length - 1);
-    }
+  const handlePagination = buttonValue => {
+    setSelectedButton(buttonValue);
   };
 
   return (
@@ -139,44 +123,32 @@ const MyAlarms = () => {
                 <ContentsWrap>
                   {Alarms.map(alarm => (
                     <ContentsBox
-                      onClick={() => {
-                        window.open(alarm.notification_url, '_self');
+                      onClick={e => {
+                        checkedAlarm(
+                          e,
+                          alarm.confirmation,
+                          alarm.notification_id,
+                          alarm.notification_url
+                        );
                       }}
                       key={alarm.notification_id}
                     >
-                      <ContentsText>{alarm.title}</ContentsText>
-                      <ContentsArrow src='/image/mypage-alarms-arrow.png' />
+                      <ContentsText checked={alarm.confirmation}>
+                        {alarm.title}
+                      </ContentsText>
+                      <ContentsArrow
+                        checked={alarm.confirmation}
+                        src='/image/mypage-alarms-arrow.png'
+                      />
                     </ContentsBox>
                   ))}
                 </ContentsWrap>
-
-                <Nav>
-                  {SelectedButton > 0 && (
-                    <Button onClick={() => firstList()}>
-                      <DoubleArrow url='/image/double-arrow-left.png' />
-                    </Button>
-                  )}
-                  <Button onClick={() => leftList()}>
-                    <Arrow url='/image/arrow-left.png' />
-                  </Button>
-                  {Page.map((page, i) => (
-                    <Button
-                      key={i}
-                      onClick={() => pageList(page)}
-                      aria-current={page === SelectedButton ? 'true' : null}
-                    >
-                      {page + 1}
-                    </Button>
-                  ))}
-                  <Button onClick={() => rightList()}>
-                    <Arrow url='/image/arrow-right.png' />
-                  </Button>
-                  {SelectedButton < Page.length - 1 && (
-                    <Button onClick={() => lastList()}>
-                      <DoubleArrow url='/image/double-arrow-right.png' />
-                    </Button>
-                  )}
-                </Nav>
+                {/* 페이지네이션 */}
+                <Pagination
+                  handlePagination={handlePagination}
+                  Page={Page}
+                  SelectedButton={SelectedButton}
+                />
               </>
             )}
           </PageWrap>

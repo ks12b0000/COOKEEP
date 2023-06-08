@@ -5,6 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
 import ReplyDelete from './ReplyDelete';
+import Pagination from '../mypage/pagination';
 
 const commentHttp = new CommentHttp();
 
@@ -44,37 +45,9 @@ const ReplyList = props => {
     }
   };
 
-  //넘버 버튼으로 페이지 불러오기
-  const pageList = async pageNum => {
-    setSelectedButton(pageNum);
-  };
-
-  //left arrow 버튼으로 페이지 불러오기
-  const leftList = async () => {
-    if (SelectedButton > 0) {
-      setSelectedButton(prev => prev - 1);
-    }
-  };
-
-  //right arrow 버튼으로 페이지 불러오기
-  const rightList = async () => {
-    if (SelectedButton < Page.length - 1) {
-      setSelectedButton(prev => prev + 1);
-    }
-  };
-
-  //첫 페이지로 이동
-  const firstList = async () => {
-    if (SelectedButton > 0) {
-      setSelectedButton(0);
-    }
-  };
-
-  //마지막 페이지로 이동
-  const lastList = async () => {
-    if (SelectedButton < Page.length - 1) {
-      setSelectedButton(Page.length - 1);
-    }
+  // 페이지 네이션 함수
+  const handlePagination = buttonValue => {
+    setSelectedButton(buttonValue);
   };
 
   // 대댓글 수정 기능
@@ -274,33 +247,13 @@ const ReplyList = props => {
 
       {/* 페이지 네이션 */}
       {Replys.length !== 0 && (
-        <Nav>
-          {SelectedButton > 0 && (
-            <Button onClick={() => firstList()}>
-              <DoubleArrow url='/image/double-arrow-left.png' />
-            </Button>
-          )}
-          <Button onClick={() => leftList()}>
-            <Arrow url='/image/arrow-left.png' />
-          </Button>
-          {Page.map((page, i) => (
-            <Button
-              key={i}
-              onClick={() => pageList(page)}
-              aria-current={page === SelectedButton ? 'true' : null}
-            >
-              {page + 1}
-            </Button>
-          ))}
-          <Button onClick={() => rightList()}>
-            <Arrow url='/image/arrow-right.png' />
-          </Button>
-          {SelectedButton < Page.length - 1 && (
-            <Button onClick={() => lastList()}>
-              <DoubleArrow url='/image/double-arrow-right.png' />
-            </Button>
-          )}
-        </Nav>
+        <>
+          <Pagination
+            handlePagination={handlePagination}
+            Page={Page}
+            SelectedButton={SelectedButton}
+          />
+        </>
       )}
 
       {Replys.length !== 0 && <Line />}
@@ -557,70 +510,10 @@ const Edit2Button = styled.div`
   }
 `;
 
-//페이지 네이션
-const Nav = styled.nav`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  margin: 16px;
-`;
-
-const Button = styled.button`
-  border: 1px solid #cbcbcb;
-  position: relative;
-  top: 0;
-  border-radius: 5px;
-  width: 30px;
-  height: 30px;
-  background: white;
-  color: #cbcbcb;
-  font-size: 1rem;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    cursor: pointer;
-    transform: translateY(-3px);
-  }
-
-  &[disabled] {
-    background: white;
-    border: 1px solid #cbcbcb;
-    cursor: revert;
-    transform: revert;
-  }
-
-  &[aria-current] {
-    background: #ff4122;
-    border: 1px solid #ff4122;
-    color: white;
-    font-weight: bold;
-    cursor: revert;
-    transform: revert;
-  }
-`;
-
-const Arrow = styled.div`
-  width: 8px;
-  height: 14px;
-  background: url(${props => props.url});
-  background-size: 8px;
-`;
-
 const Line = styled.div`
   width: 100%;
   height: 0.1px;
   background-color: #ffa590;
-`;
-
-const DoubleArrow = styled.div`
-  width: 14px;
-  height: 12px;
-  background: url(${props => props.url});
-  background-size: 14px;
 `;
 
 export default ReplyList;
