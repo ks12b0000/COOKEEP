@@ -110,6 +110,7 @@ const Profile = styled.div`
   border-radius: 70px;
   background-color: #ced4da;
   position: relative;
+  overflow: hidden;
 `;
 
 const Img = styled.img`
