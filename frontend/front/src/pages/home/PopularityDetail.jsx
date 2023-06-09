@@ -5,7 +5,7 @@ import IsNonData from "../../components/atomic/isNonData/IsNonData";
 import Post from "../../components/post/Post";
 import {Link} from "react-router-dom";
 import styled from "@emotion/styled";
-import {mq} from "../../constants/media/media";
+import {mobile, mq} from "../../constants/media/media";
 import {color} from "../../constants/color";
 
 const client = new CategoryHttp();
@@ -43,7 +43,7 @@ const Container = styled.section`
   position: relative;
   width:1400px;
   margin:24px auto 16px;
-  ${mq[0]}{
+  ${mobile}{
     width: 100vw;
   }
 

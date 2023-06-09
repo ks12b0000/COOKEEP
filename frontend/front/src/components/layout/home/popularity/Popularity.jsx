@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import {color} from "../../../../constants/color";
-import {mq} from '../../../../constants/media/media'
+import {mobile, mq} from '../../../../constants/media/media'
 import Post from "../../../post/Post";
 import IsNonData from "../../../atomic/isNonData/IsNonData";
 import {Link} from "react-router-dom";
@@ -26,13 +26,15 @@ const Container = styled.section`
   position: relative;
   width:1400px;
   margin:24px auto 16px;
-  ${mq[0]}{
-    width: 100vw;
+  
+  @media screen and (max-width: 1700px) {
+    width: 1300px;
+  }
+  ${mobile}{
+    width: 95vw;
   }
 
-  @media screen and (max-width: 1700px) {
-       width: 1300px;
-    }
+ 
 `
 const MoreBtn = styled.div`
   position: absolute;
@@ -56,6 +58,14 @@ const  PopularUl = styled.ul`
   align-items: center;
   gap:16px;
   margin-top:16px;
+
+  ${mobile}{
+    width: 95vw;
+    margin: 9px auto 0;
+    flex-wrap: wrap;
+    gap:0;
+    justify-content: flex-start;
+  }
 `
 const PopularTitle = styled.h1`
   display: flex;
@@ -63,5 +73,11 @@ const PopularTitle = styled.h1`
   align-items: center;
   font-weight: 700;
   font-size: 24px;
-  color:${color.main}
+  color:${color.main};
+  
+  ${mobile} {
+    font-size: 18px;
+  }
+  
+  
 `

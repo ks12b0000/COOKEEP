@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-import {mq} from "../../../../constants/media/media";
+import {mq,mobile} from "../../../../constants/media/media";
 
 const LogoContainer = styled.div`
     display: flex;
@@ -10,7 +10,7 @@ const LogoContainer = styled.div`
     div {
       width: 100%;
       text-align: center;
-      ${mq[0]}{
+      ${mobile}{
         text-align: left;
       }
         a {
@@ -18,7 +18,7 @@ const LogoContainer = styled.div`
           font-weight: 500;
           font-size: 20px;
           line-height: 24px;
-          ${mq[0]}{
+          ${mobile}{
             font-size: 5vw;
           }
         }

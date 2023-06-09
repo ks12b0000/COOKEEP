@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { logoutUser, saveUserImg } from '../../../../redux/reducer/userSlice';
-import { mq } from '../../../../constants/media/media';
+import {mobile, mq} from '../../../../constants/media/media';
 import { color } from '../../../../constants/color';
 import UserHttp from '../../../../http/userHttp';
 import AuthHttp from '../../../../http/authHttp';
@@ -161,7 +161,7 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
 
 const MediaMenu = styled.div`
   display: none;
-  ${mq[0]} {
+  ${mobile} {
     display: block;
   }
 `;
@@ -230,7 +230,7 @@ const GnbContainer = styled.ul`
   align-items: center;
   justify-content: center;
   gap: 20px;
-  ${mq[0]} {
+  ${mobile} {
     display: none;
   }
 

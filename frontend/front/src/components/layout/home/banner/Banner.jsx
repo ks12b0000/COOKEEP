@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import {mq} from "../../../../constants/media/media";
+import {mobile, mq} from "../../../../constants/media/media";
 import { Swiper, SwiperSlide } from "swiper/react"; // basic
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import "swiper/css"; //basic
@@ -110,7 +110,7 @@ const BannrImg =styled.div`
     width:100%;
     height: 100%;
     object-fit: cover;
-    ${mq[0]} {
+    ${mobile} {
       object-fit: cover;
     }
   }
