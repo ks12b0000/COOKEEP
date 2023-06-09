@@ -3,6 +3,7 @@ import {color} from "../../../../constants/color";
 import IsNonData from "../../../atomic/isNonData/IsNonData";
 import Post from "../../../post/Post";
 import {Link} from "react-router-dom";
+import {mobile} from "../../../../constants/media/media";
 
 function Ranking({commented}) {
     return(
@@ -23,8 +24,11 @@ const RankingWrap = styled.section`
   width:1400px;
   margin:48px auto 16px;
   @media screen and (max-width: 1700px) {
-       width: 1300px;
-    }
+    width: 1300px;
+  }
+  ${mobile}{
+    width: 95vw;
+  }
 `
 const MoreBtn = styled.div`
   position: absolute;
@@ -47,7 +51,12 @@ const RankingTitle = styled.h1`
   align-items: center;
   font-weight: 700;
   font-size: 24px;
-  color:${color.main}
+  color:${color.main};
+
+  ${mobile} {
+    width: 100%;
+    font-size: 18px;
+  }
 `
 
 const  RankingUl = styled.ul`
@@ -57,5 +66,13 @@ const  RankingUl = styled.ul`
   align-items: center;
   gap:16px;
   margin-top:16px;
+
+  ${mobile}{
+    width: 95vw;
+    margin: 9px auto 0;
+    flex-wrap: wrap;
+    gap:0;
+    justify-content: flex-start;
+  }
 
 `

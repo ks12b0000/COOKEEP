@@ -3,7 +3,7 @@ import Layout from "../../components/layout/Layout";
 import IsNonData from "../../components/atomic/isNonData/IsNonData";
 import Post from "../../components/post/Post";
 import styled from "@emotion/styled";
-import {mq} from "../../constants/media/media";
+import {mobile, mq} from "../../constants/media/media";
 import {color} from "../../constants/color";
 import CategoryHttp from "../../http/categoryHttp";
 
@@ -42,7 +42,7 @@ const Container = styled.section`
   position: relative;
   width:1400px;
   margin:24px auto 16px;
-  ${mq[0]}{
+  ${mobile}{
     width: 100vw;
   }
 

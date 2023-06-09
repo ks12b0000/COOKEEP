@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import {mq} from '../../../../constants/media/media'
+import {mobile, mq} from '../../../../constants/media/media'
 function Search() {
     return(
         <SearchWrap>
@@ -11,7 +11,7 @@ function Search() {
 export default Search;
 const SearchWrap = styled.div`
   position: relative;
-  ${mq[0]} {
+  ${mobile} {
     display: none;
   }
 `

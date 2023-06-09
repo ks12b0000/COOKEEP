@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import Logo from "./logo/Logo";
 import RightGnb from "./rightGnb/RightGnb";
 
-import {mq} from "../../../constants/media/media";
+import {mobile, mq} from "../../../constants/media/media";
 
 import {useEffect, useRef, useState} from "react";
 import Nav from "./nav/Nav";
@@ -34,7 +34,7 @@ const Container = styled.div`
   justify-content: space-around;
   align-items: center;
   height: 100%;
-  ${mq[0]}{
+  ${mobile}{
     width: 100vw;
     justify-content: space-around;
     height: 70px;

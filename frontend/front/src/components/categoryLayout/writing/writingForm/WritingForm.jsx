@@ -56,6 +56,7 @@ function WritingForm() {
 
     const [optionImg,setOptionImg] = useState([]);
     const [isSelect,setIsSelect] = useState(0);
+
     console.log(quillValue);
     const onCheckEnter = (e) => {
         if(e.key === 'Enter') {
