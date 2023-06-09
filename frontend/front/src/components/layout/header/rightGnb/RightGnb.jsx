@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { logoutUser } from '../../../../redux/reducer/userSlice';
+import { logoutUser, saveUserImg } from '../../../../redux/reducer/userSlice';
 import {mobile, mq} from '../../../../constants/media/media';
 import { color } from '../../../../constants/color';
 import UserHttp from '../../../../http/userHttp';
@@ -23,33 +23,40 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
-  const [UserImage, setUserImage] = useState('');
+  // const [UserImage, setUserImage] = useState('');
   const [AlarmOpen, setAlarmOpen] = useState(false);
 
   useEffect(() => {
     LoginCheck();
-    getUserImageItem();
+    // getUserImageItem();
   }, [userInfo]);
 
   //토큰이 아직 유효한지 확인
   const LoginCheck = async () => {
     try {
       const res = await authHttp.getIsLoggedIn();
+      if (userInfo.userImg === '') {
+        dispatch(
+          saveUserImg({
+            userImg: res.data.result.user_image,
+          })
+        );
+      }
     } catch (err) {
       dispatch(logoutUser());
       console.log(err.response);
     }
   };
 
-  const getUserImageItem = async () => {
-    try {
-      const res = await authHttp.getUserImage(userInfo.userId);
-      setUserImage(res.data.result.url);
-    } catch (err) {
-      dispatch(logoutUser());
-      console.log(err.response);
-    }
-  };
+  // const getUserImageItem = async () => {
+  //   try {
+  //     const res = await authHttp.getUserImage(userInfo.userId);
+  //     setUserImage(res.data.result.url);
+  //   } catch (err) {
+  //     dispatch(logoutUser());
+  //     console.log(err.response);
+  //   }
+  // };
 
   //로그아웃 기능 실행 함수
   const logout = async () => {
@@ -128,7 +135,7 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
             <LogOut>
               <div>
                 <UserImg onClick={() => setOpen(!open)}>
-                  <Img src={UserImage} />
+                  <Img src={userInfo.userImg} />
                 </UserImg>
               </div>
               {open && (

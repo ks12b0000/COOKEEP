@@ -101,7 +101,6 @@ function Login() {
             loginUser({
               userId: res.data.result.id,
               username: res.data.result.username,
-              userImg: '이미지 주소자리',
               isLoggedIn: true,
               isSocialLogin: false,
             })

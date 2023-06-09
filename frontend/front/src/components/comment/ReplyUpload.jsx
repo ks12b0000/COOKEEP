@@ -20,6 +20,10 @@ const ReplyUpload = props => {
     state => state.persistedReducer.userReducer.isLoggedIn
   );
 
+  const userImage = useSelector(
+    state => state.persistedReducer.userReducer.userImg
+  );
+
   //유저가 로그인 하지 않은 채로 댓글창을 클릭 시 경고 모달창을 띄움
   const onModal = e => {
     e.preventDefault();
@@ -55,7 +59,9 @@ const ReplyUpload = props => {
   return (
     <>
       <RepleWrap>
-        <Profile />
+        <Profile>
+          <Img src={userImage} alt='profile' />
+        </Profile>
         <RepleTextarea
           placeholder='대댓글을 입력해 주세요'
           value={Text}
@@ -103,6 +109,15 @@ const Profile = styled.div`
   height: 70px;
   border-radius: 70px;
   background-color: #ced4da;
+  position: relative;
+`;
+
+const Img = styled.img`
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const RepleTextarea = styled.textarea`
