@@ -19,6 +19,8 @@ import {
 } from './MyPosts';
 import { AccountWrap, ProfileRound, Button } from './MyAccount';
 import LoadingPopup from '../../components/categoryLayout/writing/popup/LoadingPopup';
+import CompletePopup from '../../components/categoryLayout/writing/popup/CompletePopup';
+import Alert from '../../components/atomic/modal/Alert';
 
 const authHttp = new AuthHttp();
 const userHttp = new UserHttp();
@@ -97,17 +99,22 @@ const ChangeUserinfo = () => {
   const [IsPasswordRight, setIsPasswordRight] = useState(false);
 
   //완료시 화면이동
-  const [isUpdateCompleted, setIsUpdateCompleted] = useState(false);
+  const [IsUpdateCompleted, setIsUpdateCompleted] = useState(false);
+
+  //저장 시 모달창
+  const [IsModal, setIsModal] = useState(false);
+  const [IsLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isUpdateCompleted) {
+    if (IsLoading) {
       const timeout = setTimeout(() => {
-        navigate(`/mypage/account/${userId}`);
-      }, 3000);
+        setIsLoading(false);
+        setIsUpdateCompleted(true);
+      }, 2000);
 
       return () => clearTimeout(timeout);
     }
-  }, [isUpdateCompleted, navigate, userId]);
+  }, [IsLoading, navigate, userId]);
 
   useEffect(() => {
     onMypage();
@@ -128,7 +135,7 @@ const ChangeUserinfo = () => {
   };
 
   //프로필 미리보기 보여주는 함수
-  const savePreview = () => {
+  const savePreview = async () => {
     if (!previewRef.current || !previewRef.current.files) {
       return;
     }
@@ -174,77 +181,45 @@ const ChangeUserinfo = () => {
     }
   };
 
-  const onSubmit = async e => {
+  const clickSaveButton = async e => {
     e.preventDefault();
 
-    if (Profile) {
-      if (!IsPreviewDone) {
-        sendProfile();
-        setIsPreviewDone(true);
-      }
-    }
-
     if (Nickname) {
-      if (!IsNicknameDone) {
-        if (!CheckNickname) {
-          setIsError(true);
-          nicknameRef.current.focus();
-          setNicknameText('닉네임 중복검사를 진행해 주세요');
-          setTimeout(() => {
-            setNicknameText('');
-            setIsError(false);
-          }, 5000);
-          return;
-        }
-        if (Nickname.length < 3) {
-          setIsError(true);
-          nicknameRef.current.focus();
-          setNicknameText('닉네임 중복검사를 진행해 주세요');
-          setTimeout(() => {
-            setNicknameText('');
-            setIsError(false);
-          }, 5000);
-          return;
-        } else {
-          onChangeNickname();
-          setIsNicknameDone(true);
-        }
+      if (!CheckNickname) {
+        setIsError(true);
+        nicknameRef.current.focus();
+        setNicknameText('닉네임 중복검사를 진행해 주세요');
+        setTimeout(() => {
+          setNicknameText('');
+          setIsError(false);
+        }, 5000);
+        return;
       }
     }
 
     if (Id) {
-      if (!IsIdDone) {
-        if (!CheckId) {
-          setIsError(true);
-          idRef.current.focus();
-          setIdText('아이디 중복검사를 진행해 주세요');
-          setTimeout(() => {
-            setIdText('');
-            setIsError(false);
-          }, 5000);
-          return;
-        } else {
-          onChangeId();
-          setIsIdDone(true);
-        }
+      if (!CheckId) {
+        setIsError(true);
+        idRef.current.focus();
+        setIdText('아이디 중복검사를 진행해 주세요');
+        setTimeout(() => {
+          setIdText('');
+          setIsError(false);
+        }, 5000);
+        return;
       }
     }
 
     if (Email) {
-      if (!IsEmailDone) {
-        if (!CheckEmail) {
-          setIsError(true);
-          emailRef.current.focus();
-          setEmailText('이메일 중복검사를 진행해 주세요');
-          setTimeout(() => {
-            setEmailText('');
-            setIsError(false);
-          }, 5000);
-          return;
-        } else {
-          onChangeEmail();
-          setIsEmailDone(true);
-        }
+      if (!CheckEmail) {
+        setIsError(true);
+        emailRef.current.focus();
+        setEmailText('이메일 중복검사를 진행해 주세요');
+        setTimeout(() => {
+          setEmailText('');
+          setIsError(false);
+        }, 5000);
+        return;
       }
     }
 
@@ -286,11 +261,10 @@ const ChangeUserinfo = () => {
       }
     }
 
-    setIsUpdateCompleted(true);
+    setIsModal(true);
   };
 
   // 닉네임 업데이트 및 중복확인
-
   const onChangeNickname = async () => {
     const body = {
       nickname: Nickname,
@@ -315,9 +289,19 @@ const ChangeUserinfo = () => {
         setNicknameText('');
         setIsError(false);
       }, 5000);
+    }
+    if (Nickname.length < 3) {
+      setIsError(true);
+      nicknameRef.current.focus();
+      setNicknameText('닉네임을 3글자 이상 작성해주세요');
+      setTimeout(() => {
+        setNicknameText('');
+        setIsError(false);
+      }, 5000);
+      return;
     } else {
       try {
-        const res = await userHttp.getCheckNickname(Id);
+        const res = await userHttp.getCheckNickname(Nickname);
         console.log(res);
 
         if (!res.data.result.isDuplicate) {
@@ -381,7 +365,7 @@ const ChangeUserinfo = () => {
     }
   };
 
-  //이메일 업데이트 및 중복확인
+  //이메일 업데이트
   const onChangeEmail = async () => {
     const body = {
       updateEmail: Email,
@@ -396,6 +380,7 @@ const ChangeUserinfo = () => {
     }
   };
 
+  //이메일 중복확인
   const onCheckEmail = async e => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -469,286 +454,353 @@ const ChangeUserinfo = () => {
     }
   };
 
+  //저장 누를 시 모달창
+  const offModal = () => {
+    setIsModal(false);
+  };
+
+  //유저 변경 정보 전송
+  const onSubmit = async e => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (Profile) {
+      sendProfile();
+      setIsPreviewDone(true);
+    }
+
+    if (Nickname) {
+      onChangeNickname();
+    }
+
+    if (Id) {
+      onChangeId();
+    }
+
+    if (Email) {
+      onChangeEmail();
+    }
+
+    if (Password1) {
+      onChangePassword();
+    }
+
+    console.log('완료');
+  };
+
+  //모달창 props
+  const Props = {
+    body: {
+      text: '변경된 내용을 저장하시겠습니까?',
+    },
+
+    buttons: {
+      btn: [
+        {
+          text: '취소',
+          onClick: offModal,
+        },
+        {
+          text: '저장',
+          onClick: onSubmit,
+        },
+      ],
+    },
+  };
+
   return (
-    <Layout>
-      <Wrap>
-        <Text>마이페이지</Text>
+    <>
+      <Layout>
+        <Wrap>
+          <Text>마이페이지</Text>
 
-        <BoxWrap>
-          <MypageNav
-            userNickName={UserInfo.nickname}
-            userName={UserInfo.username}
-            userEmail={UserInfo.email}
-            categoryName='account'
-            userId={userId}
-            userImage={UserInfo.user_image}
-          />
-          <PageWrap>
-            <RedIconWrap>
-              <RedIcon>
-                <img src='/image/mypage-account-r.png' alt='icon' />
-              </RedIcon>
-              <IconText>설정</IconText>
-            </RedIconWrap>
-            <AccountWrap top>
-              <ProfileRound>
-                {Preview ? (
-                  <ProfileImg src={Preview} alt='프로필 이미지' />
-                ) : (
-                  ''
-                )}
-              </ProfileRound>
-              <ProfileButton htmlFor='profileImg'>프로필 변경</ProfileButton>
-              <ProfileInput
-                type='file'
-                accept='image/*'
-                id='profileImg'
-                onChange={savePreview}
-                ref={previewRef}
-              />
-
-              {isSocialLogin ? (
-                <>
-                  <InputTitle>닉네임</InputTitle>
-                  <IdWrap>
-                    {CheckNickname === true ? (
-                      <IdInput value={Nickname} disabled />
-                    ) : (
-                      <IdInput
-                        value={Nickname}
-                        type='text'
-                        ref={nicknameRef}
-                        placeholder='닉네임 입력하세요'
-                        onChange={e => {
-                          setNickname(e.currentTarget.value);
-                        }}
-                        isError={IsError}
-                      />
-                    )}
-                    <IdButton
-                      onClick={e => onCheckNickname(e)}
-                      isFilled={Nickname !== ''}
-                    >
-                      중복확인
-                    </IdButton>
-                    {NicknameText && (
-                      <SignError>
-                        <ErrorMark />
-                        {NicknameText}
-                      </SignError>
-                    )}
-                  </IdWrap>
-                </>
-              ) : (
-                <>
-                  <InputTitle>닉네임</InputTitle>
-                  <IdWrap>
-                    {CheckNickname === true ? (
-                      <IdInput value={Nickname} disabled />
-                    ) : (
-                      <IdInput
-                        value={Nickname}
-                        type='text'
-                        ref={nicknameRef}
-                        placeholder={UserInfo.nickname}
-                        onChange={e => {
-                          setNickname(e.currentTarget.value);
-                        }}
-                        isError={IsError}
-                      />
-                    )}
-                    <IdButton
-                      onClick={e => onCheckNickname(e)}
-                      isFilled={Nickname !== ''}
-                    >
-                      중복확인
-                    </IdButton>
-                    {NicknameText && (
-                      <SignError>
-                        <ErrorMark />
-                        {NicknameText}
-                      </SignError>
-                    )}
-                  </IdWrap>
-
-                  <InputTitle>아이디</InputTitle>
-                  <IdWrap>
-                    {CheckId === true ? (
-                      <IdInput value={Id} disabled />
-                    ) : (
-                      <IdInput
-                        value={Id}
-                        type='text'
-                        ref={idRef}
-                        placeholder={UserInfo.username}
-                        onChange={e => {
-                          setId(e.currentTarget.value);
-                        }}
-                        isError={IsError}
-                      />
-                    )}
-                    <IdButton onClick={e => onCheckId(e)} isFilled={Id !== ''}>
-                      중복확인
-                    </IdButton>
-                    {IdText && (
-                      <SignError>
-                        <ErrorMark />
-                        {IdText}
-                      </SignError>
-                    )}
-                  </IdWrap>
-
-                  <InputTitle>이메일</InputTitle>
-                  <IdWrap>
-                    {CheckEmail === true ? (
-                      <IdInput value={Email} disabled />
-                    ) : (
-                      <IdInput
-                        value={Email}
-                        type='email'
-                        ref={emailRef}
-                        placeholder='이메일을 입력하세요'
-                        onChange={e => {
-                          setEmail(e.currentTarget.value);
-                        }}
-                        isError={IsError}
-                      />
-                    )}
-                    <IdButton
-                      onClick={e => onCheckEmail(e)}
-                      isFilled={Email !== ''}
-                    >
-                      중복확인
-                    </IdButton>
-                    {EmailText && (
-                      <SignError>
-                        <ErrorMark />
-                        {EmailText}
-                      </SignError>
-                    )}
-                  </IdWrap>
-
-                  {isChangePassword ? (
-                    <>
-                      <InputTitle>기존 비밀번호</InputTitle>
-                      <SignInputWrap>
-                        <SignInput
-                          value={CurrentPassword}
-                          type={EyeVisible1 ? 'text' : 'password'}
-                          ref={currentPasswordRef}
-                          placeholder='비밀번호를 입력하세요'
-                          onChange={e => {
-                            setCurrentPassword(e.currentTarget.value);
-                          }}
-                          isError={IsError}
-                          autocomplete='off'
-                        />
-                        {EyeVisible1 ? (
-                          <EyeImg
-                            onClick={e => eyeToggle(e, 1)}
-                            EyeVisible={EyeVisible1}
-                            src='/image/eye-open.png'
-                            alt='eye open'
-                          />
-                        ) : (
-                          <EyeImg
-                            onClick={e => eyeToggle(e, 1)}
-                            EyeVisible={EyeVisible1}
-                            src='/image/eye.png'
-                            alt='eye close'
-                          />
-                        )}
-                        {CurrentPasswordText && (
-                          <SignError>
-                            <ErrorMark />
-                            {CurrentPasswordText}
-                          </SignError>
-                        )}
-                      </SignInputWrap>
-
-                      <InputTitle>새 비밀번호</InputTitle>
-                      <SignInputWrap>
-                        <SignInput
-                          value={Password1}
-                          type={EyeVisible2 ? 'text' : 'password'}
-                          ref={passwordRef}
-                          placeholder='비밀번호를 입력하세요'
-                          onChange={e => {
-                            setPassword1(e.currentTarget.value);
-                          }}
-                          isError={IsError}
-                          autocomplete='off'
-                        />
-                        {EyeVisible2 ? (
-                          <EyeImg
-                            onClick={e => eyeToggle(e, 2)}
-                            EyeVisible={EyeVisible2}
-                            src='/image/eye-open.png'
-                            alt='eye open'
-                          />
-                        ) : (
-                          <EyeImg
-                            onClick={e => eyeToggle(e, 2)}
-                            EyeVisible={EyeVisible2}
-                            src='/image/eye.png'
-                            alt='eye close'
-                          />
-                        )}
-                        {PasswordText && (
-                          <SignError>
-                            <ErrorMark />
-                            {PasswordText}
-                          </SignError>
-                        )}
-                      </SignInputWrap>
-
-                      <InputTitle>새 비밀번호 확인</InputTitle>
-                      <SignInputWrap>
-                        <SignInput
-                          value={Password2}
-                          type={EyeVisible3 ? 'text' : 'password'}
-                          placeholder='비밀번호를 입력하세요'
-                          onChange={e => {
-                            setPassword2(e.currentTarget.value);
-                          }}
-                          isError={IsError}
-                          autocomplete='off'
-                        />
-                        {EyeVisible3 ? (
-                          <EyeImg
-                            onClick={e => eyeToggle(e, 3)}
-                            EyeVisible={EyeVisible3}
-                            src='/image/eye-open.png'
-                            alt='eye open'
-                          />
-                        ) : (
-                          <EyeImg
-                            onClick={e => eyeToggle(e, 3)}
-                            EyeVisible={EyeVisible3}
-                            src='/image/eye.png'
-                            alt='eye close'
-                          />
-                        )}
-                      </SignInputWrap>
-                    </>
+          <BoxWrap>
+            <MypageNav
+              userNickName={UserInfo.nickname}
+              userName={UserInfo.username}
+              userEmail={UserInfo.email}
+              categoryName='account'
+              userId={userId}
+              userImage={UserInfo.user_image}
+            />
+            <PageWrap>
+              <RedIconWrap>
+                <RedIcon>
+                  <img src='/image/mypage-account-r.png' alt='icon' />
+                </RedIcon>
+                <IconText>설정</IconText>
+              </RedIconWrap>
+              <AccountWrap top>
+                <ProfileRound>
+                  {Preview ? (
+                    <ProfileImg src={Preview} alt='프로필 이미지' />
                   ) : (
-                    <Button button onClick={() => setIsChangePassword(true)}>
-                      비밀번호 변경
-                    </Button>
+                    <ProfileImg src={UserInfo.user_image} />
                   )}
-                </>
-              )}
-            </AccountWrap>
-            <SubmitButton onClick={e => onSubmit(e)}>저장</SubmitButton>
-          </PageWrap>
-        </BoxWrap>
-        {isUpdateCompleted && (
-          <LoaderBack>
-            <LoadingPopup />
-          </LoaderBack>
-        )}
-      </Wrap>
-    </Layout>
+                </ProfileRound>
+                <ProfileButton htmlFor='profileImg'>프로필 변경</ProfileButton>
+                <ProfileInput
+                  type='file'
+                  accept='image/*'
+                  id='profileImg'
+                  onChange={savePreview}
+                  ref={previewRef}
+                />
+
+                {isSocialLogin ? (
+                  <>
+                    <InputTitle>닉네임</InputTitle>
+                    <IdWrap>
+                      {CheckNickname === true ? (
+                        <IdInput value={Nickname} disabled />
+                      ) : (
+                        <IdInput
+                          value={Nickname}
+                          type='text'
+                          ref={nicknameRef}
+                          placeholder='닉네임 입력하세요'
+                          onChange={e => {
+                            setNickname(e.currentTarget.value);
+                          }}
+                          isError={IsError}
+                        />
+                      )}
+                      <IdButton
+                        onClick={e => onCheckNickname(e)}
+                        isFilled={Nickname !== ''}
+                      >
+                        중복확인
+                      </IdButton>
+                      {NicknameText && (
+                        <SignError>
+                          <ErrorMark />
+                          {NicknameText}
+                        </SignError>
+                      )}
+                    </IdWrap>
+                  </>
+                ) : (
+                  <>
+                    <InputTitle>닉네임</InputTitle>
+                    <IdWrap>
+                      {CheckNickname === true ? (
+                        <IdInput value={Nickname} disabled />
+                      ) : (
+                        <IdInput
+                          value={Nickname}
+                          type='text'
+                          ref={nicknameRef}
+                          placeholder={UserInfo.nickname}
+                          onChange={e => {
+                            setNickname(e.currentTarget.value);
+                          }}
+                          isError={IsError}
+                        />
+                      )}
+                      <IdButton
+                        onClick={e => onCheckNickname(e)}
+                        isFilled={Nickname !== ''}
+                      >
+                        중복확인
+                      </IdButton>
+                      {NicknameText && (
+                        <SignError>
+                          <ErrorMark />
+                          {NicknameText}
+                        </SignError>
+                      )}
+                    </IdWrap>
+
+                    <InputTitle>아이디</InputTitle>
+                    <IdWrap>
+                      {CheckId === true ? (
+                        <IdInput value={Id} disabled />
+                      ) : (
+                        <IdInput
+                          value={Id}
+                          type='text'
+                          ref={idRef}
+                          placeholder={UserInfo.username}
+                          onChange={e => {
+                            setId(e.currentTarget.value);
+                          }}
+                          isError={IsError}
+                        />
+                      )}
+                      <IdButton
+                        onClick={e => onCheckId(e)}
+                        isFilled={Id !== ''}
+                      >
+                        중복확인
+                      </IdButton>
+                      {IdText && (
+                        <SignError>
+                          <ErrorMark />
+                          {IdText}
+                        </SignError>
+                      )}
+                    </IdWrap>
+
+                    <InputTitle>이메일</InputTitle>
+                    <IdWrap>
+                      {CheckEmail === true ? (
+                        <IdInput value={Email} disabled />
+                      ) : (
+                        <IdInput
+                          value={Email}
+                          type='email'
+                          ref={emailRef}
+                          placeholder={UserInfo.email}
+                          onChange={e => {
+                            setEmail(e.currentTarget.value);
+                          }}
+                          isError={IsError}
+                        />
+                      )}
+                      <IdButton
+                        onClick={e => onCheckEmail(e)}
+                        isFilled={Email !== ''}
+                      >
+                        중복확인
+                      </IdButton>
+                      {EmailText && (
+                        <SignError>
+                          <ErrorMark />
+                          {EmailText}
+                        </SignError>
+                      )}
+                    </IdWrap>
+
+                    {isChangePassword ? (
+                      <>
+                        <InputTitle>기존 비밀번호</InputTitle>
+                        <SignInputWrap>
+                          <SignInput
+                            value={CurrentPassword}
+                            type={EyeVisible1 ? 'text' : 'password'}
+                            ref={currentPasswordRef}
+                            placeholder='비밀번호를 입력하세요'
+                            onChange={e => {
+                              setCurrentPassword(e.currentTarget.value);
+                            }}
+                            isError={IsError}
+                            autocomplete='off'
+                          />
+                          {EyeVisible1 ? (
+                            <EyeImg
+                              onClick={e => eyeToggle(e, 1)}
+                              EyeVisible={EyeVisible1}
+                              src='/image/eye-open.png'
+                              alt='eye open'
+                            />
+                          ) : (
+                            <EyeImg
+                              onClick={e => eyeToggle(e, 1)}
+                              EyeVisible={EyeVisible1}
+                              src='/image/eye.png'
+                              alt='eye close'
+                            />
+                          )}
+                          {CurrentPasswordText && (
+                            <SignError>
+                              <ErrorMark />
+                              {CurrentPasswordText}
+                            </SignError>
+                          )}
+                        </SignInputWrap>
+
+                        <InputTitle>새 비밀번호</InputTitle>
+                        <SignInputWrap>
+                          <SignInput
+                            value={Password1}
+                            type={EyeVisible2 ? 'text' : 'password'}
+                            ref={passwordRef}
+                            placeholder='비밀번호를 입력하세요'
+                            onChange={e => {
+                              setPassword1(e.currentTarget.value);
+                            }}
+                            isError={IsError}
+                            autocomplete='off'
+                          />
+                          {EyeVisible2 ? (
+                            <EyeImg
+                              onClick={e => eyeToggle(e, 2)}
+                              EyeVisible={EyeVisible2}
+                              src='/image/eye-open.png'
+                              alt='eye open'
+                            />
+                          ) : (
+                            <EyeImg
+                              onClick={e => eyeToggle(e, 2)}
+                              EyeVisible={EyeVisible2}
+                              src='/image/eye.png'
+                              alt='eye close'
+                            />
+                          )}
+                          {PasswordText && (
+                            <SignError>
+                              <ErrorMark />
+                              {PasswordText}
+                            </SignError>
+                          )}
+                        </SignInputWrap>
+
+                        <InputTitle>새 비밀번호 확인</InputTitle>
+                        <SignInputWrap>
+                          <SignInput
+                            value={Password2}
+                            type={EyeVisible3 ? 'text' : 'password'}
+                            placeholder='비밀번호를 입력하세요'
+                            onChange={e => {
+                              setPassword2(e.currentTarget.value);
+                            }}
+                            isError={IsError}
+                            autocomplete='off'
+                          />
+                          {EyeVisible3 ? (
+                            <EyeImg
+                              onClick={e => eyeToggle(e, 3)}
+                              EyeVisible={EyeVisible3}
+                              src='/image/eye-open.png'
+                              alt='eye open'
+                            />
+                          ) : (
+                            <EyeImg
+                              onClick={e => eyeToggle(e, 3)}
+                              EyeVisible={EyeVisible3}
+                              src='/image/eye.png'
+                              alt='eye close'
+                            />
+                          )}
+                        </SignInputWrap>
+                      </>
+                    ) : (
+                      <Button button onClick={() => setIsChangePassword(true)}>
+                        비밀번호 변경
+                      </Button>
+                    )}
+                  </>
+                )}
+              </AccountWrap>
+              <SubmitButton onClick={e => clickSaveButton(e)}>
+                저장
+              </SubmitButton>
+            </PageWrap>
+          </BoxWrap>
+          {IsUpdateCompleted && (
+            <LoaderBack>
+              <LoadingPopup />
+            </LoaderBack>
+          )}
+        </Wrap>
+      </Layout>
+
+      {IsModal && <Alert {...Props} />}
+      {IsLoading && <LoadingPopup />}
+      {IsUpdateCompleted && (
+        <CompletePopup category={`mypage/account/${userId2}`} />
+      )}
+    </>
   );
 };
 
@@ -785,6 +837,10 @@ const ProfileInput = styled.input`
 `;
 
 const ProfileImg = styled.img`
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   height: 100%;
   width: auto;
 `;

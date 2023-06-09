@@ -8,6 +8,7 @@ import {color} from "../../../constants/color";
 import CateItemAll from "./CateItemAll";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router";
+import AlertLogin from "../../../components/categoryLayout/writing/popup/LoginPopup";
 const Container = styled.section`
   width: 1440px;
   margin: 24px auto 16px;
@@ -33,15 +34,43 @@ const ButtonWrap = styled.div`
 function AllCategory() {
     const {isLoggedIn} = useSelector(state => state.persistedReducer.userReducer);
     const navigation = useNavigate()
+    const [loginModal,setIsLoginModal] = useState(false);
 
     const Writing =() => {
-        if(!isLoggedIn){
-            alert('로그인유저가아닙니다');
-            navigation('/login');
+        if(!isLoggedIn) {
+            setIsLoginModal(true);
             return false;
         }
         navigation('writing');
+    }
 
+    const Props = {
+
+        Cancel:{
+            setOpenModal:() => setIsLoginModal(false),
+            body:{
+                text:'로그인 후 이용 가능합니다.',
+                icon:(
+                    <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt=""/>
+                ),
+
+            },
+            buttons:{
+                btn:[
+                    {
+                        text:'취소',
+                        onClick:() => setIsLoginModal(false)
+                    },
+                    {
+                        text:'로그인',
+                        onClick:() => {
+                                navigation('/login');
+                                return false;
+                        }
+                    },
+                ]
+            }
+        },
     }
     return (
         <>
@@ -60,6 +89,8 @@ function AllCategory() {
                     </Category1Title>
                 </Container>
             </Layout>
+            {loginModal && <AlertLogin {...Props}/>}
+
         </>
     );
 }

@@ -80,7 +80,7 @@ public class BoardServiceImpl implements BoardService{
         String tags = boardTagService.findTagsByBoard(board);
         boardRepository.updateView(board.getBoardId());
 
-        return new BoardResponseInDetailFormat(board, tags);
+        return new BoardResponseInDetailFormat(board);
     }
 
     private Board findBoardByBoardId(Long boardId) {

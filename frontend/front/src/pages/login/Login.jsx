@@ -617,6 +617,7 @@ const LoginInput = styled.input`
     border: ${({ isError }) =>
       isError ? '1px solid #FF4122' : '1px solid #FFA590'};
     background-color: ${({ isError }) => (isError ? '#FFEAE4' : 'white')};
+    box-shadow: none;
   }
 `;
 

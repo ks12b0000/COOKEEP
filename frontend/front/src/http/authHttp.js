@@ -24,7 +24,19 @@ class AuthHttp extends Http {
   //유저 이미지 조회
   getUserImage = async id => {
     try {
-      const res = await this.axios.get(`/auth/user/image/${id}`);
+      const res = await this.axios.get(`auth/user/image/${id}`);
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //메인페이지 알림 리스트 불러오기
+  getMainAlarmList = async (user_id, num) => {
+    try {
+      const res = await this.axios.get(
+        `auth/user/notification/list/${user_id}?category=&page=${num}`
+      );
       return res;
     } catch (err) {
       throw err;
@@ -32,10 +44,22 @@ class AuthHttp extends Http {
   };
 
   //마이페이지 알림 리스트 불러오기
-  getAlarmList = async (user_id, num) => {
+  getMypageAlarmList = async (user_id, num) => {
     try {
       const res = await this.axios.get(
-        `auth/user/notification/list/${user_id}?page=${num}`
+        `auth/user/notification/list/${user_id}?category=mypage&page=${num}`
+      );
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //알림 확인
+  putCheckedAlarm = async notification_id => {
+    try {
+      const res = await this.axios.put(
+        `auth/notification/update/confirmation?notificationId=${notification_id}`
       );
       return res;
     } catch (err) {
@@ -47,7 +71,7 @@ class AuthHttp extends Http {
   getPostList = async (user_id, num) => {
     try {
       const res = await this.axios.get(
-        `/auth/user/board/list/${user_id}?page=${num}`
+        `auth/user/board/list/${user_id}?page=${num}`
       );
       return res;
     } catch (err) {
@@ -59,7 +83,7 @@ class AuthHttp extends Http {
   getLikeList = async (user_id, num) => {
     try {
       const res = await this.axios.get(
-        `/auth/user/like/list/${user_id}?page=${num}`
+        `auth/user/like/list/${user_id}?page=${num}`
       );
       return res;
     } catch (err) {
@@ -71,7 +95,7 @@ class AuthHttp extends Http {
   getCommentList = async (user_id, num) => {
     try {
       const res = await this.axios.get(
-        `/auth/user/comment/list/${user_id}?page=${num}`
+        `auth/user/comment/list/${user_id}?page=${num}`
       );
       return res;
     } catch (err) {
@@ -83,7 +107,7 @@ class AuthHttp extends Http {
   deleteLikeList = async (user_id, board_ids) => {
     try {
       const res = await this.axios.delete(
-        `/auth/user/${user_id}/like/list?boardIds=${board_ids}`
+        `auth/user/${user_id}/like/list?boardIds=${board_ids}`
       );
       return res;
     } catch (err) {

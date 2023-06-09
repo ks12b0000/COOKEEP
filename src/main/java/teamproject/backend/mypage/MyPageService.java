@@ -1,6 +1,7 @@
 package teamproject.backend.mypage;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
 import teamproject.backend.mypage.dto.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +17,7 @@ public interface MyPageService {
 
     public void updateByUserId(Long user_id, UpdateIdRequest updateIdRequest, HttpServletResponse response);
 
-    public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest, HttpServletResponse response);
+    public void updateByUserEmail(Long user_id, UpdateEmailRequest updateEmailRequest);
 
     public void updateNickname(Long user_id, UpdateNicknameRequest request);
 
@@ -29,7 +30,7 @@ public interface MyPageService {
 
     public void deleteBoardLikes(List<Long> boardIds, Long userId);
 
-    public GetNotificationResponse notificationByUser(Long user_id, Pageable pageable);
+    public GetNotificationResponse notificationByUser(Long user_id, Pageable pageable, String category);
 
     public List<String> suggestNickname(int size);
 

@@ -239,24 +239,20 @@ function SignUp() {
             {/* 아이디 입력 */}
             <SignName>아이디</SignName>
             <IdWrap>
-            {CheckUsername===true
-            ?
-            <IdInput
-              value={Username}
-              disabled
-            />
-            :
-            <IdInput
-              value={Username}
-              type='id'
-              ref={idRef}
-              placeholder='영문, 숫자 조합 5자리 이상'
-              onChange={e => {
-                setUsername(e.currentTarget.value);
-              }}
-              isError={IsError}
-            />
-            }
+              {CheckUsername === true ? (
+                <IdInput value={Username} disabled />
+              ) : (
+                <IdInput
+                  value={Username}
+                  type='id'
+                  ref={idRef}
+                  placeholder='영문, 숫자 조합 5자리 이상'
+                  onChange={e => {
+                    setUsername(e.currentTarget.value);
+                  }}
+                  isError={IsError}
+                />
+              )}
               <IdButton
                 onClick={e => onCheckUsername(e)}
                 isFilled={Username !== ''}
@@ -273,24 +269,20 @@ function SignUp() {
             {/* 이메일 입력 */}
             <SignName>이메일</SignName>
             <IdWrap>
-              {CheckEmail===true
-              ?
-              <IdInput
-              value={Email}
-              disabled
-              />
-              :
-              <IdInput
-              value={Email}
-              type='email'
-              ref={emailRef}
-              placeholder='이메일을 입력하세요'
-              onChange={e => {
-                setEmail(e.currentTarget.value);
-              }}
-              isError={IsError}
-            />
-              }
+              {CheckEmail === true ? (
+                <IdInput value={Email} disabled />
+              ) : (
+                <IdInput
+                  value={Email}
+                  type='email'
+                  ref={emailRef}
+                  placeholder='이메일을 입력하세요'
+                  onChange={e => {
+                    setEmail(e.currentTarget.value);
+                  }}
+                  isError={IsError}
+                />
+              )}
               <IdButton onClick={e => onCheckEmail(e)} isFilled={Email !== ''}>
                 중복확인
               </IdButton>
@@ -531,6 +523,7 @@ const SignInput = styled.input`
     border: ${({ isError }) =>
       isError ? '1px solid #FF4122' : '1px solid #FFA590'};
     background-color: ${({ isError }) => (isError ? '#FFEAE4' : 'white')};
+    box-shadow: none;
   }
 `;
 
@@ -573,6 +566,7 @@ const IdInput = styled.input`
     border: ${({ isError }) =>
       isError ? '1px solid #FF4122' : '1px solid#FFA590'};
     background-color: ${({ isError }) => (isError ? '#FFEAE4' : 'white')};
+    box-shadow: none;
   }
 `;
 

@@ -7,8 +7,10 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
 import teamproject.backend.mypage.dto.UploadUserImageResponse;
+import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
@@ -20,6 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 import static teamproject.backend.response.BaseExceptionStatus.*;
 
@@ -34,6 +37,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final CookieService cookieService;
     private final S3DAO s3DAO;
     private static final String DEFAULT_USER_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/default_user_image.png";
+    private final NotificationRepository notificationRepository;
 
     /**
      * 회원가입
@@ -55,6 +59,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         user.setImageURL(DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
+        notificationSave(user);
 
         return user.getId();
     }
@@ -76,6 +81,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
         userRepository.save(user);
 
         SocialUserInfo userInfo = new SocialUserInfo(user.getId(), user.getUsername(), user.getEmail());
+        notificationSave(user);
 
         return userInfo;
     }
@@ -298,20 +304,24 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     @Transactional
     public UploadUserImageResponse uploadImage(Long userId, MultipartFile image) throws IOException {
-        Optional<User> user = userRepository.findById(userId);
-
+        Optional<User> user = userRepository.findByIdForUpdate(userId);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
 
+        //기존 이미지 삭제 : 기존 유저의 이미지가 기본이미지(DEFAULT)가 아닐 경우 이미지 삭제
+        String beforeURL = user.get().getImageURL();
+        if(!beforeURL.equals(DEFAULT_USER_IMAGE_URL)){
+            s3DAO.delete(beforeURL);
+        }
+
+        //이미지 null 처리 : 이미지 요청값이 null 일 경우 기본 이미지 url로 교채
         if(image == null){
-            s3DAO.delete(user.get().getImageURL());
             user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
             return new UploadUserImageResponse(true, DEFAULT_USER_IMAGE_URL);
         }
+
+        //이미지 저장 : 이미지 저장 시 (유저_id)-(uuid).확장자(extension)으로 저장.
         String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-        String fileName = userId + "." + extension;
-        if(s3DAO.isExist(fileName)){
-            s3DAO.delete(fileName);
-        }
+        String fileName = userId + "-" + UUID.randomUUID() + "." + extension;
         s3DAO.upload(fileName, image);
         String url = s3DAO.getURL(fileName);
         user.get().setImageURL(url);
@@ -323,5 +333,13 @@ public class UserServiceImpl implements UserService, SocialUserService {
         Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()) throw new BaseException(USER_NOT_EXIST);
         return new FindUserImageResponse(id, user.get().getImageURL());
+    }
+
+    private void notificationSave(User user) {
+        String title = "🎉" + " 회원가입을 환영합니다!";
+        String subTitle = "지금 닉네임을 변경하고 활동을 시작해 보세요!";
+        String url = "https://www.teamprojectvv.shop/mypage/account/" + user.getId();
+        Notification notification = new Notification(user, title, subTitle, url,"mainpage");
+        notificationRepository.save(notification);
     }
 }
