@@ -13,7 +13,6 @@ export const UserSlice = createSlice({
     loginUser: (state, action) => {
       state.userId = action.payload.userId;
       state.username = action.payload.username;
-      state.userImg = action.payload.userImg;
       state.isLoggedIn = action.payload.isLoggedIn;
       state.isSocialLogin = action.payload.isSocialLogin;
     },
@@ -26,12 +25,12 @@ export const UserSlice = createSlice({
       state.isSocialLogin = false;
     },
 
-    changeUserImg: (state, action) => {
+    saveUserImg: (state, action) => {
       state.userImg = action.payload.userImg;
     },
   },
 });
 
-export const { loginUser, logoutUser, changeUserImg } = UserSlice.actions;
+export const { loginUser, logoutUser, saveUserImg } = UserSlice.actions;
 
 export default UserSlice.reducer;

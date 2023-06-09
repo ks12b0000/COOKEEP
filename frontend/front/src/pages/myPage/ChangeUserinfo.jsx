@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeUserImg } from '../../redux/reducer/userSlice';
+import { saveUserImg } from '../../redux/reducer/userSlice';
 import AuthHttp from '../../http/authHttp';
 import UserHttp from '../../http/userHttp';
 import Layout from '../../components/layout/Layout';
@@ -171,7 +171,7 @@ const ChangeUserinfo = () => {
       console.log(res);
 
       dispatch(
-        changeUserImg({
+        saveUserImg({
           userImg: res.data.result.url,
         })
       );
