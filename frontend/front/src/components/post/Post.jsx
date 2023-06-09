@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import {Link, useParams} from "react-router-dom";
+import {mobile} from "../../constants/media/media";
 import PostLike from './PostLike';
 import CategoryHttp from "../../http/categoryHttp";
 import {useSelector} from "react-redux";
@@ -86,12 +87,16 @@ function Post({data,currentPage}) {
 export  default  Post;
 
 const PopularList = styled.li`
+    
     border-radius: 20px;
     width: 19%;
     box-sizing: border-box;
     transition: 0.3s ease-in-out;
     cursor: pointer;
-
+   ${mobile} {
+     width:50%;
+     padding:2vw;
+   }
     &:last-of-type{
       padding:0;
     }
@@ -102,12 +107,23 @@ const PopularList = styled.li`
 const PopularListImg = styled.div`
   width: 100%;
   height: 220px;
+
+  ${mobile} {
+    width: 100%;
+    height: 35vw;
+  }
   img{
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    
+    ${mobile}{
+      border-top-right-radius: 2.5vw;
+      border-top-left-radius: 2.5vw;
+    }
+   
   }
 `
 
@@ -120,6 +136,15 @@ const PopularTextBox = styled.div`
   gap:16px;
   border-bottom-right-radius:20px;
   border-bottom-left-radius:20px;
+  
+  ${mobile}{
+    height: 40vw;
+    padding: 2.5vw;
+    box-sizing: border-box;
+    gap:0;
+   
+  
+  }
 `
 
 const TextBoxLeft = styled.div`
@@ -129,6 +154,10 @@ const TextBoxLeft = styled.div`
     font-size: 14px;
     line-height: 17px;
     color: #CBCBCB;
+    
+    ${mobile} {
+      font-size:12px;
+    }
   }
 `
 
@@ -156,6 +185,11 @@ const LeftTitle = styled.p`
     font-size: 18px;
     color:#000000;
     min-height: 44px;
+    
+    ${mobile} {
+      font-size: 14px;
+      min-height: 9vw;
+    }
   }
   margin:0;
 `
@@ -204,4 +238,15 @@ const TextBoxRight = styled.div`
  const IconImg = styled.div`
    width: 19px;
    height: 19px;
+   
+   ${mobile} {
+     width: 14px;
+     height: 14px;
+     
+     img{
+       width: 100%;
+       height: 100%;
+       object-fit: contain;
+     }
+   }
  `;
