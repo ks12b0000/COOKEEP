@@ -16,10 +16,10 @@ public class SearchByResponse {
     private Date create_date;
     private String thumbnail;
     private String tags;
-    private Integer commented;
-    private Integer liked;
+    private Long commented;
+    private Long liked;
 
-    public SearchByResponse(Board board, String tags) {
+    public SearchByResponse(Board board, String tags, Long commentCnt, Long likeCnt) {
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
@@ -27,7 +27,7 @@ public class SearchByResponse {
         this.create_date = board.getCreateDate();
         this.thumbnail = board.getThumbnail();
         this.tags = tags;
-        this.commented = board.getCommented();
-        this.liked = board.getLiked();
+        this.commented = commentCnt;
+        this.liked = likeCnt;
     }
 }

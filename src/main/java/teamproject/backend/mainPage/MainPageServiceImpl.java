@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.dto.BoardListResponseAll;
 import teamproject.backend.board.dto.BoardListResponseByCategory;
 import teamproject.backend.board.dto.BoardResponseInCardFormat;
+import teamproject.backend.boardComment.BoardCommentRepository;
 import teamproject.backend.boardTag.BoardTagRepository;
 import teamproject.backend.boardTag.BoardTagService;
 import teamproject.backend.domain.*;
+import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mainPage.dto.*;
 import teamproject.backend.mypage.MyPageRepository;
 import teamproject.backend.mypage.dto.GetNotificationResponse;
@@ -35,10 +37,10 @@ public class MainPageServiceImpl implements MainPageService {
     private final MainPageRepository mainPageRepository;
     private final TagRepository tagRepository;
     private final BoardTagRepository boardTagRepository;
-    private final MyPageRepository myPageRepository;
-    private final NotificationRepository notificationRepository;
     private final SearchRepository searchRepository;
     private final BoardTagService boardTagService;
+    private final BoardCommentRepository boardCommentRepository;
+    private final LikeBoardRepository likeBoardRepository;
 
 
     /**
@@ -143,7 +145,9 @@ public class MainPageServiceImpl implements MainPageService {
         for(int i = 0; i < min; i++){
             Board board = boards.get(i);
             String tags = boardTagService.findTagsByBoard(board);
-            responses.add(new BoardResponseInCardFormat(board, tags));
+            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
+            Long likeCnt = likeBoardRepository.CountBoardLike(board.getBoardId());
+            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt, likeCnt));
         }
         return responses;
     }
@@ -154,7 +158,9 @@ public class MainPageServiceImpl implements MainPageService {
         for(int i = 0; i < min; i++){
             Board board = boards.get(i).getBoard();
             String tags = boardTagService.findTagsByBoard(board);
-            responses.add(new SearchByResponse(board, tags));
+            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
+            Long likeCnt = likeBoardRepository.CountBoardLike(board.getBoardId());
+            responses.add(new SearchByResponse(board, tags, commentCnt, likeCnt));
         }
         return responses;
     }
