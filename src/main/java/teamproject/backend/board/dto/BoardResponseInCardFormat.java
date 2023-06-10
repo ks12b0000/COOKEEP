@@ -18,10 +18,10 @@ public class BoardResponseInCardFormat {
     private Date create_date;
     private String thumbnail;
     private String tags;
-    private Integer commented;
-    private Integer liked;
+    private Long commented;
+    private Long liked;
 
-    public BoardResponseInCardFormat(Board board, String tags) {
+    public BoardResponseInCardFormat(Board board, String tags, Long commentCnt, Long likeCnt) {
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
@@ -29,20 +29,20 @@ public class BoardResponseInCardFormat {
         this.create_date = board.getCreateDate();
         this.thumbnail = board.getThumbnail();
         this.tags = tags;
-        this.commented = board.getCommented();
-        this.liked = board.getLiked();
+        this.commented = commentCnt;
+        this.liked = likeCnt;
     }
 
-    public BoardResponseInCardFormat(Long board_id, String category, String title, String user_name, Date create_date, String thumbnail, Integer commented, Integer liked, Integer view) {
-        this.board_id = board_id;
-        this.category = category;
-        this.title = title;
-        this.user_name = user_name;
-        this.create_date = create_date;
-        this.thumbnail = thumbnail;
-        this.commented = commented;
-        this.liked = liked;
-    }
+//    public BoardResponseInCardFormat(Long board_id, String category, String title, String user_name, Date create_date, String thumbnail, Integer commented, Integer liked, Integer view) {
+//        this.board_id = board_id;
+//        this.category = category;
+//        this.title = title;
+//        this.user_name = user_name;
+//        this.create_date = create_date;
+//        this.thumbnail = thumbnail;
+//        this.commented = commented;
+//        this.liked = liked;
+//    }
 
     public void setTags(String tags) {
         this.tags = tags;

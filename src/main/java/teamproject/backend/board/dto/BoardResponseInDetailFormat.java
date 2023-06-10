@@ -19,12 +19,12 @@ public class BoardResponseInDetailFormat {
     private String user_name;
     private Long user_id;
     private String create_date;
-    private Integer commented;
-    private Integer liked;
+    private Long commented;
+    private Long liked;
     private Integer view;
     private String thumbnail;
 
-    public BoardResponseInDetailFormat(Board board){
+    public BoardResponseInDetailFormat(Board board, Long commentCnt, Long likeCnt){
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
@@ -32,8 +32,8 @@ public class BoardResponseInDetailFormat {
         this.user_name = board.getUser().getNickname();
         this.user_id = board.getUser().getId();
         this.create_date = asString(board.getCreateDate());
-        this.commented = board.getCommented();
-        this.liked = board.getLiked();
+        this.commented = commentCnt;
+        this.liked = likeCnt;
         this.view = board.getView();
         this.thumbnail = board.getThumbnail();
     }

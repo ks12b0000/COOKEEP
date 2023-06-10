@@ -49,7 +49,7 @@ public class BoardCommentServiceImpl implements BoardCommentService{
 
         BoardComment comment = new BoardComment(user, board, writeRequest.getText());
         boardCommentRepository.save(comment);
-        board.increaseCommentCount();
+
         if (board.getUser().getId() != user.getId()) {
             notificationSave(user, board);
         }
@@ -92,14 +92,14 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         boardCommentReplyService.deleteAllReplyOf(comment);
 
         boardCommentRepository.delete(comment);
-        board.decreaseCommentCount();
     }
 
     @Override
     public BoardCommentListResponse findCommentListByBoard(Pageable pageable, Long boardId) {
         Board board = getBoardBy(boardId);
         Page<BoardCommentResponse> comments = boardCommentRepository.findByBoardOrderByCreateDateDesc(pageable, board);
-        return new BoardCommentListResponse(comments.getContent(), comments.getTotalPages(), board.getCommented());
+        Long commentCnt = boardCommentRepository.CountBoardComment(boardId);
+        return new BoardCommentListResponse(comments.getContent(), comments.getTotalPages(), commentCnt);
     }
 
     @Override
