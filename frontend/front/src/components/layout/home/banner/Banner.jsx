@@ -58,11 +58,19 @@ function Banner() {
         <BannerWrap >
           <Swiper
               loop={false}
-              allowTouchMove={false}
+              allowTouchMove={true}
               ref={swiperRef}
               spaceBetween={30}
               slidesPerView={1}
               pagination={{ clickable: true }}
+              breakpoints={{
+                  768: {
+                      slidesPerView: 1,
+                  },
+                  1024: {
+                      slidesPerView: 1,
+                  }
+              }}
           >
               {banner.map((item)=>
                   {
@@ -146,6 +154,12 @@ const BannerWrap = styled.section`
     align-items: center;
     margin:0 auto;
     position: relative;
+    
+    
+    ${mobile} {
+      width:100vw;
+    }
+    
     
     h1{
       margin-top:60px;

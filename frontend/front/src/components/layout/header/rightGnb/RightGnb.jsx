@@ -99,7 +99,7 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
             <li>
               <Link to='/login'> 로그인</Link>
             </li>
-            <li>
+            <li className="sign">
               <Link to='/sign'>회원가입</Link>
             </li>
           </>
@@ -154,7 +154,30 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
           </>
         )}
       </GnbContainer>
-      <MediaMenu>햄버거</MediaMenu>
+   
+      <MediaMenu>
+        <ul>
+
+          <li className={AlarmOpen ? 'alarmon' : 'alarm-m'}>
+            {AlarmOpen ? (
+                <img
+                    src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
+                    alt='알람아이콘'
+                    onClick={e => AlarmToggle(e)}
+                />
+            ) : (
+                <img
+                    src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
+                    alt='알람아이콘'
+                    onClick={e => AlarmToggle(e)}
+                />
+            )}
+            {AlarmOpen && <AlarmModal />}
+          </li>
+
+          <li>햄버거</li>
+        </ul>
+      </MediaMenu>
     </>
   );
 };
@@ -163,6 +186,12 @@ const MediaMenu = styled.div`
   display: none;
   ${mobile} {
     display: block;
+    position:absolute;
+    right:16px;
+    
+    ul{
+      display: flex;
+    }
   }
 `;
 
@@ -205,7 +234,8 @@ const MenuList = styled.ul`
   flex-direction: column;
   text-align: center;
 
-  li {
+
+  li { 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -230,9 +260,11 @@ const GnbContainer = styled.ul`
   align-items: center;
   justify-content: center;
   gap: 20px;
-  ${mobile} {
-    display: none;
-  }
+ ${mobile} {
+   display: none;
+ }
+
+ 
 
   &.user {
     gap: 10px;
@@ -248,12 +280,25 @@ const GnbContainer = styled.ul`
           height: 20px;
         }
       }
-
+     
+      
       &.alarm {
+        
+        ${mobile} {
+          display: none;
+        }
         img {
           width: 20px;
           height: 23px;
         }
+      }
+      
+      &.alarm-m {
+        img {
+          width: 20px;
+          height: 23px;
+        }
+        
       }
 
       &.alarmon {
@@ -274,6 +319,9 @@ const GnbContainer = styled.ul`
     justify-content: center;
     align-items: center;
 
+
+     
+    }
     &.active {
       width: 44px;
       height: 44px;
@@ -290,6 +338,8 @@ const GnbContainer = styled.ul`
       cursor: pointer;
       font-weight: 600;
       font-size: 16px !important;
+      
+  
       &:hover {
         color: ${color.main};
       }

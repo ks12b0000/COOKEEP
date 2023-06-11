@@ -19,6 +19,13 @@ const HeaderContainer = styled.header`
     height: 75px;
     box-sizing: border-box;
   
+  ${mobile} {
+    position: fixed;
+    top:0;
+    z-index: 100;
+    height: 65px;
+  }
+  
     img{
       width:100%;
       height: 100%;
@@ -34,15 +41,19 @@ const Container = styled.div`
   justify-content: space-around;
   align-items: center;
   height: 100%;
+
+  @media screen and (max-width: 1700px) {
+    width: 1300px;
+  }
   ${mobile}{
     width: 100vw;
     justify-content: space-around;
-    height: 70px;
+    height: 60px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, .1 )
+    
   }
 
-  @media screen and (max-width: 1700px) {
-       width: 1300px;
-    }
+
 `;
 
 
