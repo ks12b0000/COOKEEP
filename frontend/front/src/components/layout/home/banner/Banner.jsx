@@ -140,6 +140,10 @@ const BannerWrap = styled.section`
   height: 350px;
   background:#D9D9D9;
   cursor: pointer;
+  
+  ${mobile} {
+    top:65px;
+  }
 
 
 
