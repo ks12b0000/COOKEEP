@@ -55,6 +55,23 @@ const Quill = ({quillValue,setQuillValue,setOptionImg,optionImg}) => {
                 const range = editor.getSelection();
                 // 가져온 위치에 이미지를 삽입한다
                 editor.insertEmbed(range.index, 'image', IMG_URL);
+
+
+                // 이미지 삭제 이벤트 감지
+                const imageElements = editor.getModule('toolbar').container.querySelectorAll('img');
+                imageElements.forEach((img) => {
+                    img.addEventListener('click', () => {
+                        // 삭제된 이미지 처리
+                        console.log('삭제된 이미지:', img.src);
+                        // 여기서 원하는 추가 작업을 수행할 수 있습니다.
+                        // 예를 들면 이미지를 서버에서 삭제하거나 다른 동작을 수행할 수 있습니다.
+
+                        // 이미지 삭제
+                        const index = Array.from(img.parentNode.childNodes).indexOf(img);
+                        editor.deleteText(range.index + index, 1);
+                    });
+
+                });
             } catch (error) {
                 console.log('실패했어요ㅠ');
             }

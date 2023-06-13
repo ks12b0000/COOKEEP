@@ -8,6 +8,8 @@ import styled from "@emotion/styled";
 import Banner from "../../components/layout/home/banner/Banner";
 import {useSelector} from "react-redux";
 import { useNavigate } from "react-router";
+import {useState} from "react";
+import AlertLogin from "../../components/categoryLayout/writing/popup/LoginPopup";
 const Container = styled.section`
   width: 1440px;
   min-height: 800px;
@@ -33,17 +35,46 @@ function Category({title,categoryName}){
 
     const {isLoggedIn} = useSelector(state => state.persistedReducer.userReducer);
     const navigation = useNavigate()
-
-   const Writing =() => {
-        if(!isLoggedIn){
-        alert('로그인유저가아닙니다');
-        navigation('/login');
-        return false;
+    const [loginModal,setIsLoginModal] = useState(false);
+    const Writing =() => {
+        if(!isLoggedIn) {
+            setIsLoginModal(true);
+            return false;
         }
         navigation('writing');
+    }
 
-   }
+
+    const Props = {
+
+        Cancel:{
+            setOpenModal:() => setIsLoginModal(false),
+            body:{
+                text:'로그인 후 이용 가능합니다.',
+                icon:(
+                    <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt=""/>
+                ),
+
+            },
+            buttons:{
+                btn:[
+                    {
+                        text:'취소',
+                        onClick:() => setIsLoginModal(false)
+                    },
+                    {
+                        text:'로그인',
+                        onClick:() => {
+                            navigation('/login');
+                            return false;
+                        }
+                    },
+                ]
+            }
+        },
+    }
     return(
+        <>
         <Layout>
             <Container>
                 <Category1Title>
@@ -59,6 +90,8 @@ function Category({title,categoryName}){
                 </Category1Title>
             </Container>
         </Layout>
+            {loginModal && <AlertLogin {...Props}/>}
+        </>
     )
 }
 export default Category;

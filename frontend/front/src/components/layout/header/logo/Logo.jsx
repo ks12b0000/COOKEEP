@@ -7,6 +7,16 @@ const LogoContainer = styled.div`
     justify-content: start;
     align-items: center;
     max-width: 280px;
+  
+   ${mobile} {
+     position: absolute;
+     top: 16px;
+     left: 16px;
+     
+     img{
+        height: 23px;
+   }
+   }
     div {
       width: 100%;
       text-align: center;

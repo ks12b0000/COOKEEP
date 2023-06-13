@@ -32,6 +32,7 @@ const Container = styled.section`
   }
   ${mobile}{
     width: 95vw;
+    margin:90px auto 16px;
   }
 
  
