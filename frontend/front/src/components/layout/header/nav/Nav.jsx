@@ -56,7 +56,7 @@ function Nav({categoryName,isOpen}) {
         ):isOpen &&
         //모바일버전
         (
-        <MobileNavList  >
+        <MobileNavList  className={isOpen ? 'show' :'hide'}>
             <GnbContainer className={userInfo.isLoggedIn && 'user'}>
                 <BtnWrap className="btnWrap">
                     <li className="login">
@@ -94,8 +94,26 @@ const MobileNavList = styled.nav`
      background: #ffffff;
      height: 100vh;
      transition: ease 1s;
- 
-  
+    
+    &.hide{
+      transform: translateX(-100%);
+
+    }
+    &.show{
+      animation: slide-fade-out-dropdown-animation .5s;
+     
+    }
+
+
+  @keyframes slide-fade-out-dropdown-animation {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(-0%);
+    }
+  }
 `
 const NavList = styled.nav`
     display: flex;
