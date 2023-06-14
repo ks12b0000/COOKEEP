@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { color } from '../../../constants/color';
+import {mobile} from "../../../constants/media/media";
 
 function Footer() {
   return (
@@ -27,6 +28,10 @@ const FooterContainer = styled.footer`
   background: #f0f0f0;
   width: 100%;
   overflow-x: hidden;
+  
+  ${mobile}{
+    margin-top:10px;
+  }
 `;
 
 const ContentsWrap = styled.div`
