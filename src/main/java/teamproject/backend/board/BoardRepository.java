@@ -23,11 +23,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Page<Board> findByUserId(Pageable pageable, Long userId);
 
-    List<Board> findTop5ByOrderByLikedDesc();
-
     List<Board> findTop5ByOrderByViewDesc();
-
-    List<Board> findTop10ByOrderByLikedDesc();
 
     List<Board> findTop10ByOrderByViewDesc();
 
