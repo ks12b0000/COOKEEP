@@ -30,6 +30,12 @@ public class S3DAO {
         amazonS3Client.deleteObject(bucket, fileName);
     }
 
+    public void deleteByURL(String url){
+        String[] split = url.split("/");
+        String fileName = split[split.length - 1];
+        delete(fileName);
+    }
+
     public boolean isExist(String fileName){
         return amazonS3Client.doesObjectExist(bucket,fileName);
     }

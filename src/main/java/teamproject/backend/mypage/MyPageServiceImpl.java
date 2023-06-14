@@ -2,6 +2,7 @@ package teamproject.backend.mypage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import teamproject.backend.user.RandomNickName;
 import teamproject.backend.user.UserRepository;
 import teamproject.backend.utils.S3.S3DAO;
 import teamproject.backend.utils.SHA256;
+import teamproject.backend.utils.recommend.RecommendManager;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +43,8 @@ public class MyPageServiceImpl implements MyPageService {
     private final BoardRepository boardRepository;
 
     private final BoardService boardService;
+    @Qualifier("boardRecommendManager")
+    private final RecommendManager boardRecommendManager;
 
     private final NotificationRepository notificationRepository;
     private final BoardCommentRepository boardCommentRepository;
@@ -167,11 +171,17 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     @Transactional
     public void userDelete(Long user_id, HttpServletResponse response) {
+        User user = myPageRepository.findByIdForUpdate(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
-        User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
+        //s3에서 이미지 삭제
+        s3DAO.deleteByURL(user.getImageURL());
 
-        myPageRepository.delete(user);
-        s3DAO.delete(""+user_id);
+        //전체 글 조회 후, 추천 배너 관리자 업데이트
+        List<Board> boards = boardRepository.findByUser(user);
+        for(Board board : boards){
+            boardRecommendManager.update(board.getBoardId());
+        }
+
         logout(response);
     }
 
