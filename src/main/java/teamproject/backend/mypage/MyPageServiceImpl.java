@@ -296,8 +296,7 @@ public class MyPageServiceImpl implements MyPageService {
     public GetLikeAndCommentByUserResponse commentByUser(Pageable pageable, Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
-        Page<BoardComment> boards = boardCommentRepository.findDistinctBoardByUser(pageable, user);
-
+        Page<BoardComment> boards = boardCommentRepository.findDistinctBoardIdByUser(pageable, user.getId());
 
         return new GetLikeAndCommentByUserResponse(getCommentByResponse(boards.getContent(), boards.getSize()),boards.getTotalPages());
     }
