@@ -9,10 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import teamproject.backend.board.BoardRepository;
 import teamproject.backend.board.BoardService;
 import teamproject.backend.boardComment.BoardCommentRepository;
-import teamproject.backend.domain.Board;
-import teamproject.backend.domain.Notification;
-import teamproject.backend.domain.User;
+import teamproject.backend.domain.*;
 import teamproject.backend.like.LikeBoardRepository;
+import teamproject.backend.mainPage.dto.SearchByResponse;
 import teamproject.backend.mypage.dto.*;
 import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.response.BaseException;
@@ -183,12 +182,19 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public GetLikeAndCommentByUserResponse likeByUser(Pageable pageable, Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        Page<LikeAndCommentByUserResponse> boards = likeBoardRepository.findBoardByUserId(pageable, user.getId());
-        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder()
-                .commentList(boards.getContent())
-                .total(boards.getTotalPages())
-                .build();
-        return getCommentByUserResponse;
+        Page<BoardLike> boards = likeBoardRepository.findByUserId(pageable, user.getId());
+
+        return new GetLikeAndCommentByUserResponse(getLikeByResponse(boards.getContent(), boards.getSize()), boards.getTotalPages());
+    }
+    private List<LikeAndCommentByUserResponse> getLikeByResponse(List<BoardLike> boards, int length){
+        List<LikeAndCommentByUserResponse> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i).getBoard();
+            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
+            responses.add(new LikeAndCommentByUserResponse(board, commentCnt));
+        }
+        return responses;
     }
 
     /**
@@ -199,14 +205,20 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public GetBoardByUserResponse boardByUser(Pageable pageable, Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
-        Page<BoardByUserResponse> boards = boardRepository.findBoardByUserId(pageable, user.getId());
-        GetBoardByUserResponse getBoardByUserResponse = GetBoardByUserResponse.builder()
-                .boardList(boards.getContent())
-                .total(boards.getTotalPages())
-                .build();
-        return getBoardByUserResponse;
-    }
+        Page<Board> boards = boardRepository.findByUserId(pageable, user.getId());
 
+        return new GetBoardByUserResponse(getBoardByResponse(boards.getContent(), boards.getSize()), boards.getTotalPages());
+    }
+    private List<BoardByUserResponse> getBoardByResponse(List<Board> boards, int length){
+        List<BoardByUserResponse> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i);
+            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
+            responses.add(new BoardByUserResponse(board, commentCnt));
+        }
+        return responses;
+    }
 
     @Override
     @Transactional
@@ -284,14 +296,20 @@ public class MyPageServiceImpl implements MyPageService {
     public GetLikeAndCommentByUserResponse commentByUser(Pageable pageable, Long user_id) {
         User user = myPageRepository.findById(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
 
-        Page<LikeAndCommentByUserResponse> commentByUserResponses = boardCommentRepository.findByUserDistinctBoard(pageable, user);
+        Page<BoardComment> boards = boardCommentRepository.findDistinctBoardByUser(pageable, user);
 
-        GetLikeAndCommentByUserResponse getCommentByUserResponse = GetLikeAndCommentByUserResponse.builder()
-                .commentList(commentByUserResponses.getContent())
-                .total(commentByUserResponses.getTotalPages())
-                .build();
 
-        return getCommentByUserResponse;
+        return new GetLikeAndCommentByUserResponse(getCommentByResponse(boards.getContent(), boards.getSize()),boards.getTotalPages());
+    }
+    private List<LikeAndCommentByUserResponse> getCommentByResponse(List<BoardComment> boards, int length){
+        List<LikeAndCommentByUserResponse> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i).getBoard();
+            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
+            responses.add(new LikeAndCommentByUserResponse(board, commentCnt));
+        }
+        return responses;
     }
 
     /**
@@ -320,4 +338,6 @@ public class MyPageServiceImpl implements MyPageService {
         Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new BaseException(NOT_NOTIFICATION));
         notification.updateConfirmation();
     }
+
+
 }

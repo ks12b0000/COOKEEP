@@ -9,18 +9,11 @@ import teamproject.backend.domain.Board;
 public class LikeAndCommentByUserResponse {
     private Long board_id;
     private String title;
-    private Integer commented;
+    private Long commented;
 
-    @Builder
-    public LikeAndCommentByUserResponse(Board board) {
+    public LikeAndCommentByUserResponse(Board board, Long commented) {
         this.board_id = board.getBoardId();
         this.title = board.getTitle();
-        this.commented = board.getCommented();
-    }
-
-    public LikeAndCommentByUserResponse(Long board_id, String title, Integer commented) {
-        this.board_id = board_id;
-        this.title = title;
         this.commented = commented;
     }
 }

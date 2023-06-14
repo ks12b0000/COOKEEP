@@ -43,10 +43,4 @@ public class BoardLike {
         this.createDate = new Date(System.currentTimeMillis());
         this.status = true;
     }
-
-    public LikeAndCommentByUserResponse toDto(){
-        return LikeAndCommentByUserResponse.builder()
-                .board(board)
-                .build();
-    }
 }

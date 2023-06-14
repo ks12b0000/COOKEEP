@@ -17,9 +17,8 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Long
     Page<BoardCommentResponse> findByBoardOrderByCreateDateDesc(Pageable pageable, Board board);
     List<BoardComment> findByBoard(Board board);
     List<BoardComment> findByUser(User user);
-    @Query("select new teamproject.backend.mypage.dto.LikeAndCommentByUserResponse(d.board.boardId, d.board.title, d.board.commented) " +
-            "from BoardComment d where d.user =:user group by d.board")
-    Page<LikeAndCommentByUserResponse> findByUserDistinctBoard(Pageable pageable, User user);
+
+    Page<BoardComment> findDistinctBoardByUser(Pageable pageable, User user);
 
     @Query("select count(*) from BoardComment b where b.board.boardId = :board_id")
     Long CountBoardComment(Long board_id);
