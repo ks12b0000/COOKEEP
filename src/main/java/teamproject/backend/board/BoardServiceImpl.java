@@ -294,8 +294,18 @@ public class BoardServiceImpl implements BoardService{
 
     public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
-        Page<BoardByUserResponse> boards = boardRepository.findBannerByUserId(pageable, userId);
-        return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalPages());
+        Page<Board> boards = boardRepository.findByUserId(pageable, userId);
+        return new UserBoardResponseInListFormat(getBoardByResponse(boards.getContent(), boards.getSize()), user, boards.getTotalPages());
+    }
+    private List<BoardByUserResponse> getBoardByResponse(List<Board> boards, int length){
+        List<BoardByUserResponse> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i);
+            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
+            responses.add(new BoardByUserResponse(board, commentCnt));
+        }
+        return responses;
     }
 
     public CheckUserLikeBoard checkLiked(Long userId, Long boardId){

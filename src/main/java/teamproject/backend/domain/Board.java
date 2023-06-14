@@ -67,28 +67,4 @@ public class Board{
         this.text = boardWriteRequest.getText();
         this.category = foodCategory;
     }
-
-    public void increaseCommentCount() {
-        this.commented += 1;
-    }
-
-    public void decreaseCommentCount() {
-        this.commented -= 1;
-    }
-
-    public void increaseLikeCount() {
-        this.liked += 1;
-    }
-
-    public void decreaseLikeCount() {
-        this.liked -= 1;
-    }
-
-    public BoardByUserResponse toDto(){
-        return BoardByUserResponse.builder()
-                .board_id(boardId)
-                .title(title)
-                .commented(commented)
-                .build();
-    }
 }

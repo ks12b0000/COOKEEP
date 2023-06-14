@@ -9,12 +9,12 @@ public class BoardByUserResponse {
 
     private Long board_id;
     private String title;
-    private Integer commented;
+    private Long commented;
 
     @Builder
-    public BoardByUserResponse(Long board_id, String title, Integer commented) {
-        this.board_id = board_id;
-        this.title = title;
+    public BoardByUserResponse(Board board, Long commented) {
+        this.board_id = board.getBoardId();
+        this.title = board.getTitle();
         this.commented = commented;
     }
 }
