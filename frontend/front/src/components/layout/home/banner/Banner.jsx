@@ -111,7 +111,7 @@ function Banner() {
 export default Banner;
 
 const BannrImg =styled.div`
-
+  margin-top:65px;
   img{
     position: absolute;
     z-index: -1;
@@ -140,15 +140,16 @@ const BannerWrap = styled.section`
   height: 350px;
   background:#D9D9D9;
   cursor: pointer;
+
   
   ${mobile} {
-    top:65px;
+
+    background: initial;
   }
 
 
 
-;
-  }
+
   //스와이퍼
   .swiperContents{
     width:1400px;
