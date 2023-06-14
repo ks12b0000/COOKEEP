@@ -9,17 +9,20 @@ import{mobile} from "../../../../constants/media/media";
 import AlarmModal from "../rightGnb/AlarmModal";
 import * as React from "react";
 import {useSelector} from "react-redux";
+import {useMediaQuery} from "react-responsive";
 
-function Nav({categoryName}) {
+function Nav({categoryName,isOpen}) {
     const userInfo = useSelector(state => state.persistedReducer.userReducer);
     const [menus, setMenus] = useState(NavDada);
     const [active,setActive] =useState(false);
+    const isMobile = useMediaQuery({
+        query: "(max-width:768px)"
+    });
 
 
 
 
-
-    return (
+    return  !isMobile ?  (
 
           <NavList>
 
@@ -50,11 +53,50 @@ function Nav({categoryName}) {
 
 
           </NavList>
+        ):isOpen &&
+        //모바일버전
+        (
+        <MobileNavList  >
+            <GnbContainer className={userInfo.isLoggedIn && 'user'}>
+                <BtnWrap className="btnWrap">
+                    <li className="login">
+                        <Link to='/login'> 로그인</Link>
+                    </li>
+                    <li className="sign">
+                        <Link to='/sign'>회원가입</Link>
+                    </li>
+                </BtnWrap>
+
+                <div>돋보기</div>
+            </GnbContainer>
+
+
+
+            <ul className="menu">
+                {menus.map((menu) => (
+                    <Menu key={menu.id}>
+                        <NavLink to={menu.url} className={ categoryName === menu.name ? 'active' : null} >{menu.name}</NavLink>
+                    </Menu>
+                ))}
+            </ul>
+        </MobileNavList>
 
     );
 }
 export default Nav;
 
+
+const MobileNavList = styled.nav`
+     position: fixed;
+     top: 65px;
+     width: 100vw;
+     z-index: 100;
+     background: #ffffff;
+     height: 100vh;
+     transition: ease 1s;
+ 
+  
+`
 const NavList = styled.nav`
     display: flex;
     align-items: center;
@@ -63,15 +105,7 @@ const NavList = styled.nav`
     height: 43px;
     margin:0 auto;
   
-  ${mobile} {
-    display: none;
-    position: fixed;
-    top: 65px;
-    width: 100vw;
-    z-index: 100;
-    background: #ffffff;
-    height: 100vh;
-  }
+ 
   
    .menu{
      display: flex;
@@ -79,11 +113,11 @@ const NavList = styled.nav`
      justify-content: space-around;
      align-items: center;
      
-     ${mobile} {
-    
-       flex-direction: column;
-       align-items: flex-start;
-     }
+     // ${mobile} {
+     //
+     //   flex-direction: column;
+     //   align-items: flex-start;
+     // }
    }
 `;
 

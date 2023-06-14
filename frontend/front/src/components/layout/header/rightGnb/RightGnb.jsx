@@ -17,7 +17,7 @@ import AlarmModal from './AlarmModal';
 const userHttp = new UserHttp();
 const authHttp = new AuthHttp();
 
-const RightGnb = ({ HandleSearch, searchOn }) => {
+const RightGnb = ({ HandleSearch, searchOn ,MenuOpen}) => {
   const userInfo = useSelector(state => state.persistedReducer.userReducer);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -175,7 +175,9 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
             {AlarmOpen && <AlarmModal />}
           </li>
 
-          <li>햄버거</li>
+          <li onClick={MenuOpen}>
+            <img src={`${process.env.PUBLIC_URL}/image/ham.png`} alt="메뉴판"/>
+          </li>
         </ul>
       </MediaMenu>
     </>
@@ -191,6 +193,16 @@ const MediaMenu = styled.div`
     
     ul{
       display: flex;
+      li{
+        &:first-of-type {
+          margin-right: 19px;
+        }
+      }
+    }
+    img{
+      width: 18px;
+      height: 22px;
+      object-fit: contain;
     }
   }
 `;

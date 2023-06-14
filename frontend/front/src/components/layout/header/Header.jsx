@@ -63,6 +63,12 @@ function Header({color,categoryName,contents,tagContents}) {
     const [searchOn,setSearchOn] =useState(contents || tagContents  ? true : false);
     const [bottom,setBottom] =useState(false);
 
+    const[isOpen,setIsOpen] = useState(false)
+
+    const MenuOpen = () =>  {
+        setIsOpen(!isOpen);
+    }
+
     const HandleSearch  = () => {
         setSearchOn(!searchOn);
     }
@@ -72,14 +78,16 @@ function Header({color,categoryName,contents,tagContents}) {
     const onBlur = () => {
         setBottom(false)
     }
+
+
     return (
        <>
 
             <HeaderContainer >
               <Container >
                 <Logo />
-                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} contents={contents} tagContents={tagContents} /> :    <Nav  categoryName = {categoryName} />}
-                <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn}/>
+                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} contents={contents} tagContents={tagContents} /> :    <Nav  categoryName = {categoryName} isOpen={isOpen} />}
+                <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn} MenuOpen={MenuOpen}/>
               </Container>
             </HeaderContainer>
 
