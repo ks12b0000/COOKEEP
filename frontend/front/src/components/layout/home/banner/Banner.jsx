@@ -31,29 +31,7 @@ function Banner() {
         })();
     },[])
 
-    const SlideData = [
-        {
-            id:1,
-            sum:"https://img.freepik.com/free-photo/top-view-closeup-plates-chinese-foods-white-table_181624-48736.jpg?w=2000",
-            topText:"오늘의 추천 레시피 글",
-            mainText1:"둘이 먹다 하나가 죽어도 모를 정도로 맛있는데",
-            mainText2:"미친듯이 간단한 닭강정 (Feat. 양심 샐러드)",
-        },
-        {
-            id:2,
-            sum:"https://img.freepik.com/free-photo/top-view-closeup-plates-chinese-foods-white-table_181624-48736.jpg?w=2000",
-            topText:"오늘의 추천 레시피 글",
-            mainText1:"텍스트2",
-            mainText2:"텍스트2",
-        },
-        {
-            id:3,
-            sum:"https://img.freepik.com/free-photo/top-view-closeup-plates-chinese-foods-white-table_181624-48736.jpg?w=2000",
-            topText:"오늘의 추천 레시피 글",
-            mainText1:"텍스트3",
-            mainText2:"텍스트3",
-        }
-    ]
+
     return(
         <BannerWrap >
           <Swiper
@@ -111,7 +89,10 @@ function Banner() {
 export default Banner;
 
 const BannrImg =styled.div`
-
+   
+  ${mobile}{
+    margin-top:65px;
+  }
   img{
     position: absolute;
     z-index: -1;
@@ -140,15 +121,16 @@ const BannerWrap = styled.section`
   height: 350px;
   background:#D9D9D9;
   cursor: pointer;
+
   
   ${mobile} {
-    top:65px;
+
+    background: initial;
   }
 
 
 
-;
-  }
+
   //스와이퍼
   .swiperContents{
     width:1400px;

@@ -18,6 +18,7 @@ import teamproject.backend.imageFile.ImageFileRepository;
 import teamproject.backend.imageFile.ImageFileService;
 import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mypage.dto.BoardByUserResponse;
+import teamproject.backend.mypage.dto.LikeAndCommentByUserResponse;
 import teamproject.backend.response.BaseException;
 import teamproject.backend.user.UserRepository;
 import teamproject.backend.utils.recommend.RecommendManager;
@@ -257,9 +258,9 @@ public class BoardServiceImpl implements BoardService{
      * @return
      */
     public List<BoardResponseInCardFormat> findBoarListByLiked() {
-        List<Board> boards = boardRepository.findTop5ByOrderByLikedDesc();
+        List<BoardLike> boards = likeBoardRepository.findTop5ByOrderByLikedDesc();
 
-        return getBoardResponsesInCardFormat(boards, boards.size());
+        return getLikeByResponse(boards, boards.size());
     }
 
     /**
@@ -277,9 +278,9 @@ public class BoardServiceImpl implements BoardService{
      * @return
      */
     public List<BoardResponseInCardFormat> findBoarListByLikedMore() {
-        List<Board> boards = boardRepository.findTop10ByOrderByLikedDesc();
+        List<BoardLike> boards = likeBoardRepository.findTop10ByOrderByLikedDesc();
 
-        return getBoardResponsesInCardFormat(boards, boards.size());
+        return getLikeByResponse(boards, boards.size());
     }
 
     /**
@@ -294,8 +295,18 @@ public class BoardServiceImpl implements BoardService{
 
     public UserBoardResponseInListFormat findBoardListByUser(Pageable pageable, Long userId){
         User user = getUserById(userId);
-        Page<BoardByUserResponse> boards = boardRepository.findBannerByUserId(pageable, userId);
-        return new UserBoardResponseInListFormat(boards.getContent(), user, boards.getTotalPages());
+        Page<Board> boards = boardRepository.findByUserId(pageable, userId);
+        return new UserBoardResponseInListFormat(getBoardByResponse(boards.getContent(), boards.getSize()), user, boards.getTotalPages());
+    }
+    private List<BoardByUserResponse> getBoardByResponse(List<Board> boards, int length){
+        List<BoardByUserResponse> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i);
+            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
+            responses.add(new BoardByUserResponse(board, commentCnt));
+        }
+        return responses;
     }
 
     public CheckUserLikeBoard checkLiked(Long userId, Long boardId){
@@ -323,5 +334,17 @@ public class BoardServiceImpl implements BoardService{
             list.add(getLikeBoard(user, boardId));
         }
         return list;
+    }
+    private List<BoardResponseInCardFormat> getLikeByResponse(List<BoardLike> boards, int length){
+        List<BoardResponseInCardFormat> responses = new ArrayList<>();
+        int min = Math.min(boards.size(), length);
+        for(int i = 0; i < min; i++){
+            Board board = boards.get(i).getBoard();
+            String tags = boardTagService.findTagsByBoard(board);
+            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
+            Long likeCnt = likeBoardRepository.CountBoardLike(board.getBoardId());
+            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt, likeCnt));
+        }
+        return responses;
     }
 }

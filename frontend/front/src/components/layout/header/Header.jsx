@@ -57,46 +57,40 @@ const Container = styled.div`
   }
 `;
 
-function Header({ color, categoryName, contents, tagContents }) {
-  const [searchOn, setSearchOn] = useState(
-    contents || tagContents ? true : false
-  );
-  const [bottom, setBottom] = useState(false);
+function Header({color,categoryName,contents,tagContents}) {
+    const [searchOn,setSearchOn] =useState(contents || tagContents  ? true : false);
+    const [bottom,setBottom] =useState(false);
 
-  const HandleSearch = () => {
-    setSearchOn(!searchOn);
-  };
-  const onFocus = () => {
-    setBottom(true);
-  };
-  const onBlur = () => {
-    setBottom(false);
-  };
-  return (
-    <>
-      <HeaderContainer>
-        <Container>
-          <Logo />
-          {searchOn ? (
-            <SearchView
-              bottom={bottom}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              contents={contents}
-              tagContents={tagContents}
-            />
-          ) : (
-            <Nav categoryName={categoryName} />
-          )}
-          <RightGnb
-            color={color}
-            HandleSearch={HandleSearch}
-            searchOn={searchOn}
-          />
-        </Container>
-      </HeaderContainer>
-    </>
-  );
+    const[isOpen,setIsOpen] = useState(false)
+
+    const MenuOpen = () =>  {
+        setIsOpen(!isOpen);
+    }
+
+    const HandleSearch  = () => {
+        setSearchOn(!searchOn);
+    }
+    const onFocus = () => {
+        setBottom(true)
+    }
+    const onBlur = () => {
+        setBottom(false)
+    }
+
+
+    return (
+       <>
+
+            <HeaderContainer >
+              <Container >
+                <Logo />
+                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} contents={contents} tagContents={tagContents} /> :    <Nav  categoryName = {categoryName} isOpen={isOpen} />}
+                <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn} MenuOpen={MenuOpen}/>
+              </Container>
+            </HeaderContainer>
+
+        </>
+    );
 }
 
 export default Header;

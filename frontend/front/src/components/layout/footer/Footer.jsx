@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { color } from '../../../constants/color';
+import {mobile} from "../../../constants/media/media";
 
 function Footer() {
   return (

@@ -130,6 +130,7 @@ const PopularListImg = styled.div`
 const PopularTextBox = styled.div`
   padding:16px;
   box-sizing: border-box;
+  height:163px;
   background: #F8F9FA;
   display: flex;
   justify-content: space-between;

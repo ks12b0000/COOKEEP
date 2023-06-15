@@ -15,9 +15,7 @@ import java.util.Optional;
 public interface LikeBoardRepository extends JpaRepository<BoardLike, Long> {
     Optional<BoardLike> findByBoardAndUser(Board board, User user);
 
-    @Query("select new teamproject.backend.mypage.dto.LikeAndCommentByUserResponse(d.board.boardId, d.board.title, d.board.commented) " +
-            "from BoardLike d where d.user.id =:userId")
-    Page<LikeAndCommentByUserResponse> findBoardByUserId(Pageable pageable, Long userId);
+    Page<BoardLike> findByUserId(Pageable pageable, Long userId);
 
     List<BoardLike> findByBoard(Board board); // 글 삭제 시 좋아요 일괄 삭제를 위함
 
@@ -26,4 +24,9 @@ public interface LikeBoardRepository extends JpaRepository<BoardLike, Long> {
     @Query("select count(*) from BoardLike b where b.board.boardId = :board_id")
     Long CountBoardLike(Long board_id);
 
+    @Query(value = "select b.*, count(b.board_id) as cnt from board_like b group by b.board_id order by cnt desc limit 5", nativeQuery = true)
+    List<BoardLike> findTop5ByOrderByLikedDesc();
+
+    @Query(value = "select b.*, count(b.board_id) as cnt from board_like b group by b.board_id order by cnt desc limit 10", nativeQuery = true)
+    List<BoardLike> findTop10ByOrderByLikedDesc();
 }
