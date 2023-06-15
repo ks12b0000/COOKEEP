@@ -180,7 +180,7 @@ public class MyPageServiceImpl implements MyPageService {
         for(Board board : boards){
             boardRecommendManager.update(board.getBoardId());
         }
-
+        myPageRepository.delete(user);
         logout(response);
     }
 
