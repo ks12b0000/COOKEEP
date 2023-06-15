@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
 import AuthHttp from '../../http/authHttp';
 import Layout from '../../components/layout/Layout';
 import MypageNav from '../../components/mypage/myPageNav';
@@ -11,6 +12,9 @@ const authHttp = new AuthHttp();
 
 const MyPosts = () => {
   const params = useParams();
+
+  const { ref, inView } = useInView();
+
   let { userId } = params;
   userId = parseInt(userId);
   const userId2 = useSelector(
@@ -19,11 +23,26 @@ const MyPosts = () => {
 
   const navigate = useNavigate();
 
+  //유저정보
   const [UserInfo, setUserInfo] = useState([]);
+
+  //작성글 리스트
   const [Posts, setPosts] = useState([]);
+
+  //페이지 네이션
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
 
+  //모바일 화면 체크
+  const [IsMobile, setIsMobile] = useState(false);
+
+  //모바일 인피니트 스크롤
+  const [MoreData, setMoreData] = useState(1);
+
+  //footer 위치
+  const [FooterBottom, setFooterBottom] = useState(false);
+
+  //유저 정보 불러오기, Post정보 불러오기
   useEffect(() => {
     onMypage();
     getPostList();
@@ -32,6 +51,24 @@ const MyPosts = () => {
       navigate('/notfound');
     }
   }, [SelectedButton]);
+
+  //모바일 화면 체크
+  useEffect(() => {
+    checkIsMobile(); // 초기 로드 시 한 번 실행
+    window.addEventListener('resize', checkIsMobile); // 윈도우 크기 변경 시 실행
+
+    return () => {
+      window.removeEventListener('resize', checkIsMobile); // 컴포넌트가 unmount 될 때 이벤트 리스너 제거
+    };
+  }, []);
+
+  //인피니트 스크롤
+  useEffect(() => {
+    if (inView) {
+      getMobilePostList();
+    }
+    console.log('check');
+  }, [inView]);
 
   const onMypage = async () => {
     try {
@@ -55,13 +92,38 @@ const MyPosts = () => {
     }
   };
 
+  //모바일용 인피니트 스크롤 함수
+  const getMobilePostList = async () => {
+    try {
+      const res = await authHttp.getPostList(userId, MoreData);
+      console.log(res);
+      const newPosts = [...Posts, ...res.data.result.boardList];
+      setPosts(newPosts);
+      if (MoreData < res.data.result.total) {
+        setMoreData(prev => prev + 1);
+      }
+      if (newPosts.length > 9) {
+        setFooterBottom(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //모바일 화면 체크 함수
+  const checkIsMobile = () => {
+    const isMobileDevice = window.matchMedia('(max-width: 760px)').matches;
+    setIsMobile(isMobileDevice);
+  };
+
+  //페이지 네이션 함수
   const handlePagination = buttonValue => {
     setSelectedButton(buttonValue);
   };
 
   return (
     <Layout>
-      <Wrap>
+      <Wrap length={FooterBottom}>
         <Text>마이페이지</Text>
         <BoxWrap>
           <MypageNav
@@ -84,7 +146,7 @@ const MyPosts = () => {
             ) : (
               <>
                 <ContentsWrap>
-                  {Posts.map(post => (
+                  {Posts.map((post, i) => (
                     <ContentsBox
                       onClick={() => {
                         window.open(
@@ -92,7 +154,7 @@ const MyPosts = () => {
                           '_self'
                         );
                       }}
-                      key={post.board_id}
+                      key={i}
                     >
                       <ContentsText>
                         {post.title} ({post.commented})
@@ -101,12 +163,18 @@ const MyPosts = () => {
                     </ContentsBox>
                   ))}
                 </ContentsWrap>
-                {/* 페이지네이션 */}
-                <Pagination
-                  handlePagination={handlePagination}
-                  Page={Page}
-                  SelectedButton={SelectedButton}
-                />
+                {IsMobile ? (
+                  <div ref={ref}></div>
+                ) : (
+                  <>
+                    {/* 페이지네이션 */}
+                    <Pagination
+                      handlePagination={handlePagination}
+                      Page={Page}
+                      SelectedButton={SelectedButton}
+                    />
+                  </>
+                )}
               </>
             )}
           </PageWrap>
@@ -125,6 +193,17 @@ export const Wrap = styled.div`
   @media screen and (max-width: 1700px) {
     width: 1300px;
   }
+
+  @media screen and (max-width: 1020px) {
+    width: 760px;
+    height: 75vh;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 100%;
+    margin-bottom: 0;
+    height: ${props => (props.length ? 'auto' : '92.5vh')};
+  }
 `;
 
 export const Text = styled.div`
@@ -133,6 +212,11 @@ export const Text = styled.div`
   margin-bottom: 20px;
   margin-top: 3vh;
   color: #ed3419;
+
+  @media screen and (max-width: 760px) {
+    font-size: 18px;
+    display: none;
+  }
 `;
 
 export const BoxWrap = styled.div`
@@ -142,6 +226,14 @@ export const BoxWrap = styled.div`
   display: grid;
   grid-template-columns: 25% 73%;
   justify-content: space-between;
+
+  @media screen and (max-width: 1024px) {
+    grid-template-columns: 29% 68%;
+  }
+
+  @media screen and (max-width: 760px) {
+    grid-template-columns: 100%;
+  }
 `;
 
 export const PageWrap = styled.div`
@@ -152,11 +244,24 @@ export const PageWrap = styled.div`
   padding: 30px 25px;
   box-sizing: border-box;
   position: relative;
-  position: relative;
+
+  @media screen and (max-width: 760px) {
+    border: none;
+    padding: 0;
+  }
 `;
 
 export const RedIconWrap = styled.div`
   display: flex;
+  @media screen and (max-width: 1080px) {
+    margin-bottom: 70px;
+  }
+
+  @media screen and (max-width: 760px) {
+    margin-top: 90px;
+    margin-left: 18px;
+    margin-bottom: 40px;
+  }
 `;
 
 export const RedIcon = styled.div`
@@ -187,6 +292,14 @@ export const EmptyText = styled.div`
 
 export const ContentsWrap = styled.div`
   margin-top: ${props => (props.marginTop ? '6px' : '30px')};
+
+  @media screen and (max-width: 1080px) {
+    margin-bottom: 60px;
+  }
+
+  @media screen and (max-width: 760px) {
+    margin-bottom: 0;
+  }
 `;
 
 export const ContentsBox = styled.div`
@@ -212,11 +325,27 @@ export const ContentsBox = styled.div`
     background-color: #f0f0f0;
     border: 1px solid #ff4122;
   }
+
+  @media screen and (max-width: 1080px) {
+    margin: 15px 0;
+  }
+
+  @media screen and (max-width: 760px) {
+    border: none;
+    border-bottom: 1px solid #ced4da;
+    border-radius: 0;
+    padding: 35px 25px;
+    margin: 0;
+  }
 `;
 export const ContentsText = styled.div`
   font-weight: 400;
-  font-size: 13px;
+  font-size: 14px;
   opacity: ${props => (props.checked ? '0.4' : '')};
+
+  @media screen and (max-width: 760px) {
+    width: 85%;
+  }
 `;
 
 export const ContentsArrow = styled.img`
@@ -225,6 +354,18 @@ export const ContentsArrow = styled.img`
   left: 97%;
   transform: translate(0, -50%);
   opacity: ${props => (props.checked ? '0.2' : '')};
+
+  @media screen and (max-width: 1080px) {
+    left: 95%;
+  }
+
+  @media screen and (max-width: 760px) {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
+    margin-left: auto;
+  }
 `;
 
 //페이지네이션

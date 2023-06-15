@@ -33,8 +33,14 @@ const MyAccount = () => {
     state => state.persistedReducer.userReducer.isSocialLogin
   );
 
+  //유저 정보
   const [UserInfo, setUserInfo] = useState([]);
+
+  //모달창 관리 state
   const [IsModal, setIsModal] = useState(false);
+
+  //모바일 화면 체크
+  const [IsMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     onMypage();
@@ -44,6 +50,17 @@ const MyAccount = () => {
     }
   }, []);
 
+  //모바일 화면 체크
+  useEffect(() => {
+    checkIsMobile(); // 초기 로드 시 한 번 실행
+    window.addEventListener('resize', checkIsMobile); // 윈도우 크기 변경 시 실행
+
+    return () => {
+      window.removeEventListener('resize', checkIsMobile); // 컴포넌트가 unmount 될 때 이벤트 리스너 제거
+    };
+  }, []);
+
+  //유저 정보 불러오기 함수
   const onMypage = useCallback(async () => {
     try {
       const res = await authHttp.getMypage(userId);
@@ -53,6 +70,12 @@ const MyAccount = () => {
       console.log(err);
     }
   }, []);
+
+  //모바일 화면 체크 함수
+  const checkIsMobile = () => {
+    const isMobileDevice = window.matchMedia('(max-width: 760px)').matches;
+    setIsMobile(isMobileDevice);
+  };
 
   //회원탈퇴 기능
   const onDeleteUser = async () => {
@@ -151,7 +174,11 @@ const MyAccount = () => {
               >
                 프로필 수정
               </Button>
-              <Button onClick={() => setIsModal(true)}>회원 탈퇴</Button>
+              {IsMobile ? (
+                ''
+              ) : (
+                <Button onClick={() => setIsModal(true)}>회원 탈퇴</Button>
+              )}
             </AccountWrap>
           </PageWrap>
           {IsModal && <Alert {...Props} />}
@@ -171,6 +198,12 @@ export const AccountWrap = styled.div`
   position: absolute;
   top: ${props => (props.top ? '10px' : '15px')};
   left: 0;
+
+  @media screen and (max-width: 760px) {
+    position: ${props => (props.footerBottom ? 'relative' : 'absolute')};
+    height: ${props => (props.footerBottom ? 'auto' : '100%')};
+    margin-bottom: ${props => (props.footerBottom ? '40px' : '')};
+  }
 `;
 
 export const ProfileRound = styled.div`
@@ -181,12 +214,6 @@ export const ProfileRound = styled.div`
   margin-bottom: ${props => (props.marginBottom ? '36px' : '20px')};
   overflow: hidden;
   position: relative;
-
-  @media screen and (max-width: 1700px) {
-    width: 80px;
-    height: 80px;
-    margin-bottom: ${props => (props.marginBottom ? '30px' : '15px')};
-  }
 `;
 
 const Img = styled.img`
@@ -195,10 +222,6 @@ const Img = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
-  @media screen and (max-width: 1700px) {
-    height: 80px;
-  }
 `;
 
 export const UserInfoBox = styled.div`
@@ -209,6 +232,10 @@ export const UserInfoBox = styled.div`
 export const UserInfoWrap = styled.div`
   display: flex;
   margin-bottom: ${props => (props.marginBottom ? '36px' : '10px')};
+
+  @media screen and (max-width: 760px) {
+    margin-bottom: ${props => (props.marginBottom ? '36px' : '16px')};
+  }
 `;
 
 export const InfoTitle = styled.div`
@@ -216,10 +243,6 @@ export const InfoTitle = styled.div`
   color: #ff4122;
   font-size: 18px;
   margin-right: 16px;
-
-  @media screen and (max-width: 1700px) {
-    font-size: 16px;
-  }
 `;
 
 export const InfoText = styled.div`
@@ -229,6 +252,10 @@ export const InfoText = styled.div`
 
   @media screen and (max-width: 1700px) {
     font-size: 16px;
+  }
+
+  @media screen and (max-width: 760px) {
+    font-size: 18px;
   }
 `;
 
@@ -240,13 +267,19 @@ export const Button = styled.div`
   align-items: center;
   background-color: ${props => (props.button ? '#FF4122' : '')};
   color: ${props => (props.button ? 'white' : '#E52F2F')};
-  font-size: 13px;
+  font-size: 16px;
   text-decoration: ${props => (props.button ? '' : 'underline')};
   border-radius: 5px;
   cursor: pointer;
 
   @media screen and (max-width: 1700px) {
     width: 320px;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 343px;
+    height: 48px;
+    font-size: 16px;
   }
 `;
 

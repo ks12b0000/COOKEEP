@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { logoutUser, saveUserImg } from '../../../../redux/reducer/userSlice';
-import {mobile, mq} from '../../../../constants/media/media';
+import { mobile, mq } from '../../../../constants/media/media';
 import { color } from '../../../../constants/color';
 import UserHttp from '../../../../http/userHttp';
 import AuthHttp from '../../../../http/authHttp';
@@ -48,16 +48,6 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
     }
   };
 
-  // const getUserImageItem = async () => {
-  //   try {
-  //     const res = await authHttp.getUserImage(userInfo.userId);
-  //     setUserImage(res.data.result.url);
-  //   } catch (err) {
-  //     dispatch(logoutUser());
-  //     console.log(err.response);
-  //   }
-  // };
-
   //로그아웃 기능 실행 함수
   const logout = async () => {
     try {
@@ -99,7 +89,7 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
             <li>
               <Link to='/login'> 로그인</Link>
             </li>
-            <li className="sign">
+            <li className='sign'>
               <Link to='/sign'>회원가입</Link>
             </li>
           </>
@@ -154,23 +144,22 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
           </>
         )}
       </GnbContainer>
-   
+
       <MediaMenu>
         <ul>
-
           <li className={AlarmOpen ? 'alarmon' : 'alarm-m'}>
             {AlarmOpen ? (
-                <img
-                    src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
-                    alt='알람아이콘'
-                    onClick={e => AlarmToggle(e)}
-                />
+              <img
+                src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
+                alt='알람아이콘'
+                onClick={e => AlarmToggle(e)}
+              />
             ) : (
-                <img
-                    src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
-                    alt='알람아이콘'
-                    onClick={e => AlarmToggle(e)}
-                />
+              <img
+                src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
+                alt='알람아이콘'
+                onClick={e => AlarmToggle(e)}
+              />
             )}
             {AlarmOpen && <AlarmModal />}
           </li>
@@ -186,10 +175,10 @@ const MediaMenu = styled.div`
   display: none;
   ${mobile} {
     display: block;
-    position:absolute;
-    right:16px;
-    
-    ul{
+    position: absolute;
+    right: 16px;
+
+    ul {
       display: flex;
     }
   }
@@ -219,7 +208,7 @@ const Img = styled.img`
 
 const MenuList = styled.ul`
   position: absolute;
-  top: 55px;
+  top: 60px;
   z-index: 1000;
   left: -20px;
   width: 80px;
@@ -234,8 +223,7 @@ const MenuList = styled.ul`
   flex-direction: column;
   text-align: center;
 
-
-  li { 
+  li {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -236,7 +236,7 @@ function WritingForm() {
             {isOpen && <CancelPopup {...Props}/> }
             {createIsOpen && <CreatePopup setCreateIsOpen={setCreateIsOpen} onSubmit={onSubmit} /> }
             {isLoading && <LoadingPopup /> }
-            {isComplete &&  <CompletePopup category={category}/>}
+            {isComplete && <CompletePopup category={category} sentence={'등록이 완료되었습니다.'} />}
 
         </>
 

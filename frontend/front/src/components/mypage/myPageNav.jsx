@@ -110,12 +110,23 @@ const Wrap = styled.div`
   height: 100%;
   border: 1px solid #ff6242;
   border-radius: 10px;
+
+  @media screen and (max-width: 760px) {
+    display: none;
+  }
 `;
 const UserWrap = styled.div`
   display: flex;
   width: 87%;
   margin: 5vh auto 6vh auto;
   align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    display: grid;
+    grid-template-columns: 100%;
+    width: 85%;
+    margin: 3vh auto 8vh auto;
+  }
 `;
 
 const UserImg = styled.div`
@@ -123,9 +134,16 @@ const UserImg = styled.div`
   height: 80px;
   border-radius: 50px;
   background-color: #d9d9d9;
+  border: 1px solid #ff4122;
   margin-right: 24px;
   overflow: hidden;
   position: relative;
+
+  @media screen and (max-width: 1024px) {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px auto;
+  }
 `;
 
 const Img = styled.img`
@@ -134,6 +152,10 @@ const Img = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  @media screen and (max-width: 1024px) {
+    height: 100px;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -167,6 +189,11 @@ const Box = styled.div`
 
   &.active {
     background-color: #ff6242;
+  }
+
+  @media screen and (max-width: 1024px) {
+    height: 80px;
+    margin: 10px auto;
   }
 `;
 

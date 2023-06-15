@@ -21,10 +21,17 @@ const ModalContents = styled.div`
   align-items: center;
   text-align: center;
   min-height: 120px;
+  font-size: 16px;
   > p {
     color: #000000;
     font-weight: 700;
     font-size: 16px;
+  }
+
+  @media screen and (max-width: 768px) {
+    > p {
+      width: 200px;
+    }
   }
 `;
 const ModalIcon = styled.div`
