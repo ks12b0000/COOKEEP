@@ -210,6 +210,7 @@ const MediaMenu = styled.div`
 const LogOut = styled.li`
   position: relative;
 `;
+
 const UserImg = styled.div`
   width: 40px;
   height: 40px;

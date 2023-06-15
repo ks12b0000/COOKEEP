@@ -89,7 +89,10 @@ function Banner() {
 export default Banner;
 
 const BannrImg =styled.div`
-  margin-top:65px;
+   
+  ${mobile}{
+    margin-top:65px;
+  }
   img{
     position: absolute;
     z-index: -1;

@@ -26,18 +26,7 @@ function Nav({categoryName,isOpen}) {
 
           <NavList>
 
-              <GnbContainer className={userInfo.isLoggedIn && 'user'}>
-                   <BtnWrap className="btnWrap">
-                       <li className="login">
-                           <Link to='/login'> 로그인</Link>
-                       </li>
-                       <li className="sign">
-                           <Link to='/sign'>회원가입</Link>
-                       </li>
-                   </BtnWrap>
 
-                  <div>돋보기</div>
-              </GnbContainer>
 
 
 
@@ -53,10 +42,10 @@ function Nav({categoryName,isOpen}) {
 
 
           </NavList>
-        ):isOpen &&
+        ):
         //모바일버전
-        (
-        <MobileNavList  className={isOpen ? 'show' :'hide'}>
+        isOpen && (
+        <MobileNavList  className={ isOpen ? 'show' :'hide'}>
             <GnbContainer className={userInfo.isLoggedIn && 'user'}>
                 <BtnWrap className="btnWrap">
                     <li className="login">
@@ -67,7 +56,12 @@ function Nav({categoryName,isOpen}) {
                     </li>
                 </BtnWrap>
 
-                <div>돋보기</div>
+                <div>
+                    <img
+                    src={`${process.env.PUBLIC_URL}/image/search.png`}
+                    alt='검색아이콘'
+                    />
+                </div>
             </GnbContainer>
 
 
@@ -97,15 +91,14 @@ const MobileNavList = styled.nav`
     
     &.hide{
       transform: translateX(-100%);
-
     }
     &.show{
-      animation: slide-fade-out-dropdown-animation .5s;
-     
+    
+      animation: slideOn .5s;
     }
 
 
-  @keyframes slide-fade-out-dropdown-animation {
+  @keyframes slideOn {
     0% {
       transform: translateX(-100%);
     }
@@ -114,7 +107,27 @@ const MobileNavList = styled.nav`
       transform: translateX(-0%);
     }
   }
+  
+  
+  .menu{
+    padding:0 16px;
+    display: flex;
+    flex-direction: column;
+ 
+    gap:8px;
+    
+    li{
+      padding-left:15px;
+      width: 65px;
+      height: 43px;
+      line-height: 43px;
+    
+    }
+  }
+  
 `
+
+
 const NavList = styled.nav`
     display: flex;
     align-items: center;
@@ -143,7 +156,7 @@ const GnbContainer = styled.ul`
   display: none;
     ${mobile} {
       display: flex;
- 
+      padding: 24px 16px 14px;
       justify-content: space-between;
     }
 `;
@@ -154,6 +167,7 @@ const BtnWrap = styled.div`
    display: flex;
    height: 50px;
    gap:10px;
+  
   .login{
     width: 90px;
     height: 44px;
