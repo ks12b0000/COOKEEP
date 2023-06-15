@@ -40,12 +40,6 @@ public class Board{
     @Column
     private String thumbnail;
 
-    @Column(nullable = true)
-    private Integer liked; // 좋아요 수
-
-    @Column
-    private Integer commented;
-
     @Column
     private Integer view;
 
@@ -56,8 +50,6 @@ public class Board{
         this.user = user;
         this.createDate = new Date(System.currentTimeMillis());
         this.thumbnail = boardWriteRequest.getThumbnail();
-        this.liked = 0;
-        this.commented = 0;
         this.view = 0;
     }
 
