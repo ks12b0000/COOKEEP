@@ -29,6 +29,7 @@ import SearchTag from './components/categoryLayout/searchList/SearchTag';
 import MyComments from './pages/myPage/MyComments';
 import MyAlarms from './pages/myPage/MyAlarms';
 import MyAccount from './pages/myPage/MyAccount';
+import MyPageMobile from './pages/myPage/MyPageMobile';
 import PopularityDetail from './pages/home/PopularityDetail';
 import RankingDetail from './pages/home/RankingDetail';
 import ChangeUserinfo from './pages/myPage/ChangeUserinfo';
@@ -53,6 +54,11 @@ function App() {
           <Route
             path='/mypage/changeuserinfo/:userId'
             element={<ChangeUserinfo />}
+          ></Route>
+          {/* 마이페이지 모바일 용 */}
+          <Route
+            path='/mypage/mobile/:userId'
+            element={<MyPageMobile />}
           ></Route>
         </Route>
         {/*더보기페이지*/}

@@ -1,7 +1,7 @@
 import Alert from "../../../atomic/modal/Alert";
 import {useNavigate} from "react-router";
 
-function CompletePopup({category}){
+function CompletePopup({category, sentence}){
     const navigation = useNavigate();
     const RouterPath = () => {
         navigation(`/${category}`);
@@ -12,7 +12,7 @@ function CompletePopup({category}){
             icon:(
                 <img src={`${process.env.PUBLIC_URL}/image/modal-check.png`} alt=""/>
             ),
-            text:'등록이 완료되었습니다.',
+            text: sentence,
         },
         buttons:{
             btn:[

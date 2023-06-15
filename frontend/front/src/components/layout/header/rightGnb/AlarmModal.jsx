@@ -90,11 +90,11 @@ const AlarmModal = () => {
               <TitleWrap>
                 <Title checked={alarm.confirmation}>{alarm.title}</Title>
               </TitleWrap>
-              <SubTitle>{alarm.subTitle}</SubTitle>
+              <SubTitle checked={alarm.confirmation}>{alarm.subTitle}</SubTitle>
               {formattedDate === alarm.createDate ? (
-                <Time>{alarm.createTime}</Time>
+                <Time checked={alarm.confirmation}>{alarm.createTime}</Time>
               ) : (
-                <Time>{alarm.createDate}</Time>
+                <Time checked={alarm.confirmation}>{alarm.createDate}</Time>
               )}
             </TextWrap>
             {/* <ArrowWrap> */}
@@ -140,15 +140,25 @@ const ConentsWrap = styled.div`
   cursor: pointer;
 `;
 const ContentsBox = styled.div`
-  width: 370px;
-  margin: 0px auto;
+  width: 100%;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 5% 80% 5%;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 5px 20px 15px;
+  padding: 20px 10px 20px 20px;
   box-sizing: border-box;
-  border-bottom: 0.1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 0.1px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  transition: 0.3s;
+
+  &:hover {
+    background: #ffc9bb;
+  }
+
+  &:active {
+    background: #ffa590;
+  }
 `;
 
 const RedRound = styled.div`
@@ -156,7 +166,7 @@ const RedRound = styled.div`
   height: 10px;
   border-radius: 10px;
   background-color: #ff4122;
-  background-color: ${props => (props.checked ? '#cccccc' : '#ff4122')};
+  background-color: ${props => (props.checked ? '#CED4DA' : '#ff4122')};
 `;
 
 const TextWrap = styled.div`
@@ -179,19 +189,19 @@ const Title = styled.div`
   font-weight: 600;
   text-align: left;
   margin-bottom: 3px;
-  opacity: ${props => (props.checked ? '0.4' : '')};
+  color: ${props => (props.checked ? '#B0B0B0' : '#000000')};
 `;
 
 const SubTitle = styled.div`
   font-size: 12px;
-  color: #838485;
+  color: ${props => (props.checked ? '#CED4DA' : '#838485')};
   margin-bottom: 12px;
   text-align: left;
 `;
 
 const Time = styled.div`
   font-size: 12px;
-  color: #838485;
+  color: ${props => (props.checked ? '#CED4DA' : '#838485')};
   text-align: left;
 `;
 
