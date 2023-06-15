@@ -15,6 +15,7 @@ public class S3DAO {
     private final AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    public static final String DEFAULT_USER_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/default_user_image.png";
 
     public String getURL(String fileName){
         return amazonS3Client.getUrl(bucket, fileName).toString();
@@ -28,6 +29,13 @@ public class S3DAO {
 
     public void delete(String fileName){
         amazonS3Client.deleteObject(bucket, fileName);
+    }
+
+    public void deleteByURL(String url){
+        if(url.equals(DEFAULT_USER_IMAGE_URL))return;
+        String[] split = url.split("/");
+        String fileName = split[split.length - 1];
+        delete(fileName);
     }
 
     public boolean isExist(String fileName){
