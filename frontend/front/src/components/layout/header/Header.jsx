@@ -8,6 +8,7 @@ import {mobile, mq} from "../../../constants/media/media";
 import {useEffect, useRef, useState} from "react";
 import Nav from "./nav/Nav";
 import SearchView from "../../atomic/Search.view";
+import * as React from "react";
 
 const HeaderContainer = styled.header`
     width: 100%;
@@ -77,6 +78,8 @@ function Header({color,categoryName,contents,tagContents}) {
 
             <HeaderContainer >
               <Container >
+
+
                 <Logo />
                   {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} contents={contents} tagContents={tagContents} /> :    <Nav  categoryName = {categoryName} />}
                 <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn}/>

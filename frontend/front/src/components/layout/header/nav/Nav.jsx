@@ -44,6 +44,8 @@ function Nav({categoryName}) {
                     <NavLink to={menu.url} className={ categoryName === menu.name ? 'active' : null} >{menu.name}</NavLink>
                   </Menu>
               ))}
+
+
             </ul>
 
 
