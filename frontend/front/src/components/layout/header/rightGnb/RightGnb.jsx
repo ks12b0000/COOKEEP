@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { logoutUser, saveUserImg } from '../../../../redux/reducer/userSlice';
-import {mobile, mq} from '../../../../constants/media/media';
+import { mobile, mq } from '../../../../constants/media/media';
 import { color } from '../../../../constants/color';
 import UserHttp from '../../../../http/userHttp';
 import AuthHttp from '../../../../http/authHttp';
@@ -17,7 +17,7 @@ import AlarmModal from './AlarmModal';
 const userHttp = new UserHttp();
 const authHttp = new AuthHttp();
 
-const RightGnb = ({ HandleSearch, searchOn }) => {
+const RightGnb = ({ HandleSearch, searchOn ,MenuOpen}) => {
   const userInfo = useSelector(state => state.persistedReducer.userReducer);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,16 +47,6 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
       console.log(err.response);
     }
   };
-
-  // const getUserImageItem = async () => {
-  //   try {
-  //     const res = await authHttp.getUserImage(userInfo.userId);
-  //     setUserImage(res.data.result.url);
-  //   } catch (err) {
-  //     dispatch(logoutUser());
-  //     console.log(err.response);
-  //   }
-  // };
 
   //로그아웃 기능 실행 함수
   const logout = async () => {
@@ -99,7 +89,7 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
             <li>
               <Link to='/login'> 로그인</Link>
             </li>
-            <li className="sign">
+            <li className='sign'>
               <Link to='/sign'>회원가입</Link>
             </li>
           </>
@@ -154,28 +144,29 @@ const RightGnb = ({ HandleSearch, searchOn }) => {
           </>
         )}
       </GnbContainer>
-   
+
       <MediaMenu>
         <ul>
-
           <li className={AlarmOpen ? 'alarmon' : 'alarm-m'}>
             {AlarmOpen ? (
-                <img
-                    src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
-                    alt='알람아이콘'
-                    onClick={e => AlarmToggle(e)}
-                />
+              <img
+                src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
+                alt='알람아이콘'
+                onClick={e => AlarmToggle(e)}
+              />
             ) : (
-                <img
-                    src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
-                    alt='알람아이콘'
-                    onClick={e => AlarmToggle(e)}
-                />
+              <img
+                src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
+                alt='알람아이콘'
+                onClick={e => AlarmToggle(e)}
+              />
             )}
             {AlarmOpen && <AlarmModal />}
           </li>
 
-          <li>햄버거</li>
+          <li onClick={MenuOpen}>
+            <img src={`${process.env.PUBLIC_URL}/image/ham.png`} alt="메뉴판"/>
+          </li>
         </ul>
       </MediaMenu>
     </>
@@ -186,11 +177,21 @@ const MediaMenu = styled.div`
   display: none;
   ${mobile} {
     display: block;
-    position:absolute;
-    right:16px;
-    
-    ul{
+    position: absolute;
+    right: 16px;
+
+    ul {
       display: flex;
+      li{
+        &:first-of-type {
+          margin-right: 19px;
+        }
+      }
+    }
+    img{
+      width: 18px;
+      height: 22px;
+      object-fit: contain;
     }
   }
 `;
@@ -198,6 +199,7 @@ const MediaMenu = styled.div`
 const LogOut = styled.li`
   position: relative;
 `;
+
 const UserImg = styled.div`
   width: 40px;
   height: 40px;
@@ -219,7 +221,7 @@ const Img = styled.img`
 
 const MenuList = styled.ul`
   position: absolute;
-  top: 55px;
+  top: 60px;
   z-index: 1000;
   left: -20px;
   width: 80px;
@@ -234,8 +236,7 @@ const MenuList = styled.ul`
   flex-direction: column;
   text-align: center;
 
-
-  li { 
+  li {
     display: flex;
     align-items: center;
     justify-content: center;

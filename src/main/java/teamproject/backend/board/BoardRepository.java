@@ -21,17 +21,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findByUser(User user);
 
-    @Query("select new teamproject.backend.mypage.dto.BoardByUserResponse(b.boardId, b.title, b.commented) from Board b where b.user.id =:userId")
-    Page<BoardByUserResponse> findBoardByUserId(Pageable pageable, Long userId);
-
-    @Query("select new teamproject.backend.mypage.dto.BoardByUserResponse(b.boardId, b.title, b.commented) from Board b where b.user.id = :userId")
-    Page<BoardByUserResponse> findBannerByUserId(Pageable pageable, Long userId);
-
-    List<Board> findTop5ByOrderByLikedDesc();
+    Page<Board> findByUserId(Pageable pageable, Long userId);
 
     List<Board> findTop5ByOrderByViewDesc();
-
-    List<Board> findTop10ByOrderByLikedDesc();
 
     List<Board> findTop10ByOrderByViewDesc();
 

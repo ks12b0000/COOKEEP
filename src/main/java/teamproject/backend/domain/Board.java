@@ -40,12 +40,6 @@ public class Board{
     @Column
     private String thumbnail;
 
-    @Column(nullable = true)
-    private Integer liked; // 좋아요 수
-
-    @Column
-    private Integer commented;
-
     @Column
     private Integer view;
 
@@ -56,8 +50,6 @@ public class Board{
         this.user = user;
         this.createDate = new Date(System.currentTimeMillis());
         this.thumbnail = boardWriteRequest.getThumbnail();
-        this.liked = 0;
-        this.commented = 0;
         this.view = 0;
     }
 
@@ -66,29 +58,5 @@ public class Board{
         this.title = boardWriteRequest.getTitle();
         this.text = boardWriteRequest.getText();
         this.category = foodCategory;
-    }
-
-    public void increaseCommentCount() {
-        this.commented += 1;
-    }
-
-    public void decreaseCommentCount() {
-        this.commented -= 1;
-    }
-
-    public void increaseLikeCount() {
-        this.liked += 1;
-    }
-
-    public void decreaseLikeCount() {
-        this.liked -= 1;
-    }
-
-    public BoardByUserResponse toDto(){
-        return BoardByUserResponse.builder()
-                .board_id(boardId)
-                .title(title)
-                .commented(commented)
-                .build();
     }
 }

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { color } from '../../../constants/color';
+import {mobile} from "../../../constants/media/media";
 
 function Footer() {
   return (
@@ -26,7 +27,10 @@ const FooterContainer = styled.footer`
   height: 70px;
   background: #f0f0f0;
   width: 100%;
-  overflow-x: hidden;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 0;
+  }
 `;
 
 const ContentsWrap = styled.div`
@@ -36,9 +40,19 @@ const ContentsWrap = styled.div`
   height: 70px;
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
 
   @media screen and (max-width: 1700px) {
     width: 1300px;
+  }
+
+  @media screen and (max-width: 1020px) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 100vw;
+    overflow: hidden;
   }
 `;
 

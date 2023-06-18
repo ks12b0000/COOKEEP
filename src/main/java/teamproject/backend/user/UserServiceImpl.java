@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService, SocialUserService {
     private final JwtService jwtService;
     private final CookieService cookieService;
     private final S3DAO s3DAO;
-    private static final String DEFAULT_USER_IMAGE_URL = "https://teamproject-s3.s3.ap-northeast-2.amazonaws.com/default_user_image.png";
     private final NotificationRepository notificationRepository;
 
     /**
@@ -56,7 +55,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
         User user = new User(username, nickname, email, password, salt);
 
-        user.setImageURL(DEFAULT_USER_IMAGE_URL);
+        user.setImageURL(S3DAO.DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
         notificationSave(user);
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
         User user = new User(username, nickname, email, password, salt);
 
-        user.setImageURL(DEFAULT_USER_IMAGE_URL);
+        user.setImageURL(S3DAO.DEFAULT_USER_IMAGE_URL);
 
         userRepository.save(user);
 
@@ -309,14 +308,14 @@ public class UserServiceImpl implements UserService, SocialUserService {
 
         //기존 이미지 삭제 : 기존 유저의 이미지가 기본이미지(DEFAULT)가 아닐 경우 이미지 삭제
         String beforeURL = user.get().getImageURL();
-        if(!beforeURL.equals(DEFAULT_USER_IMAGE_URL)){
+        if(!beforeURL.equals(S3DAO.DEFAULT_USER_IMAGE_URL)){
             s3DAO.delete(beforeURL);
         }
 
         //이미지 null 처리 : 이미지 요청값이 null 일 경우 기본 이미지 url로 교채
         if(image == null){
-            user.get().setImageURL(DEFAULT_USER_IMAGE_URL);
-            return new UploadUserImageResponse(true, DEFAULT_USER_IMAGE_URL);
+            user.get().setImageURL(S3DAO.DEFAULT_USER_IMAGE_URL);
+            return new UploadUserImageResponse(true, S3DAO.DEFAULT_USER_IMAGE_URL);
         }
 
         //이미지 저장 : 이미지 저장 시 (유저_id)-(uuid).확장자(extension)으로 저장.

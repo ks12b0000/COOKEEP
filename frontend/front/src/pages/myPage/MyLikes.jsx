@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
 import AuthHttp from '../../http/authHttp';
 import Layout from '../../components/layout/Layout';
 import MypageNav from '../../components/mypage/myPageNav';
@@ -25,6 +26,9 @@ const authHttp = new AuthHttp();
 
 const MyLikes = () => {
   const params = useParams();
+
+  const { ref, inView } = useInView();
+
   let { userId } = params;
   userId = parseInt(userId);
   const userId2 = useSelector(
@@ -33,15 +37,35 @@ const MyLikes = () => {
 
   const navigate = useNavigate();
 
+  //유저 정보
   const [UserInfo, setUserInfo] = useState([]);
 
+  //좋아요 리스트
   const [Likes, setLikes] = useState([]);
+
+  //페이지 네이션
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
+
+  //편집 버튼 state
   const [IsEdit, setIsEdit] = useState(false);
+
+  //좋아요 리스트 삭제
   const [BoardIdList, setBoardIdList] = useState([]);
+
+  //모달창 state
   const [IsModal, setIsModal] = useState(false);
 
+  //모바일 화면 체크
+  const [IsMobile, setIsMobile] = useState(false);
+
+  //모바일 인피니트 스크롤
+  const [MoreData, setMoreData] = useState(1);
+
+  //footer 위치
+  const [FooterBottom, setFooterBottom] = useState(false);
+
+  //유저 정보 불러오기, 좋아요 리스트 불러오기
   useEffect(() => {
     onMypage();
     getLikeList();
@@ -51,7 +75,25 @@ const MyLikes = () => {
     }
   }, [SelectedButton]);
 
-  //유저 정보 불러오기
+  //모바일 화면 체크
+  useEffect(() => {
+    checkIsMobile(); // 초기 로드 시 한 번 실행
+    window.addEventListener('resize', checkIsMobile); // 윈도우 크기 변경 시 실행
+
+    return () => {
+      window.removeEventListener('resize', checkIsMobile); // 컴포넌트가 unmount 될 때 이벤트 리스너 제거
+    };
+  }, []);
+
+  //인피니트 스크롤
+  useEffect(() => {
+    if (inView) {
+      getMobileLikeList();
+    }
+    console.log('check');
+  }, [inView]);
+
+  //유저 정보 불러오기 함수
   const onMypage = async () => {
     try {
       const res = await authHttp.getMypage(userId);
@@ -75,7 +117,32 @@ const MyLikes = () => {
     }
   };
 
-  //좋아요 한 게시글 리스트 다중삭제
+  //인피니트 스크롤로 좋아요 리스트 얻기
+  const getMobileLikeList = async () => {
+    try {
+      const res = await authHttp.getLikeList(userId, MoreData);
+      console.log(res);
+      const newLikes = [...Likes, ...res.data.result.commentList];
+      setLikes(newLikes);
+      console.log('length', newLikes.length);
+      if (MoreData < res.data.result.total) {
+        setMoreData(prev => prev + 1);
+      }
+      if (newLikes.length > 9) {
+        setFooterBottom(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //모바일 화면 체크 함수
+  const checkIsMobile = () => {
+    const isMobileDevice = window.matchMedia('(max-width: 760px)').matches;
+    setIsMobile(isMobileDevice);
+  };
+
+  //좋아요 리스트 다중삭제 함수
   const onDeleteLikeList = async () => {
     const num = BoardIdList;
     console.log('num', num);
@@ -89,6 +156,7 @@ const MyLikes = () => {
     }
   };
 
+  //다중삭제용 배열 값 컨트롤 함수
   const handleBoardIdList = boardId => {
     if (BoardIdList.includes(boardId)) {
       // 이미 체크한 보드를 다시 클릭한 경우
@@ -99,11 +167,12 @@ const MyLikes = () => {
     }
   };
 
+  //페이지네이션 함수
   const handlePagination = buttonValue => {
     setSelectedButton(buttonValue);
   };
 
-  //편집모드 닫기
+  //편집모드 닫기 함수
   const offEdit = e => {
     e.preventDefault();
 
@@ -111,6 +180,7 @@ const MyLikes = () => {
     setBoardIdList([]);
   };
 
+  //모달창 닫기 함수
   const offModal = () => {
     setIsModal(false);
   };
@@ -140,7 +210,7 @@ const MyLikes = () => {
 
   return (
     <Layout>
-      <Wrap>
+      <Wrap length={FooterBottom}>
         <Text>마이페이지</Text>
         <BoxWrap>
           <MypageNav
@@ -194,6 +264,8 @@ const MyLikes = () => {
                 <EditButton
                   backColor='#FF4122'
                   border='1px solid #FF4122'
+                  mobileBackColor='#ffffff'
+                  mobileColor='#FF4122'
                   color='white'
                   onClick={() => setIsEdit(true)}
                 >
@@ -241,12 +313,18 @@ const MyLikes = () => {
                   ))}
                 </ContentsWrap>
 
-                {/* 페이지네이션 */}
-                <Pagination
-                  handlePagination={handlePagination}
-                  Page={Page}
-                  SelectedButton={SelectedButton}
-                />
+                {IsMobile ? (
+                  <div ref={ref}></div>
+                ) : (
+                  <>
+                    {/* 페이지네이션 */}
+                    <Pagination
+                      handlePagination={handlePagination}
+                      Page={Page}
+                      SelectedButton={SelectedButton}
+                    />
+                  </>
+                )}
               </>
             )}
           </PageWrap>
@@ -264,6 +342,10 @@ const TopWrap = styled.div`
   align-items: center;
   position: relative;
   top: -10px;
+
+  @media screen and (max-width: 1080px) {
+    top: 0px;
+  }
 `;
 
 const EditButton = styled.div`
@@ -280,6 +362,15 @@ const EditButton = styled.div`
   font-size: 16px;
   margin-right: ${props => (props.marginRight ? '10px' : '')};
   cursor: ${props => (props.cursor ? '' : 'pointer')};
+
+  @media screen and (max-width: 760px) {
+    width: 90px;
+    height: 40px;
+    margin-top: 45px;
+    margin-right: ${props => (props.marginRight ? '8px' : '16px')};
+    background-color: ${props => props.mobileBackColor};
+    color: ${props => props.mobileColor};
+  }
 `;
 
 const ButtonWrap = styled.div`
@@ -290,6 +381,10 @@ const ButtonWrap = styled.div`
 const ImgTextWrap = styled.div`
   display: flex;
   align-items: center;
+
+  @media screen and (max-width: 768px) {
+    border-bottom: 1px solid #ced4da;
+  }
 `;
 
 const CheckImg = styled.img`
@@ -325,6 +420,13 @@ const ContentsBox = styled.div`
   &:active {
     background-color: #f0f0f0;
     border: 1px solid #ff4122;
+  }
+
+  @media screen and (max-width: 760px) {
+    border: none;
+    border-radius: 0;
+    padding: 35px 25px;
+    margin: 0;
   }
 `;
 
