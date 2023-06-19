@@ -1,12 +1,16 @@
 package teamproject.backend.user;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamproject.backend.domain.User;
-import teamproject.backend.response.BaseResponse;
-import teamproject.backend.response.ValidationSequence;
+import teamproject.backend.response.*;
 import teamproject.backend.user.dto.*;
 
 import javax.servlet.http.Cookie;
@@ -16,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Users", description = "User API")
 public class UserController {
 
     private final UserService userService;
@@ -30,6 +35,11 @@ public class UserController {
      * @param joinRequest
      * @return
      */
+    @Operation(summary = "회원가입", description = "회원가입 API", responses = {
+            @ApiResponse(responseCode = "1000", description = "회원가입에 성공했습니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+            @ApiResponse(responseCode = "2001", description = "아이디를 입력하세요.")
+    })
+    @Tag(name = "Users")
     @PostMapping("/user/join")
     public BaseResponse join(@Validated(ValidationSequence.class) @RequestBody JoinRequest joinRequest) {
 
@@ -45,6 +55,7 @@ public class UserController {
      * @param username
      * @return
      */
+    @Tag(name = "Users")
     @GetMapping("/user/duplicate")
     public BaseResponse<GetUserSameRes> checkIdDuplicate(@RequestParam String username) {
 
@@ -62,6 +73,7 @@ public class UserController {
      * @param response
      * @return loginResponse
      */
+    @Tag(name = "Users")
     @PostMapping("/user/login")
     public BaseResponse<LoginResponse> login(@Validated(ValidationSequence.class) @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
@@ -78,6 +90,7 @@ public class UserController {
      * @param response
      * @return
      */
+    @Tag(name = "Users")
     @GetMapping("/user/login/kakao")
     public BaseResponse<LoginResponse> kakaoLogin(@RequestParam String code, HttpServletResponse response){
 
@@ -95,6 +108,7 @@ public class UserController {
      * @param response
      * @return
      */
+    @Tag(name = "Users")
     @GetMapping("/user/login/naver")
     public BaseResponse<LoginResponse> naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
 
@@ -111,6 +125,7 @@ public class UserController {
      * @param response
      * @return
      */
+    @Tag(name = "Users")
     @GetMapping("/user/login/google")
     public BaseResponse<LoginResponse> googleLogin(@RequestParam String code, HttpServletResponse response){
 
@@ -125,6 +140,7 @@ public class UserController {
      *
      * @return
      */
+    @Tag(name = "Users")
     @GetMapping("/auth/user/login")
     public BaseResponse loginCheck(HttpServletRequest request) {
 
@@ -140,6 +156,7 @@ public class UserController {
      * @param response
      * @return
      */
+    @Tag(name = "Users")
     @GetMapping("/user/logout")
     public BaseResponse logout(HttpServletResponse response) {
 
@@ -154,6 +171,7 @@ public class UserController {
      * @param findIdRequest
      * @return
      */
+    @Tag(name = "Users")
     @PostMapping("/user/find/id")
     public BaseResponse findByUserId(@Validated(ValidationSequence.class) @RequestBody FindIdRequest findIdRequest) {
 
@@ -169,6 +187,7 @@ public class UserController {
      * @param email
      * @return
      */
+    @Tag(name = "Users")
     @GetMapping("/user/email/duplicate")
     public BaseResponse<GetUserSameRes> checkEmailDuplicate(@RequestParam String email) {
 
@@ -184,6 +203,7 @@ public class UserController {
      * @param findPwRequest
      * @return
      */
+    @Tag(name = "Users")
     @PostMapping("/user/find/password")
     public BaseResponse findByUserPw(@Validated(ValidationSequence.class) @RequestBody FindPwRequest findPwRequest) {
 
@@ -192,6 +212,7 @@ public class UserController {
         return new BaseResponse("비밀번호 찾기에 성공했습니다.", findPwResponse);
     }
 
+    @Tag(name = "Users")
     @GetMapping("/auth/user/image/{user_id}")
     public BaseResponse findUserImage(@PathVariable Long user_id){
         FindUserImageResponse response = userService.findUserImageByUserId(user_id);
