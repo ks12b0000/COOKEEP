@@ -1,6 +1,7 @@
 package teamproject.backend.config;
 
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -10,9 +11,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import teamproject.backend.WebController;
-import teamproject.backend.response.BaseException;
 import teamproject.backend.response.BaseResponse;
-import teamproject.backend.response.ExceptionResponseAdvice;
 
 @Configuration
 public class SwaggerConfig {
@@ -27,7 +26,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo())
-                .ignoredParameterTypes(WebController.class);
+                .ignoredParameterTypes(WebController.class, ErrorController.class);
     }
 
     private ApiInfo apiInfo() {

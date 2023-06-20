@@ -11,7 +11,6 @@ import javax.validation.constraints.*;
 
 import static teamproject.backend.response.ValidationGroup.*;
 
-@Schema(description = "회원가입 요청 DTO 객체")
 @Getter
 @Setter
 @AllArgsConstructor

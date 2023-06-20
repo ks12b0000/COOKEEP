@@ -1,8 +1,7 @@
 package teamproject.backend.user;
 
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +34,8 @@ public class UserController {
      * @param joinRequest
      * @return
      */
-    @Operation(summary = "회원가입", description = "회원가입 API", responses = {
-            @ApiResponse(responseCode = "1000", description = "회원가입에 성공했습니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
-            @ApiResponse(responseCode = "2001", description = "아이디를 입력하세요.")
+    @Operation(summary = "회원가입 API", description = "UserName, PassWord, Email을 입력해서 회원가입을 한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "회원가입에 성공했습니다.")
     })
     @Tag(name = "Users")
     @PostMapping("/user/join")
@@ -55,6 +53,10 @@ public class UserController {
      * @param username
      * @return
      */
+    @Operation(summary = "아이디 중복체크 API", description = "UserName을 활용하여 아이디 중복체크를 한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "사용 가능한 아이디 입니다.")
+    })
+    @ApiImplicitParam(name = "username", value = "유저 아이디", required = true, dataTypeClass = String.class)
     @Tag(name = "Users")
     @GetMapping("/user/duplicate")
     public BaseResponse<GetUserSameRes> checkIdDuplicate(@RequestParam String username) {
@@ -73,6 +75,9 @@ public class UserController {
      * @param response
      * @return loginResponse
      */
+    @Operation(summary = "로그인 API", description = "UserName, PassWord를 입력해서 유저가 로그인한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "로그인에 성공했습니다.")
+    })
     @Tag(name = "Users")
     @PostMapping("/user/login")
     public BaseResponse<LoginResponse> login(@Validated(ValidationSequence.class) @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -90,6 +95,9 @@ public class UserController {
      * @param response
      * @return
      */
+    @Operation(summary = "카카오 로그인 API", description = "KaKao 인가 code를 받아 유저가 로그인한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "카카오 로그인에 성공했습니다.")
+    })
     @Tag(name = "Users")
     @GetMapping("/user/login/kakao")
     public BaseResponse<LoginResponse> kakaoLogin(@RequestParam String code, HttpServletResponse response){
@@ -108,6 +116,9 @@ public class UserController {
      * @param response
      * @return
      */
+    @Operation(summary = "네이버 로그인 API", description = "Naver 인가 code, state를 받아 유저가 로그인한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "네이버 로그인에 성공했습니다.")
+    })
     @Tag(name = "Users")
     @GetMapping("/user/login/naver")
     public BaseResponse<LoginResponse> naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response){
@@ -125,6 +136,9 @@ public class UserController {
      * @param response
      * @return
      */
+    @Operation(summary = "구글 로그인 API", description = "Google 인가 code를 받아 유저가 로그인한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "구글 로그인에 성공했습니다.")
+    })
     @Tag(name = "Users")
     @GetMapping("/user/login/google")
     public BaseResponse<LoginResponse> googleLogin(@RequestParam String code, HttpServletResponse response){
@@ -140,6 +154,9 @@ public class UserController {
      *
      * @return
      */
+    @Operation(summary = "로그인 여부 체크 API", description = "Cookie를 활용하여 로그인 여부를 체크한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "로그인 된 유저입니다.")
+    })
     @Tag(name = "Users")
     @GetMapping("/auth/user/login")
     public BaseResponse loginCheck(HttpServletRequest request) {
@@ -156,6 +173,9 @@ public class UserController {
      * @param response
      * @return
      */
+    @Operation(summary = "로그아웃 API", description = "Cookie를 활용하여 로그아웃을 한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "로그아웃에 성공했습니다.")
+    })
     @Tag(name = "Users")
     @GetMapping("/user/logout")
     public BaseResponse logout(HttpServletResponse response) {
@@ -171,6 +191,9 @@ public class UserController {
      * @param findIdRequest
      * @return
      */
+    @Operation(summary = "아이디 찾기 API", description = "유저 Email을 활용하여 유저의 아이디를 찾는다.", responses = {
+            @ApiResponse(responseCode = "200", description = "아이디 찾기에 성공했습니다.")
+    })
     @Tag(name = "Users")
     @PostMapping("/user/find/id")
     public BaseResponse findByUserId(@Validated(ValidationSequence.class) @RequestBody FindIdRequest findIdRequest) {
@@ -187,6 +210,10 @@ public class UserController {
      * @param email
      * @return
      */
+    @Operation(summary = "이메일 중복체크 API", description = "Email을 활용하여 Email 중복체크를 한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "사용 가능한 이메일 입니다.")
+    })
+    @ApiImplicitParam(name = "email", value = "유저 이메일", required = true, dataTypeClass = String.class)
     @Tag(name = "Users")
     @GetMapping("/user/email/duplicate")
     public BaseResponse<GetUserSameRes> checkEmailDuplicate(@RequestParam String email) {
@@ -203,6 +230,9 @@ public class UserController {
      * @param findPwRequest
      * @return
      */
+    @Operation(summary = "비밀번호 찾기 API", description = "유저 UserName, Email을 활용하여 유저의 비밀번호를 찾는다.", responses = {
+            @ApiResponse(responseCode = "200", description = "비밀번호 찾기에 성공했습니다.")
+    })
     @Tag(name = "Users")
     @PostMapping("/user/find/password")
     public BaseResponse findByUserPw(@Validated(ValidationSequence.class) @RequestBody FindPwRequest findPwRequest) {
@@ -212,6 +242,9 @@ public class UserController {
         return new BaseResponse("비밀번호 찾기에 성공했습니다.", findPwResponse);
     }
 
+    @Operation(summary = "유저 이미지 조회 API", description = "유저 UserId를 활용하여 유저 이미지를 조회한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "유저 이미지를 조회했습니다.")
+    })
     @Tag(name = "Users")
     @GetMapping("/auth/user/image/{user_id}")
     public BaseResponse findUserImage(@PathVariable Long user_id){

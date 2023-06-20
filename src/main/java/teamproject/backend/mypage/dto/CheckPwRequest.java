@@ -1,5 +1,6 @@
 package teamproject.backend.mypage.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import static teamproject.backend.response.ValidationGroup.*;
 public class CheckPwRequest {
 
     // 유저 비밀번호 확인
+    @Schema(description = "비밀번호", example = "test12345", required = true)
     @NotBlank(message = "비밀번호를 입력하세요.", groups = NotBlankGroup.class)
     private String password;
 }
