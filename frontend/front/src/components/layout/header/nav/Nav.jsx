@@ -10,14 +10,15 @@ import AlarmModal from "../rightGnb/AlarmModal";
 import * as React from "react";
 import {useSelector} from "react-redux";
 import {useMediaQuery} from "react-responsive";
+import SearchModal from "../../../atomic/modal/SearchModal";
 
 function Nav({categoryName,isOpen}) {
     const userInfo = useSelector(state => state.persistedReducer.userReducer);
     const [menus, setMenus] = useState(NavDada);
-    const [active,setActive] =useState(false);
     const isMobile = useMediaQuery({
         query: "(max-width:768px)"
     });
+    const[searchOpen,setSearchOpen] = useState(false);
 
 
 
@@ -25,11 +26,6 @@ function Nav({categoryName,isOpen}) {
     return  !isMobile ?  (
 
           <NavList>
-
-
-
-
-
             <ul className="menu">
               {menus.map((menu) => (
                   <Menu key={menu.id}>
@@ -37,15 +33,12 @@ function Nav({categoryName,isOpen}) {
                   </Menu>
               ))}
             </ul>
-
-
-
-
           </NavList>
         ):
         //모바일버전
         isOpen && (
-        <MobileNavList  className={ isOpen ? 'show' :'hide'}>
+        <>
+          <MobileNavList  className={ isOpen ? 'show' :'hide'}>
             <GnbContainer className={userInfo.isLoggedIn && 'user'}>
                 <BtnWrap className="btnWrap">
                     <li className="login">
@@ -56,16 +49,14 @@ function Nav({categoryName,isOpen}) {
                     </li>
                 </BtnWrap>
 
-                <div>
+                <div style={{display:'flex',justifyContent:'center',alignItems:'center',marginLeft:'15px'}} onClick={()=> setSearchOpen(!searchOpen)}>
                     <img
                     src={`${process.env.PUBLIC_URL}/image/search.png`}
                     alt='검색아이콘'
+                    style={{width:'20px',height:'20px'}}
                     />
                 </div>
             </GnbContainer>
-
-
-
             <ul className="menu">
                 {menus.map((menu) => (
                     <Menu key={menu.id}>
@@ -73,8 +64,10 @@ function Nav({categoryName,isOpen}) {
                     </Menu>
                 ))}
             </ul>
-        </MobileNavList>
 
+        </MobileNavList>
+          <SearchModal isOpen={searchOpen} setOpen={setSearchOpen} />
+        </>
     );
 }
 export default Nav;
@@ -156,14 +149,15 @@ const GnbContainer = styled.ul`
   display: none;
     ${mobile} {
       display: flex;
-      padding: 24px 16px 14px;
+      padding: 24px 26px 14px 16px;
       justify-content: space-between;
     }
 `;
 
 
 const BtnWrap = styled.div`
-
+  
+  
    display: flex;
    height: 50px;
    gap:10px;
