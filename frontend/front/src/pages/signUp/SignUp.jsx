@@ -124,7 +124,7 @@ function SignUp() {
   //아이디 중복체크 실행 함수
   const onCheckUsername = async e => {
     e.preventDefault();
-    const idRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{5,}$/;
+    const idRegex = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d]{5,}$/;
 
     if (Username === '') {
       setIsError(true);
