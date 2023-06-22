@@ -12,7 +12,7 @@ function MobileTabInput() {
     return (
         <>
             <input type="text" placeholder={!isTag ? '검색어를 입력하세요' : '태그를 입력하세요'}/>
-            <IsTag>#</IsTag>
+            {isTag && <IsTag>#</IsTag> }
             <ul>
                 <li onClick={TagChange} ><Tag isTag={isTag}>#</Tag></li>
                 <li><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt=""/></li>
@@ -31,6 +31,7 @@ const Tag = styled.span`
 `
 const IsTag = styled.div`
   position: absolute;
-  top:40px;
-  left:0;
+  top:50%;
+  transform: translateY(-50%);
+  left:15px;
 `

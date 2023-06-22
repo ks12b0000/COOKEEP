@@ -3,13 +3,14 @@ import styled from "@emotion/styled";
 
 import { useState, useEffect } from "react";
 import CategoryHttp from "../../../http/categoryHttp";
-import {Pagination} from "@mui/material";
+import {Pagination,PaginationItem} from "@mui/material";
 import Post from "../../post/Post";
 import IsNonData from "../../atomic/isNonData/IsNonData";
 
 
 const categoryHttp = new CategoryHttp();
 function CateItem({cateItemName}) {
+    const buttonCount = 5; // 버튼 개수
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [allText,setAllText] = useState(0);
@@ -58,7 +59,18 @@ function CateItem({cateItemName}) {
                     posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts} currentPage={currentPage}/>
                 }
             </Ul>
-           <PaginationWrap > <Pagination  count={totalCount}  page={currentPage + 1 }   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton /></PaginationWrap>
+           <PaginationWrap >
+               <Pagination
+                   variant="outlined"
+                   count={totalCount}
+                   boundaryCount={totalCount > buttonCount ? buttonCount - 1 : totalCount}
+
+                   page={currentPage + 1 }
+                   onChange={onChangePagination}
+                   shape="rounded" showFirstButton showLastButton
+
+
+                /></PaginationWrap>
         </>
     );
 }

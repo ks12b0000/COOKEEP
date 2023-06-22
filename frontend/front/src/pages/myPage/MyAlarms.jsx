@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
 import AuthHttp from '../../http/authHttp';
 import Layout from '../../components/layout/Layout';
 import MypageNav from '../../components/mypage/myPageNav';
@@ -25,6 +26,9 @@ const authHttp = new AuthHttp();
 
 const MyAlarms = () => {
   const params = useParams();
+
+  const { ref, inView } = useInView();
+
   let { userId } = params;
   userId = parseInt(userId);
   const userId2 = useSelector(
@@ -33,12 +37,26 @@ const MyAlarms = () => {
 
   const navigate = useNavigate();
 
+  //유저 정보
   const [UserInfo, setUserInfo] = useState([]);
 
+  //알림 리스트
   const [Alarms, setAlarms] = useState([]);
+
+  //페이지 네이션
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
 
+  //모바일 화면 체크
+  const [IsMobile, setIsMobile] = useState(false);
+
+  //모바일 인피니트 스크롤
+  const [MoreData, setMoreData] = useState(1);
+
+  //footer 위치
+  const [FooterBottom, setFooterBottom] = useState(false);
+
+  //유저 정보 불러오기 & 알림 리스트 불러오기
   useEffect(() => {
     onMypage();
     getAlarmList();
@@ -48,6 +66,25 @@ const MyAlarms = () => {
     }
   }, [SelectedButton]);
 
+  //모바일 화면 체크
+  useEffect(() => {
+    checkIsMobile(); // 초기 로드 시 한 번 실행
+    window.addEventListener('resize', checkIsMobile); // 윈도우 크기 변경 시 실행
+
+    return () => {
+      window.removeEventListener('resize', checkIsMobile); // 컴포넌트가 unmount 될 때 이벤트 리스너 제거
+    };
+  }, []);
+
+  //인피니트 스크롤
+  useEffect(() => {
+    if (inView) {
+      getMobileAlarmList();
+    }
+    console.log('check');
+  }, [inView]);
+
+  //유저 정보 불러오기 함수
   const onMypage = async () => {
     try {
       const res = await authHttp.getMypage(userId);
@@ -58,6 +95,7 @@ const MyAlarms = () => {
     }
   };
 
+  //알림리스트 얻기
   const getAlarmList = async () => {
     try {
       const res = await authHttp.getMypageAlarmList(userId, SelectedButton);
@@ -69,6 +107,29 @@ const MyAlarms = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  //인피니트 스크롤로 알림리스트 얻기
+  const getMobileAlarmList = async () => {
+    try {
+      const res = await authHttp.getMypageAlarmList(userId, MoreData);
+      const newAlarms = [...Alarms, ...res.data.result.notificationList];
+      setAlarms(newAlarms);
+      if (MoreData < res.data.result.total) {
+        setMoreData(prev => prev + 1);
+      }
+      if (newAlarms.length > 9) {
+        setFooterBottom(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //모바일 화면 체크 함수
+  const checkIsMobile = () => {
+    const isMobileDevice = window.matchMedia('(max-width: 760px)').matches;
+    setIsMobile(isMobileDevice);
   };
 
   const checkedAlarm = async (
@@ -98,7 +159,7 @@ const MyAlarms = () => {
 
   return (
     <Layout>
-      <Wrap>
+      <Wrap length={FooterBottom}>
         <Text>마이페이지</Text>
         <BoxWrap>
           <MypageNav
@@ -121,7 +182,7 @@ const MyAlarms = () => {
             ) : (
               <>
                 <ContentsWrap>
-                  {Alarms.map(alarm => (
+                  {Alarms.map((alarm, i) => (
                     <ContentsBox
                       onClick={e => {
                         checkedAlarm(
@@ -131,7 +192,7 @@ const MyAlarms = () => {
                           alarm.notification_url
                         );
                       }}
-                      key={alarm.notification_id}
+                      key={i}
                     >
                       <ContentsText checked={alarm.confirmation}>
                         {alarm.title}
@@ -143,12 +204,18 @@ const MyAlarms = () => {
                     </ContentsBox>
                   ))}
                 </ContentsWrap>
-                {/* 페이지네이션 */}
-                <Pagination
-                  handlePagination={handlePagination}
-                  Page={Page}
-                  SelectedButton={SelectedButton}
-                />
+                {IsMobile ? (
+                  <div ref={ref}></div>
+                ) : (
+                  <>
+                    {/* 페이지네이션 */}
+                    <Pagination
+                      handlePagination={handlePagination}
+                      Page={Page}
+                      SelectedButton={SelectedButton}
+                    />
+                  </>
+                )}
               </>
             )}
           </PageWrap>

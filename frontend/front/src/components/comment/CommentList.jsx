@@ -125,7 +125,11 @@ const CommentList = props => {
           <CommentBlock>
             {/* 상단 작성자 이름 */}
             <UserNameWrap>
-              <UsernameText>{comment.user_name}</UsernameText>
+              <UsernameText
+                onClick={() => navigate(`/written/${comment.user_id}`)}
+              >
+                {comment.user_name}
+              </UsernameText>
               {props.userName === comment.user_name && <Author>작성자</Author>}
             </UserNameWrap>
             {formattedDate === comment.create_date ? (
@@ -334,6 +338,7 @@ const UsernameText = styled.div`
   color: black;
   display: inline;
   margin-right: 6px;
+  cursor: pointer;
 `;
 
 const Author = styled.div`

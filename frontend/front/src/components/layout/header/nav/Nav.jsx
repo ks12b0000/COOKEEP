@@ -24,7 +24,6 @@ function Nav({categoryName,isOpen}) {
 
 
     return  !isMobile ?  (
-
           <NavList>
             <ul className="menu">
               {menus.map((menu) => (

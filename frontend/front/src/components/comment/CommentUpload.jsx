@@ -92,9 +92,14 @@ const CommentUpload = props => {
   return (
     <>
       <RepleWrap>
-        <Profile>
-          <Img src={userImage} alt='profile' />
-        </Profile>
+        {isLoggedIn ? (
+          <Profile>
+            <Img src={userImage} alt='profile' />
+          </Profile>
+        ) : (
+          <Profile></Profile>
+        )}
+
         <RepleTextarea
           placeholder='댓글을 입력해 주세요'
           value={Text}

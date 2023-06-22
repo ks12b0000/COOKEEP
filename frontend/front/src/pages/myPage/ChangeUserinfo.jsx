@@ -88,16 +88,6 @@ const ChangeUserinfo = () => {
   const [EyeVisible2, setEyeVisible2] = useState(false);
   const [EyeVisible3, setEyeVisible3] = useState(false);
 
-  //onSubmit함수를 위한 isDone 값
-  const [IsPreviewDone, setIsPreviewDone] = useState(false);
-  const [IsNicknameDone, setIsNicknameDone] = useState(false);
-  const [IsIdDone, setIsIdDone] = useState(false);
-  const [IsEmailDone, setIsEmailDone] = useState(false);
-  const [IsPasswordDone, setIsPasswordDone] = useState(false);
-
-  //현재 비밀번호 일치 여부
-  const [IsPasswordRight, setIsPasswordRight] = useState(false);
-
   //완료시 화면이동
   const [IsUpdateCompleted, setIsUpdateCompleted] = useState(false);
 
@@ -105,6 +95,19 @@ const ChangeUserinfo = () => {
   const [IsModal, setIsModal] = useState(false);
   const [IsLoading, setIsLoading] = useState(false);
 
+  //footer 위치
+  const [FooterBottom, setFooterBottom] = useState(false);
+
+  //유저 정보
+  useEffect(() => {
+    onMypage();
+
+    if (userId !== userId2) {
+      navigate('/notfound');
+    }
+  }, []);
+
+  //로딩 및 완료 팝업창 관리하는 useEffect
   useEffect(() => {
     if (IsLoading) {
       const timeout = setTimeout(() => {
@@ -116,14 +119,14 @@ const ChangeUserinfo = () => {
     }
   }, [IsLoading, navigate, userId]);
 
+  //비밀번호 변경 버튼 클릭 시 footer 위치 관리
   useEffect(() => {
-    onMypage();
-
-    if (userId !== userId2) {
-      navigate('/notfound');
+    if (isChangePassword) {
+      setFooterBottom(true);
     }
-  }, []);
+  }, [isChangePassword]);
 
+  //유저 정보 함수
   const onMypage = async () => {
     try {
       const res = await authHttp.getMypage(userId);
@@ -466,7 +469,6 @@ const ChangeUserinfo = () => {
 
     if (Profile) {
       sendProfile();
-      setIsPreviewDone(true);
     }
 
     if (Nickname) {
@@ -511,7 +513,7 @@ const ChangeUserinfo = () => {
   return (
     <>
       <Layout>
-        <Wrap>
+        <Wrap length={FooterBottom}>
           <Text>마이페이지</Text>
 
           <BoxWrap>
@@ -530,7 +532,7 @@ const ChangeUserinfo = () => {
                 </RedIcon>
                 <IconText>설정</IconText>
               </RedIconWrap>
-              <AccountWrap top>
+              <AccountWrap top footerBottom={FooterBottom}>
                 <ProfileRound>
                   {Preview ? (
                     <ProfileImg src={Preview} alt='프로필 이미지' />
@@ -558,7 +560,7 @@ const ChangeUserinfo = () => {
                           value={Nickname}
                           type='text'
                           ref={nicknameRef}
-                          placeholder='닉네임 입력하세요'
+                          placeholder={UserInfo.nickname}
                           onChange={e => {
                             setNickname(e.currentTarget.value);
                           }}
@@ -787,18 +789,16 @@ const ChangeUserinfo = () => {
               </SubmitButton>
             </PageWrap>
           </BoxWrap>
-          {IsUpdateCompleted && (
-            <LoaderBack>
-              <LoadingPopup />
-            </LoaderBack>
-          )}
         </Wrap>
       </Layout>
 
       {IsModal && <Alert {...Props} />}
       {IsLoading && <LoadingPopup />}
       {IsUpdateCompleted && (
-        <CompletePopup category={`mypage/account/${userId2}`} />
+        <CompletePopup
+          category={`mypage/account/${userId2}`}
+          sentence={'유저 정보 변경이 완료되었습니다.'}
+        />
       )}
     </>
   );
@@ -830,6 +830,12 @@ const ProfileButton = styled.label`
     margin-bottom: 10px;
     font-size: 14px;
   }
+
+  @media screen and (max-width: 760px) {
+    margin-bottom: 25px;
+    height: 45px;
+    font-size: 16px;
+  }
 `;
 
 const ProfileInput = styled.input`
@@ -858,6 +864,13 @@ const InputTitle = styled.div`
     margin-bottom: 5px;
     font-weight: 600;
   }
+
+  @media screen and (max-width: 760px) {
+    margin-bottom: 6px;
+    font-size: 16px;
+    text-align: left;
+    width: 340px;
+  }
 `;
 
 const IdWrap = styled.div`
@@ -873,6 +886,11 @@ const IdWrap = styled.div`
     width: 320px;
     height: 35px;
     margin-bottom: 20px;
+  }
+
+  @media screen and (max-width: 760px) {
+    height: 45px;
+    width: 343px;
   }
 `;
 
@@ -908,6 +926,14 @@ const IdInput = styled.input`
       font-size: 14px;
     }
   }
+
+  @media screen and (max-width: 760px) {
+    height: 45px;
+
+    ::placeholder {
+      font-size: 16px;
+    }
+  }
 `;
 
 const IdButton = styled.button`
@@ -933,6 +959,10 @@ const IdButton = styled.button`
   @media screen and (max-width: 1700px) {
     height: 35px;
   }
+
+  @media screen and (max-width: 760px) {
+    height: 45px;
+  }
 `;
 
 const SignInputWrap = styled.form`
@@ -945,6 +975,11 @@ const SignInputWrap = styled.form`
     width: 320px;
     height: 35px;
     margin-bottom: 20px;
+  }
+
+  @media screen and (max-width: 760px) {
+    height: 45px;
+    width: 343px;
   }
 `;
 
@@ -979,6 +1014,15 @@ const SignInput = styled.input`
 
     ::placeholder {
       font-size: 14px;
+    }
+  }
+
+  @media screen and (max-width: 760px) {
+    height: 45px;
+    width: 343px;
+
+    ::placeholder {
+      font-size: 16px;
     }
   }
 `;
@@ -1052,37 +1096,16 @@ const SubmitButton = styled.div`
     height: 35px;
     font-size: 14px;
   }
-`;
 
-const LoaderBack = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+  @media screen and (max-width: 1020px) {
+    left: 75%;
+    top: 3.5%;
+  }
 
-const LoaderModal = styled.div`
-  width: 400px;
-  height: 270px;
-  background-color: white;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  padding-bottom: 30px;
-`;
-
-const ModalText = styled.div`
-  font-size: 20px;
-  font-weight: 500;
-  text-align: center;
+  @media screen and (max-width: 760px) {
+    left: 68%;
+    top: 11%;
+  }
 `;
 
 export default ChangeUserinfo;
