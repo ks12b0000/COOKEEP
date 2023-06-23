@@ -30,6 +30,7 @@ const FooterContainer = styled.footer`
 
   @media screen and (max-width: 768px) {
     margin-top: 0;
+ 
   }
 `;
 
@@ -51,13 +52,18 @@ const ContentsWrap = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    width: 100vw;
+    width: 100%;
     overflow: hidden;
+    
   }
 `;
 
 const Logo = styled.img`
   width: 133px;
+  
+  ${mobile} {
+    width: 25vw;
+  }
 `;
 
 const LinkWrap = styled.div`
@@ -66,6 +72,12 @@ const LinkWrap = styled.div`
   height: 70px;
   justify-content: space-between;
   align-items: center;
+  
+  ${mobile}{
+    width: 70vw;
+    gap: 10px;
+    justify-content: center;
+  }
 `;
 
 const Text = styled.div`
@@ -74,4 +86,8 @@ const Text = styled.div`
   font-weight: ${props => (props.thin ? '300' : '600')};
   cursor: ${props => (props.pointer ? 'pointer' : '')};
   text-decoration: ${props => (props.underline ? 'underline' : '')};
+  
+  ${mobile} {
+    font-size: 10px;
+  }
 `;
