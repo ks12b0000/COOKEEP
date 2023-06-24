@@ -382,7 +382,7 @@ const ImgTextWrap = styled.div`
   display: flex;
   align-items: center;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 760px) {
     border-bottom: 1px solid #ced4da;
   }
 `;

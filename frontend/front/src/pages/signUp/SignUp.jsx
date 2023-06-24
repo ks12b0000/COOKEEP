@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import UserHttp from '../../http/userHttp';
 import { useNavigate } from 'react-router';
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import AgreeForm from '../../components/signUp/AgreeForm';
 import Header from '../../components/layout/header/Header';
 import Footer from '../../components/layout/footer/Footer';
+import { color } from '../../constants/color';
 
 const userHttp = new UserHttp();
 
@@ -60,6 +61,9 @@ function SignUp() {
 
   //focus 색상 구분
   const [IsError, setIsError] = useState(false);
+
+  //모바일 화면 체크
+  const [IsMobile, setIsMobile] = useState(false);
 
   //function
   //회원가입 실행 함수
@@ -215,8 +219,25 @@ function SignUp() {
     }
   };
 
+  //모바일 화면 체크
+  useEffect(() => {
+    checkIsMobile(); // 초기 로드 시 한 번 실행
+    window.addEventListener('resize', checkIsMobile); // 윈도우 크기 변경 시 실행
+
+    return () => {
+      window.removeEventListener('resize', checkIsMobile); // 컴포넌트가 unmount 될 때 이벤트 리스너 제거
+    };
+  }, []);
+
+  //모바일 화면 체크 함수
+  const checkIsMobile = () => {
+    const isMobileDevice = window.matchMedia('(max-width: 760px)').matches;
+    setIsMobile(isMobileDevice);
+  };
+
   return (
     <>
+      {IsMobile && <Header color={color.falseMainColor} />}
       <SignBackground IsDone={IsDone}>
         <Link to='/'>
           <Logo />
@@ -408,6 +429,7 @@ function SignUp() {
           </SignWrap>
         )}
       </SignBackground>
+      {IsMobile && <Footer />}
     </>
   );
 }
@@ -426,6 +448,11 @@ const SignBackground = styled.div`
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   padding: ${props => (props.IsDone ? '0 0 50px 0' : '50px 0 100px 0')};
   box-sizing: ${props => (props.IsDone ? 'border-box' : '')};
+
+  @media screen and (max-width: 760px) {
+    height: 100vh;
+    padding: 0;
+  }
 `;
 
 const Logo = styled.div`
@@ -444,6 +471,10 @@ const Logo = styled.div`
   &:hover {
     top: -3px;
   }
+
+  @media screen and (max-width: 760px) {
+    display: none;
+  }
 `;
 
 const SignWrap = styled.div`
@@ -457,6 +488,13 @@ const SignWrap = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+  @media screen and (max-width: 760px) {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
 `;
 
 const SignTitle = styled.div`
@@ -705,6 +743,12 @@ const DoneModalWrap = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+  @media screen and (max-width: 760px) {
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+  }
 `;
 
 const CheckImg = styled.div`
