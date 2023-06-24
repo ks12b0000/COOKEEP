@@ -1,13 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../redux/reducer/userSlice';
 import styled from '@emotion/styled';
-import Header from '../../components/layout/header/Header';
-import UserHttp from '../../http/userHttp';
-import Footer from '../../components/layout/footer/Footer';
 
+import Header from '../../components/layout/header/Header';
+import Footer from '../../components/layout/footer/Footer';
+import { color } from '../../constants/color';
+
+import UserHttp from '../../http/userHttp';
 const userHttp = new UserHttp();
 
 function Login() {
@@ -63,6 +65,9 @@ function Login() {
   //서버에서 받은 찾은 아이디와 비번 저장용 state
   const [FoundIdText, setFoundIdText] = useState('');
   const [FoundPasswordText, setFoundPasswordText] = useState('');
+
+  //모바일 화면 체크
+  const [IsMobile, setIsMobile] = useState(false);
 
   // 일반 로그인 동작 수행 함수
   const onLogin = async e => {
@@ -281,8 +286,25 @@ function Login() {
     }
   };
 
+  //모바일 화면 체크
+  useEffect(() => {
+    checkIsMobile(); // 초기 로드 시 한 번 실행
+    window.addEventListener('resize', checkIsMobile); // 윈도우 크기 변경 시 실행
+
+    return () => {
+      window.removeEventListener('resize', checkIsMobile); // 컴포넌트가 unmount 될 때 이벤트 리스너 제거
+    };
+  }, []);
+
+  //모바일 화면 체크 함수
+  const checkIsMobile = () => {
+    const isMobileDevice = window.matchMedia('(max-width: 760px)').matches;
+    setIsMobile(isMobileDevice);
+  };
+
   return (
     <>
+      {IsMobile && <Header color={color.falseMainColor} />}
       <LoginBackground>
         <Link to='/'>
           <Logo />
@@ -529,6 +551,7 @@ function Login() {
           <></>
         )}
       </LoginBackground>
+      {IsMobile && <Footer />}
     </>
   );
 }
@@ -547,6 +570,13 @@ const LoginBackground = styled.div`
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   padding-bottom: 40px;
   box-sizing: border-box;
+
+  @media screen and (max-width: 760px) {
+    height: 100vh;
+    padding: 0;
+    box-shadow: none;
+    overflow: hidden;
+  }
 `;
 
 const Logo = styled.div`
@@ -565,6 +595,10 @@ const Logo = styled.div`
   &:hover {
     top: -3px;
   }
+
+  @media screen and (max-width: 760px) {
+    display: none;
+  }
 `;
 
 const LoginWrap = styled.div`
@@ -578,6 +612,13 @@ const LoginWrap = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+  @media screen and (max-width: 760px) {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
 `;
 
 const LoginTitle = styled.div`
