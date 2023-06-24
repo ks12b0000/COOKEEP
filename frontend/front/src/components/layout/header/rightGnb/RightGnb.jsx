@@ -319,10 +319,6 @@ const GnbContainer = styled.ul`
     display: flex;
     justify-content: center;
     align-items: center;
-
-
-     
-    }
     &.active {
       width: 44px;
       height: 44px;
@@ -334,6 +330,10 @@ const GnbContainer = styled.ul`
         height: 20px;
       }
     }
+
+     
+    }
+   
     a {
       color: #000000;
       cursor: pointer;

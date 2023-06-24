@@ -1,5 +1,6 @@
 package teamproject.backend.boardComment.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,12 +16,15 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardCommentUpdateRequest {
+    @Schema(description = "댓글 인덱스", example = "1", required = true)
     @NotBlank(message = "boardComment_id를 입력해주세요.", groups = ValidationGroup.NotBlankGroup.class)
     private Long boardComment_id;
 
+    @Schema(description = "수정할 댓글 내용", example = "Comment12345", required = true)
     @Size(min = 5, message = "댓글의 내용은 5글자 이상 입력하세요.", groups = ValidationGroup.PatternGroup.class)
     private String text;
 
+    @Schema(description = "유저 인덱스", example = "1", required = true)
     @NotNull(message = "유저 id를 입력하세요.", groups = ValidationGroup.NotNullGroup.class)
     private Long user_id;
 }

@@ -9,7 +9,9 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
+import teamproject.backend.domain.Notification;
 import teamproject.backend.domain.User;
+import teamproject.backend.notification.NotificationRepository;
 import teamproject.backend.user.dto.*;
 import teamproject.backend.utils.CookieService;
 import teamproject.backend.utils.JwtService;
@@ -39,6 +41,8 @@ public class UserServiceTest {
     private JwtService jwtService;
     @Mock
     private CookieService cookieService;
+    @Mock
+    private NotificationRepository notificationRepository;
 
 
     @Test
@@ -48,9 +52,11 @@ public class UserServiceTest {
         JoinRequest dto = new JoinRequest("test1234", "test1234@gmail.com", "test1234");
 
         User user = new User(dto.getUsername(), "testNick12", dto.getEmail(), dto.getPassword(), null);
+        Notification notification = new Notification(user, "title123", "subTitle123", "url12345","mainpage");
 
         // stub 행동정의 (가설)
         when(userRepository.save(any())).thenReturn(user);
+        when(notificationRepository.save(any())).thenReturn(notification);
 
         // when
         Long userId = userService.join(dto);
@@ -64,10 +70,11 @@ public class UserServiceTest {
     void social_Join() {
         // given
         User user = new User("test1234", "test122", "test1234@gmail.com", "test1234", null);
+        Notification notification = new Notification(user, "title123", "subTitle123", "url12345","mainpage");
 
         // stub 행동정의 (가설)
         when(userRepository.save(any())).thenReturn(user);
-
+        when(notificationRepository.save(any())).thenReturn(notification);
         // when
         SocialUserInfo saveUser = userService.joinBySocial(user.getUsername(), user.getEmail());
 

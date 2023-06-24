@@ -1,5 +1,6 @@
 package teamproject.backend.user.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import static teamproject.backend.response.ValidationGroup.NotBlankGroup;
 public class FindIdRequest {
 
     // 유저 이메일
+    @Schema(description = "이메일", example = "test12345@gmail.com", required = true)
     @NotBlank(message = "이메일을 입력하세요.", groups = NotBlankGroup.class)
     @Email(message = "이메일 형식으로 입력해주세요.", groups = ValidationGroup.EmailGroup.class)
     private String email;

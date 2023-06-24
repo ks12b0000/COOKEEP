@@ -1,5 +1,6 @@
 package teamproject.backend.imageFile;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +14,12 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Image", description = "Image API")
 public class ImageFileController {
 
     private final ImageFileService imageFileService;
 
+    @Tag(name = "Image")
     @PostMapping("/image")
     public BaseResponse<ImageFileResponse> imageFileUpload(MultipartFile imageFile, Long user_id) throws IOException {
         return new BaseResponse<>("성공적으로 사진이 저장되었습니다.", imageFileService.save(imageFile, user_id));
@@ -27,6 +30,7 @@ public class ImageFileController {
     //    return new BaseResponse<>("사진을 불러왔습니다.",imageFileService.findById(image_id));
     //}
 
+    @Tag(name = "Image")
     @DeleteMapping("/image")
     public BaseResponse imageFileDelete(@RequestParam String fileName){
         imageFileService.delete(fileName);
