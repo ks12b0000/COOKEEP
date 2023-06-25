@@ -14,6 +14,10 @@ const categoryHttp = new CategoryHttp();
 function Ranking({commented}) {
     const isMobile = useMediaQuery({
         query: "(max-width:768px)"
+        
+
+
+
     });
     const [IsLiked, setIsLiked] = useState(false);
     const { userId } = useSelector(state => state.persistedReducer.userReducer);

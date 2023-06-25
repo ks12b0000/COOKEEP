@@ -14,6 +14,7 @@ import SearchModal from "../../../atomic/modal/SearchModal";
 
 function Nav({categoryName,isOpen}) {
     const userInfo = useSelector(state => state.persistedReducer.userReducer);
+
     const [menus, setMenus] = useState(NavDada);
     const isMobile = useMediaQuery({
         query: "(max-width:768px)"
@@ -74,7 +75,7 @@ export default Nav;
 
 const MobileNavList = styled.nav`
      position: fixed;
-     top: 65px;
+     top: 64px;
      width: 100vw;
      z-index: 100;
      background: #ffffff;
