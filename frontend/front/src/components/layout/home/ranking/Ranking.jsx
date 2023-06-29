@@ -14,11 +14,8 @@ const categoryHttp = new CategoryHttp();
 function Ranking({commented}) {
     const isMobile = useMediaQuery({
         query: "(max-width:768px)"
-        
-
-
-
     });
+    
     const [IsLiked, setIsLiked] = useState(false);
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
 
@@ -37,6 +34,8 @@ function Ranking({commented}) {
             }
         })()
     }, [ commented ]);
+
+
     return!isMobile ? (
         <RankingWrap>
               <RankingTitle><div><img src={`${process.env.PUBLIC_URL}/image/ranking.png`} alt=""/></div>  레시피 Total 조회 순위</RankingTitle>
@@ -62,7 +61,7 @@ function Ranking({commented}) {
 
                             {commented.map((item,index) => {
                                 return (
-                                    <SwiperSlide key={index}>
+                                    <SwiperSlide key={index}  style={{padding:'2vw 0'}}>
                                         <PopularList>
                                             <Link to={`/category/${item.board_id}`}>
                                                 <PopularListImg>

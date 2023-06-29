@@ -62,7 +62,7 @@ function Popularity({likeList}) {
 
                  {likeList.map((item,index) => {
                      return (
-                         <SwiperSlide key={index}>
+                         <SwiperSlide key={index} style={{padding:'2vw 0'}}>
                              <PopularList>
                                  <Link to={`/category/${item.board_id}`}>
                                      <PopularListImg>
@@ -127,7 +127,7 @@ const MobileMore = styled.div`
   flex-direction: column;
 `
 const BannerWrap = styled.section`
-  padding:2vw;
+
   min-height: 290px;
   margin-top:4vw;
   cursor: pointer;
