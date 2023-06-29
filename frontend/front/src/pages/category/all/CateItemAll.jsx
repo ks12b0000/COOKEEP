@@ -1,14 +1,10 @@
-
 import styled from "@emotion/styled";
-
-
 import { useState, useEffect } from "react";
-
+import {mobile} from "../../../constants/media/media";
 import {Pagination} from "@mui/material";
 import IsNonData from "../../../components/atomic/isNonData/IsNonData";
 import CategoryHttp from "../../../http/categoryHttp";
 import Post from "../../../components/post/Post";
-import AllPagination from "../../../components/categoryLayout/pagination/Pagination";
 import {PaginationWrap} from "../../../components/categoryLayout/cateItem/CateItem";
 
 
@@ -67,41 +63,16 @@ function CateItemAll() {
       margin-top:30px;
       min-height: 800px;
       display: flex;
-      gap: 16px;
       flex-wrap: wrap;
       justify-content: start;
+    
     li {
         width: 19%;
         cursor: pointer;
-    }
-`;
-    const Thumbnail = styled.div`
-    width: 250px;
-    height: 200px;
-    border-radius: 4px;
-    img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-`;
-    const TextBox = styled.div`
-    margin-top: 10px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    span {
-        width: 90%;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        font-size: 16px;
-        font-weight: 500;
+      
+      ${mobile}{
+        width: 50%;
+      }
     }
 `;
     const SelectBox = styled.div`
@@ -121,6 +92,12 @@ function CateItemAll() {
         &:focus {
             outline: none;
         }
+      
+       ${mobile}{
+         padding:12px 15px;
+         width: 100px;
+       
+       }
     }
 `
 
