@@ -1,6 +1,7 @@
 package teamproject.backend.boardComment;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import static teamproject.backend.response.BaseExceptionStatus.NOT_EXIST_BOARD;
 import static teamproject.backend.response.BaseExceptionStatus.USER_NOT_EXIST;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardCommentServiceImpl implements BoardCommentService{
@@ -49,6 +51,7 @@ public class BoardCommentServiceImpl implements BoardCommentService{
 
         BoardComment comment = new BoardComment(user, board, writeRequest.getText());
         boardCommentRepository.save(comment);
+        board.increaseCommentCount();
 
         if (board.getUser().getId() != user.getId()) {
             notificationSave(user, board);
@@ -90,8 +93,8 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         validateUser(comment, userId);
 
         boardCommentReplyService.deleteAllReplyOf(comment);
-
         boardCommentRepository.delete(comment);
+        board.decreaseCommentCount();
     }
 
     @Override

@@ -23,4 +23,7 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Long
 
     @Query("select count(*) from BoardComment b where b.board.boardId = :board_id")
     Long CountBoardComment(Long board_id);
+
+    @Query(value = "select board_comment_id, user_id, board_id, text, create_date, reply_cnt from board_comment where user_id =:user_id group by board_id", nativeQuery = true)
+    List<BoardComment> findByUserGroupByBoard(Long user_id);
 }
