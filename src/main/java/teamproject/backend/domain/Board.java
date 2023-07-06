@@ -41,6 +41,11 @@ public class Board{
     private String thumbnail;
 
     @Column
+    private Long liked;
+
+    @Column
+    private Long commented;
+    @Column
     private Integer view;
 
     public Board(FoodCategory foodCategory, BoardWriteRequest boardWriteRequest, User user) {
@@ -50,6 +55,8 @@ public class Board{
         this.user = user;
         this.createDate = new Date(System.currentTimeMillis());
         this.thumbnail = boardWriteRequest.getThumbnail();
+        this.liked = 0L;
+        this.commented = 0L;
         this.view = 0;
     }
 
@@ -58,5 +65,25 @@ public class Board{
         this.title = boardWriteRequest.getTitle();
         this.text = boardWriteRequest.getText();
         this.category = foodCategory;
+    }
+
+    public void increaseCommentCount() {
+        this.commented += 1;
+    }
+
+    public void decreaseCommentCount() {
+        this.commented -= 1;
+    }
+
+    public void increaseLikeCount() {
+        this.liked += 1;
+    }
+
+    public void decreaseLikeCount() {
+        this.liked -= 1;
+    }
+
+    public void updateCommented(Long commentCnt) {
+        this.commented = commentCnt;
     }
 }
