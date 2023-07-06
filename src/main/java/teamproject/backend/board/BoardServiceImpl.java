@@ -81,9 +81,8 @@ public class BoardServiceImpl implements BoardService{
         String tags = boardTagService.findTagsByBoard(board);
         boardRepository.updateView(board.getBoardId());
         Long commentCnt = boardCommentRepository.CountBoardComment(boardId);
-        Long likeCnt = likeBoardRepository.CountBoardLike(boardId);
 
-        return new BoardResponseInDetailFormat(board, commentCnt, likeCnt);
+        return new BoardResponseInDetailFormat(board, commentCnt);
     }
 
     private Board findBoardByBoardId(Long boardId) {
@@ -107,8 +106,7 @@ public class BoardServiceImpl implements BoardService{
             Board board = boards.get(i);
             String tags = boardTagService.findTagsByBoard(board);
             Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
-            Long likeCnt = likeBoardRepository.CountBoardLike(board.getBoardId());
-            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt, likeCnt));
+            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt));
         }
         return responses;
     }
@@ -343,8 +341,7 @@ public class BoardServiceImpl implements BoardService{
             Board board = boards.get(i).getBoard();
             String tags = boardTagService.findTagsByBoard(board);
             Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
-            Long likeCnt = likeBoardRepository.CountBoardLike(board.getBoardId());
-            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt, likeCnt));
+            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt));
         }
         return responses;
     }
