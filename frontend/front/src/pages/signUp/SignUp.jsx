@@ -450,8 +450,9 @@ const SignBackground = styled.div`
   box-sizing: ${props => (props.IsDone ? 'border-box' : '')};
 
   @media screen and (max-width: 760px) {
-    height: 100vh;
-    padding: 0;
+    height: auto;
+    background: none;
+    padding: 40px 0 20px 0;
   }
 `;
 
