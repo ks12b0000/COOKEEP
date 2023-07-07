@@ -101,6 +101,7 @@ const CommentList = props => {
   const onEdit = (id, text) => {
     const copyList = [...Comments];
     copyList.find(comment => comment.comment_id === id).edit_selected = true;
+    copyList.find(comment => comment.comment_id === id).icon_selected = false;
     setComments(copyList);
     setEditComment(text);
   };
@@ -289,6 +290,16 @@ const CommentTitle = styled.div`
   font-weight: 700;
   font-size: 24px;
   margin-bottom: 34.5px;
+
+  @media screen and (max-width: 1020px) {
+    margin: 0 auto 34.5px auto;
+    width: 740px;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 350px;
+    font-size: 18px;
+  }
 `;
 
 const CommentWrap = styled.div`
@@ -303,6 +314,18 @@ const CommentWrap = styled.div`
   @media screen and (max-width: 1700px) {
     width: 1300px;
   }
+
+  @media screen and (max-width: 1020px) {
+    margin: 20px auto 40px auto;
+    width: 740px;
+    grid-template-columns: 8% 88%;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 350px;
+    grid-template-columns: 5% 88%;
+    border-bottom: 1px solid #dddddd;
+  }
 `;
 
 const Profile = styled.div`
@@ -312,6 +335,17 @@ const Profile = styled.div`
   background-color: #ced4da;
   position: relative;
   overflow: hidden;
+  top: 25px;
+
+  @media screen and (max-width: 1020px) {
+    top: 20px;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 30px;
+    height: 30px;
+    top: -7px;
+  }
 `;
 
 const Img = styled.img`
@@ -320,6 +354,10 @@ const Img = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  @media screen and (max-width: 760px) {
+    height: 30px;
+  }
 `;
 
 const CommentBlock = styled.div`
@@ -339,6 +377,10 @@ const UsernameText = styled.div`
   display: inline;
   margin-right: 6px;
   cursor: pointer;
+
+  @media screen and (max-width: 760px) {
+    font-size: 14px;
+  }
 `;
 
 const Author = styled.div`
@@ -352,6 +394,11 @@ const Author = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: 760px) {
+    position: relative;
+    top: -3px;
+  }
 `;
 
 const TimeStyled = styled.div`
@@ -359,6 +406,10 @@ const TimeStyled = styled.div`
   color: #cbcbcb;
   font-weight: 400;
   margin: 6px 0 9px 0;
+
+  @media screen and (max-width: 760px) {
+    margin: 2px 0 9px 0;
+  }
 `;
 
 const ContentBlock = styled.div`
@@ -384,22 +435,38 @@ const ContentText = styled.div`
   border-radius: 10px;
   box-sizing: border-box;
   background-color: ${props => (props.backColor ? '#F8F9FA' : 'white')};
+
+  @media screen and (max-width: 760px) {
+    border: none;
+    padding: 0;
+  }
 `;
 
 const EditButton = styled.img`
   margin-left: 10px;
   margin-top: 3px;
   cursor: pointer;
+
+  @media screen and (max-width: 760px) {
+    height: 15px;
+    position: relative;
+    top: -45px;
+    left: -10px;
+  }
 `;
 
 const EditBoxBack = styled.div`
   position: fixed;
   width: 100vw;
   height: 100vh;
-  top: 0;
-  left: 0;
   overflow: hidden;
+  left: 0;
+  top: 0;
   z-index: 20;
+
+  @media screen and (max-width: 1020px) {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 `;
 
 const EditBox = styled.div`
@@ -435,6 +502,32 @@ const EditBox = styled.div`
       color: white;
     }
   }
+
+  @media screen and (max-width: 1020px) {
+    width: 100vw;
+    left: 0;
+    top: 100%;
+    transform: translate(0, -100%);
+    position: fixed;
+    padding: 20px 0;
+    border: none;
+    border-radius: 0;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+
+    div {
+      font-size: 18px;
+      color: #ff4122;
+      font-weight: 600;
+      text-align: center;
+      height: 55px;
+
+      &:hover {
+        background-color: white;
+        color: #ff4122;
+      }
+    }
+  }
 `;
 
 const ReplyText = styled.div`
@@ -446,7 +539,6 @@ const ReplyText = styled.div`
 `;
 
 const EditBlock = styled.input`
-  width: 100%;
   position: absolute;
   top: 1px;
   left: 0;
@@ -455,9 +547,9 @@ const EditBlock = styled.input`
   font-size: 15px;
   padding: 24px 16px;
   box-sizing: border-box;
-  width: 1286px;
   font-family: 400;
   background-color: white;
+  width: 1313px;
 
   :focus {
     outline: none;
@@ -472,6 +564,10 @@ const EditBlock = styled.input`
 
   @media screen and (max-width: 1700px) {
     width: 1184px;
+  }
+
+  @media screen and (max-width: 1020px) {
+    width: 620px;
   }
 `;
 
@@ -493,6 +589,10 @@ const Edit1Button = styled.div`
   &:hover {
     top: 45%;
   }
+
+  @media screen and (max-width: 1020px) {
+    left: 78%;
+  }
 `;
 
 const Edit2Button = styled.div`
@@ -513,12 +613,23 @@ const Edit2Button = styled.div`
   &:hover {
     top: 45%;
   }
+
+  @media screen and (max-width: 1020px) {
+    left: 87%;
+  }
 `;
 
 const ReplyWrap = styled.div`
   width: 100%;
   padding-left: 40px;
   box-sizing: border-box;
+
+  @media screen and (max-width: 1020px) {
+    width: 680px;
+    position: relative;
+    padding-left: 0;
+    left: -40px;
+  }
 `;
 
 const Line = styled.div`

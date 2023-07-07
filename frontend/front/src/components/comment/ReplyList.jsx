@@ -92,6 +92,7 @@ const ReplyList = props => {
   const onEdit = (id, text) => {
     const copyList = [...Replys];
     copyList.find(reply => reply.reply_id === id).edit_selected = true;
+    copyList.find(reply => reply.reply_id === id).icon_selected = false;
     setReplys(copyList);
     setEditComment(text);
   };
@@ -265,6 +266,10 @@ const Wrap = styled.div`
   width: 1270px;
   height: auto;
   position: relative;
+
+  @media screen and (max-width: 1020px) {
+    width: 680px;
+  }
 `;
 
 const CommentWrap = styled.div`
@@ -278,6 +283,11 @@ const CommentWrap = styled.div`
 
   @media screen and (max-width: 1700px) {
     width: 1130px;
+  }
+
+  @media screen and (max-width: 1020px) {
+    width: 680px;
+    grid-template-columns: 12% 85%;
   }
 `;
 
@@ -294,6 +304,11 @@ const Profile = styled.div`
   background-color: #ced4da;
   position: relative;
   overflow: hidden;
+  top: 40px;
+
+  @media screen and (max-width: 1020px) {
+    top: 35px;
+  }
 `;
 
 const Img = styled.img`
@@ -369,6 +384,10 @@ const ContentTextWrap = styled.div`
   @media screen and (max-width: 1700px) {
     width: 1075px;
   }
+
+  @media screen and (max-width: 1020px) {
+    width: 100%;
+  }
 `;
 
 const ContentText = styled.div`
@@ -396,6 +415,12 @@ const EditBoxBack = styled.div`
   height: 100vh;
   top: 0;
   left: 0;
+  overflow: hidden;
+  z-index: 30;
+
+  @media screen and (max-width: 1020px) {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 `;
 
 const EditBox = styled.div`
@@ -431,6 +456,32 @@ const EditBox = styled.div`
       color: white;
     }
   }
+
+  @media screen and (max-width: 1020px) {
+    width: 100vw;
+    left: 0;
+    top: 100%;
+    transform: translate(0, -100%);
+    position: fixed;
+    padding: 20px 0;
+    border: none;
+    border-radius: 0;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+
+    div {
+      font-size: 18px;
+      color: #ff4122;
+      font-weight: 600;
+      text-align: center;
+      height: 55px;
+
+      &:hover {
+        background-color: white;
+        color: #ff4122;
+      }
+    }
+  }
 `;
 
 const EditBlock = styled.input`
@@ -442,7 +493,7 @@ const EditBlock = styled.input`
   font-size: 15px;
   padding: 24px 16px;
   box-sizing: border-box;
-  width: 1146px;
+  width: 1170px;
   font-family: 400;
   background-color: white;
 
@@ -460,6 +511,10 @@ const EditBlock = styled.input`
   @media screen and (max-width: 1700px) {
     width: 1054px;
   }
+
+  @media screen and (max-width: 1020px) {
+    width: 567px;
+  }
 `;
 
 const Edit1Button = styled.div`
@@ -470,7 +525,7 @@ const Edit1Button = styled.div`
   font-weight: 500;
   position: absolute;
   top: 56%;
-  left: 87%;
+  left: 89%;
   padding: 5px 14px;
   border-radius: 5px;
   transition: 0.2s;
@@ -484,6 +539,10 @@ const Edit1Button = styled.div`
   @media screen and (max-width: 1700px) {
     left: 90%;
   }
+
+  @media screen and (max-width: 1020px) {
+    left: 77%;
+  }
 `;
 
 const Edit2Button = styled.div`
@@ -494,7 +553,7 @@ const Edit2Button = styled.div`
   font-weight: 500;
   position: absolute;
   top: 56%;
-  left: 92%;
+  left: 93.8%;
   padding: 5px 14px;
   border-radius: 5px;
   transition: 0.2s;
@@ -507,6 +566,10 @@ const Edit2Button = styled.div`
 
   @media screen and (max-width: 1700px) {
     left: 95%;
+  }
+
+  @media screen and (max-width: 1020px) {
+    left: 87%;
   }
 `;
 

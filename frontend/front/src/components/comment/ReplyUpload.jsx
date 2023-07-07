@@ -102,6 +102,10 @@ const RepleWrap = styled.div`
   display: grid;
   grid-template-columns: 8% 82% 10%;
   justify-content: space-between;
+
+  @media screen and (max-width: 1020px) {
+    grid-template-columns: 13% 67% 18%;
+  }
 `;
 
 const Profile = styled.div`
