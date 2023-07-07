@@ -147,7 +147,7 @@ const RightGnb = ({ HandleSearch, searchOn ,MenuOpen}) => {
 
       <MediaMenu>
         <ul>
-          <li className={AlarmOpen ? 'alarmon' : 'alarm-m'}>
+          {userInfo.isLoggedIn && <li className={AlarmOpen ? 'alarmon' : 'alarm-m'}>
             {AlarmOpen ? (
               <img
                 src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
@@ -162,7 +162,7 @@ const RightGnb = ({ HandleSearch, searchOn ,MenuOpen}) => {
               />
             )}
             {AlarmOpen && <AlarmModal />}
-          </li>
+          </li> }
 
           <li onClick={MenuOpen}>
             <img src={`${process.env.PUBLIC_URL}/image/ham.png`} alt="메뉴판"/>

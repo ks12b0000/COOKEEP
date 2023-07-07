@@ -180,7 +180,16 @@ public class MyPageServiceImpl implements MyPageService {
         for(Board board : boards){
             boardRecommendManager.update(board.getBoardId());
         }
+
+        List<BoardComment> boardComments = boardCommentRepository.findByUserGroupByBoard(user.getId());
         myPageRepository.delete(user);
+        myPageRepository.flush();
+
+        for (BoardComment boardComment : boardComments) {
+            Board board = boardComment.getBoard();
+            board.updateCommented(boardCommentRepository.CountBoardComment(board.getBoardId()));
+        }
+
         logout(response);
     }
 

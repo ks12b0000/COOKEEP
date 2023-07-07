@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import WriteHttp from '../../../http/writeHttp';
 import CommentList from '../../comment/CommentList';
 import CategoryHttp from '../../../http/categoryHttp';
-
+import {mobile} from "../../../constants/media/media";
 import useModal from '../../../hooks/useModal';
 import { useNavigate } from 'react-router';
 import Header from '../../layout/header/Header';
@@ -13,11 +13,14 @@ import Footer from '../../layout/footer/Footer';
 import Banner from '../../layout/home/banner/Banner';
 import DetailBtn from '../detail/detailBtn/DetailBtn';
 import Alert from '../../atomic/modal/Alert';
+import {useMediaQuery} from "react-responsive";
 
 function Detail() {
   const categoryHttp = new CategoryHttp();
   const writeHttp = new WriteHttp();
-
+  const isMobile = useMediaQuery({
+    query: "(max-width:768px)"
+  });
   const navigate = useNavigate();
 
   const { userId } = useSelector(state => state.persistedReducer.userReducer);
@@ -132,8 +135,7 @@ function Detail() {
   return (
     <>
       <Header categoryName={detailPost.category} />
-      <Banner />
-
+      {!isMobile && <Banner />}
       <Container>
         <TopContainer>
           <TopHeader>
@@ -208,6 +210,7 @@ function Detail() {
             </TopHeaderIconWrap>
           </TopHeader>
           <TopBody>
+
             <div dangerouslySetInnerHTML={{ __html: detailPost.text }} />
           </TopBody>
         </TopContainer>
@@ -228,9 +231,12 @@ export default Detail;
 const Container = styled.article`
   width: 1440px;
   margin: 0 auto;
-
+ 
   @media screen and (max-width: 1700px) {
     width: 1300px;
+  }
+  ${mobile}{
+    width: 100vw;
   }
 `;
 
@@ -241,6 +247,11 @@ const TopContainer = styled.div`
   box-sizing: border-box;
   border: 1px solid #ffa590;
   border-radius: 20px;
+  
+  ${mobile}{
+      margin:89px auto;
+      border:none;
+  }
 `;
 const TopHeader = styled.div`
   position: relative;
@@ -316,5 +327,9 @@ const TopBody = styled.div`
   font-size: 16px;
   line-height: 23px;
   color: #3e4145;
+  
+  img{
+    width:50vw;
+  }
 `;
 

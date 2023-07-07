@@ -81,9 +81,8 @@ public class BoardServiceImpl implements BoardService{
         String tags = boardTagService.findTagsByBoard(board);
         boardRepository.updateView(board.getBoardId());
         Long commentCnt = boardCommentRepository.CountBoardComment(boardId);
-        Long likeCnt = likeBoardRepository.CountBoardLike(boardId);
 
-        return new BoardResponseInDetailFormat(board, commentCnt, likeCnt);
+        return new BoardResponseInDetailFormat(board, commentCnt);
     }
 
     private Board findBoardByBoardId(Long boardId) {
@@ -107,8 +106,7 @@ public class BoardServiceImpl implements BoardService{
             Board board = boards.get(i);
             String tags = boardTagService.findTagsByBoard(board);
             Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
-            Long likeCnt = likeBoardRepository.CountBoardLike(board.getBoardId());
-            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt, likeCnt));
+            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt));
         }
         return responses;
     }
@@ -121,9 +119,8 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardListResponseByCategory findBoardListByFoodCategoryName(Pageable pageable, String categoryName) {
         FoodCategory foodCategory = foodCategoryService.getFoodCategory(categoryName);
-        //Page<BoardResponseInCardFormat> boards = boardRepository.findByCategory(pageable, foodCategory);
-        Page<Board> boards = boardRepository.findByCategory(pageable, foodCategory);
 
+        Page<Board> boards = boardRepository.findByCategory(pageable,foodCategory);
         return new BoardListResponseByCategory(getBoardResponsesInCardFormat(boards.getContent(), boards.getSize()), boards.getTotalPages());
     }
 
@@ -212,8 +209,10 @@ public class BoardServiceImpl implements BoardService{
     public String updateLikeOfBoard(Long boardId, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BaseException(NOT_EXIST_BOARD));
         if (!hasLikeBoard(board, user)) {
+            board.increaseLikeCount();
             return createLikeBoard(board, user);
         }
+        board.decreaseLikeCount();
         return removeLikeBoard(board, user);
     }
 
@@ -342,8 +341,7 @@ public class BoardServiceImpl implements BoardService{
             Board board = boards.get(i).getBoard();
             String tags = boardTagService.findTagsByBoard(board);
             Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
-            Long likeCnt = likeBoardRepository.CountBoardLike(board.getBoardId());
-            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt, likeCnt));
+            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt));
         }
         return responses;
     }

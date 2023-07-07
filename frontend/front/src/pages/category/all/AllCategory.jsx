@@ -3,6 +3,7 @@ import Layout from "../../../components/layout/Layout";
 import {useState} from "react";
 import {Link} from "react-router-dom";
 import Buttons from "../../../components/atomic/Buttons";
+import {mobile} from "../../../constants/media/media";
 import styled from "@emotion/styled";
 import {color} from "../../../constants/color";
 import CateItemAll from "./CateItemAll";
@@ -15,7 +16,16 @@ const Container = styled.section`
 
   @media screen and (max-width: 1700px) {
        width: 1300px;
-    }
+  }
+  
+  ${mobile}{
+    margin:89px auto 16px;
+    width: 100vw;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+  
+  
 `;
 const Category1Title = styled.div`
     padding-top:10px;
@@ -23,7 +33,13 @@ const Category1Title = styled.div`
     h1 {
       font-weight: 700;
       font-size: 24px;
-      color: ${color.main}
+      color: ${color.main};
+      
+      ${mobile}{
+        font-size: 18px;
+        line-height: 15px;
+
+      }
 
     }
 `;
