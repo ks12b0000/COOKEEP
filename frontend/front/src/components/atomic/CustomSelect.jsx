@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 
+import {mobile} from "../../constants/media/media";
+
 import {useState} from "react";
 
 function CustomSelect({setAllText,currentPage}) {
@@ -47,6 +49,13 @@ const SelectBox = styled.div`
   justify-content: flex-end;
   align-items: center;
   cursor: pointer;
+<<<<<<< HEAD
+=======
+  
+  ${mobile} {
+    box-sizing: border-box;
+  }
+>>>>>>> hoon
 
 
 `;

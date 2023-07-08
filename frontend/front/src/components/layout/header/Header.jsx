@@ -1,12 +1,7 @@
 import styled from '@emotion/styled';
 import Logo from './logo/Logo';
 import RightGnb from './rightGnb/RightGnb';
-
 import { mobile, mq } from '../../../constants/media/media';
-
-
-
-
 import { useEffect, useRef, useState } from 'react';
 import Nav from './nav/Nav';
 import SearchView from '../../atomic/Search.view';

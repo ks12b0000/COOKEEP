@@ -21,7 +21,7 @@ public class BoardResponseInCardFormat {
     private Long commented;
     private Long liked;
 
-    public BoardResponseInCardFormat(Board board, String tags, Long commentCnt) {
+    public BoardResponseInCardFormat(Board board, String tags, Long commentCnt, Long likeCnt) {
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
@@ -30,7 +30,7 @@ public class BoardResponseInCardFormat {
         this.thumbnail = board.getThumbnail();
         this.tags = tags;
         this.commented = commentCnt;
-        this.liked = board.getLiked();
+        this.liked = likeCnt;
     }
 
 //    public BoardResponseInCardFormat(Long board_id, String category, String title, String user_name, Date create_date, String thumbnail, Integer commented, Integer liked, Integer view) {
