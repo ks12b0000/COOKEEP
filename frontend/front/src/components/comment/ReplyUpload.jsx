@@ -96,7 +96,9 @@ const ReplyUpload = props => {
 };
 
 const RepleWrap = styled.div`
-  width: 100%;
+  width: 1240px;
+  position: relative;
+  left: -20px;
   height: auto;
   margin: 30px 0 30px 0;
   display: grid;
@@ -104,7 +106,10 @@ const RepleWrap = styled.div`
   justify-content: space-between;
 
   @media screen and (max-width: 1020px) {
-    grid-template-columns: 13% 67% 18%;
+    position: relative;
+    width: 690px;
+    left: -20px;
+    grid-template-columns: 13% 70% 17%;
   }
 `;
 

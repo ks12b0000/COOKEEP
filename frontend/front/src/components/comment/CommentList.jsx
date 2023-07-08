@@ -97,6 +97,22 @@ const CommentList = props => {
     setComments(copyList);
   };
 
+  //대댓글 창 켜기 기능
+  const onReply = id => {
+    const copyList = [...Comments];
+    copyList.find(comment => comment.comment_id === id).reply_selected = true;
+    copyList.find(comment => comment.comment_id === id).icon_selected = false;
+    setComments(copyList);
+  };
+
+  //대댓글 창 켜기 기능
+  const offReply = id => {
+    const copyList = [...Comments];
+    copyList.find(comment => comment.comment_id === id).reply_selected = false;
+    copyList.find(comment => comment.comment_id === id).icon_selected = false;
+    setComments(copyList);
+  };
+
   //댓글 수정창 켜기 기능
   const onEdit = (id, text) => {
     const copyList = [...Comments];
@@ -156,6 +172,24 @@ const CommentList = props => {
                     {userId === comment.user_id ? (
                       <>
                         <EditBox ref={modalRef}>
+                          {comment.reply_selected ? (
+                            <div
+                              onClick={() => {
+                                offReply(comment.comment_id);
+                              }}
+                            >
+                              답글 닫기
+                            </div>
+                          ) : (
+                            <div
+                              onClick={() => {
+                                onReply(comment.comment_id);
+                              }}
+                            >
+                              답글 달기
+                            </div>
+                          )}
+
                           <CopyToClipboard
                             text={comment.text}
                             onCopy={() => alert('댓글이 복사되었습니다.')}
@@ -190,6 +224,23 @@ const CommentList = props => {
                     ) : (
                       <>
                         <EditBox ref={modalRef}>
+                          {comment.reply_selected ? (
+                            <div
+                              onClick={() => {
+                                offReply(comment.comment_id);
+                              }}
+                            >
+                              답글 닫기
+                            </div>
+                          ) : (
+                            <div
+                              onClick={() => {
+                                onReply(comment.comment_id);
+                              }}
+                            >
+                              답글 달기
+                            </div>
+                          )}
                           <CopyToClipboard
                             text={comment.text}
                             onCopy={() => alert('댓글이 복사되었습니다.')}
@@ -236,7 +287,7 @@ const CommentList = props => {
               )}
             </ContentBlock>
 
-            {comment.reply_selected ? (
+            {/* {comment.reply_selected ? (
               <ReplyText onClick={() => offItem(comment.comment_id, 'reply')}>
                 {`대댓글 닫기 (${comment.replyCount})`}
               </ReplyText>
@@ -244,17 +295,17 @@ const CommentList = props => {
               <ReplyText onClick={() => onItem(comment.comment_id, 'reply')}>
                 {`대댓글 보기 (${comment.replyCount})`}
               </ReplyText>
-            )}
+            )} */}
 
             {comment.reply_selected && (
-              <ReplyWrap>
-                <ReplyList
-                  commentId={comment.comment_id}
-                  userName={props.userName}
-                />
-                <ReplyUpload commentId={comment.comment_id} />
-              </ReplyWrap>
+              <ReplyUpload commentId={comment.comment_id} />
             )}
+            <ReplyWrap>
+              <ReplyList
+                commentId={comment.comment_id}
+                userName={props.userName}
+              />
+            </ReplyWrap>
           </CommentBlock>
           {comment.modal_selected && (
             <CommentDelete
@@ -309,7 +360,7 @@ const CommentWrap = styled.div`
   display: grid;
   grid-template-columns: 6% 93%;
   justify-content: space-between;
-  margin: 20px 0 40px 0;
+  margin: 20px 0;
 
   @media screen and (max-width: 1700px) {
     width: 1300px;
@@ -567,7 +618,7 @@ const EditBlock = styled.input`
   }
 
   @media screen and (max-width: 1020px) {
-    width: 620px;
+    width: 640px;
   }
 `;
 
@@ -637,6 +688,14 @@ const Line = styled.div`
   height: 0.1px;
   background-color: #ffa590;
   margin: 40px 0;
+
+  @media screen and (max-width: 1020px) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 90%;
+  }
 `;
 
 export default CommentList;

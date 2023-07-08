@@ -138,7 +138,7 @@ const RepleWrap = styled.div`
   justify-content: space-between;
 
   @media screen and (max-width: 1020px) {
-    margin: 0 auto 40px auto;
+    margin: 40px auto 40px auto;
     width: 750px;
     grid-template-columns: 8% 70% 13%;
   }
