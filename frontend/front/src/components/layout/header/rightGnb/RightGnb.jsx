@@ -183,7 +183,7 @@ const MediaMenu = styled.div`
     ul {
       display: flex;
       li{
-        &:first-of-type {
+        &.alarmon,&.alarm-m{
           margin-right: 19px;
         }
       }
