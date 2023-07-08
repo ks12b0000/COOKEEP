@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import WriteHttp from '../../../http/writeHttp';
 import CommentList from '../../comment/CommentList';
 import CategoryHttp from '../../../http/categoryHttp';
-import {mobile} from "../../../constants/media/media";
+import { mobile } from '../../../constants/media/media';
 import useModal from '../../../hooks/useModal';
 import { useNavigate } from 'react-router';
 import Header from '../../layout/header/Header';
@@ -13,13 +13,13 @@ import Footer from '../../layout/footer/Footer';
 import Banner from '../../layout/home/banner/Banner';
 import DetailBtn from '../detail/detailBtn/DetailBtn';
 import Alert from '../../atomic/modal/Alert';
-import {useMediaQuery} from "react-responsive";
+import { useMediaQuery } from 'react-responsive';
 
 function Detail() {
   const categoryHttp = new CategoryHttp();
   const writeHttp = new WriteHttp();
   const isMobile = useMediaQuery({
-    query: "(max-width:768px)"
+    query: '(max-width:768px)',
   });
   const navigate = useNavigate();
 
@@ -65,11 +65,11 @@ function Detail() {
 
   const OffLikeModal = () => {
     setIsModal(false);
-  }
+  };
 
   const MoveLikeModal = () => {
     navigate('/login');
-  }
+  };
 
   const onLike = async e => {
     e.preventDefault();
@@ -93,7 +93,7 @@ function Detail() {
   };
 
   const checkIsLiked = async () => {
-    if(isLoggedIn===true){
+    if (isLoggedIn === true) {
       try {
         const res = await categoryHttp.getisLiked(id, userId);
         setIsLiked(res.data.result.like);
@@ -111,26 +111,26 @@ function Detail() {
   };
 
   const LikeProps = {
-        body:{
-            text:'로그인 후 이용 가능합니다.',
-            icon:(
-                <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt=""/>
-            )
-        },
+    body: {
+      text: '로그인 후 이용 가능합니다.',
+      icon: (
+        <img src={`${process.env.PUBLIC_URL}/image/modal-icon.png`} alt='' />
+      ),
+    },
 
-        buttons:{
-            btn:[
-                {
-                    text:'취소',
-                    onClick: OffLikeModal,
-                },
-                {
-                    text:'로그인',
-                    onClick: MoveLikeModal,
-                }
-            ]
-        }
-  }
+    buttons: {
+      btn: [
+        {
+          text: '취소',
+          onClick: OffLikeModal,
+        },
+        {
+          text: '로그인',
+          onClick: MoveLikeModal,
+        },
+      ],
+    },
+  };
 
   return (
     <>
@@ -151,21 +151,21 @@ function Detail() {
                 <>
                   <li>
                     {IsLiked === true ? (
-                        <p>
-                          <LikeIcon
-                              onClick={e => onLike(e)}
-                              src='/image/heart-fill.png'
-                              alt=''
-                          />
-                        </p>
+                      <p>
+                        <LikeIcon
+                          onClick={e => onLike(e)}
+                          src='/image/heart-fill.png'
+                          alt=''
+                        />
+                      </p>
                     ) : (
-                        <p>
-                          <LikeIcon
-                              onClick={e => onLike(e)}
-                              src='/image/heart.png'
-                              alt=''
-                          />
-                        </p>
+                      <p>
+                        <LikeIcon
+                          onClick={e => onLike(e)}
+                          src='/image/heart.png'
+                          alt=''
+                        />
+                      </p>
                     )}
                     <p>{detailPost.liked}</p>
                   </li>
@@ -210,7 +210,6 @@ function Detail() {
             </TopHeaderIconWrap>
           </TopHeader>
           <TopBody>
-
             <div dangerouslySetInnerHTML={{ __html: detailPost.text }} />
           </TopBody>
         </TopContainer>
@@ -228,15 +227,21 @@ function Detail() {
 }
 export default Detail;
 
-const Container = styled.article`
+const Container = styled.div`
   width: 1440px;
   margin: 0 auto;
- 
+
   @media screen and (max-width: 1700px) {
     width: 1300px;
   }
-  ${mobile}{
-    width: 100vw;
+
+  @media screen and (max-width: 1020px) {
+    width: 750px;
+    padding-top: 10px;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 370px;
   }
 `;
 
@@ -247,10 +252,14 @@ const TopContainer = styled.div`
   box-sizing: border-box;
   border: 1px solid #ffa590;
   border-radius: 20px;
-  
-  ${mobile}{
-      margin:89px auto;
-      border:none;
+
+  @media screen and (max-width: 1020px) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 760px) {
+    margin: 89px auto;
+    border: none;
   }
 `;
 const TopHeader = styled.div`
@@ -327,9 +336,16 @@ const TopBody = styled.div`
   font-size: 16px;
   line-height: 23px;
   color: #3e4145;
-  
-  img{
-    width:50vw;
+
+  img {
+    width: 50vw;
+  }
+
+  @media screen and (max-width: 1020px) {
+    min-height: 350px;
+  }
+
+  @media screen and (max-width: 760px) {
+    min-height: 150px;
   }
 `;
-

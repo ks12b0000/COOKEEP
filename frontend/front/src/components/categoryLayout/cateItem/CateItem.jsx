@@ -6,6 +6,7 @@ import CategoryHttp from "../../../http/categoryHttp";
 import {Pagination} from "@mui/material";
 import Post from "../../post/Post";
 import IsNonData from "../../atomic/isNonData/IsNonData";
+import CustomSelect from "../../atomic/CustomSelect";
 
 
 const categoryHttp = new CategoryHttp();
@@ -47,13 +48,7 @@ function CateItem({cateItemName}) {
 
     return (
         <>
-            <SelectBox>
-                <select onChange={FilterPosts} defaultValue="8">
-                    <option value={`page=${currentPage}`}>최신순</option>
-                    <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
-                    <option value={`sort=liked,desc&page=${currentPage}`}>좋아요순</option>
-                </select>
-            </SelectBox>
+            <CustomSelect setAllText={setAllText} currentPage={currentPage} />
             <Ul>
                 {
 

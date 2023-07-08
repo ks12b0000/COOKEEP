@@ -6,6 +6,7 @@ import IsNonData from "../../../components/atomic/isNonData/IsNonData";
 import CategoryHttp from "../../../http/categoryHttp";
 import Post from "../../../components/post/Post";
 import {PaginationWrap} from "../../../components/categoryLayout/cateItem/CateItem";
+import CustomSelect from "../../../components/atomic/CustomSelect";
 
 
 const categoryHttp = new CategoryHttp();
@@ -34,22 +35,12 @@ function CateItemAll() {
             })();
         }, [currentPage,allText]);
 
-        console.log(totalCount);
-        const FilterPosts = (e) => {
-            setAllText(e.target.value)
-        };
 
 
 
         return (
             <>
-                <SelectBox>
-                    <select onChange={FilterPosts} >
-                        <option value={`page=${currentPage}`}>최신순</option>
-                        <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
-                        <option value={`sort=liked,desc&page=${currentPage}`}>좋아요순</option>
-                    </select>
-                </SelectBox>
+                <CustomSelect setAllText={setAllText} currentPage={currentPage} />
                 <Ul>
                     {posts.length === 0 ? <IsNonData text="데이터가 존재하지않습니다."/> : <Post data={posts} currentPag={currentPage}/>}
                 </Ul>
