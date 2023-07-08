@@ -28,10 +28,10 @@ function Nav({categoryName, isOpen}) {
                              className={categoryName === menu.name ? 'active' : null}>{menu.name}</NavLink>
                 </Menu>))}
             </ul>
-        </NavList>) : //모바일버전
+        </NavList>) :
+        //모바일버전
         isOpen && (<>
             <MobileNavList className={isOpen ? 'show' : 'hide'}>
-
                 <GnbContainer className={userInfo.isLoggedIn && 'user'} user={userInfo.isLoggedIn}>
                     {!userInfo.isLoggedIn && (
                         <BtnWrap className="btnWrap">
@@ -100,7 +100,7 @@ const MobileNavList = styled.nav`
 
   @keyframes slideOn {
     0% {
-      transform: translateX(-100%);
+      transform: translateX(100%);
     }
 
     100% {
