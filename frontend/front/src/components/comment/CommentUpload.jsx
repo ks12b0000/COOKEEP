@@ -4,11 +4,15 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import CommentHttp from '../../http/commentHttp';
 import Alert from '../atomic/modal/Alert';
+import { useMediaQuery } from 'react-responsive';
 
 const commentHttp = new CommentHttp();
 
 const CommentUpload = props => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({
+    query: '(max-width:768px)',
+  });
 
   const [Text, setText] = useState('');
   const [IsModal, setIsModal] = useState(false);
@@ -110,9 +114,15 @@ const CommentUpload = props => {
             onModal(e);
           }}
         />
-        <RepleButton onClick={e => onSubmit(e)} text={Text}>
-          댓글 쓰기
-        </RepleButton>
+        {isMobile ? (
+          <RepleButton onClick={e => onSubmit(e)} text={Text}>
+            입력
+          </RepleButton>
+        ) : (
+          <RepleButton onClick={e => onSubmit(e)} text={Text}>
+            댓글 쓰기
+          </RepleButton>
+        )}
       </RepleWrap>
       {IsModal && <Alert {...Props} />}
     </>
@@ -126,6 +136,17 @@ const RepleWrap = styled.div`
   margin-bottom: 40px;
   grid-template-columns: 7% 83% 8%;
   justify-content: space-between;
+
+  @media screen and (max-width: 1020px) {
+    margin: 40px auto 40px auto;
+    width: 750px;
+    grid-template-columns: 8% 70% 13%;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 350px;
+    grid-template-columns: 84% 13%;
+  }
 `;
 
 const Profile = styled.div`
@@ -135,6 +156,10 @@ const Profile = styled.div`
   background-color: #ced4da;
   position: relative;
   overflow: hidden;
+
+  @media screen and (max-width: 760px) {
+    display: none;
+  }
 `;
 
 const Img = styled.img`
@@ -148,8 +173,8 @@ const Img = styled.img`
 const RepleTextarea = styled.textarea`
   padding: 15px;
   width: 100%;
-  height: 80px;
-  border-radius: 15px 20px;
+  height: 70px;
+  border-radius: 10px;
   border: 1px solid #ffa590;
   box-sizing: border-box;
   font-size: 16px;
@@ -163,6 +188,11 @@ const RepleTextarea = styled.textarea`
     font-weight: 300;
     letter-spacing: 2px;
     color: #aaaaaa;
+  }
+
+  @media screen and (max-width: 760px) {
+    height: 43px;
+    padding: 11px 12px;
   }
 `;
 
@@ -179,6 +209,13 @@ const RepleButton = styled.div`
   margin-top: 10px;
   font-weight: 600;
   cursor: pointer;
+  transition: 0.2s;
+
+  @media screen and (max-width: 760px) {
+    margin: 0;
+    width: 48px;
+    height: 43px;
+  }
 `;
 
 export default CommentUpload;
