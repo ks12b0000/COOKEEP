@@ -25,9 +25,9 @@ function CustomSelect({setAllText,currentPage}) {
                     <div><img src={`${process.env.PUBLIC_URL}/image/down.png`} alt=""/></div>
                 </Label>
                 <SelectOptions show={showOptions}>
-                    <Option onClick={handleOnChangeSelectValue} aria-valuetext={`page=${currentPage}`}>최신순</Option>
-                    <Option onClick={handleOnChangeSelectValue} aria-valuetext={`sort=commented,desc&page=${currentPage}`}>좋아요순</Option>
-                    <Option onClick={handleOnChangeSelectValue} aria-valuetext={`sort=liked,desc&page=${currentPage}`}>댓글순</Option>
+                    <Option onClick={handleOnChangeSelectValue}  aria-valuetext={`page=${currentPage}`}>최신순</Option>
+                    <Option onClick={handleOnChangeSelectValue}  aria-valuetext={`sort=liked,desc&page=${currentPage}`}  >좋아요순</Option>
+                    <Option onClick={handleOnChangeSelectValue}  aria-valuetext={`sort=commented,desc&page=${currentPage}`}>댓글순</Option>
 
                 </SelectOptions>
             </SelectBox>
