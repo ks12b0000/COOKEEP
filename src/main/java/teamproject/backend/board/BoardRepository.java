@@ -25,7 +25,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findTop5ByOrderByViewDesc();
 
+    List<Board> findTop5ByOrderByLikedDesc();
+
     List<Board> findTop10ByOrderByViewDesc();
+
+    List<Board> findTop10ByOrderByLikedDesc();
 
     @Transactional
     @Modifying
