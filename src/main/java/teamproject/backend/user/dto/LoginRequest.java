@@ -28,7 +28,7 @@ public class LoginRequest {
     // 유저 비밀번호
     @Schema(description = "비밀번호", example = "test1234ds5", required = true)
     @NotBlank(message = "비밀번호를 입력하세요.", groups = NotBlankGroup.class)
-    @Pattern(regexp= "^(?=.*[a-z])(?=.*\\d)[A-Za-z\\d!?@#$%&*]{5,15}$", message = "비밀번호는 5자 이상의 영어, 숫자를 포함해주세요.", groups = PatternGroup.class)
+    @Pattern(regexp= "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!?@#$%&*]{5,15}$", message = "비밀번호는 5자 이상의 영어, 숫자를 포함해주세요.", groups = PatternGroup.class)
     private String password;
 
     // 자동 로그인
