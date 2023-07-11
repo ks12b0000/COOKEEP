@@ -449,8 +449,13 @@ const SignBackground = styled.div`
   padding: ${props => (props.IsDone ? '0 0 50px 0' : '50px 0 100px 0')};
   box-sizing: ${props => (props.IsDone ? 'border-box' : '')};
 
+  @media screen and (max-width: 1020px) {
+    height: 100vh;
+    padding: 0;
+  }
+
   @media screen and (max-width: 760px) {
-    height: auto;
+    height: ${props => (props.IsDone ? '100vh' : 'auto')};
     background: none;
     padding: 40px 0 20px 0;
   }
@@ -746,9 +751,8 @@ const DoneModalWrap = styled.div`
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 
   @media screen and (max-width: 760px) {
-    height: 100%;
     width: 100%;
-    border-radius: 0;
+    box-shadow: none;
   }
 `;
 
@@ -766,6 +770,10 @@ const DoneTitle = styled.div`
   font-size: 24px;
   line-height: 29px;
   margin-top: 30px;
+
+  @media screen and (max-width: 760px) {
+    margin-top: 20px;
+  }
 `;
 
 const DoneText = styled.div`
@@ -776,6 +784,10 @@ const DoneText = styled.div`
   text-align: center;
   color: #000000;
   margin-top: 40px;
+
+  @media screen and (max-width: 760px) {
+    margin-top: 30px;
+  }
 `;
 
 const DoneButton = styled.div`
@@ -791,6 +803,10 @@ const DoneButton = styled.div`
   color: white;
   font-weight: 600;
   font-size: 16px;
+
+  @media screen and (max-width: 760px) {
+    margin-top: 30px;
+  }
 `;
 
 export default SignUp;
