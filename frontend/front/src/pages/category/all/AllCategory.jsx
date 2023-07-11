@@ -93,7 +93,6 @@ function AllCategory() {
             <Layout>
                 <Container>
                     <Category1Title>
-                        <h1>전체</h1>
                         <CateItemAll  />
                         <ButtonWrap>
                             <div onClick={Writing}>

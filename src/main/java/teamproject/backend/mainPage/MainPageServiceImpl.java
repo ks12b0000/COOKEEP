@@ -146,7 +146,8 @@ public class MainPageServiceImpl implements MainPageService {
             Board board = boards.get(i);
             String tags = boardTagService.findTagsByBoard(board);
             Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
-            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt));
+            Long likeCnt = likeBoardRepository.CountBoardLike(board.getBoardId());
+            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt, likeCnt));
         }
         return responses;
     }

@@ -1,16 +1,19 @@
 import styled from "@emotion/styled";
-
-
+import {mobile} from "../../../constants/media/media";
 import {useEffect, useState} from "react";
 import CategoryHttp from "../../../http/categoryHttp";
 import {Pagination} from "@mui/material";
 import Post from "../../post/Post";
 import IsNonData from "../../atomic/isNonData/IsNonData";
+import CustomSelect from "../../atomic/CustomSelect";
+
+import FlexContainer from "../../atomic/FlexContainer";
+
 
 
 const categoryHttp = new CategoryHttp();
 
-function CateItem({cateItemName}) {
+function CateItem({cateItemName, title}) {
     const buttonCount = 5; // 버튼 개수
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
@@ -47,13 +50,13 @@ function CateItem({cateItemName}) {
 
     return (
         <>
-            <SelectBox>
-                <select onChange={FilterPosts} defaultValue="8">
-                    <option value={`page=${currentPage}`}>최신순</option>
-                    <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
-                    <option value={`sort=liked,desc&page=${currentPage}`}>좋아요순</option>
-                </select>
-            </SelectBox>
+
+
+            <FlexContainer>
+                <h1>{title}</h1>
+                <CustomSelect setAllText={setAllText} currentPage={currentPage}/>
+            </FlexContainer>
+
             <Ul>
                 {
 
@@ -102,10 +105,19 @@ const Ul = styled.ul`
   gap: 16px;
   flex-wrap: wrap;
   justify-content: start;
+  
+  ${mobile}{
+    margin:16px 0;
+    gap:0;
+  }
 
   li {
     width: 19%;
     cursor: pointer;
+    
+    ${mobile} {
+      width: 50%;
+    }
   }
 `;
 const Thumbnail = styled.div`
