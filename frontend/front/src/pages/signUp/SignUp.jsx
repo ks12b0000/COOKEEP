@@ -492,7 +492,7 @@ const SignWrap = styled.div`
 
   @media screen and (max-width: 760px) {
     width: 100%;
-    height: 100vh;
+    height: 850px;
     border-radius: 0;
     box-shadow: none;
   }
