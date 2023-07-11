@@ -19,7 +19,7 @@ public class SearchByResponse {
     private Long commented;
     private Long liked;
 
-    public SearchByResponse(Board board, String tags, Long commentCnt, Long likeCnt) {
+    public SearchByResponse(Board board, String tags, Long commentCnt) {
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
@@ -28,6 +28,6 @@ public class SearchByResponse {
         this.thumbnail = board.getThumbnail();
         this.tags = tags;
         this.commented = commentCnt;
-        this.liked = likeCnt;
+        this.liked = board.getLiked();
     }
 }

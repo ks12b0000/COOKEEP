@@ -21,9 +21,6 @@ public interface LikeBoardRepository extends JpaRepository<BoardLike, Long> {
 
     boolean existsByBoardAndUser(Board board, User user);
 
-    @Query("select count(*) from BoardLike b where b.board.boardId = :board_id")
-    Long CountBoardLike(Long board_id);
-
     @Query(value = "select b.*, count(b.board_id) as cnt from board_like b group by b.board_id order by cnt desc limit 5", nativeQuery = true)
     List<BoardLike> findTop5ByOrderByLikedDesc();
 
