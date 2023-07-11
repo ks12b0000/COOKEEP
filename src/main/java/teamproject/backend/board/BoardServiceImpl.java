@@ -257,9 +257,9 @@ public class BoardServiceImpl implements BoardService{
      * @return
      */
     public List<BoardResponseInCardFormat> findBoarListByLiked() {
-        List<BoardLike> boards = likeBoardRepository.findTop5ByOrderByLikedDesc();
+        List<Board> boards = boardRepository.findTop5ByOrderByLikedDesc();
 
-        return getLikeByResponse(boards, boards.size());
+        return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
     /**
@@ -277,9 +277,9 @@ public class BoardServiceImpl implements BoardService{
      * @return
      */
     public List<BoardResponseInCardFormat> findBoarListByLikedMore() {
-        List<BoardLike> boards = likeBoardRepository.findTop10ByOrderByLikedDesc();
+        List<Board> boards = boardRepository.findTop10ByOrderByLikedDesc();
 
-        return getLikeByResponse(boards, boards.size());
+        return getBoardResponsesInCardFormat(boards, boards.size());
     }
 
     /**
@@ -333,16 +333,5 @@ public class BoardServiceImpl implements BoardService{
             list.add(getLikeBoard(user, boardId));
         }
         return list;
-    }
-    private List<BoardResponseInCardFormat> getLikeByResponse(List<BoardLike> boards, int length){
-        List<BoardResponseInCardFormat> responses = new ArrayList<>();
-        int min = Math.min(boards.size(), length);
-        for(int i = 0; i < min; i++){
-            Board board = boards.get(i).getBoard();
-            String tags = boardTagService.findTagsByBoard(board);
-            Long commentCnt = boardCommentRepository.CountBoardComment(board.getBoardId());
-            responses.add(new BoardResponseInCardFormat(board, tags, commentCnt));
-        }
-        return responses;
     }
 }
