@@ -513,7 +513,7 @@ const ChangeUserinfo = () => {
   return (
     <>
       <Layout>
-        <Wrap length={FooterBottom}>
+        <Wrap length>
           <Text>마이페이지</Text>
 
           <BoxWrap>
@@ -806,7 +806,7 @@ const ChangeUserinfo = () => {
 
 const ProfileButton = styled.label`
   width: 130px;
-  height: 50px;
+  height: 40px;
   border-radius: 5px;
   font-size: 16px;
   font-weight: 600;
@@ -817,7 +817,7 @@ const ProfileButton = styled.label`
   align-items: center;
   transition: 0.2s;
   cursor: pointer;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   box-sizing: border-box;
 
   &:hover {
@@ -854,7 +854,7 @@ const ProfileImg = styled.img`
 const InputTitle = styled.div`
   font-size: 16px;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   width: 343px;
   text-align: left;
 
@@ -875,11 +875,11 @@ const InputTitle = styled.div`
 
 const IdWrap = styled.div`
   width: 343px;
-  height: 48px;
+  height: 40px;
   position: relative;
   display: grid;
   grid-template-columns: 62% 36%;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   justify-content: space-between;
 
   @media screen and (max-width: 1700px) {
@@ -896,7 +896,7 @@ const IdWrap = styled.div`
 
 const IdInput = styled.input`
   width: 100%;
-  height: 48px;
+  height: 40px;
   padding: 0 20px;
   box-sizing: border-box;
   border: 1px solid #ced4da;
@@ -941,7 +941,7 @@ const IdButton = styled.button`
   border: none;
   box-sizing: border-box;
   width: 100%;
-  height: 48px;
+  height: 40px;
   color: ${props => (props.isFilled ? '#FF4122' : '#dcdcdc')};
   font-size: 16px;
   border: ${props =>
@@ -967,9 +967,9 @@ const IdButton = styled.button`
 
 const SignInputWrap = styled.form`
   width: 343px;
-  height: 48px;
+  height: 40px;
   position: relative;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 
   @media screen and (max-width: 1700px) {
     width: 320px;
@@ -985,7 +985,7 @@ const SignInputWrap = styled.form`
 
 const SignInput = styled.input`
   width: 343px;
-  height: 48px;
+  height: 40px;
   padding: 0 20px;
   box-sizing: border-box;
   border: 1px solid #ced4da;

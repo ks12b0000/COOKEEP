@@ -7,7 +7,6 @@ import AuthHttp from '../../http/authHttp';
 import Layout from '../../components/layout/Layout';
 import MypageNav from '../../components/mypage/myPageNav';
 import {
-  Wrap,
   Text,
   BoxWrap,
   PageWrap,
@@ -188,6 +187,28 @@ const MyAccount = () => {
   );
 };
 
+const Wrap = styled.div`
+  width: 1440px;
+  margin: 0 auto;
+  height: 74.2vh;
+  margin-bottom: 10vh;
+
+  @media screen and (max-width: 1700px) {
+    width: 1300px;
+  }
+
+  @media screen and (max-width: 1020px) {
+    width: 760px;
+    height: 75vh;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 100%;
+    margin-bottom: 0;
+    height: auto
+  }
+`
+
 export const AccountWrap = styled.div`
   width: 100%;
   height: 100%;
@@ -200,9 +221,10 @@ export const AccountWrap = styled.div`
   left: 0;
 
   @media screen and (max-width: 760px) {
-    position: ${props => (props.footerBottom ? 'relative' : 'absolute')};
-    height: ${props => (props.footerBottom ? 'auto' : '100%')};
-    margin-bottom: ${props => (props.footerBottom ? '40px' : '')};
+    position: relative;
+    height: ${props => (props.footerBottom ? 'auto' : '670px')};
+    top: ${props => (props.footerBottom ? '20px' : '-40px')};
+    margin-bottom: ${props => (props.footerBottom ? '70px' : '30px')};
   }
 `;
 

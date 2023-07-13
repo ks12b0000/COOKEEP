@@ -9,12 +9,16 @@ import CommentUpload from './CommentUpload';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CommentDelete from './CommentDelete';
 import Pagination from '../mypage/pagination';
+import { useMediaQuery } from 'react-responsive';
 
 const commentHttp = new CommentHttp();
 
 const CommentList = props => {
   const modalRef = useRef();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({
+    query: '(max-width:768px)',
+  });
 
   const username = useSelector(
     state => state.persistedReducer.userReducer.username
@@ -23,16 +27,25 @@ const CommentList = props => {
     state => state.persistedReducer.userReducer.userId
   );
 
+  //댓글 리스트 state
   const [Comments, setComments] = useState([]);
+
+  //댓글 수정창 컨트롤
   const [EditComment, setEditComment] = useState('');
+
+  //페이지 네이션
   const [Page, setPage] = useState([]);
   const [SelectedButton, setSelectedButton] = useState(0);
   const [Count, setCount] = useState(0);
+
+  //모바일 인피니트 스크롤
+  const [MoreData, setMoreData] = useState(1);
 
   useEffect(() => {
     getList();
   }, [SelectedButton]);
 
+  //페이지네이션으로 댓글리스트 얻기
   const getList = async () => {
     try {
       const res = await commentHttp.getCommentList(
@@ -135,7 +148,10 @@ const CommentList = props => {
     <>
       <CommentTitle>{`댓글 (${Count})`}</CommentTitle>
       {Comments?.map(comment => (
-        <CommentWrap key={comment.comment_id}>
+        <CommentWrap
+          key={comment.comment_id}
+          backColor={username === comment.user_name}
+        >
           <Profile>
             <Img src={comment.user_image} />
           </Profile>
@@ -316,21 +332,26 @@ const CommentList = props => {
           )}
         </CommentWrap>
       ))}
-
-      {/* 페이지 네이션 */}
-      {Comments.length !== 0 && (
+      {isMobile ? (
+        ''
+      ) : (
         <>
-          {/* 페이지네이션 */}
-          <Pagination
-            handlePagination={handlePagination}
-            Page={Page}
-            SelectedButton={SelectedButton}
-          />
+          {Comments.length !== 0 && (
+            <>
+              {/* 페이지네이션 */}
+              <Pagination
+                handlePagination={handlePagination}
+                Page={Page}
+                SelectedButton={SelectedButton}
+              />
+            </>
+          )}
         </>
       )}
 
       {/* 댓글 작성 컴포넌트 */}
-      <Line />
+      {isMobile ? '' : <Line />}
+
       <CommentUpload boardId={props.boardId} />
     </>
   );
@@ -348,6 +369,7 @@ const CommentTitle = styled.div`
   }
 
   @media screen and (max-width: 760px) {
+    margin: 0 auto 10px auto;
     width: 350px;
     font-size: 18px;
   }
@@ -375,6 +397,10 @@ const CommentWrap = styled.div`
   @media screen and (max-width: 760px) {
     width: 350px;
     grid-template-columns: 5% 88%;
+    margin: 0 auto;
+    padding: 25px 0 0 0;
+    box-sizing: border-box;
+    background-color: ${props => (props.backColor ? '#F0F0F0' : '')};
     border-bottom: 1px solid #dddddd;
   }
 `;
@@ -396,6 +422,7 @@ const Profile = styled.div`
     width: 30px;
     height: 30px;
     top: -7px;
+    left: 5px;
   }
 `;
 
@@ -490,6 +517,8 @@ const ContentText = styled.div`
   @media screen and (max-width: 760px) {
     border: none;
     padding: 0;
+    margin-bottom: 15px;
+    background-color: rgba(0, 0, 0, 0);
   }
 `;
 
@@ -513,7 +542,7 @@ const EditBoxBack = styled.div`
   overflow: hidden;
   left: 0;
   top: 0;
-  z-index: 20;
+  z-index: 100;
 
   @media screen and (max-width: 1020px) {
     background-color: rgba(0, 0, 0, 0.5);
@@ -534,7 +563,7 @@ const EditBox = styled.div`
   padding: 5px 0;
   box-sizing: border-box;
   background-color: white;
-  z-index: 100;
+  z-index: 130;
 
   div {
     font-size: 15px;
@@ -577,6 +606,13 @@ const EditBox = styled.div`
         background-color: white;
         color: #ff4122;
       }
+    }
+  }
+
+  @media screen and (max-width: 760px) {
+    div {
+      font-size: 16px;
+      height: 45px;
     }
   }
 `;
@@ -677,6 +713,13 @@ const ReplyWrap = styled.div`
 
   @media screen and (max-width: 1020px) {
     width: 680px;
+    position: relative;
+    padding-left: 0;
+    left: -40px;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 300px;
     position: relative;
     padding-left: 0;
     left: -40px;

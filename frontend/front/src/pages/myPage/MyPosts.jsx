@@ -288,6 +288,12 @@ export const EmptyText = styled.div`
   font-weight: 700;
   color: #fb3b1e;
   top: ${props => (props.top ? '-35px' : '-15px')};
+
+  @media screen and (max-width: 760px) {
+    position: absolute;
+    height: 90vh;
+    top: 50px;
+  }
 `;
 
 export const ContentsWrap = styled.div`

@@ -10,9 +10,11 @@ import {mobile} from "../../../../constants/media/media";
 import {useSelector} from "react-redux";
 import {useMediaQuery} from "react-responsive";
 import SearchModal from "../../../atomic/modal/SearchModal";
+import { useNavigate } from "react-router-dom";
 
 function Nav({categoryName, isOpen}) {
-    const userInfo = useSelector(state => state.persistedReducer.userReducer);
+  const userInfo = useSelector(state => state.persistedReducer.userReducer);
+  const navigate = useNavigate();
 
     const [menus, setMenus] = useState(NavDada);
     const isMobile = useMediaQuery({
@@ -56,7 +58,7 @@ function Nav({categoryName, isOpen}) {
 
                 {userInfo.isLoggedIn && (
                     <User>
-                        <div className='userBoard'>
+                        <div className='userBoard' onClick={() => navigate(`/mypage/mobile/${userInfo.userId}`)}>
                             <UserImg><Img src={userInfo.userImg}/></UserImg>
                             <span>마이페이지</span>
                         </div>

@@ -3,11 +3,16 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import CommentHttp from '../../http/commentHttp';
+import { useMediaQuery } from 'react-responsive';
 
 const commentHttp = new CommentHttp();
 
 const ReplyUpload = props => {
   const navigate = useNavigate();
+
+  const isMobile = useMediaQuery({
+    query: '(max-width:768px)',
+  });
 
   const [Text, setText] = useState('');
   const [IsModal, setIsModal] = useState(false);
@@ -59,9 +64,14 @@ const ReplyUpload = props => {
   return (
     <>
       <RepleWrap>
-        <Profile>
-          <Img src={userImage} alt='profile' />
-        </Profile>
+        {isLoggedIn ? (
+          <Profile>
+            <Img src={userImage} alt='profile' />
+          </Profile>
+        ) : (
+          <Profile />
+        )}
+
         <RepleTextarea
           placeholder='대댓글을 입력해 주세요'
           value={Text}
@@ -72,9 +82,15 @@ const ReplyUpload = props => {
             onModal(e);
           }}
         />
-        <RepleButton onClick={e => onSubmit(e)} text={Text}>
-          대댓글 쓰기
-        </RepleButton>
+        {isMobile ? (
+          <RepleButton onClick={e => onSubmit(e)} text={Text}>
+            입력
+          </RepleButton>
+        ) : (
+          <RepleButton onClick={e => onSubmit(e)} text={Text}>
+            댓글 쓰기
+          </RepleButton>
+        )}
       </RepleWrap>
       {IsModal && (
         <>
@@ -96,13 +112,13 @@ const ReplyUpload = props => {
 };
 
 const RepleWrap = styled.div`
-  width: 1240px;
+  width: 1370px;
   position: relative;
   left: -20px;
   height: auto;
   margin: 30px 0 30px 0;
   display: grid;
-  grid-template-columns: 8% 82% 10%;
+  grid-template-columns: 8% 82% 9%;
   justify-content: space-between;
 
   @media screen and (max-width: 1020px) {
@@ -110,6 +126,12 @@ const RepleWrap = styled.div`
     width: 690px;
     left: -20px;
     grid-template-columns: 13% 70% 17%;
+  }
+
+  @media screen and (max-width: 760px) {
+    width: 320px;
+    grid-template-columns: 84% 13%;
+    margin: 10px 0;
   }
 `;
 
@@ -120,6 +142,10 @@ const Profile = styled.div`
   background-color: #ced4da;
   position: relative;
   overflow: hidden;
+
+  @media screen and (max-width: 760px) {
+    display: none;
+  }
 `;
 
 const Img = styled.img`
@@ -149,6 +175,11 @@ const RepleTextarea = styled.textarea`
     letter-spacing: 2px;
     color: #aaaaaa;
   }
+
+  @media screen and (max-width: 760px) {
+    height: 43px;
+    padding: 11px 12px;
+  }
 `;
 
 const RepleButton = styled.div`
@@ -164,6 +195,12 @@ const RepleButton = styled.div`
   margin-top: 10px;
   font-weight: 600;
   cursor: pointer;
+
+  @media screen and (max-width: 760px) {
+    margin: 0;
+    width: 48px;
+    height: 43px;
+  }
 `;
 
 const ModalBack = styled.div`
