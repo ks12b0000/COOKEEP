@@ -29,7 +29,7 @@ const ReplyList = props => {
   const [EditComment, setEditComment] = useState('');
 
   //모바일 인피니트 스크롤
-  const [MoreData, setMoreData] = useState(1);
+  const [MoreData, setMoreData] = useState(0);
 
   // useEffect(() => {
   //   getList();
@@ -44,8 +44,6 @@ const ReplyList = props => {
   //     console.log(res);
   //     setReplys(res.data.result.list);
   //     const arrayLength = res.data.result.total;
-  //     const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
-  //     setPage(newArray);
   //   } catch (err) {
   //     console.log(err);
   //   }
@@ -56,18 +54,16 @@ const ReplyList = props => {
   //   setSelectedButton(buttonValue);
   // };
 
-  //인피니트 스크롤
+  // 인피니트 스크롤
   useEffect(() => {
     getList();
   }, [inView]);
 
-  //인피니트 스크롤로 알림리스트 얻기
+  // 인피니트 스크롤로 리스트 얻기
   const getList = async () => {
     try {
       const res = await commentHttp.getReplyList(props.commentId, MoreData);
-      console.log(res);
       const newReplys = [...Replys, ...res.data.result.list];
-      console.log('대댓글', res.data.result.list);
       setReplys(newReplys);
       if (MoreData < res.data.result.total) {
         setMoreData(prev => prev + 1);
@@ -279,7 +275,7 @@ const ReplyList = props => {
         </div>
       ))}
 
-      {Replys.length !== 0 && <div ref={ref}>더보기</div>}
+      {Replys.length !== 0 && <div ref={ref}></div>}
 
       {/* 페이지 네이션 */}
       {/* {Replys.length !== 0 && (
