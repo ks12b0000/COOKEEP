@@ -44,6 +44,9 @@ const Category1Title = styled.div`
     }
 `;
 const ButtonWrap = styled.div`
+    ${mobile} {
+      margin-top:16px;
+    }
     display: flex;
     justify-content: end;
 `;
@@ -95,7 +98,7 @@ function AllCategory() {
                     <Category1Title>
                         <CateItemAll  />
                         <ButtonWrap>
-                            <div onClick={Writing}>
+                            <div onClick={Writing} >
                                 <Link>
                                     <Buttons text="글쓰기" />
                                 </Link>
