@@ -212,6 +212,12 @@ const BannerText = styled.div`
   text-align: center;
   width:750px;
   margin-top:30px;  
+  
+  ${mobile}{
+    width:75vw;
+    margin-top:5vw;
+  }
+  
   span{
     display: block;
     font-weight: 700;
@@ -219,6 +225,10 @@ const BannerText = styled.div`
     line-height: 50px;
     align-items: center;
     color: #FFFFFF;
-
+   ${mobile}{
+     word-break: keep-all;
+     font-size: 8vw;
+     line-height: 10vw;
+   }
   }
 `
