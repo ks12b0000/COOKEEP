@@ -5,6 +5,7 @@ import { mobile, mq } from '../../../constants/media/media';
 import { useEffect, useRef, useState } from 'react';
 import Nav from './nav/Nav';
 import SearchView from '../../atomic/Search.view';
+import {useMediaQuery} from "react-responsive";
 
 
 const HeaderContainer = styled.header`
@@ -59,11 +60,14 @@ const Container = styled.div`
 function Header({color,categoryName,contents,tagContents}) {
     const [searchOn,setSearchOn] =useState(contents || tagContents  ? true : false);
     const [bottom,setBottom] =useState(false);
-
+    const isMobile = useMediaQuery({
+        query: '(max-width:768px)',
+    });
     const[isOpen,setIsOpen] = useState(false)
 
     const MenuOpen = () =>  {
         setIsOpen(!isOpen);
+
     }
 
     const HandleSearch  = () => {
@@ -85,7 +89,7 @@ function Header({color,categoryName,contents,tagContents}) {
 
 
                 <Logo />
-                  {searchOn ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} contents={contents} tagContents={tagContents} /> :    <Nav  categoryName = {categoryName} isOpen={isOpen} />}
+                  {searchOn && !isMobile ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} contents={contents} tagContents={tagContents} /> :    <Nav  categoryName = {categoryName} isOpen={isOpen} setIsOpen={setIsOpen} />}
                 <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn} MenuOpen={MenuOpen}/>
               </Container>
             </HeaderContainer>

@@ -65,13 +65,20 @@ const Ul = styled.ul`
   display: flex;
   flex-wrap: wrap;
   justify-content: start;
-
+  gap:16px;
+  ${mobile} {
+    margin: 16px 0;
+    gap: 2vw;
+    min-height: auto;
+    justify-content: space-between;
+  }
   li {
     width: 19%;
     cursor: pointer;
 
     ${mobile} {
-      width: 50%;
+      margin-top:1vw;
+      width: 48.5%;
     }
 `
 

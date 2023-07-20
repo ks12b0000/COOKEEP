@@ -11,7 +11,7 @@ import {useSelector} from "react-redux";
 import {useMediaQuery} from "react-responsive";
 import SearchModal from "../../../atomic/modal/SearchModal";
 
-function Nav({categoryName, isOpen}) {
+function Nav({categoryName, isOpen,setIsOpen}) {
     const userInfo = useSelector(state => state.persistedReducer.userReducer);
     const navigate = useNavigate();
     const [menus, setMenus] = useState(NavDada);
@@ -72,7 +72,7 @@ function Nav({categoryName, isOpen}) {
                 </ul>
 
             </MobileNavList>
-            <SearchModal isOpen={searchOpen} setOpen={setSearchOpen}/>
+            <SearchModal isOpen={searchOpen} setOpen={setSearchOpen} navOpen ={isOpen} navSetOpen={setIsOpen}/>
         </>);
 }
 

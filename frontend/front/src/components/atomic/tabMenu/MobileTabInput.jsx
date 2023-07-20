@@ -1,21 +1,36 @@
 import styled from "@emotion/styled";
 import {useState} from "react";
+import {useNavigate} from "react-router";
 
-function MobileTabInput() {
+function MobileTabInput({contents,tagContents}) {
 
+    const [value,setValue] =useState(contents ? contents : tagContents ? tagContents : "");
     const [isTag, setIsTag] = useState(false);
-
+    const navigation = useNavigate();
+    const handleInput = (e) => {
+        setValue(e.target.value);
+    }
     const TagChange = () => {
         setIsTag(!isTag);
     }
 
+    const SearchClick = (tag,value ) => {
+        if(tag ) {
+            navigation(`/searchTag${value? '/'+ value : '/null' }`)
+        }
+        else {
+            navigation(`/search${value ?  '/'+ value : '/null' }`)
+        }
+
+    }
+
     return (
         <>
-            <input type="text" placeholder={!isTag ? '검색어를 입력하세요' : '태그를 입력하세요'}/>
+            <input type="text" placeholder={!isTag ? '검색어를 입력하세요' : '태그를 입력하세요'} onChange={handleInput}/>
             {isTag && <IsTag>#</IsTag> }
             <ul>
                 <li onClick={TagChange} ><Tag isTag={isTag}>#</Tag></li>
-                <li><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt=""/></li>
+                <li onClick={()=> SearchClick(isTag,value)}><img src={`${process.env.PUBLIC_URL}/image/search.png`} alt=""/></li>
             </ul>
         </>
     )

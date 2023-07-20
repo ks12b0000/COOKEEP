@@ -23,7 +23,7 @@ function EditForm() {
 
     const {userId} = useSelector(state => state.persistedReducer.userReducer);
     const navigate = useNavigate();
-    const [quillValue,setQuillValue] = useState("안녕");
+    const [quillValue,setQuillValue] = useState("");
 
     const [categoryList,setCategoryList] = useState([]);
     const [categoryError,setCategoryError] = useState(false);
@@ -77,7 +77,7 @@ function EditForm() {
         const FormData = {
           category:categoryValue,
           title,
-          text:footText,
+          text:quillValue,
           user_id:userId,
           thumbnail:optionImg,
           tags:tag

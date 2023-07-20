@@ -67,9 +67,12 @@ const  PopularUl = styled.ul`
   align-items: center;
   gap:16px;
   margin-top:16px;
-  
-  ${mobile}{
-    gap:0;
+
+  ${mobile} {
+    margin: 16px 0;
+    gap: 1vw;
+    min-height: auto;
+    justify-content: space-between;
   }
 `
 const PopularTitle = styled.h1`

@@ -8,6 +8,11 @@ import Buttons from "../../atomic/Buttons";
 import styled from "@emotion/styled";
 import {Pagination} from "@mui/material";
 import {PaginationWrap} from "../cateItem/CateItem";
+import {mobile} from "../../../constants/media/media";
+import FlexContainer from "../../atomic/FlexContainer";
+import CustomSelect from "../../atomic/CustomSelect";
+import Footer from "../../layout/footer/Footer";
+
 const client = new SearchHttp();
 function SearchList() {
     const { contents } = useParams();
@@ -42,13 +47,11 @@ function SearchList() {
         <>
             <Header  contents={contents}/>
             <Container>
-                <SelectBox>
-                    <select onChange={FilterPosts} defaultValue="8">
-                        <option value={`page=${currentPage}`}>최신순</option>
-                        <option value={`sort=commented,desc&page=${currentPage}`}>댓글순</option>
-                        <option value={`sort=liked,desc&page=${currentPage}`}>좋아요순</option>
-                    </select>
-                </SelectBox>
+
+                <div style={{display:'flex', justifyContent:'flex-end',alignItems:'center'}}>
+                    <CustomSelect setAllText={setAllText} currentPage={currentPage}/>
+                </div>
+
 
                 <Ul>
                     {
@@ -57,14 +60,17 @@ function SearchList() {
                     }
                 </Ul>
                 <PaginationWrap > <Pagination  count={total}  page={currentPage + 1 }   onChange={onChangePagination} variant="outlined" shape="rounded" showFirstButton showLastButton /></PaginationWrap>
-                <ButtonWrap>
-                    <div>
-                        <Link to="writing">
-                            <Buttons text="글쓰기" />
-                        </Link>
-                    </div>
-                </ButtonWrap>
+                <div style={{marginTop:'16px'}}>
+                    <ButtonWrap>
+                        <div>
+                            <Link to="writing">
+                                <Buttons text="글쓰기" />
+                            </Link>
+                        </div>
+                    </ButtonWrap>
+                </div>
             </Container>
+            <Footer />
         </>
 
     )
@@ -80,6 +86,13 @@ const Container = styled.section`
   @media screen and (max-width: 1700px) {
        width: 1300px;
     }
+  
+  ${mobile} {
+    margin: 89px auto 16px;
+    width: 100vw;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
 `;
 
 const ButtonWrap = styled.div`
@@ -94,28 +107,22 @@ const Ul = styled.ul`
     gap: 16px;
     flex-wrap: wrap;
     justify-content: start;
+  
+    ${mobile} {
+      margin: 16px 0;
+      gap: 2vw;
+      min-height: auto;
+      justify-content: space-between;
+    }
     li {
         width: 19%;
         cursor: pointer;
-    }
-`;
 
-const SelectBox = styled.div`
-    position: relative;
-    width: 100%;
-    select {
-        padding: 10px 15px;
-        border: 1px solid #ccc;
-        position: absolute;
-        right: 0;
-        top: -25px;
-        border-radius: 5px;
-        width: 150px;
-        -webkit-appearance: none;
-        background: url("https://i.imgur.com/e60gpgR.png") 88%/12px no-repeat;
-        cursor: pointer;
-        &:focus {
-            outline: none;
-        }
+      ${mobile}{
+        margin-top:1vw;
+        width:48.5%;
+      }
     }
-`
+  
+  
+`;

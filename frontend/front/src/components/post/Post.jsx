@@ -94,8 +94,9 @@ const PopularList = styled.li`
     transition: 0.3s ease-in-out;
     cursor: pointer;
    ${mobile} {
-     width:50%;
-     padding:2vw;
+     margin-top:1vw;
+     width: 48.5%;
+
    }
     &:last-of-type{
       padding:0;

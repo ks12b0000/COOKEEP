@@ -5,9 +5,10 @@ import {useEffect, useState} from "react";
 import SearchHttp from "../../../http/searchHttp";
 import MobileTabInput from "../tabMenu/MobileTabInput";
 
+
 const client = new SearchHttp();
 
-function SearchModal({isOpen, setOpen}) {
+function SearchModal({isOpen, setOpen,contents,tagContents,navOpen,navSetOpen}) {
 
 
 
@@ -16,13 +17,8 @@ function SearchModal({isOpen, setOpen}) {
     const [top, setTop] = useState([]);
     const [tag, setTag] = useState([])
 
-    const Props = {
-        top,
-        topActive,
-        tag,
-        tagActive,
 
-    }
+
 
     useEffect(() => {
         (async () => {
@@ -41,7 +37,20 @@ function SearchModal({isOpen, setOpen}) {
 
         })()
     }, [])
+    const Props = {
+        top,
+        topActive,
+        tag,
+        tagActive,
+        setOpen,
+        navSetOpen,
+        input:{
+            contents,
+            tagContents,
 
+        }
+
+    }
     const SearchModalWrap = styled.div`
       position: absolute;
       top: 0;
@@ -82,7 +91,7 @@ function SearchModal({isOpen, setOpen}) {
                         </div>
                     </li>
                     <InputBox>
-                            <MobileTabInput />
+                            <MobileTabInput  {...Props.input} />
 
                     </InputBox>
                 </SearchHeader>
