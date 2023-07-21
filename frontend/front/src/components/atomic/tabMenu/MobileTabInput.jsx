@@ -2,7 +2,8 @@ import styled from "@emotion/styled";
 import {useState} from "react";
 import {useNavigate} from "react-router";
 
-function MobileTabInput({contents,tagContents}) {
+function MobileTabInput({contents,tagContents,  setOpen,
+                            navSetOpen,}) {
 
     const [value,setValue] =useState(contents ? contents : tagContents ? tagContents : "");
     const [isTag, setIsTag] = useState(false);
@@ -15,12 +16,18 @@ function MobileTabInput({contents,tagContents}) {
     }
 
     const SearchClick = (tag,value ) => {
-        if(tag ) {
+        if(tag && value) {
+            setOpen(false);
+            navSetOpen(false);
             navigation(`/searchTag${value? '/'+ value : '/null' }`)
         }
-        else {
+        else if (!tag && value ){
+            setOpen(false);
+            navSetOpen(false);
             navigation(`/search${value ?  '/'+ value : '/null' }`)
         }
+
+        return false;
 
     }
 

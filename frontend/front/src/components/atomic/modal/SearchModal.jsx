@@ -8,7 +8,7 @@ import MobileTabInput from "../tabMenu/MobileTabInput";
 
 const client = new SearchHttp();
 
-function SearchModal({isOpen, setOpen,contents,tagContents,navOpen,navSetOpen}) {
+function SearchModal({isOpen, setOpen,contents,tagContents,navOpen,navSetOpen,searchOpen}) {
 
 
 
@@ -47,6 +47,8 @@ function SearchModal({isOpen, setOpen,contents,tagContents,navOpen,navSetOpen}) 
         input:{
             contents,
             tagContents,
+            setOpen,
+            navSetOpen,
 
         }
 
