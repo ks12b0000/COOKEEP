@@ -5,13 +5,18 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CommentHttp from '../../http/commentHttp';
 import styled from '@emotion/styled';
 import ReplyDelete from './ReplyDelete';
-import Pagination from '../mypage/pagination';
+import { useMediaQuery } from 'react-responsive';
+import { useInView } from 'react-intersection-observer';
 
 const commentHttp = new CommentHttp();
 
 const ReplyList = props => {
   const modalRef = useRef();
+  const { ref, inView } = useInView();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({
+    query: '(max-width:768px)',
+  });
 
   const username = useSelector(
     state => state.persistedReducer.userReducer.username
@@ -22,32 +27,50 @@ const ReplyList = props => {
 
   const [Replys, setReplys] = useState([]);
   const [EditComment, setEditComment] = useState('');
-  const [Page, setPage] = useState([]);
-  const [SelectedButton, setSelectedButton] = useState(0);
 
+  //모바일 인피니트 스크롤
+  const [MoreData, setMoreData] = useState(0);
+
+  // useEffect(() => {
+  //   getList();
+  // }, [SelectedButton]);
+
+  // const getList = async () => {
+  //   try {
+  //     const res = await commentHttp.getReplyList(
+  //       props.commentId,
+  //       SelectedButton
+  //     );
+  //     console.log(res);
+  //     setReplys(res.data.result.list);
+  //     const arrayLength = res.data.result.total;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  // 페이지 네이션 함수
+  // const handlePagination = buttonValue => {
+  //   setSelectedButton(buttonValue);
+  // };
+
+  // 인피니트 스크롤
   useEffect(() => {
     getList();
-  }, [SelectedButton]);
+  }, [inView]);
 
+  // 인피니트 스크롤로 리스트 얻기
   const getList = async () => {
     try {
-      const res = await commentHttp.getReplyList(
-        props.commentId,
-        SelectedButton
-      );
-      console.log(res);
-      setReplys(res.data.result.list);
-      const arrayLength = res.data.result.total;
-      const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
-      setPage(newArray);
+      const res = await commentHttp.getReplyList(props.commentId, MoreData);
+      const newReplys = [...Replys, ...res.data.result.list];
+      setReplys(newReplys);
+      if (MoreData < res.data.result.total) {
+        setMoreData(prev => prev + 1);
+      }
     } catch (err) {
       console.log(err);
     }
-  };
-
-  // 페이지 네이션 함수
-  const handlePagination = buttonValue => {
-    setSelectedButton(buttonValue);
   };
 
   // 대댓글 수정 기능
@@ -78,7 +101,6 @@ const ReplyList = props => {
     const copyList = [...Replys];
     copyList.find(reply => reply.reply_id === id)[item + '_selected'] = true;
     setReplys(copyList);
-    console.log('Page', Page.length);
   };
 
   //닫기 기능
@@ -126,125 +148,134 @@ const ReplyList = props => {
   return (
     <Wrap>
       {Replys?.map(reply => (
-        <CommentWrap key={reply.reply_id}>
-          <ReplyArrow src='/image/reply-arrow.png' Length={Replys.length} />
-          <Profile>
-            <Img src={reply.user_image} />
-          </Profile>
-          <CommentBlock>
-            <TextWrap>
-              <TextBlock>
-                <UserNameWrap>
-                  <UsernameText>{reply.user_name}</UsernameText>
-                  {props.userName === reply.user_name && (
-                    <Author>작성자</Author>
-                  )}
-                </UserNameWrap>
-                {formattedDate === reply.create_date ? (
-                  <TimeStyled>{reply.create_time}</TimeStyled>
-                ) : (
-                  <TimeStyled>{reply.create_date}</TimeStyled>
-                )}
-              </TextBlock>
-            </TextWrap>
-
-            <ContentBlock>
-              <ContentTextWrap>
-                {username === reply.user_name ? (
-                  <ContentText backColor>{reply.text}</ContentText>
-                ) : (
-                  <ContentText>{reply.text}</ContentText>
-                )}
-                <EditButton
-                  src='/image/edit-icon.png'
-                  alt='edit-button'
-                  onClick={() => onItem(reply.reply_id, 'icon')}
-                />
-                {reply.icon_selected && (
-                  <>
-                    {userId === reply.user_id ? (
-                      <>
-                        <EditBox ref={modalRef}>
-                          <CopyToClipboard
-                            text={reply.text}
-                            onCopy={() => alert('댓글이 복사되었습니다.')}
-                          >
-                            <div>복사하기</div>
-                          </CopyToClipboard>
-                          <div
-                            onClick={() => {
-                              navigate(`/written/${reply.user_id}`);
-                            }}
-                          >
-                            작성글 보기
-                          </div>
-                          <div
-                            onClick={() => onEdit(reply.reply_id, reply.text)}
-                          >
-                            수정하기
-                          </div>
-                          <div onClick={() => onItem(reply.reply_id, 'modal')}>
-                            삭제하기
-                          </div>
-                        </EditBox>
-                        <EditBoxBack
-                          onClick={() => offItem(reply.reply_id, 'icon')}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <EditBox ref={modalRef}>
-                          <CopyToClipboard
-                            text={reply.text}
-                            onCopy={() => alert('댓글이 복사되었습니다.')}
-                          >
-                            <div>복사하기</div>
-                          </CopyToClipboard>
-                          <div
-                            onClick={() => {
-                              navigate(`/written/${reply.user_id}`);
-                            }}
-                          >
-                            작성글 보기
-                          </div>
-                        </EditBox>
-                        <EditBoxBack
-                          onClick={() => offItem(reply.reply_id, 'icon')}
-                        />
-                      </>
+        <div key={reply.reply_id}>
+          {isMobile && <BorderLine />}
+          <CommentWrap>
+            <ReplyArrow src='/image/reply-arrow.png' Length={Replys.length} />
+            <Profile>
+              <Img src={reply.user_image} />
+            </Profile>
+            <CommentBlock>
+              <TextWrap>
+                <TextBlock>
+                  <UserNameWrap>
+                    <UsernameText>{reply.user_name}</UsernameText>
+                    {props.userName === reply.user_name && (
+                      <Author>작성자</Author>
                     )}
+                  </UserNameWrap>
+                  {formattedDate === reply.create_date ? (
+                    <TimeStyled>{reply.create_time}</TimeStyled>
+                  ) : (
+                    <TimeStyled>{reply.create_date}</TimeStyled>
+                  )}
+                </TextBlock>
+              </TextWrap>
+
+              <ContentBlock>
+                <ContentTextWrap>
+                  {username === reply.user_name ? (
+                    <ContentText backColor>{reply.text}</ContentText>
+                  ) : (
+                    <ContentText>{reply.text}</ContentText>
+                  )}
+                  <EditButton
+                    src='/image/edit-icon.png'
+                    alt='edit-button'
+                    onClick={() => onItem(reply.reply_id, 'icon')}
+                  />
+                  {reply.icon_selected && (
+                    <>
+                      {userId === reply.user_id ? (
+                        <>
+                          <EditBox ref={modalRef}>
+                            <CopyToClipboard
+                              text={reply.text}
+                              onCopy={() => alert('댓글이 복사되었습니다.')}
+                            >
+                              <div>복사하기</div>
+                            </CopyToClipboard>
+                            <div
+                              onClick={() => {
+                                navigate(`/written/${reply.user_id}`);
+                              }}
+                            >
+                              작성글 보기
+                            </div>
+                            <div
+                              onClick={() => onEdit(reply.reply_id, reply.text)}
+                            >
+                              수정하기
+                            </div>
+                            <div
+                              onClick={() => onItem(reply.reply_id, 'modal')}
+                            >
+                              삭제하기
+                            </div>
+                          </EditBox>
+                          <EditBoxBack
+                            onClick={() => offItem(reply.reply_id, 'icon')}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <EditBox ref={modalRef}>
+                            <CopyToClipboard
+                              text={reply.text}
+                              onCopy={() => alert('댓글이 복사되었습니다.')}
+                            >
+                              <div>복사하기</div>
+                            </CopyToClipboard>
+                            <div
+                              onClick={() => {
+                                navigate(`/written/${reply.user_id}`);
+                              }}
+                            >
+                              작성글 보기
+                            </div>
+                          </EditBox>
+                          <EditBoxBack
+                            onClick={() => offItem(reply.reply_id, 'icon')}
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
+                </ContentTextWrap>
+
+                {reply.edit_selected && (
+                  <>
+                    <EditBlock
+                      value={EditComment}
+                      type='text'
+                      onChange={e => setEditComment(e.currentTarget.value)}
+                    />
+                    <Edit1Button
+                      onClick={e => submitEdit(e, reply.reply_id, reply.text)}
+                    >
+                      확인
+                    </Edit1Button>
+                    <Edit2Button
+                      onClick={() => offItem(reply.reply_id, 'edit')}
+                    >
+                      취소
+                    </Edit2Button>
                   </>
                 )}
-              </ContentTextWrap>
-
-              {reply.edit_selected && (
-                <>
-                  <EditBlock
-                    value={EditComment}
-                    type='text'
-                    onChange={e => setEditComment(e.currentTarget.value)}
-                  />
-                  <Edit1Button
-                    onClick={e => submitEdit(e, reply.reply_id, reply.text)}
-                  >
-                    확인
-                  </Edit1Button>
-                  <Edit2Button onClick={() => offItem(reply.reply_id, 'edit')}>
-                    취소
-                  </Edit2Button>
-                </>
-              )}
-            </ContentBlock>
-          </CommentBlock>
-          {reply.modal_selected && (
-            <ReplyDelete
-              offItem={offItem}
-              replyId={reply.reply_id}
-              userId={userId}
-            />
-          )}
-        </CommentWrap>
+              </ContentBlock>
+            </CommentBlock>
+            {reply.modal_selected && (
+              <ReplyDelete
+                offItem={offItem}
+                replyId={reply.reply_id}
+                userId={userId}
+              />
+            )}
+          </CommentWrap>
+        </div>
       ))}
+
+      {Replys.length !== 0 && <div ref={ref}></div>}
 
       {/* 페이지 네이션 */}
       {/* {Replys.length !== 0 && (
@@ -296,9 +327,16 @@ const CommentWrap = styled.div`
   }
 
   @media screen and (max-width: 760px) {
-    width: 280px;
-    left: 20px;
+    width: 290px;
+    left: 35px;
+    grid-template-columns: 12% 86%;
   }
+`;
+
+const BorderLine = styled.div`
+  width: 350px;
+  height: 0.1px;
+  background-color: #dddddd;
 `;
 
 const ReplyArrow = styled.img`
@@ -309,6 +347,12 @@ const ReplyArrow = styled.img`
   @media screen and (max-width: 1020px) {
     left: -60px;
     top: 50px;
+  }
+
+  @media screen and (max-width: 760px) {
+    scale: 0.5;
+    left: -40px;
+    top: 30px;
   }
 `;
 
@@ -328,6 +372,7 @@ const Profile = styled.div`
   @media screen and (max-width: 760px) {
     width: 30px;
     height: 30px;
+    top: 18px;
   }
 `;
 
@@ -349,6 +394,10 @@ const CommentBlock = styled.div`
   padding: 10px 0;
   box-sizing: border-box;
   margin: 5px 0;
+
+  @media screen and (max-width: 760px) {
+    padding: 20px 0 15px 0;
+  }
 `;
 
 const UserNameWrap = styled.div`
@@ -444,6 +493,7 @@ const ContentText = styled.div`
   @media screen and (max-width: 760px) {
     border: none;
     padding: 0;
+    font-size: 14px;
   }
 `;
 
@@ -470,7 +520,7 @@ const EditBoxBack = styled.div`
   top: 0;
   left: 0;
   overflow: hidden;
-  z-index: 30;
+  z-index: 100;
 
   @media screen and (max-width: 1020px) {
     background-color: rgba(0, 0, 0, 0.5);
@@ -491,7 +541,7 @@ const EditBox = styled.div`
   padding: 5px 0;
   box-sizing: border-box;
   background-color: white;
-  z-index: 100;
+  z-index: 200;
 
   div {
     font-size: 15px;
@@ -534,6 +584,13 @@ const EditBox = styled.div`
         background-color: white;
         color: #ff4122;
       }
+    }
+  }
+
+  @media screen and (max-width: 760px) {
+    div {
+      font-size: 16px;
+      height: 45px;
     }
   }
 `;

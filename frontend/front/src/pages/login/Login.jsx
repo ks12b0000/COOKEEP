@@ -410,7 +410,7 @@ function Login() {
         {/* 아이디 찾기 모달창 */}
         {FindId ? (
           <>
-            <ModalWrap height='327px'>
+            <ModalWrap height='327px' founded={FoundId}>
               {FoundId ? (
                 <>
                   <CheckImg />
@@ -470,7 +470,7 @@ function Login() {
         {/* 비밀번호 찾기 모달창 */}
         {FindPassword ? (
           <>
-            <ModalWrap height='430px'>
+            <ModalWrap height='430px' founded={FoundPassword}>
               {FoundPassword ? (
                 <>
                   <CheckImg />
@@ -478,6 +478,7 @@ function Login() {
                   <DoneText
                     marginTop='44px'
                     width='240px'
+                    marginMobileTop='28px'
                   >{`고객님의 임시 비밀번호는 ${FoundPasswordText} 입니다.`}</DoneText>
                   <DoneText marginTop='16px' width='300px'>
                     비밀번호는 마이페이지에서 변경 가능합니다.
@@ -576,6 +577,7 @@ const LoginBackground = styled.div`
     padding: 0;
     box-shadow: none;
     overflow: hidden;
+    background-image: none;
   }
 `;
 
@@ -844,6 +846,13 @@ const ModalWrap = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+  @media screen and (max-width: 760px) {
+    box-shadow: none;
+    position: ${props => (props.founded ? 'relative' : 'absolute')};
+    top: ${props => (props.founded ? '0' : '60px')};
+    width: 100vw;
+  }
 `;
 
 const XButton = styled.div`
@@ -857,6 +866,10 @@ const XButton = styled.div`
   opacity: 0.5;
   cursor: pointer;
   z-index: 10;
+
+  @media screen and (max-width: 760px) {
+    display: none;
+  }
 `;
 
 const ModalTitle = styled.div`
@@ -891,6 +904,10 @@ const DoneTitle = styled.div`
   font-size: 24px;
   line-height: 29px;
   margin-top: 30px;
+
+  @media screen and (max-width: 760px) {
+    margin-top: 20px;
+  }
 `;
 
 const DoneText = styled.div`
@@ -901,6 +918,10 @@ const DoneText = styled.div`
   text-align: center;
   color: #000000;
   margin-top: ${props => props.marginTop};
+
+  @media screen and (max-width: 760px) {
+    margin-top: ${props => props.marginMobileTop};
+  }
 `;
 
 const IdButtonWrap = styled.div`
@@ -940,6 +961,10 @@ const DonePasswordButton = styled.div`
   color: white;
   font-weight: 600;
   font-size: 16px;
+
+  @media screen and (max-width: 760px) {
+    margin-top: 30px;
+  }
 `;
 
 export default Login;

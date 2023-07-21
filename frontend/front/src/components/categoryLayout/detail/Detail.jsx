@@ -346,6 +346,6 @@ const TopBody = styled.div`
   }
 
   @media screen and (max-width: 760px) {
-    min-height: 150px;
+    min-height: 300px;
   }
 `;
