@@ -9,9 +9,9 @@ function Footer() {
         <Logo src='/image/LOGO.png' />
         <LinkWrap>
           <Text>피드백 문의</Text>
-          <Text thin>ks12b0000@gmail.com</Text>
+          <Text thin className='name'>ks12b0000@gmail.com</Text>
           <a href='https://night-triangle-fdc.notion.site/COOKEEP-9d7eebcdacde4859bfd7dc428a052aea'>
-            <Text pointer underline>
+            <Text pointer underline className='pro'>
               프로젝트 소개
             </Text>
           </a>
@@ -27,7 +27,10 @@ const FooterContainer = styled.footer`
   height: 70px;
   background: #f0f0f0;
   width: 100%;
-
+   
+  ${mobile}{
+    height: 85px;
+  }
   @media screen and (max-width: 768px) {
     margin-top: 0;
  
@@ -42,6 +45,13 @@ const ContentsWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
+  
+  ${mobile} {
+    padding:8px 16px 0;
+    box-sizing: border-box;
+
+    display: block;
+  }
 
   @media screen and (max-width: 1700px) {
     width: 1300px;
@@ -62,7 +72,8 @@ const Logo = styled.img`
   width: 133px;
   
   ${mobile} {
-    width: 25vw;
+    
+    width: 70px;
   }
 `;
 
@@ -74,9 +85,10 @@ const LinkWrap = styled.div`
   align-items: center;
   
   ${mobile}{
-    width: 70vw;
-    gap: 10px;
-    justify-content: center;
+    margin-top:21px;
+    width: 95vw;
+    gap:0;
+    height: auto;
   }
 `;
 
@@ -86,8 +98,18 @@ const Text = styled.div`
   font-weight: ${props => (props.thin ? '300' : '600')};
   cursor: ${props => (props.pointer ? 'pointer' : '')};
   text-decoration: ${props => (props.underline ? 'underline' : '')};
+   &.name{
+     ${mobile}{
+       padding-right: 13vw;
+     }
+   }
   
+  &.pro{
+    ${mobile}{
+      padding-right: 10px;
+    }
+  }
   ${mobile} {
-    font-size: 10px;
+    font-size: 14px;
   }
 `;

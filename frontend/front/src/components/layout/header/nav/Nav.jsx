@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import * as React from "react";
 import {useState} from "react";
 import {NavDada} from "../../../../http/data/nav/navData";
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import {color} from "../../../../constants/color";
 import {mobile} from "../../../../constants/media/media";
 import {useSelector} from "react-redux";
@@ -12,10 +12,9 @@ import {useMediaQuery} from "react-responsive";
 import SearchModal from "../../../atomic/modal/SearchModal";
 import { useNavigate } from "react-router-dom";
 
-function Nav({categoryName, isOpen}) {
-  const userInfo = useSelector(state => state.persistedReducer.userReducer);
-  const navigate = useNavigate();
-
+function Nav({categoryName, isOpen,setIsOpen}) {
+    const userInfo = useSelector(state => state.persistedReducer.userReducer);
+    const navigate = useNavigate();
     const [menus, setMenus] = useState(NavDada);
     const isMobile = useMediaQuery({
         query: "(max-width:768px)"
@@ -62,7 +61,7 @@ function Nav({categoryName, isOpen}) {
                             <UserImg><Img src={userInfo.userImg}/></UserImg>
                             <span>마이페이지</span>
                         </div>
-                        <UserArrow><img src={`${process.env.PUBLIC_URL}/image/user-arrow.png`} alt="" /></UserArrow>
+                        <UserArrow onClick={() => navigate(`/mypage/alarms/${userInfo.userId}`)}><img src={`${process.env.PUBLIC_URL}/image/user-arrow.png`} alt="" /></UserArrow>
                     </User>
 
                 )}
@@ -74,7 +73,7 @@ function Nav({categoryName, isOpen}) {
                 </ul>
 
             </MobileNavList>
-            <SearchModal isOpen={searchOpen} setOpen={setSearchOpen}/>
+            <SearchModal isOpen={searchOpen} setOpen={setSearchOpen} navOpen ={isOpen} navSetOpen={setIsOpen}/>
         </>);
 }
 

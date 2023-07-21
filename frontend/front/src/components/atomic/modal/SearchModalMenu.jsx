@@ -6,15 +6,28 @@ import TabList from "@mui/lab/TabList";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
 import styled from "@emotion/styled";
+import {useNavigate} from "react-router";
 
 
-function SearchModalMenu({top,topActive,tag,tagActive}) {
+function SearchModalMenu({top,topActive,tag,tagActive,setOpen,navSetOpen}) {
 
-
+     const navigation = useNavigate();
     const [value, setValue] = React.useState('1');
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const NavigationList = (name) => {
+        setOpen(false);
+        navSetOpen(false);
+        navigation(`/search/${name}`)
+    }
+
+    const NavigationTag = (name) => {
+        setOpen(false);
+        navSetOpen(false);
+        navigation(`/searchTag/${name}`)
+    }
 
 
     return (
@@ -32,6 +45,7 @@ function SearchModalMenu({top,topActive,tag,tagActive}) {
                     <TabMenuList>
                         {top.map((item, index) => (
                             <li key={index}
+                                onClick={() => NavigationList(item.keyword) }
                                 className={topActive === item.keyword && 'active'}>
                                {index + 1}.  {item.keyword}</li>))
                         }
@@ -41,7 +55,9 @@ function SearchModalMenu({top,topActive,tag,tagActive}) {
                 <TabPanel value="2" sx={{padding: "  0", display: 'flex', gap: 5}}>
                     <TabMenuList>
                         {tag.map((item, index) => (
-                            <li key={index}  className={tagActive === item.tag_name && 'active'}>{index+1}.   {item.tag_name}</li>
+                            <li key={index}
+                                onClick={() => NavigationTag(item.tag_name) }
+                                className={tagActive === item.tag_name && 'active'}>{index+1}.   {item.tag_name}</li>
                             ))
                         }
                     </TabMenuList>

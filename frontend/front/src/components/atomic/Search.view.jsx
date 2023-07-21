@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import SearchHttp from "../../http/searchHttp";
 import {Link, useParams} from "react-router-dom";
 import {useNavigate} from "react-router";
+import {useMediaQuery} from "react-responsive";
 
 const SearchContainer = styled.div`
   margin:0 auto;
@@ -51,10 +52,14 @@ const TagSearch = styled.span`
   
   `
 function SearchView({bottom,onFocus,onBlur,contents,tagContents}) {
+
     const [value,setValue] =useState(contents ? contents : tagContents ? tagContents : "");
     const [tag,setTag] = useState(tagContents? tagContents : false);
     const navigation = useNavigate();
-    const contents2 = useParams()
+    const contents2 = useParams();
+    const isMobile = useMediaQuery({
+        query: "(max-width:768px)"
+    });
     const handleTag = () => {
         setTag(!tag)
     }
@@ -80,7 +85,7 @@ function SearchView({bottom,onFocus,onBlur,contents,tagContents}) {
     }
 
 
-    return (
+    return !isMobile && (
         <>
             <SearchContainer>
                 <InputWrap>

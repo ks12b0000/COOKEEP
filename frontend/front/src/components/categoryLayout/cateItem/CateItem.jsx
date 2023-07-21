@@ -105,10 +105,12 @@ const Ul = styled.ul`
   gap: 16px;
   flex-wrap: wrap;
   justify-content: start;
-  
-  ${mobile}{
-    margin:16px 0;
-    gap:0;
+
+  ${mobile} {
+    margin: 16px 0;
+    gap: 2vw;
+    min-height: auto;
+    justify-content: space-between;
   }
 
   li {
@@ -116,7 +118,8 @@ const Ul = styled.ul`
     cursor: pointer;
     
     ${mobile} {
-      width: 50%;
+      margin-top:1vw;
+      width: 48.5%;
     }
   }
 `;

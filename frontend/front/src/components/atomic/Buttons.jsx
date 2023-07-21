@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-
+import {mobile} from "../../constants/media/media";
 
 const Button = styled.button`
     cursor: pointer;
@@ -10,7 +10,12 @@ const Button = styled.button`
     background: #FF4122;
     border-radius: 5px;
     border: none;
-
+   
+    ${mobile}{
+      width:100px;
+      height: 48px;
+      box-sizing: border-box;
+    }
 
     &:hover {
       background: #ff2704;

@@ -43,13 +43,20 @@ const Container = styled.section`
   position: relative;
   width:1400px;
   margin:24px auto 16px;
-  ${mobile}{
-    width: 100vw;
-  }
+  
 
   @media screen and (max-width: 1700px) {
        width: 1300px;
     }
+
+  ${mobile}{
+    margin: 89px auto 16px;
+    width: 100vw;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+  
+  
 `
 const MoreBtn = styled.div`
   position: absolute;
@@ -74,6 +81,14 @@ const  PopularUl = styled.ul`
   align-items: center;
   gap:16px;
   margin-top:16px;
+
+
+  ${mobile} {
+    margin: 16px 0;
+    gap: 1vw;
+    min-height: auto;
+    justify-content: space-between;
+  }
 `
 const PopularTitle = styled.h1`
   display: flex;
