@@ -33,6 +33,7 @@ import MyPageMobile from './pages/myPage/MyPageMobile';
 import PopularityDetail from './pages/home/PopularityDetail';
 import RankingDetail from './pages/home/RankingDetail';
 import ChangeUserinfo from './pages/myPage/ChangeUserinfo';
+import MobileCommentList from './components/comment/MobileCommentList';
 
 function App() {
   const user = useSelector(state => state);
@@ -78,7 +79,8 @@ function App() {
         <Route path='/category/:id' element={<Detail />} />
         <Route path='/:id/edit' element={<Edit />} />
         <Route path='/written/:userId' element={<Written />} />
-        {/**/}
+        {/*모바일용 댓글 더보기 페이지*/}
+        <Route path='/category/comment/:id' element={<MobileCommentList />} />
 
         {/*검색*/}
         <Route path='/search/:contents' element={<SearchList />} />

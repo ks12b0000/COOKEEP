@@ -144,6 +144,7 @@ const RepleWrap = styled.div`
   }
 
   @media screen and (max-width: 760px) {
+    margin: 30px auto;
     width: 350px;
     grid-template-columns: 84% 13%;
   }
