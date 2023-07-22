@@ -144,7 +144,7 @@ const RepleWrap = styled.div`
   }
 
   @media screen and (max-width: 760px) {
-    margin: 30px auto;
+    margin: 0 auto;
     width: 350px;
     grid-template-columns: 84% 13%;
   }
@@ -193,7 +193,7 @@ const RepleTextarea = styled.textarea`
 
   @media screen and (max-width: 760px) {
     height: 43px;
-    padding: 11px 12px;
+    padding: 10px 12px;
   }
 `;
 

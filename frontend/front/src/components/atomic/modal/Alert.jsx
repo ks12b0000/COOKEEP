@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import ModalBtn from './ModalBtn';
 import ModalBody from './ModalBody';
+
 function Alert({ setOpenModal, buttons, body }) {
   return (
     <>
@@ -15,17 +16,18 @@ function Alert({ setOpenModal, buttons, body }) {
 export default Alert;
 
 const ModalBackground = styled.div`
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
-  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 900;
 `;
+
 const ModalContainer = styled.div`
   position: fixed;
   top: 50%;

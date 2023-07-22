@@ -27,32 +27,7 @@ const ReplyList = props => {
 
   const [Replys, setReplys] = useState([]);
   const [EditComment, setEditComment] = useState('');
-
-  //모바일 인피니트 스크롤
   const [MoreData, setMoreData] = useState(0);
-
-  // useEffect(() => {
-  //   getList();
-  // }, [SelectedButton]);
-
-  // const getList = async () => {
-  //   try {
-  //     const res = await commentHttp.getReplyList(
-  //       props.commentId,
-  //       SelectedButton
-  //     );
-  //     console.log(res);
-  //     setReplys(res.data.result.list);
-  //     const arrayLength = res.data.result.total;
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  // 페이지 네이션 함수
-  // const handlePagination = buttonValue => {
-  //   setSelectedButton(buttonValue);
-  // };
 
   // 인피니트 스크롤
   useEffect(() => {
@@ -276,19 +251,6 @@ const ReplyList = props => {
       ))}
 
       {Replys.length !== 0 && <div ref={ref}></div>}
-
-      {/* 페이지 네이션 */}
-      {/* {Replys.length !== 0 && (
-        <>
-          <Pagination
-            handlePagination={handlePagination}
-            Page={Page}
-            SelectedButton={SelectedButton}
-          />
-        </>
-      )}
-
-      {Replys.length !== 0 && <Line />} */}
     </Wrap>
   );
 };
@@ -352,7 +314,7 @@ const ReplyArrow = styled.img`
   @media screen and (max-width: 760px) {
     scale: 0.5;
     left: -40px;
-    top: 30px;
+    top: 15px;
   }
 `;
 

@@ -9,6 +9,7 @@ import ReplyList from './ReplyList';
 import ReplyUpload from './ReplyUpload';
 import CommentUpload from './CommentUpload';
 import CommentDelete from './CommentDelete';
+import Header from '../layout/header/Header';
 import {
   CommentTitle,
   CommentWrap,
@@ -71,6 +72,7 @@ const MobileCommentList = props => {
     try {
       const res = await commentHttp.getCommentList(id, MoreData);
       const newReplys = [...Comments, ...res.data.result.list];
+      setCount(res.data.result.cnt);
       setComments(newReplys);
       if (MoreData < res.data.result.total) {
         setMoreData(prev => prev + 1);
@@ -158,185 +160,211 @@ const MobileCommentList = props => {
 
   return (
     <>
-      <CommentTitle>{`댓글 (${Count})`}</CommentTitle>
-      {Comments?.map(comment => (
-        <CommentWrap
-          key={comment.comment_id}
-          backColor={username === comment.user_name}
-        >
-          <Profile>
-            <Img src={comment.user_image} />
-          </Profile>
-          <CommentBlock>
-            {/* 상단 작성자 이름 */}
-            <UserNameWrap>
-              <UsernameText
-                onClick={() => navigate(`/written/${comment.user_id}`)}
-              >
-                {comment.user_name}
-              </UsernameText>
-              {props.userName === comment.user_name && <Author>작성자</Author>}
-            </UserNameWrap>
-            {formattedDate === comment.create_date ? (
-              <TimeStyled>{comment.create_time}</TimeStyled>
-            ) : (
-              <TimeStyled>{comment.create_date}</TimeStyled>
-            )}
-            <ContentBlock>
-              <ContentTextWrap>
-                {username === comment.user_name ? (
-                  <ContentText backColor>{comment.text}</ContentText>
-                ) : (
-                  <ContentText>{comment.text}</ContentText>
+      <Header />
+      <Wrap>
+        <CommentTitle>{`댓글 (${Count})`}</CommentTitle>
+        {Comments?.map(comment => (
+          <CommentWrap
+            key={comment.comment_id}
+            backColor={username === comment.user_name}
+          >
+            <Profile>
+              <Img src={comment.user_image} />
+            </Profile>
+            <CommentBlock>
+              {/* 상단 작성자 이름 */}
+              <UserNameWrap>
+                <UsernameText
+                  onClick={() => navigate(`/written/${comment.user_id}`)}
+                >
+                  {comment.user_name}
+                </UsernameText>
+                {props.userName === comment.user_name && (
+                  <Author>작성자</Author>
                 )}
-                <EditButton
-                  src='/image/edit-icon.png'
-                  alt='edit-button'
-                  onClick={() => onItem(comment.comment_id, 'icon')}
-                />
+              </UserNameWrap>
+              {formattedDate === comment.create_date ? (
+                <TimeStyled>{comment.create_time}</TimeStyled>
+              ) : (
+                <TimeStyled>{comment.create_date}</TimeStyled>
+              )}
+              <ContentBlock>
+                <ContentTextWrap>
+                  {username === comment.user_name ? (
+                    <ContentText backColor>{comment.text}</ContentText>
+                  ) : (
+                    <ContentText>{comment.text}</ContentText>
+                  )}
+                  <EditButton
+                    src='/image/edit-icon.png'
+                    alt='edit-button'
+                    onClick={() => onItem(comment.comment_id, 'icon')}
+                  />
 
-                {comment.icon_selected && (
+                  {comment.icon_selected && (
+                    <>
+                      {userId === comment.user_id ? (
+                        <>
+                          <EditBox ref={modalRef}>
+                            {comment.reply_selected ? (
+                              <div
+                                onClick={() => {
+                                  offReply(comment.comment_id);
+                                }}
+                              >
+                                답글 닫기
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => {
+                                  onReply(comment.comment_id);
+                                }}
+                              >
+                                답글 달기
+                              </div>
+                            )}
+
+                            <CopyToClipboard
+                              text={comment.text}
+                              onCopy={() => alert('댓글이 복사되었습니다.')}
+                            >
+                              <div>복사하기</div>
+                            </CopyToClipboard>
+                            <div
+                              onClick={() => {
+                                navigate(`/written/${comment.user_id}`);
+                              }}
+                            >
+                              작성글 보기
+                            </div>
+                            <div
+                              onClick={() =>
+                                onEdit(comment.comment_id, comment.text)
+                              }
+                            >
+                              수정하기
+                            </div>
+                            {/* <div onClick={e => onDelete(e, comment.comment_id)}> */}
+                            <div
+                              onClick={() =>
+                                onItem(comment.comment_id, 'modal')
+                              }
+                            >
+                              삭제하기
+                            </div>
+                          </EditBox>
+                          <EditBoxBack
+                            onClick={() => offItem(comment.comment_id, 'icon')}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <EditBox ref={modalRef}>
+                            {comment.reply_selected ? (
+                              <div
+                                onClick={() => {
+                                  offReply(comment.comment_id);
+                                }}
+                              >
+                                답글 닫기
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => {
+                                  onReply(comment.comment_id);
+                                }}
+                              >
+                                답글 달기
+                              </div>
+                            )}
+                            <CopyToClipboard
+                              text={comment.text}
+                              onCopy={() => alert('댓글이 복사되었습니다.')}
+                            >
+                              <div>복사하기</div>
+                            </CopyToClipboard>
+                            <div
+                              onClick={() => {
+                                navigate(`/written/${comment.user_id}`);
+                              }}
+                            >
+                              작성글 보기
+                            </div>
+                          </EditBox>
+                          <EditBoxBack
+                            onClick={() => offItem(comment.comment_id, 'icon')}
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
+                </ContentTextWrap>
+
+                {comment.edit_selected && (
                   <>
-                    {userId === comment.user_id ? (
-                      <>
-                        <EditBox ref={modalRef}>
-                          {comment.reply_selected ? (
-                            <div
-                              onClick={() => {
-                                offReply(comment.comment_id);
-                              }}
-                            >
-                              답글 닫기
-                            </div>
-                          ) : (
-                            <div
-                              onClick={() => {
-                                onReply(comment.comment_id);
-                              }}
-                            >
-                              답글 달기
-                            </div>
-                          )}
-
-                          <CopyToClipboard
-                            text={comment.text}
-                            onCopy={() => alert('댓글이 복사되었습니다.')}
-                          >
-                            <div>복사하기</div>
-                          </CopyToClipboard>
-                          <div
-                            onClick={() => {
-                              navigate(`/written/${comment.user_id}`);
-                            }}
-                          >
-                            작성글 보기
-                          </div>
-                          <div
-                            onClick={() =>
-                              onEdit(comment.comment_id, comment.text)
-                            }
-                          >
-                            수정하기
-                          </div>
-                          {/* <div onClick={e => onDelete(e, comment.comment_id)}> */}
-                          <div
-                            onClick={() => onItem(comment.comment_id, 'modal')}
-                          >
-                            삭제하기
-                          </div>
-                        </EditBox>
-                        <EditBoxBack
-                          onClick={() => offItem(comment.comment_id, 'icon')}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <EditBox ref={modalRef}>
-                          {comment.reply_selected ? (
-                            <div
-                              onClick={() => {
-                                offReply(comment.comment_id);
-                              }}
-                            >
-                              답글 닫기
-                            </div>
-                          ) : (
-                            <div
-                              onClick={() => {
-                                onReply(comment.comment_id);
-                              }}
-                            >
-                              답글 달기
-                            </div>
-                          )}
-                          <CopyToClipboard
-                            text={comment.text}
-                            onCopy={() => alert('댓글이 복사되었습니다.')}
-                          >
-                            <div>복사하기</div>
-                          </CopyToClipboard>
-                          <div
-                            onClick={() => {
-                              navigate(`/written/${comment.user_id}`);
-                            }}
-                          >
-                            작성글 보기
-                          </div>
-                        </EditBox>
-                        <EditBoxBack
-                          onClick={() => offItem(comment.comment_id, 'icon')}
-                        />
-                      </>
-                    )}
+                    <EditBlock
+                      value={EditComment}
+                      type='text'
+                      onChange={e => setEditComment(e.currentTarget.value)}
+                    />
+                    <Edit1Button
+                      onClick={e =>
+                        submitEdit(e, comment.comment_id, comment.text)
+                      }
+                    >
+                      확인
+                    </Edit1Button>
+                    <Edit2Button
+                      onClick={() => offItem(comment.comment_id, 'edit')}
+                    >
+                      취소
+                    </Edit2Button>
                   </>
                 )}
-              </ContentTextWrap>
+              </ContentBlock>
 
-              {comment.edit_selected && (
-                <>
-                  <EditBlock
-                    value={EditComment}
-                    type='text'
-                    onChange={e => setEditComment(e.currentTarget.value)}
-                  />
-                  <Edit1Button
-                    onClick={e =>
-                      submitEdit(e, comment.comment_id, comment.text)
-                    }
-                  >
-                    확인
-                  </Edit1Button>
-                  <Edit2Button
-                    onClick={() => offItem(comment.comment_id, 'edit')}
-                  >
-                    취소
-                  </Edit2Button>
-                </>
+              {comment.reply_selected && (
+                <ReplyUpload commentId={comment.comment_id} />
               )}
-            </ContentBlock>
-
-            {comment.reply_selected && (
-              <ReplyUpload commentId={comment.comment_id} />
-            )}
-            <ReplyWrap>
-              <ReplyList
+              <ReplyWrap>
+                <ReplyList
+                  commentId={comment.comment_id}
+                  userName={props.userName}
+                />
+              </ReplyWrap>
+            </CommentBlock>
+            {comment.modal_selected && (
+              <CommentDelete
+                offItem={offItem}
                 commentId={comment.comment_id}
-                userName={props.userName}
+                userId={userId}
               />
-            </ReplyWrap>
-          </CommentBlock>
-          {comment.modal_selected && (
-            <CommentDelete
-              offItem={offItem}
-              commentId={comment.comment_id}
-              userId={userId}
-            />
-          )}
-        </CommentWrap>
-      ))}
-      {Comments.length !== 0 && <div ref={ref}></div>}
-      <CommentUpload boardId={props.boardId} />
+            )}
+          </CommentWrap>
+        ))}
+        {Comments.length !== 0 && <div ref={ref}></div>}
+        <CommentUploadWrap>
+          <CommentUpload boardId={props.boardId} />
+        </CommentUploadWrap>
+      </Wrap>
     </>
   );
 };
+
+const Wrap = styled.div`
+  margin: 80px 0 60px 0;
+`;
+
+const CommentUploadWrap = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 62px;
+  background-color: #ff8164;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default MobileCommentList;
