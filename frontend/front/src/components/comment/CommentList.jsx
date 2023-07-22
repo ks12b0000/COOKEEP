@@ -39,9 +39,6 @@ const CommentList = props => {
   const [Count, setCount] = useState(0);
   const [Total, setTotal] = useState(0);
 
-  //모바일 인피니트 스크롤
-  const [MoreData, setMoreData] = useState(1);
-
   useEffect(() => {
     getList();
   }, [SelectedButton]);
@@ -361,7 +358,9 @@ const CommentList = props => {
           전체 댓글 보기
         </SeeMoreButton>
       )}
-      <CommentUpload boardId={props.boardId} />
+      <CommentUploadWrap>
+        <CommentUpload boardId={props.boardId} />
+      </CommentUploadWrap>
     </>
   );
 };
@@ -763,6 +762,12 @@ const SeeMoreButton = styled.div`
     font-size: 16px;
     font-weight: 500;
     margin: 30px auto 0 auto;
+  }
+`;
+
+const CommentUploadWrap = styled.div`
+  @media screen and (max-width: 760px) {
+    margin: 30px 0;
   }
 `;
 
