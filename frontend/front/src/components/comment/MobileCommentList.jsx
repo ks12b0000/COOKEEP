@@ -53,11 +53,7 @@ const MobileCommentList = props => {
   //댓글 수정창 컨트롤
   const [EditComment, setEditComment] = useState('');
 
-  //페이지 네이션
-  const [Page, setPage] = useState([]);
-  const [SelectedButton, setSelectedButton] = useState(0);
   const [Count, setCount] = useState(0);
-  const [Total, setTotal] = useState(0);
 
   //모바일 인피니트 스크롤
   const [MoreData, setMoreData] = useState(0);
@@ -112,7 +108,6 @@ const MobileCommentList = props => {
       item + '_selected'
     ] = true;
     setComments(copyList);
-    console.log('Page', Page.length);
   };
 
   //닫기 기능
