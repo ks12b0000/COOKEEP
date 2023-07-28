@@ -170,8 +170,8 @@ function Detail() {
                     <p>{detailPost.liked}</p>
                   </li>
                   <li>
-                    <p>
-                      <img src='/image/message-dots-circle.png' alt='' />
+                    <p className='msg'>
+                      <img src='/image/msg.png' alt='' />
                     </p>
                     <p>{detailPost.commented}</p>
                   </li>
@@ -200,8 +200,8 @@ function Detail() {
                     <p>{detailPost.liked}</p>
                   </li>
                   <li>
-                    <p>
-                      <img src='/image/message-dots-circle.png' alt='' />
+                    <p className='msg'>
+                      <img src='/image/msg.png' alt='' />
                     </p>
                     <p>{detailPost.commented}</p>
                   </li>
@@ -274,11 +274,16 @@ const TopHeader = styled.div`
   //타이틀
   h2 {
     margin-top: 9px;
+   
     font-style: normal;
     font-weight: 700;
     font-size: 24px;
     line-height: 29px;
     color: #000000;
+    ${mobile}{
+      width: 70vw;
+      word-break: keep-all;
+    }
   }
   //작성자
   h3 {
@@ -310,11 +315,31 @@ const TopHeaderIconWrap = styled.ul`
   right: 0;
   top: 0;
   color: #b0b0b0;
+  
+  ${mobile}{
+    gap:5px;
+  }
   li {
     p {
+      
+      &.msg{
+        position: relative;
+        top: -2px;
+        ${mobile}{
+          top:0;
+        }
+      }
+      
+      
       font-size: 12px;
       width: 30px;
       height: 30px;
+      ${mobile}{
+        height:auto;
+        img{
+          width: 20px;
+        }
+      }
       margin-bottom: 2px;
     }
   }

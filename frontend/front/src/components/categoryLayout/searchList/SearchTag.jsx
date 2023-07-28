@@ -65,7 +65,7 @@ function SearchTag() {
                 <div style={{marginTop: '16px'}}>
                     <ButtonWrap>
                         <div>
-                            <Link to="writing">
+                            <Link to="/searchTag/writing">
                                 <Buttons text="글쓰기"/>
                             </Link>
                         </div>

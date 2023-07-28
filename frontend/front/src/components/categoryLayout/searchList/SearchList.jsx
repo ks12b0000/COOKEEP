@@ -63,7 +63,7 @@ function SearchList() {
                 <div style={{marginTop:'16px'}}>
                     <ButtonWrap>
                         <div>
-                            <Link to="writing">
+                            <Link to="/search/writing">
                                 <Buttons text="글쓰기" />
                             </Link>
                         </div>

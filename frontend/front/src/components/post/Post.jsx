@@ -199,6 +199,13 @@ const LeftTitle = styled.p`
 const LeftTag = styled.p`
    padding-top:8px;
    span{
+     ${mobile}{
+       overflow: hidden;
+       text-overflow: ellipsis;
+       display: -webkit-box;
+       -webkit-line-clamp: 2;
+       -webkit-box-orient: vertical;
+     }
      display: block;
    }
   

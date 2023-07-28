@@ -9,7 +9,7 @@ import CategoryHttp from "../../../../http/categoryHttp";
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import Quill from "../Quill";
-
+import {mobile} from "../../../../constants/media/media";
 import CancelPopup from "../popup/CancelPopup";
 import CreatePopup from "../popup/CreatePopup";
 import LoadingPopup from "../popup/LoadingPopup";
@@ -262,6 +262,11 @@ const Title = styled.h1`
   font-size: 24px;
   line-height: 29px;
   color: #ED3419;
+  
+  ${mobile}{
+  
+    font-size: 18px;
+  }
 `
 const ErrorText = styled.div`
     position: absolute;
@@ -354,6 +359,10 @@ const InputBox = styled.fieldset`
     gap:24px;
     flex-direction: row;
     border: none;
+   ${mobile} {
+     margin-top: 12px;
+     flex-direction: column;
+   }
     label {
         font-size: 20px;
         font-weight: 500;
@@ -378,8 +387,8 @@ const InputBox = styled.fieldset`
         &:focus {
             outline: none;
         }
-     
-      
+        
+   
       
     }
     input {
@@ -410,6 +419,9 @@ const ButtonsWrap = styled.div`
     width: 100%;
     gap: 20px;
     justify-content: end;
+  ${mobile} {
+    justify-content: space-between;
+  }
 `;
 const CancelButton = styled.div`
   cursor: pointer;
@@ -423,6 +435,10 @@ const CancelButton = styled.div`
   font-size: 16px;
   box-sizing: border-box;
   color:#FF4122;
+  
+  ${mobile} {
+    width: 165px;
+  }
     &:hover {
     
         background: red;
@@ -443,7 +459,9 @@ const WritingButton = styled.button`
   font-weight: 600;
   font-size: 16px;
   color:#ffffff;
- 
+  ${mobile} {
+    width: 165px;
+  }
     &:hover {
         background: red;
         border: none;
