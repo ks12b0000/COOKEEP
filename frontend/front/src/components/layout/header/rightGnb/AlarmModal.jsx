@@ -1,8 +1,9 @@
-import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import AuthHttp from '../../../../http/authHttp';
 import { useSelector } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
+import { useMediaQuery } from 'react-responsive';
+import styled from '@emotion/styled';
+import AuthHttp from '../../../../http/authHttp';
 
 const authHttp = new AuthHttp();
 
@@ -11,11 +12,18 @@ const AlarmModal = () => {
     state => state.persistedReducer.userReducer.userId
   );
 
-  const navigate = useNavigate();
+  const { ref, inView } = useInView();
 
   const [Alarms, setAlarms] = useState([]);
   const [Page, setPage] = useState(0);
   const [Total, setTotal] = useState(0);
+
+  //모바일 인피니트 스크롤
+  const [MoreData, setMoreData] = useState(0);
+
+  const isMobile = useMediaQuery({
+    query: '(max-width:760px)',
+  });
 
   useEffect(() => {
     getAlarmList();
@@ -28,6 +36,25 @@ const AlarmModal = () => {
       const newAlarms = [...Alarms, ...res.data.result.notificationList];
       setAlarms(newAlarms);
       setTotal(res.data.result.total);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getMobileAlarmList();
+  }, [inView]);
+
+  const getMobileAlarmList = async () => {
+    try {
+      const res = await authHttp.getMainAlarmList(userId, MoreData);
+      console.log('mobile', res);
+      console.log('moredata', MoreData);
+      const newAlarms = [...Alarms, ...res.data.result.notificationList];
+      setAlarms(newAlarms);
+      if (MoreData < res.data.result.total) {
+        setMoreData(prev => prev + 1);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -102,10 +129,16 @@ const AlarmModal = () => {
             {/* </ArrowWrap> */}
           </ContentsBox>
         ))}
-        {Page === Total - 1 ? (
-          <></>
+        {isMobile ? (
+          <SeeMoreMobile ref={ref}></SeeMoreMobile>
         ) : (
-          <SeeMore onClick={e => addPage(e)}>더보기</SeeMore>
+          <>
+            {Page === Total - 1 ? (
+              <></>
+            ) : (
+              <SeeMore onClick={e => addPage(e)}>더보기</SeeMore>
+            )}
+          </>
         )}
       </ConentsWrap>
     </ModalWrap>
@@ -119,7 +152,6 @@ const ModalWrap = styled.div`
   left: -300px;
   height: 550px;
   width: 400px;
-  /* overflow-y: scroll; */
   background: #ffffff;
   border-radius: 5px;
   border: 1px solid #ff4122;
@@ -128,6 +160,16 @@ const ModalWrap = styled.div`
   align-items: center;
   flex-direction: column;
   text-align: center;
+
+  @media screen and (max-width: 760px) {
+    position: fixed;
+    width: 100vw;
+    height: 94vh;
+    top: 60px;
+    left: 0;
+    z-index: -100;
+    border: none;
+  }
 `;
 
 const ConentsWrap = styled.div`
@@ -138,7 +180,12 @@ const ConentsWrap = styled.div`
   top: 0;
   left: 0;
   cursor: pointer;
+
+  @media screen and (max-width: 760px) {
+    /* height: auto; */
+  }
 `;
+
 const ContentsBox = styled.div`
   width: 100%;
   margin: 0 auto;
@@ -178,12 +225,6 @@ const TitleWrap = styled.div`
   display: flex;
 `;
 
-const WelcomeImg = styled.img`
-  margin-right: 10px;
-  width: 20px !important ;
-  height: 20px !important ;
-`;
-
 const Title = styled.div`
   font-size: 16px;
   font-weight: 600;
@@ -219,6 +260,10 @@ const SeeMore = styled.div`
   margin: 30px 0;
   text-decoration: underline;
   cursor: pointer;
+`;
+
+const SeeMoreMobile = styled.div`
+  padding: 30px;
 `;
 
 export default AlarmModal;
