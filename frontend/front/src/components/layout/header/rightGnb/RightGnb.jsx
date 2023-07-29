@@ -17,7 +17,7 @@ import AlarmModal from './AlarmModal';
 const userHttp = new UserHttp();
 const authHttp = new AuthHttp();
 
-const RightGnb = ({ HandleSearch, searchOn ,MenuOpen}) => {
+const RightGnb = ({ HandleSearch, searchOn, MenuOpen }) => {
   const userInfo = useSelector(state => state.persistedReducer.userReducer);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -69,6 +69,7 @@ const RightGnb = ({ HandleSearch, searchOn ,MenuOpen}) => {
       setAlarmOpen(false);
     } else {
       setAlarmOpen(true);
+      MenuOpen();
     }
   };
 
@@ -147,25 +148,27 @@ const RightGnb = ({ HandleSearch, searchOn ,MenuOpen}) => {
 
       <MediaMenu>
         <ul>
-          {userInfo.isLoggedIn && <li className={AlarmOpen ? 'alarmon' : 'alarm-m'}>
-            {AlarmOpen ? (
-              <img
-                src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
-                alt='알람아이콘'
-                onClick={e => AlarmToggle(e)}
-              />
-            ) : (
-              <img
-                src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
-                alt='알람아이콘'
-                onClick={e => AlarmToggle(e)}
-              />
-            )}
-            {AlarmOpen && <AlarmModal />}
-          </li> }
+          {userInfo.isLoggedIn && (
+            <li className={AlarmOpen ? 'alarmon' : 'alarm-m'}>
+              {AlarmOpen ? (
+                <img
+                  src={`${process.env.PUBLIC_URL}/image/alarm-r.png`}
+                  alt='알람아이콘'
+                  onClick={e => AlarmToggle(e)}
+                />
+              ) : (
+                <img
+                  src={`${process.env.PUBLIC_URL}/image/alarm-g.png`}
+                  alt='알람아이콘'
+                  onClick={e => AlarmToggle(e)}
+                />
+              )}
+              {AlarmOpen && <AlarmModal />}
+            </li>
+          )}
 
           <li onClick={MenuOpen}>
-            <img src={`${process.env.PUBLIC_URL}/image/ham.png`} alt="메뉴판"/>
+            <img src={`${process.env.PUBLIC_URL}/image/ham.png`} alt='메뉴판' />
           </li>
         </ul>
       </MediaMenu>
@@ -182,13 +185,14 @@ const MediaMenu = styled.div`
 
     ul {
       display: flex;
-      li{
-        &.alarmon,&.alarm-m{
+      li {
+        &.alarmon,
+        &.alarm-m {
           margin-right: 19px;
         }
       }
     }
-    img{
+    img {
       width: 18px;
       height: 22px;
       object-fit: contain;
@@ -198,6 +202,10 @@ const MediaMenu = styled.div`
 
 const LogOut = styled.li`
   position: relative;
+
+  @media screen and (max-width: 760px) {
+    position: absolute;
+  }
 `;
 
 const UserImg = styled.div`
