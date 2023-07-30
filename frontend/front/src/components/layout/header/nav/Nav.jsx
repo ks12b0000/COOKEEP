@@ -60,7 +60,7 @@ function Nav({categoryName, isOpen,setIsOpen}) {
                             <UserImg><Img src={userInfo.userImg}/></UserImg>
                             <span>마이페이지</span>
                         </div>
-                        <UserArrow onClick={() => navigate(`/mypage/alarms/${userInfo.userId}`)}><img src={`${process.env.PUBLIC_URL}/image/user-arrow.png`} alt="" /></UserArrow>
+                        <UserArrow onClick={() => navigate(`/mypage/mobile/${userInfo.userId}`)}><img src={`${process.env.PUBLIC_URL}/image/user-arrow.png`} alt="" /></UserArrow>
                     </User>
 
                 )}
