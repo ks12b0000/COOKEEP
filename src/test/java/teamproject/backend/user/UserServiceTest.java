@@ -34,16 +34,9 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    HttpServletResponse response;
-    @Spy
-    SHA256 sha256;
-    @Mock
-    private JwtService jwtService;
-    @Mock
-    private CookieService cookieService;
-    @Mock
     private NotificationRepository notificationRepository;
 
+    static User user = new User("test1234", "test122", "test1234@gmail.com", "test1234", null);
 
     @Test
     @DisplayName("유저 회원가입")
@@ -69,7 +62,6 @@ public class UserServiceTest {
     @DisplayName("소셜 회원가입")
     void social_Join() {
         // given
-        User user = new User("test1234", "test122", "test1234@gmail.com", "test1234", null);
         Notification notification = new Notification(user, "title123", "subTitle123", "url12345","mainpage");
 
         // stub 행동정의 (가설)
@@ -89,7 +81,6 @@ public class UserServiceTest {
     @DisplayName("회원가입 한 유저인지 확인.")
     void checkUserHasJoin() {
         // given
-        User user = new User("test1234", "test122", "test1234@gmail.com", "test1234", null);
 
         // stub 행동정의 (가설)
         when(userRepository.findByUsername("test1234")).thenReturn(user);
@@ -109,7 +100,6 @@ public class UserServiceTest {
     @DisplayName("중복된 아이디가 있는지 확인.")
     void checkIdDuplicate() {
         // given
-        User user = new User("test1234", "test122", "test1234@gmail.com", "test1234", null);
 
         // stub 행동정의 (가설)
         when(userRepository.findByUsername("test1234")).thenReturn(user);
@@ -127,7 +117,6 @@ public class UserServiceTest {
     @DisplayName("이메일로 아이디 찾기.")
     void findByUserId() {
         // given
-        User user = new User("test1234", "testNick12", "test1234@gmail.com", "test1234", null);
 
         FindIdRequest findIdRequest = new FindIdRequest("test1234@gmail.com");
         FindIdRequest findIdRequest2 = new FindIdRequest("test12342@gmail.com");
@@ -149,7 +138,6 @@ public class UserServiceTest {
     @DisplayName("중복된 이메일이 있는지 확인.")
     void checkEmailDuplicate() {
         // given
-        User user = new User("test1234", "test122", "test1234@gmail.com", "test1234", null);
 
         // stub 행동정의 (가설)
         when(userRepository.findByEmail("test1234@gmail.com")).thenReturn(user);
@@ -167,7 +155,6 @@ public class UserServiceTest {
     @DisplayName("유저 아이디랑 이메일을 활용하여 임시 비밀번호로 변경")
     void temporaryPassword() {
         // given
-        User user = new User("test1234", "testNick12", "test1234@gmail.com", "test1234", null);
 
         FindPwRequest findPwRequest = new FindPwRequest("test1234", "test1234@gmail.com");
 

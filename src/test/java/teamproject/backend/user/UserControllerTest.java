@@ -29,10 +29,9 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Autowired
-    private UserServiceImpl userService;
+//    @Autowired
+//    private UserServiceImpl userService;
 
-    @Test
     @DisplayName("테스트에 필요한 유저 저장")
     public void before() throws Exception {
         // given
@@ -66,8 +65,7 @@ public class UserControllerTest {
         // then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("1000"))
-                .andExpect(jsonPath("message").value("회원가입에 성공했습니다."))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("message").value("회원가입에 성공했습니다."));
     }
 
     @Test
@@ -86,13 +84,11 @@ public class UserControllerTest {
         // then
         resultActions.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("code").value("3001"))
-                .andExpect(jsonPath("message").value("중복된 아이디가 있습니다."))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("message").value("중복된 아이디가 있습니다."));
 
         resultActions2.andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("1000"))
-                .andExpect(jsonPath("message").value("사용 가능한 아이디 입니다."))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("message").value("사용 가능한 아이디 입니다."));
     }
 
     @Test
@@ -114,8 +110,7 @@ public class UserControllerTest {
         // then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("1000"))
-                .andExpect(jsonPath("message").value("로그인에 성공했습니다."))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("message").value("로그인에 성공했습니다."));
     }
 
     @Test
@@ -162,8 +157,7 @@ public class UserControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("1000"))
                 .andExpect(jsonPath("message").value("아이디 찾기에 성공했습니다."))
-                .andExpect(jsonPath("result.username").value("test1234"))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("result.username").value("test1234"));
     }
 
     @Test
@@ -182,13 +176,11 @@ public class UserControllerTest {
         // then
         resultActions.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("code").value("3004"))
-                .andExpect(jsonPath("message").value("중복된 이메일이 있습니다."))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("message").value("중복된 이메일이 있습니다."));
 
         resultActions2.andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("1000"))
-                .andExpect(jsonPath("message").value("사용 가능한 이메일 입니다."))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("message").value("사용 가능한 이메일 입니다."));
     }
 
     @Test
@@ -210,7 +202,6 @@ public class UserControllerTest {
         // then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("code").value("1000"))
-                .andExpect(jsonPath("message").value("비밀번호 찾기에 성공했습니다."))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("message").value("비밀번호 찾기에 성공했습니다."));
     }
 }
