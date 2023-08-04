@@ -6,11 +6,11 @@ class Http {
     }
     static createAxios() {
         return axios.create({
-            baseURL: "http://localhost:8080",
+            baseURL: "https://www.teamprojectvv.shop",
             timeout: 30 * 1000,
             withCredentials: true,
             headers: {
-                "Access-Control-Allow-Origin": "http://localhost:8080"
+                "Access-Control-Allow-Origin": "https://www.teamprojectvv.shop"
             }
         });
     }
