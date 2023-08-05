@@ -47,7 +47,11 @@ public class UserServiceImpl implements UserService, SocialUserService {
     @Override
     public Long join(JoinRequest joinRequest) {
         String username = joinRequest.getUsername();
+        checkIdDuplicate(username);
+
         String email = joinRequest.getEmail();
+        checkEmailDuplicate(email);
+
         String password = joinRequest.getPassword();
         String salt = SHA256.getSalt();
         String nickname = getRandomNickname();
