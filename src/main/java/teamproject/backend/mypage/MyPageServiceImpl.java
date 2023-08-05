@@ -284,9 +284,7 @@ public class MyPageServiceImpl implements MyPageService {
         User user = myPageRepository.findByIdForUpdate(user_id).orElseThrow(() -> new BaseException(USER_NOT_EXIST));
         String newNickname = request.getNickname();
 
-        if(myPageRepository.existsUserByNickname(newNickname)){
-            new BaseException(DUPLICATE_NICKNAME);
-        }
+        checkNickNameDuplicate(newNickname);
 
         user.updateNickname(newNickname);
     }
