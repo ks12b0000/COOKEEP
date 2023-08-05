@@ -90,7 +90,6 @@ const MyLikes = () => {
     if (inView) {
       getMobileLikeList();
     }
-    console.log('check');
   }, [inView]);
 
   //유저 정보 불러오기 함수
@@ -107,7 +106,6 @@ const MyLikes = () => {
   const getLikeList = async () => {
     try {
       const res = await authHttp.getLikeList(userId, SelectedButton);
-      console.log('좋아요한 게시글 리스트', res);
       setLikes(res.data.result.commentList);
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
@@ -121,10 +119,8 @@ const MyLikes = () => {
   const getMobileLikeList = async () => {
     try {
       const res = await authHttp.getLikeList(userId, MoreData);
-      console.log(res);
       const newLikes = [...Likes, ...res.data.result.commentList];
       setLikes(newLikes);
-      console.log('length', newLikes.length);
       if (MoreData < res.data.result.total) {
         setMoreData(prev => prev + 1);
       }

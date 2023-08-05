@@ -67,7 +67,6 @@ const MyPosts = () => {
     if (inView) {
       getMobilePostList();
     }
-    console.log('check');
   }, [inView]);
 
   const onMypage = async () => {
@@ -82,7 +81,6 @@ const MyPosts = () => {
   const getPostList = async () => {
     try {
       const res = await authHttp.getPostList(userId, SelectedButton);
-      console.log(res);
       setPosts(res.data.result.boardList);
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
@@ -96,7 +94,6 @@ const MyPosts = () => {
   const getMobilePostList = async () => {
     try {
       const res = await authHttp.getPostList(userId, MoreData);
-      console.log(res);
       const newPosts = [...Posts, ...res.data.result.boardList];
       setPosts(newPosts);
       if (MoreData < res.data.result.total) {
@@ -187,7 +184,7 @@ const MyPosts = () => {
 export const Wrap = styled.div`
   width: 1440px;
   margin: 0 auto;
-  height: 74.2vh;
+  height: 78vh;
   margin-bottom: 10vh;
 
   @media screen and (max-width: 1700px) {
@@ -241,7 +238,7 @@ export const PageWrap = styled.div`
   height: 100%;
   border: 1px solid #ff6242;
   border-radius: 10px;
-  padding: 30px 25px;
+  padding: 30px 25px 10px 25px;
   box-sizing: border-box;
   position: relative;
 
@@ -310,7 +307,7 @@ export const ContentsWrap = styled.div`
 
 export const ContentsBox = styled.div`
   width: 100%;
-  height: 5.8vh;
+  height: 6.2vh;
   border: 1px solid #ced4da;
   border-radius: 10px;
   margin: 10px 0;

@@ -81,7 +81,6 @@ const MyComments = () => {
     if (inView) {
       getMobilePostList();
     }
-    console.log('check');
   }, [inView]);
 
   const onMypage = async () => {
@@ -96,7 +95,6 @@ const MyComments = () => {
   const getCommentList = async () => {
     try {
       const res = await authHttp.getCommentList(userId, SelectedButton);
-      console.log(res);
       setComments(res.data.result.commentList);
       const arrayLength = res.data.result.total;
       const newArray = new Array(arrayLength).fill(0).map((_, index) => index);
@@ -110,7 +108,6 @@ const MyComments = () => {
   const getMobilePostList = async () => {
     try {
       const res = await authHttp.getCommentList(userId, MoreData);
-      console.log(res);
       const newComments = [...Comments, ...res.data.result.commentList];
       setComments(newComments);
       if (MoreData < res.data.result.total) {

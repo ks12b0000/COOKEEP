@@ -17,7 +17,7 @@ import {
   RedIcon,
   IconText,
 } from './MyPosts';
-import { AccountWrap, ProfileRound, Button } from './MyAccount';
+import { AccountWrap, Button } from './MyAccount';
 import LoadingPopup from '../../components/categoryLayout/writing/popup/LoadingPopup';
 import CompletePopup from '../../components/categoryLayout/writing/popup/CompletePopup';
 import Alert from '../../components/atomic/modal/Alert';
@@ -117,7 +117,7 @@ const ChangeUserinfo = () => {
 
       return () => clearTimeout(timeout);
     }
-  }, [IsLoading, navigate, userId]);
+  }, [IsLoading, navigate]);
 
   //비밀번호 변경 버튼 클릭 시 footer 위치 관리
   useEffect(() => {
@@ -533,7 +533,7 @@ const ChangeUserinfo = () => {
                 <IconText>설정</IconText>
               </RedIconWrap>
               <AccountWrap top footerBottom={FooterBottom}>
-                <ProfileRound>
+                <ProfileRound isChangePassword={isChangePassword}>
                   {Preview ? (
                     <ProfileImg src={Preview} alt='프로필 이미지' />
                   ) : (
@@ -803,6 +803,17 @@ const ChangeUserinfo = () => {
     </>
   );
 };
+
+const ProfileRound = styled.div`
+  width: 100px;
+  height: 100px;
+  background-color: #d9d9d9;
+  border-radius: 50px;
+  margin-bottom: ${props => (props.isChangePassword ? '10px' : '20px')};
+  overflow: hidden;
+  position: relative;
+`;
+
 
 const ProfileButton = styled.label`
   width: 130px;

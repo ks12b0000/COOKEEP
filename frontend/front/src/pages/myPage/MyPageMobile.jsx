@@ -59,7 +59,6 @@ const MyPageMobile = () => {
   const onMypage = async () => {
     try {
       const res = await authHttp.getMypage(userId);
-      console.log(res);
       setUserInfo(res.data.result);
     } catch (err) {
       console.log(err);
@@ -70,7 +69,6 @@ const MyPageMobile = () => {
   const logout = async () => {
     try {
       const res = await userHttp.getLogout();
-      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -90,7 +88,6 @@ const MyPageMobile = () => {
   const onDeleteUser = async () => {
     try {
       const res = await authHttp.deleteUser(userId);
-      console.log(res);
       setIsLoading(true);
     } catch (err) {
       console.log(err);
