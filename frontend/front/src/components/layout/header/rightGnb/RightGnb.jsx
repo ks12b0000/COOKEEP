@@ -17,13 +17,12 @@ import AlarmModal from './AlarmModal';
 const userHttp = new UserHttp();
 const authHttp = new AuthHttp();
 
-const RightGnb = ({ HandleSearch, searchOn, MenuOpen }) => {
+const RightGnb = ({ HandleSearch, searchOn, MenuOpen, MenuClose }) => {
   const userInfo = useSelector(state => state.persistedReducer.userReducer);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
-  // const [UserImage, setUserImage] = useState('');
   const [AlarmOpen, setAlarmOpen] = useState(false);
 
   useEffect(() => {
@@ -44,7 +43,6 @@ const RightGnb = ({ HandleSearch, searchOn, MenuOpen }) => {
       }
     } catch (err) {
       dispatch(logoutUser());
-      console.log(err.response);
     }
   };
 
@@ -69,7 +67,7 @@ const RightGnb = ({ HandleSearch, searchOn, MenuOpen }) => {
       setAlarmOpen(false);
     } else {
       setAlarmOpen(true);
-      MenuOpen();
+      MenuClose();
     }
   };
 
@@ -269,11 +267,9 @@ const GnbContainer = styled.ul`
   align-items: center;
   justify-content: center;
   gap: 20px;
- ${mobile} {
-   display: none;
- }
-
- 
+  ${mobile} {
+    display: none;
+  }
 
   &.user {
     gap: 10px;
@@ -289,10 +285,8 @@ const GnbContainer = styled.ul`
           height: 20px;
         }
       }
-     
-      
+
       &.alarm {
-        
         ${mobile} {
           display: none;
         }
@@ -301,13 +295,12 @@ const GnbContainer = styled.ul`
           height: 23px;
         }
       }
-      
+
       &.alarm-m {
         img {
           width: 20px;
           height: 23px;
         }
-        
       }
 
       &.alarmon {
@@ -338,22 +331,19 @@ const GnbContainer = styled.ul`
         height: 20px;
       }
     }
+  }
 
-     
-    }
-   
-    a {
-      color: #000000;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 16px !important;
-      
-  
-      &:hover {
-        color: ${color.main};
-      }
+  a {
+    color: #000000;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px !important;
+
+    &:hover {
+      color: ${color.main};
     }
   }
+
   img {
     cursor: pointer;
   }

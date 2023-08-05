@@ -63,19 +63,24 @@ function Header({color,categoryName,contents,tagContents}) {
     const isMobile = useMediaQuery({
         query: '(max-width:768px)',
     });
-    const[isOpen,setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
     const MenuOpen = () =>  {
         setIsOpen(!isOpen);
-
+    }
+  
+  const MenuClose = () => {
+      setIsOpen(false);
     }
 
     const HandleSearch  = () => {
         setSearchOn(!searchOn);
     }
+  
     const onFocus = () => {
         setBottom(true)
     }
+  
     const onBlur = () => {
         setBottom(false)
     }
@@ -90,7 +95,7 @@ function Header({color,categoryName,contents,tagContents}) {
 
                 <Logo />
                   {searchOn && !isMobile ?   <SearchView  bottom={bottom} onFocus={onFocus}  onBlur={onBlur} contents={contents} tagContents={tagContents} /> :    <Nav  categoryName = {categoryName} isOpen={isOpen} setIsOpen={setIsOpen} />}
-                <RightGnb color={color} HandleSearch={HandleSearch } searchOn={searchOn} MenuOpen={MenuOpen}/>
+            <RightGnb color={color} HandleSearch={HandleSearch} searchOn={searchOn} MenuOpen={MenuOpen} MenuClose={MenuClose} />
               </Container>
             </HeaderContainer>
 

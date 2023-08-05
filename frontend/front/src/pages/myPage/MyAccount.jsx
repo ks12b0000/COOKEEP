@@ -64,7 +64,6 @@ const MyAccount = () => {
     try {
       const res = await authHttp.getMypage(userId);
       setUserInfo(res.data.result);
-      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -80,7 +79,6 @@ const MyAccount = () => {
   const onDeleteUser = async () => {
     try {
       const res = await authHttp.deleteUser(userId);
-      console.log(res);
       alert('회원 탈퇴가 완료되었습니다. 메인 화면으로 이동합니다.');
       navigate('/');
     } catch (err) {
@@ -190,7 +188,7 @@ const MyAccount = () => {
 const Wrap = styled.div`
   width: 1440px;
   margin: 0 auto;
-  height: 74.2vh;
+  height: 78vh;
   margin-bottom: 10vh;
 
   @media screen and (max-width: 1700px) {

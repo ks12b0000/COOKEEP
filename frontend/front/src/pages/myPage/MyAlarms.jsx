@@ -81,14 +81,12 @@ const MyAlarms = () => {
     if (inView) {
       getMobileAlarmList();
     }
-    console.log('check');
   }, [inView]);
 
   //유저 정보 불러오기 함수
   const onMypage = async () => {
     try {
       const res = await authHttp.getMypage(userId);
-      console.log(res);
       setUserInfo(res.data.result);
     } catch (err) {
       console.log(err);
