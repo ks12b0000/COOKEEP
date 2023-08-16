@@ -82,16 +82,18 @@ public class BoardServiceImpl implements BoardService{
         String tags = boardTagService.findTagsByBoard(board);
         boardRepository.updateView(board.getBoardId());
         Long commentCnt = boardCommentRepository.CountBoardComment(boardId);
-        List<ImageResponse> imageResponses = findImages(boardId);
+        List<ImageResponse> imageResponses = findImages(boardId, board);
 
         return new BoardResponseInDetailFormat(board, commentCnt, imageResponses);
     }
 
-    private List<ImageResponse> findImages(Long boardId) {
+    private List<ImageResponse> findImages(Long boardId, Board board) {
         List<ImageFile> imageFiles = imageFileRepository.findByBoardId(boardId);
         List<ImageResponse> imageResponses = new LinkedList<>();
         for (ImageFile imageFile : imageFiles) {
-            imageResponses.add(new ImageResponse(imageFile.getUrl()));
+            if (!imageFile.getUrl().equals(board.getThumbnail())) {
+                imageResponses.add(new ImageResponse(imageFile.getUrl()));
+            }
         }
         return imageResponses;
     }
