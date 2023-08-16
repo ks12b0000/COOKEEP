@@ -1,6 +1,7 @@
 package teamproject.backend.imageFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImageFileServiceImpl implements ImageFileService{
@@ -70,5 +72,25 @@ public class ImageFileServiceImpl implements ImageFileService{
         }
 
         return usedImage;
+    }
+
+    @Transactional
+    @Override
+    public void deleteSaveImages(Long userId, Long boardId) {
+        List<ImageFile> unmanagedImages = imageFileRepository.findByUserIdAndBoardIdOrBoardIdIsNull(userId, boardId);
+
+        for(ImageFile imageFile : unmanagedImages){
+            //해당 이미지를 만든 아이디가 작성한 모든 글을 찾아 해당 이미지가 사용되었는지 확인
+            Board usedBoard = getUsedBoard(imageFile);
+
+            if(usedBoard == null){
+                //이미지가 사용 중이지 않다면, 이미지를 삭제한다.(DB, S3)
+                delete(imageFile.getFileName());
+            }
+            else{
+                //이미지가 사용 중이라면 board_id를 넣어준다.
+                imageFile.setBoardId(usedBoard.getBoardId());
+            }
+        }
     }
 }

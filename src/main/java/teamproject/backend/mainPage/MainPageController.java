@@ -52,7 +52,6 @@ public class MainPageController {
     @Tag(name = "MainPage")
     @GetMapping("/main/search/list")
     public BaseResponse searchList(@RequestParam String keyword, @PageableDefault(size = 20, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
-
         BoardListResponseAll getSearchByResponse = mainPageService.searchList(keyword, pageable);
 
         return new BaseResponse("검색 결과를 가져오는데 성공했습니다.", getSearchByResponse);
