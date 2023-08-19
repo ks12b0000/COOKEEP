@@ -269,7 +269,7 @@ public class MyPageController {
     @ApiImplicitParam(name = "nickName", value = "닉네임", required = true, dataTypeClass = String.class)
     @Tag(name = "MyPage")
     @GetMapping("/user/nickname/duplicate")
-    public BaseResponse<GetUserSameRes> checkEmailDuplicate(@RequestParam String nickName) {
+    public BaseResponse<GetUserSameRes> checkNickNameDuplicate(@RequestParam String nickName) {
 
         boolean nickNameDuplicate = myPageService.checkNickNameDuplicate(nickName);
 

@@ -8,19 +8,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
+import teamproject.backend.board.BoardRepository;
+import teamproject.backend.board.recommend.BoardRecommendManager;
+import teamproject.backend.boardComment.BoardCommentRepository;
+import teamproject.backend.domain.Board;
 import teamproject.backend.domain.User;
+import teamproject.backend.like.LikeBoardRepository;
 import teamproject.backend.mypage.dto.*;
 import teamproject.backend.user.UserRepository;
+import teamproject.backend.utils.S3.S3DAO;
 import teamproject.backend.utils.SHA256;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Transactional
@@ -32,7 +41,7 @@ public class MyPageServiceTest {
     @Mock
     private MyPageRepository myPageRepository;
     @Mock
-    private UserRepository userRepository;
+    private UserRepository userRepository ;
     @Spy
     SHA256 sha256;
 
@@ -161,6 +170,35 @@ public class MyPageServiceTest {
 
                 () -> assertThatThrownBy(() -> myPageService.updateByUserEmail(user.getId(), updateEmailRequest2))
                         .hasMessage("중복된 이메일이 있습니다.")
+        );
+    }
+
+    @Test
+    @DisplayName("유저 닉네임 변경")
+    void updateNickname() {
+        // given
+        UpdateNicknameRequest request = new UpdateNicknameRequest("updateNick");
+
+        // stub
+        when(myPageRepository.findByIdForUpdate(user.getId())).thenReturn(Optional.of(user));
+
+        // when
+        String beforeNickName = user.getNickname();
+        String updateNickName = request.getNickname();
+        myPageService.updateNickname(user.getId(), request);
+
+        // userEmail 중복 테스트를 위한 User 생성
+        User user2 = new User("test123411", "test122ss", "test123ddf4@gmail.com", "test1234", null);
+        UpdateNicknameRequest request2 = new UpdateNicknameRequest(user2.getNickname());
+        when(userRepository.findByNickname(request2.getNickname())).thenReturn(user2);
+
+        // then
+        assertAll (
+                () -> assertThat(user.getNickname()).isNotEqualTo(beforeNickName),
+                () -> assertThat(user.getNickname()).isEqualTo(updateNickName),
+
+                () -> assertThatThrownBy(() -> myPageService.updateNickname(user.getId(), request2))
+                        .hasMessage("중복된 닉네임이 있습니다.")
         );
     }
 

@@ -55,6 +55,7 @@ public class BoardServiceImpl implements BoardService{
         Board board = createBoard(boardWriteRequest);
         boardRepository.save(board);
         boardTagService.saveBoardTags(board, boardWriteRequest.getTags());
+        imageFileService.deleteSaveImages(boardWriteRequest.getUser_id(), board.getBoardId());
         return board.getBoardId();
     }
 
@@ -81,8 +82,20 @@ public class BoardServiceImpl implements BoardService{
         String tags = boardTagService.findTagsByBoard(board);
         boardRepository.updateView(board.getBoardId());
         Long commentCnt = boardCommentRepository.CountBoardComment(boardId);
+        List<ImageResponse> imageResponses = findImages(boardId, board);
 
-        return new BoardResponseInDetailFormat(board, commentCnt);
+        return new BoardResponseInDetailFormat(board, commentCnt, imageResponses);
+    }
+
+    private List<ImageResponse> findImages(Long boardId, Board board) {
+        List<ImageFile> imageFiles = imageFileRepository.findByBoardId(boardId);
+        List<ImageResponse> imageResponses = new LinkedList<>();
+        for (ImageFile imageFile : imageFiles) {
+            if (!imageFile.getUrl().equals(board.getThumbnail())) {
+                imageResponses.add(new ImageResponse(imageFile.getUrl()));
+            }
+        }
+        return imageResponses;
     }
 
     private Board findBoardByBoardId(Long boardId) {
@@ -137,6 +150,7 @@ public class BoardServiceImpl implements BoardService{
 
         board.update(boardWriteRequest, foodCategory);
         boardTagService.updateBoardTags(board, boardWriteRequest.getTags());
+        imageFileService.deleteSaveImages(boardWriteRequest.getUser_id(), boardId);
     }
 
     private BoardComment getBoardComment(Long request) {

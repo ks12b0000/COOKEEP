@@ -7,6 +7,7 @@ import teamproject.backend.domain.Board;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -24,7 +25,9 @@ public class BoardResponseInDetailFormat {
     private Integer view;
     private String thumbnail;
 
-    public BoardResponseInDetailFormat(Board board, Long commentCnt){
+    private List<ImageResponse> imageResponses;
+
+    public BoardResponseInDetailFormat(Board board, Long commentCnt, List<ImageResponse> imageResponses){
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
@@ -36,6 +39,7 @@ public class BoardResponseInDetailFormat {
         this.liked = board.getLiked();
         this.view = board.getView();
         this.thumbnail = board.getThumbnail();
+        this.imageResponses = imageResponses;
     }
     private String asString(Date date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
