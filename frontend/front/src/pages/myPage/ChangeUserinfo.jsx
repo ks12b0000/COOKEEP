@@ -148,9 +148,9 @@ const ChangeUserinfo = () => {
 
     // max 사이즈 제한
     const fileSize = file.size;
-    const maxSize = 1 * 1024 * 1024;
+    const maxSize = 5 * 1024 * 1024;
     if (fileSize > maxSize) {
-      alert('파일 크기가 1MB 제한을 초과합니다.');
+      alert('파일 크기가 5MB 제한을 초과합니다.');
       return;
     }
 
@@ -813,7 +813,6 @@ const ProfileRound = styled.div`
   overflow: hidden;
   position: relative;
 `;
-
 
 const ProfileButton = styled.label`
   width: 130px;
