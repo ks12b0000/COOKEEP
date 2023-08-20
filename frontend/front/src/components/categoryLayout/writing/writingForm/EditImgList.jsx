@@ -4,7 +4,8 @@ import Select from '@mui/material/Select';
 import styled from '@emotion/styled';
 import {useState} from "react";
 
-function EditImgList({optionImg, setIsSelect, isSelect, newArray}) {
+function EditImgList({optionImg, setIsSelect, isSelect,inital, newArray}) {
+    console.log(inital);
 
     const [isOpen, setIsOpen] = useState(false);
     const handleOpen = () => {
@@ -53,8 +54,13 @@ function EditImgList({optionImg, setIsSelect, isSelect, newArray}) {
                                  style={{width: "30px", height: '30px', objectFit: 'contain', marginRight: 2}}/>
                             메인이미지입니다.
                         </MenuItem>
-                
 
+
+                    <MenuItem sx={{fontSize: 16, fontFamily: "Pretendard"}} value={inital}>
+                        <img src={inital} alt="초기값"
+                             style={{width: "30px", height: '30px', objectFit: 'contain', marginRight: 2}}/>
+                        메인이미지입니다.
+                    </MenuItem>
 
 
                     {newArray[0]?.map((item, index) => {
