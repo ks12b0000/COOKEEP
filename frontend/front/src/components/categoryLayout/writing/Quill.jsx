@@ -32,9 +32,16 @@ const Quill = ({quillValue,setQuillValue,setOptionImg,optionImg}) => {
             formData.append('img', file); // formData는 키-밸류 구조
             // 백엔드 multer라우터에 이미지를 보낸다.
             try {
+                 const maxSize = 5 * 1024 * 1024;
+
+               if(file.size > maxSize) {
+                   alert('용량이 5MB가 넘어갑니다.')
+                   return false;;
+               }
                 const {result} = await writeHttp.imgUpload({imageFile: file, user_id:userId });
 
                 const IMG_URL = result.url;
+
                 setOptionImg((prevState) => {
                     return [...prevState, {url: result.url,name:file.name}]
                 })

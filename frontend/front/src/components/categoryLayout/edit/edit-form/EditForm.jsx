@@ -38,8 +38,10 @@ function EditForm() {
 
 
 
+    const [imgList,setImgList] =useState(null);
+    const [thum,setThum] = useState(null);
+
     const [footText,setFootText]  =useState('');
-    const [inital,setInital] = useState();
     const [optionImg,setOptionImg] = useState([]);
     const [isSelect,setIsSelect] = useState(0);
 
@@ -79,7 +81,7 @@ function EditForm() {
           title,
           text:quillValue,
           user_id:userId,
-          thumbnail:optionImg,
+          thumbnail:isSelect,
           tags:tag
         }
         console.log(FormData)
@@ -102,15 +104,17 @@ function EditForm() {
                 return false;
             }
 
-            console.log(board)
+
             setCategoryList(categoryMenu.result);
             setBoard(board.result);
             setCategoryValue(board.result.category)
             setTitle(board.result.title);
             setTag(board.result.tags);
-            setInital(board.result.text);
             setQuillValue(board.result.text);
             setBoardId(board.result.board_id);
+            setIsSelect(board.result.thumbnail);
+            setImgList(board.result.imageResponses);
+            setThum(board.result.thumbnail);
         })()
     },[])
 
@@ -119,7 +123,7 @@ function EditForm() {
 
     }, [optionImg]);
 
-
+    const newArray = [imgList,{url:thum}];
 
 
     const Props = {
@@ -127,7 +131,17 @@ function EditForm() {
         setQuillValue,
         setOptionImg,
         optionImg,
+
+        imgList:{
+            optionImg,
+            setIsSelect,
+            isSelect,
+            newArray
+        }
     }
+
+
+
     return(
         <form onKeyPress={onCheckEnter} >
             <Title>글 수정하기</Title>
@@ -153,7 +167,7 @@ function EditForm() {
                 <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
             </TagInput>
 
-            <EditImgList optionImg={optionImg}  setIsSelect={setIsSelect} isSelect={isSelect} inital={inital}/>
+            <EditImgList {...Props.imgList}/>
             <ButtonsWrap>
                 <CancelButton  onClick={cancel}> <span>취소</span></CancelButton>
                 <WritingButton  disabled={disableState()} onClick={(e) => onPatchSubmit(e)}>저장</WritingButton>
