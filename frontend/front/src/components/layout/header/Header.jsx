@@ -33,7 +33,8 @@ const HeaderContainer = styled.header`
 `;
 
 const Container = styled.div`
-  width: 1440px;
+  width:100%;
+  max-width: 1440px;
   margin: 0 auto;
   display: flex;
   justify-content: space-around;

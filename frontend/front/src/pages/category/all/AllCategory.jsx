@@ -11,7 +11,8 @@ import {useSelector} from "react-redux";
 import {useNavigate} from "react-router";
 import AlertLogin from "../../../components/categoryLayout/writing/popup/LoginPopup";
 const Container = styled.section`
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
   margin: 24px auto 16px;
 
   @media screen and (max-width: 1700px) {

@@ -39,7 +39,8 @@ const FooterContainer = styled.footer`
 
 const ContentsWrap = styled.div`
   margin: 0 auto;
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
   display: flex;
   height: 70px;
   justify-content: space-between;
@@ -57,7 +58,7 @@ const ContentsWrap = styled.div`
     width: 1300px;
   }
 
-  @media screen and (max-width: 1020px) {
+  @media screen and (max-width: 1024px) {
     width: 100%;
   }
 

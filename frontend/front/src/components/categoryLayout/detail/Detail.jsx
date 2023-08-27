@@ -228,7 +228,8 @@ function Detail() {
 export default Detail;
 
 const Container = styled.div`
-  width: 1440px;
+  width:100%;
+  max-width: 1440px;
   margin: 0 auto;
 
   @media screen and (max-width: 1700px) {

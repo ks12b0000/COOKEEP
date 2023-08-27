@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import WriteHttp from "../../../http/writeHttp";
 import {useSelector} from "react-redux";
 import styled from "@emotion/styled";
-const Quill = ({quillValue,setQuillValue,setOptionImg,optionImg}) => {
+const Quill = ({quillValue,setQuillValue,setOptionImg,optionImg,error}) => {
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
     const writeHttp = new WriteHttp();
 
@@ -119,7 +119,7 @@ const Quill = ({quillValue,setQuillValue,setOptionImg,optionImg}) => {
 
 
     return (
-        <QuillWrap>
+        <QuillWrap error={error}>
             <ReactQuill
                 ref={quillRef}
                 theme="snow"
@@ -129,20 +129,38 @@ const Quill = ({quillValue,setQuillValue,setOptionImg,optionImg}) => {
                 modules={modules}
                 formats={formats}
             />
-
+            {error && <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>내용과 썸네일을 등록해주세요 !! </ErrorText> }
         </QuillWrap>
     );
 };
 
 export  default Quill
+const ErrorText = styled.div`
+    position: absolute;
+    bottom:-20px;
+    left:0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap:4px;
+    font-size: 12px;
+    line-height: 14px;
+    color: #E62F2F;
+    img{
+      width: 12px;
+      height: 12px;
+    }
 
+`
 const QuillWrap = styled.div`
+  position: relative;
   border-radius: 5px;
-  border: 1px solid #CED4DA;
-  margin:34px 0 20px;
+  border:${props => (props.error ? ' 1px solid #E52F2F' :'1px solid #CED4DA')};
+  margin:34px 0 25px;
     .ql-editor {
       min-height: 500px;
-       
+      background:${props => (props.error ? ' #FFEAE4' :'white')};
     }
+
  
 `

@@ -16,7 +16,7 @@ function Nav({categoryName, isOpen,setIsOpen}) {
     const navigate = useNavigate();
     const [menus, setMenus] = useState(NavDada);
     const isMobile = useMediaQuery({
-        query: "(max-width:768px)"
+        query: "(max-width:1024px)"
     });
     const [searchOpen, setSearchOpen] = useState(false);
 

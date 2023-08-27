@@ -117,6 +117,7 @@ const BannrImg =styled.div`
 `
 const BannerWrap = styled.section`
   position: relative;
+
   width:100%;
   height: 350px;
   background:#D9D9D9;
@@ -124,7 +125,7 @@ const BannerWrap = styled.section`
 
   
   ${mobile} {
-
+    margin-top: 65px;
     background: initial;
   }
 

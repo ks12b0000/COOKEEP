@@ -57,7 +57,8 @@ function WritingForm() {
     const [optionImg,setOptionImg] = useState([]);
     const [isSelect,setIsSelect] = useState(0);
 
-    console.log(quillValue);
+
+
     const onCheckEnter = (e) => {
         if(e.key === 'Enter') {
             e.preventDefault();
@@ -148,7 +149,7 @@ function WritingForm() {
 
 
        if( isSelect === 0 || isSelect === '0') {
-           alert('썸네일을 등록해주세요');
+           alert('썸네일을 둥록과 내용을 입력해주세요');
            setError(true)
            return false;
        }
@@ -163,6 +164,7 @@ function WritingForm() {
         quillValue,
         setQuillValue,
         setOptionImg,
+        error,
         optionImg,
         Cancel:{
             setOpenModal:() => setIsOpen(false),
@@ -195,13 +197,13 @@ function WritingForm() {
 
     }
 
-   
+
     return (
         <>
-            <form  onKeyPress={onCheckEnter} >
+            <form  onKeyPress={onCheckEnter}  >
                 <Title>글쓰기</Title>
-                <InputBox>
-                    <select name="category" value={categoryValue} onChange={onChange} >
+                <InputBox categoryError ={categoryError} titleError={titleError}>
+                    <select  name="category" value={categoryValue} onChange={onChange}  >
                         <option value="카테고리" disabled >카테고리</option>
                         {categoryList.map((categoryName,index) => {
                             return(
@@ -211,12 +213,13 @@ function WritingForm() {
                     </select>
                     {categoryError &&  <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>카테고리를 선택해주세요.</ErrorText> }
                      <TitleInput>
-                      <input name="title" type="text" placeholder="제목을 입력해주세요"   value={title}  onChange={TitleOnChange}  />
+                      <input name="title" type="text" placeholder="제목을 입력해주세요"   value={title}  onChange={TitleOnChange} titleError ={titleError} />
                       {titleError && <ErrorText><img src={`${process.env.PUBLIC_URL}/image/error.png`} alt="err"/>최소 5자 이상 입력해주세요 !! </ErrorText> }
                      </TitleInput>
                 </InputBox>
                 <QuillBox>
                     <Quill  {...Props}/>
+
                 </QuillBox>
                 <TagInput>
                     <input  value={tag} name="tags" type="tags" onChange={TagOnChange} placeholder="#태그"/>
@@ -245,6 +248,67 @@ function WritingForm() {
 
 
 export default WritingForm;
+
+const InputBox = styled.fieldset`
+    position: relative;
+    margin-top: 24px;
+    display: flex;
+    gap:24px;
+    flex-direction: row;
+    border: none;
+   ${mobile} {
+     margin-top: 12px;
+     flex-direction: column;
+   }
+    label {
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    select {
+        background: ${props => (props.categoryError ? '#FFEAE4  url(\'https://i.imgur.com/Adb9Pdi.png\') 90% / 12px no-repeat;': ' url(\'https://i.imgur.com/Adb9Pdi.png\') 90% / 12px no-repeat;')};
+        width: 137px;
+        height: 48px;
+        box-sizing: border-box;
+        border: ${props =>  (props.categoryError ?' 1px solid  #E52F2F' :  '1px solid #CED4DA') }; 
+        padding:12px;
+        border-radius: 5px;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 23px;
+      -webkit-appearance: none; /* for chrome */
+        -moz-appearance: none; /*for firefox*/
+        appearance: none;
+        cursor: pointer;
+        &:focus {
+            outline: none;
+        }
+        
+   
+      
+    }
+    input {
+      height: 48px;
+      flex-grow: 1;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: ${props => props.titleError ?' 1px solid  #E52F2F' :  '1px solid #CED4DA'};
+      border-radius: 5px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 23px;
+      background:${props => props.titleError ? '#FFEAE4 ' : '#fff'};
+     
+      &::placeholder {
+        color: #CED4DA;
+      }
+      &:focus {
+         outline: none;
+         box-shadow: none;
+        border:1px solid #FFA590;
+        }
+    }
+`;
 const IMgWrap = styled.div`
 
 `
@@ -352,66 +416,6 @@ const TagInput = styled.fieldset`
   
 `
 
-const InputBox = styled.fieldset`
-    position: relative;
-    margin-top: 24px;
-    display: flex;
-    gap:24px;
-    flex-direction: row;
-    border: none;
-   ${mobile} {
-     margin-top: 12px;
-     flex-direction: column;
-   }
-    label {
-        font-size: 20px;
-        font-weight: 500;
-    }
-
-    select {
-    
-        width: 137px;
-        height: 48px;
-        box-sizing: border-box;
-        border: 1px solid #CED4DA;
-        padding:12px;
-        border-radius: 5px;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 23px;
-      -webkit-appearance: none; /* for chrome */
-        -moz-appearance: none; /*for firefox*/
-        appearance: none;
-        background: url('https://i.imgur.com/Adb9Pdi.png') 90% / 12px no-repeat;
-        cursor: pointer;
-        &:focus {
-            outline: none;
-        }
-        
-   
-      
-    }
-    input {
-      height: 48px;
-      flex-grow: 1;
-      box-sizing: border-box;
-      padding: 10px 12px;
-      border: 1px solid #CED4DA;
-      border-radius: 5px;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 23px;
-     
-      &::placeholder {
-        color: #CED4DA;
-      }
-      &:focus {
-         outline: none;
-         box-shadow: none;
-        border:1px solid #FFA590;
-        }
-    }
-`;
 
 const ButtonsWrap = styled.div`
     margin-top:42px;

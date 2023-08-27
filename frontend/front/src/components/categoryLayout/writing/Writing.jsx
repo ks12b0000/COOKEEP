@@ -5,22 +5,22 @@ import {mobile} from "../../../constants/media/media";
 
 const Container = styled.div`
     display: flex;
-    width: 1440px;
+    width: 100%;
+    max-width: 1440px;
     border:1px solid #FFA590;
     border-radius: 10px;
     height: 100%;
     margin: 24px auto ;
   
   ${mobile} {
-    margin:59px auto 16px;
-    border:0;
-    width: 100%;
+    margin-top:85px;
+    width:95%;
   }
 `;
 const Contents = styled.div`
     width: 100%;
     padding:24px;
-
+    
 
 `
 
