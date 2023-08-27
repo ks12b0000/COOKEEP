@@ -13,13 +13,18 @@ const Container = styled.div`
     margin: 24px auto ;
   
   ${mobile} {
-    margin-top:85px;
-    width:95%;
+   margin:65px auto 0;
+    width:100%;
+    border:none;
   }
 `;
 const Contents = styled.div`
     width: 100%;
     padding:24px;
+  
+  ${mobile} {
+    padding:16px;
+  }
     
 
 `

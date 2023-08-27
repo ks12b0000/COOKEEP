@@ -24,7 +24,7 @@ function EditImgList({optionImg, setIsSelect, isSelect,inital, newArray}) {
         <div>
 
             <FormControl sx={{
-                marginTop: '34px', width: 250,
+                marginTop: '27px', width: 250,
                 '.MuiInputBase-root': {
                     height: '48px'
                 },
@@ -34,6 +34,7 @@ function EditImgList({optionImg, setIsSelect, isSelect,inital, newArray}) {
                     fontFamily: "Pretendard",
                     color: '#CED4DA'
                 }
+
 
             }}>
                 <Select

@@ -100,7 +100,7 @@ const PopularList = styled.li`
    }
     &:last-of-type{
       padding:0;
-    }
+    } 
    &:hover{
      transform: scale(1.05);
    }

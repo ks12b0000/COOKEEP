@@ -89,7 +89,12 @@ export const PaginationWrap = styled.div`
     height: 40px;
     color: #CBCBCB;
     font-weight: 600;
-    font-size: 16px
+    font-size: 16px;
+    
+    ${mobile} {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   .Mui-selected {

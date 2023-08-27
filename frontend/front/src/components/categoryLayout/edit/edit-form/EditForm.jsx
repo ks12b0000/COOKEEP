@@ -426,6 +426,7 @@ const ButtonsWrap = styled.div`
   gap: 20px;
   justify-content: end;
   ${mobile} {
+    margin-top: 30px;
     justify-content: space-between;
   }
 `;

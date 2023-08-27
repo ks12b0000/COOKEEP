@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import {mobile} from '../../constants/media/media';
 
 function UploadImg({img,onClick,imgIndex}){
     return (
@@ -19,6 +20,10 @@ const Title =styled.h2`
   font-size: 14px;
   font-weight: 700;
   color:red;
+  
+  ${mobile} {
+    margin:20px 0 5px;
+  }
 `
 const Upload = styled.div`
  

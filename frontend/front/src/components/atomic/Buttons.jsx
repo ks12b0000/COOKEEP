@@ -3,7 +3,7 @@ import {mobile} from "../../constants/media/media";
 
 const Button = styled.button`
     cursor: pointer;
-    min-width: 100px;
+    min-width: 90px;
     padding: 10px;
     width: 130px;
     height: 48px;
@@ -12,7 +12,7 @@ const Button = styled.button`
     border: none;
    
     ${mobile}{
-      width:100px;
+      width:90px;
       height: 48px;
       box-sizing: border-box;
     }

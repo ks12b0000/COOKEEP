@@ -200,7 +200,7 @@ function WritingForm() {
 
     return (
         <>
-            <form  onKeyPress={onCheckEnter}  >
+            <form  onKeyPress={onCheckEnter}   >
                 <Title>글쓰기</Title>
                 <InputBox categoryError ={categoryError} titleError={titleError}>
                     <select  name="category" value={categoryValue} onChange={onChange}  >
@@ -298,6 +298,7 @@ const InputBox = styled.fieldset`
       font-size: 16px;
       line-height: 23px;
       background:${props => props.titleError ? '#FFEAE4 ' : '#fff'};
+      
      
       &::placeholder {
         color: #CED4DA;
@@ -424,6 +425,7 @@ const ButtonsWrap = styled.div`
     gap: 20px;
     justify-content: end;
   ${mobile} {
+    margin:30px 0 ;
     justify-content: space-between;
   }
 `;

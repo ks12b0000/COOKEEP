@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import WriteHttp from "../../../http/writeHttp";
 import {useSelector} from "react-redux";
+import {mobile} from '../../../constants/media/media';
 import styled from "@emotion/styled";
 const Quill = ({quillValue,setQuillValue,setOptionImg,optionImg,error}) => {
     const { userId } = useSelector(state => state.persistedReducer.userReducer);
@@ -157,6 +158,10 @@ const QuillWrap = styled.div`
   border-radius: 5px;
   border:${props => (props.error ? ' 1px solid #E52F2F' :'1px solid #CED4DA')};
   margin:34px 0 25px;
+  
+  ${mobile} {
+    margin:27px 0 25px;
+  }
     .ql-editor {
       min-height: 500px;
       background:${props => (props.error ? ' #FFEAE4' :'white')};
