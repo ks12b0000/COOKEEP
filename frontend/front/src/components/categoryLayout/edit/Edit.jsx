@@ -2,6 +2,7 @@
 import styled from "@emotion/styled";
 import Layout from "../../layout/Layout";
 import EditForm from "./edit-form/EditForm";
+import {mobile} from "../../../constants/media/media";
 
 const Container = styled.div`
   display: flex;
@@ -10,6 +11,10 @@ const Container = styled.div`
   border-radius: 10px;
   height: 100%;
   margin: 24px auto ;
+ ${mobile} {
+   margin-top:60px;
+   width:100%;
+ } 
 `;
 const Contents = styled.div`
     width: 100%;

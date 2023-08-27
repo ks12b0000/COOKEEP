@@ -15,6 +15,7 @@ import EditPopup from "../../writing/popup/EditPopup";
 import CancelPopup from "../../writing/popup/CancelPopup";
 import LoadingPopup from "../../writing/popup/LoadingPopup";
 import CompletePopup from "../../writing/popup/CompletePopup";
+import {mobile} from "../../../../constants/media/media";
 
 const categoryHttp = new CategoryHttp();
 const writeHttp = new WriteHttp();
@@ -257,6 +258,10 @@ const Title = styled.h1`
   font-size: 24px;
   line-height: 29px;
   color: #ED3419;
+  ${mobile}{
+
+    font-size: 18px;
+  }
 `
 
 const QuillBox = styled.div`
@@ -359,7 +364,10 @@ const InputBox = styled.fieldset`
   gap: 24px;
   flex-direction: row;
   border: none;
-
+  ${mobile} {
+    margin-top: 12px;
+    flex-direction: column;
+  }
   label {
     font-size: 20px;
     font-weight: 500;
@@ -418,6 +426,9 @@ const ButtonsWrap = styled.div`
   width: 100%;
   gap: 20px;
   justify-content: end;
+  ${mobile} {
+    justify-content: space-between;
+  }
 `;
 const CancelButton = styled.div`
   cursor: pointer;
@@ -432,6 +443,9 @@ const CancelButton = styled.div`
   box-sizing: border-box;
   color: #FF4122;
 
+  ${mobile} {
+    width: 165px;
+  }
   &:hover {
 
     background: red;
@@ -453,6 +467,9 @@ const WritingButton = styled.button`
   font-size: 16px;
   color: #ffffff;
 
+  ${mobile} {
+    width: 165px;
+  }
   &:hover {
     background: red;
     border: none;

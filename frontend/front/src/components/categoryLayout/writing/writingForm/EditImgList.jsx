@@ -52,7 +52,7 @@ function EditImgList({optionImg, setIsSelect, isSelect,inital, newArray}) {
                         <MenuItem sx={{fontSize: 16, fontFamily: "Pretendard"}} value={isSelect}>
                             <img src={isSelect} alt="초기값"
                                  style={{width: "30px", height: '30px', objectFit: 'contain', marginRight: 2}}/>
-                            메인이미지입니다.
+                            선택된이미지입니다.
                         </MenuItem>
 
 
