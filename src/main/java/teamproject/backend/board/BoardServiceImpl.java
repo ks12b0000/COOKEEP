@@ -84,7 +84,7 @@ public class BoardServiceImpl implements BoardService{
         Long commentCnt = boardCommentRepository.CountBoardComment(boardId);
         List<ImageResponse> imageResponses = findImages(boardId, board);
 
-        return new BoardResponseInDetailFormat(board, commentCnt, imageResponses);
+        return new BoardResponseInDetailFormat(board, commentCnt, imageResponses, tags);
     }
 
     private List<ImageResponse> findImages(Long boardId, Board board) {
