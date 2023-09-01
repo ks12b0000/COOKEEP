@@ -24,10 +24,11 @@ public class BoardResponseInDetailFormat {
     private Long liked;
     private Integer view;
     private String thumbnail;
+    private String tags;
 
     private List<ImageResponse> imageResponses;
 
-    public BoardResponseInDetailFormat(Board board, Long commentCnt, List<ImageResponse> imageResponses){
+    public BoardResponseInDetailFormat(Board board, Long commentCnt, List<ImageResponse> imageResponses, String tags){
         this.board_id = board.getBoardId();
         this.category = board.getCategory().getCategoryName();
         this.title = board.getTitle();
@@ -40,6 +41,7 @@ public class BoardResponseInDetailFormat {
         this.view = board.getView();
         this.thumbnail = board.getThumbnail();
         this.imageResponses = imageResponses;
+        this.tags = tags;
     }
     private String asString(Date date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
