@@ -351,12 +351,18 @@ const CommentList = props => {
       {/* 댓글 작성 컴포넌트 */}
       {isMobile ? '' : <Line />}
 
-      {Total > 1 && (
-        <SeeMoreButton
-          onClick={() => navigate(`/category/comment/${props.boardId}`)}
-        >
-          전체 댓글 보기
-        </SeeMoreButton>
+      {isMobile ? (
+        <>
+          {Total > 1 && (
+            <SeeMoreButton
+              onClick={() => navigate(`/category/comment/${props.boardId}`)}
+            >
+              전체 댓글 보기
+            </SeeMoreButton>
+          )}
+        </>
+      ) : (
+        <></>
       )}
       <CommentUploadWrap>
         <CommentUpload boardId={props.boardId} />
