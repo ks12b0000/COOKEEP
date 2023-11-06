@@ -234,9 +234,6 @@ const ChangeUserinfo = () => {
       try {
         const res = await authHttp.postCheckPassword(userId, body);
         console.log(res);
-        if (res.data.code === 1000) {
-          onChangePassword();
-        }
       } catch (err) {
         console.log(err);
         setIsError(true);
@@ -259,8 +256,6 @@ const ChangeUserinfo = () => {
           setPasswordText('');
         }, 5000);
         return;
-      } else {
-        onChangePassword();
       }
     }
 
