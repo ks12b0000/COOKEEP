@@ -14,7 +14,7 @@ COOKEEP은 사용자들이 각종 요리들의 레시피를 공유하고 추�
 ## Table of Contents
 - [개요](#개요)
 - [Team](#team)
-- [Skils](#skils)
+- [Skils](#back-end-skils)
 - [ERD](#erd)
 
 <br/>
@@ -26,8 +26,8 @@ COOKEEP은 사용자들이 각종 요리들의 레시피를 공유하고 추�
 |Back-End|Front-End|Designer|
 |:-----:|:-----:|:-----:|
 |박현준, 장대준|조민수, 김성훈|구지영|
-
-## Skils
+ 
+## Back-End Skils
 언어 및 프레임워크: ![Static Badge](https://img.shields.io/badge/Java-red) 
 ![Static Badge](https://img.shields.io/badge/SpringBoot-grean)
 ![Static Badge](https://img.shields.io/badge/SpringDataJPA-grean)
