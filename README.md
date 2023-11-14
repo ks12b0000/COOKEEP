@@ -18,6 +18,7 @@ COOKEEP은 사용자들이 각종 요리들의 레시피를 공유하고 추�
 - [ERD](#erd)
 - [API Reference](#api-reference)
 - [프로젝트 이슈 관리](#프로젝트-이슈-관리)
+- [Test](#test)
 
 <br/>
 
@@ -56,7 +57,14 @@ Swagger : https://www.teamprojectvv.shop/swagger-ui/index.html#/
 
 <br/>
 
+
 ## 프로젝트 이슈 관리
 [![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://www.notion.so/dev-j/6a83f5bfa7874dc49e4fac30653aaa53?v=25c6ca9163064a8c879dcf124a914f29&pvs=4)
 <br/><br/>
 [프로젝트 이슈 페이지](https://night-triangle-fdc.notion.site/0ba4492f75e94c32a308649f8d95a2b2?pvs=4)
+
+<br/>
+
+## Test
+- ServiceTest, RepositoryTest, ControllerTest 단위로 총 70개의 테스트 코드 작성
+<img width="197" alt="스크린샷 2023-11-14 오후 9 09 59" src="https://github.com/ks12b0000/COOKEEP/assets/102012155/b2a0b8eb-633e-4f18-a50d-3f715527e523">
