@@ -54,7 +54,9 @@ COOKEEP은 사용자들이 각종 요리들의 레시피를 공유하고 추�
 <br/>
 
 ## API Reference
-Swagger : https://www.teamprojectvv.shop/swagger-ui/index.html#/
+<img src="https://img.shields.io/badge/Swagger-6DB33F?style=for-the-badge&logo=SWAGGER&logoColor=white">
+
+[API Reference 페이지](https://www.teamprojectvv.shop/swagger-ui/index.html#/)
 
 <br/>
 
@@ -62,7 +64,7 @@ Swagger : https://www.teamprojectvv.shop/swagger-ui/index.html#/
 ## 프로젝트 이슈 관리
 [![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://www.notion.so/dev-j/6a83f5bfa7874dc49e4fac30653aaa53?v=25c6ca9163064a8c879dcf124a914f29&pvs=4)
 <br/><br/>
-[프로젝트 이슈 페이지](https://night-triangle-fdc.notion.site/0ba4492f75e94c32a308649f8d95a2b2?pvs=4)
+[프로젝트 이슈 관리 페이지](https://night-triangle-fdc.notion.site/0ba4492f75e94c32a308649f8d95a2b2?pvs=4)
 
 <br/>
 
