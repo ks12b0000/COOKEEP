@@ -68,3 +68,15 @@ Swagger : https://www.teamprojectvv.shop/swagger-ui/index.html#/
 ## Test
 - ServiceTest, RepositoryTest, ControllerTest 단위로 총 70개의 테스트 코드 작성
 <img width="197" alt="스크린샷 2023-11-14 오후 9 09 59" src="https://github.com/ks12b0000/COOKEEP/assets/102012155/b2a0b8eb-633e-4f18-a50d-3f715527e523">
+
+<br/>
+
+## 배포 방법
+[AWS EC2 연결 방법](https://purple-knot-a8d.notion.site/Spring-Boot-AWS-EC2-79bd7ed4c2374ca79e8f9862a7f0ef57?pvs=4)
+<br/>
+[AWS RDS 연결 방법](https://purple-knot-a8d.notion.site/Spring-Boot-AWS-RDS-8af83c1af94945d8b607f62ee7d2c679?pvs=4)
+<br/>
+[Docker, GitHub Actions를 이용한 CI / CD 환경 구축 방법](https://purple-knot-a8d.notion.site/Spring-Boot-Docker-GitHub-Actions-CI-CD-d8bb0f0bcff44bc1b5b97602c38cf884?pvs=4)
+<br/>
+[AWS Rout53과 가비아 도메인 연결 방법](https://purple-knot-a8d.notion.site/AWS-Route53-1e6593c6b849451a918a26c4488812ab?pvs=4)
+<br/>
