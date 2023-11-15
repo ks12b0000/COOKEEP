@@ -19,6 +19,7 @@ COOKEEP은 사용자들이 각종 요리들의 레시피를 공유하고 추�
 - [API Reference](#api-reference)
 - [프로젝트 이슈 관리](#프로젝트-이슈-관리)
 - [Test](#test)
+- [배포 방법](#배포-방법)
 
 <br/>
 
