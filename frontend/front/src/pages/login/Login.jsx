@@ -1,27 +1,27 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../../redux/reducer/userSlice';
-import styled from '@emotion/styled';
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../redux/reducer/userSlice";
+import styled from "@emotion/styled";
 
-import Header from '../../components/layout/header/Header';
-import Footer from '../../components/layout/footer/Footer';
-import { color } from '../../constants/color';
+import Header from "../../components/layout/header/Header";
+import Footer from "../../components/layout/footer/Footer";
+import { color } from "../../constants/color";
 
-import UserHttp from '../../http/userHttp';
+import UserHttp from "../../http/userHttp";
 const userHttp = new UserHttp();
 
 function Login() {
   //카카오 로그인 요청 주소
-  const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=7c7c8648e57e3b651c5125b11996d35b&redirect_uri=https://www.teamprojectvv.shop/callback/kakao&response_type=code`;
+  const KakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=7c7c8648e57e3b651c5125b11996d35b&redirect_uri=http://13.124.82.115:8080/callback/kakao&response_type=code`;
 
   //구글 로그인 요청 주소
-  const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=79582605278-52s8lmhreqecgap848deg5hls42gkpdc.apps.googleusercontent.com&redirect_uri=https://www.teamprojectvv.shop/callback/google&response_type=code&scope=email`;
+  const googleURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=79582605278-52s8lmhreqecgap848deg5hls42gkpdc.apps.googleusercontent.com&redirect_uri=http://13.124.82.115:8080/callback/google&response_type=code&scope=email`;
 
   //네이버 로그인 요청 주소
   const state = Math.floor(new Date().getTime() + Math.random() * 1000);
-  const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=92iO7IYduFlBEHoQfTkR&response_type=code&redirect_uri=https://www.teamprojectvv.shop/callback/naver&state=${state}`;
+  const NaverURL = `https://nid.naver.com/oauth2.0/authorize?client_id=92iO7IYduFlBEHoQfTkR&response_type=code&redirect_uri=http://13.124.82.115:8080/callback/naver&state=${state}`;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,8 +31,8 @@ function Login() {
   const passwordRef = useRef();
 
   //로그인 시 필요한 유저 정보
-  const [Username, setUsername] = useState('');
-  const [Password, setPassword] = useState('');
+  const [Username, setUsername] = useState("");
+  const [Password, setPassword] = useState("");
   const [AutoLogin, setAutoLogin] = useState(false);
 
   //모달창 관리
@@ -41,16 +41,16 @@ function Login() {
   const [FindPassword, setFindPassword] = useState(false);
 
   //아이디 찾기를 위한 이메일 값
-  const [EmailForFindId, setEmailForFindId] = useState('');
+  const [EmailForFindId, setEmailForFindId] = useState("");
 
   //비밀번호 찾기를 위한 아이디 및 이메일 값
-  const [UsernameForFindPassword, setUsernameForFindPassword] = useState('');
-  const [EmailForFindPassword, setEmailForFindPassword] = useState('');
+  const [UsernameForFindPassword, setUsernameForFindPassword] = useState("");
+  const [EmailForFindPassword, setEmailForFindPassword] = useState("");
 
   //에러 시 메세지 문구
-  const [IdText, setIdText] = useState('');
-  const [EmailText, setEmailText] = useState('');
-  const [PasswordText, setPasswordText] = useState('');
+  const [IdText, setIdText] = useState("");
+  const [EmailText, setEmailText] = useState("");
+  const [PasswordText, setPasswordText] = useState("");
 
   //비밀번호 보이기 여부 체크
   const [EyeVisible, setEyeVisible] = useState(false);
@@ -63,14 +63,14 @@ function Login() {
   const [FoundPassword, setFoundPassword] = useState(false);
 
   //서버에서 받은 찾은 아이디와 비번 저장용 state
-  const [FoundIdText, setFoundIdText] = useState('');
-  const [FoundPasswordText, setFoundPasswordText] = useState('');
+  const [FoundIdText, setFoundIdText] = useState("");
+  const [FoundPasswordText, setFoundPasswordText] = useState("");
 
   //모바일 화면 체크
   const [IsMobile, setIsMobile] = useState(false);
 
   // 일반 로그인 동작 수행 함수
-  const onLogin = async e => {
+  const onLogin = async (e) => {
     e.preventDefault();
 
     const body = {
@@ -79,20 +79,20 @@ function Login() {
       autoLogin: AutoLogin,
     };
 
-    if (Username === '') {
+    if (Username === "") {
       setIsError(true);
       idRef.current.focus();
-      setIdText('아이디를 입력하세요');
+      setIdText("아이디를 입력하세요");
       setTimeout(() => {
-        setIdText('');
+        setIdText("");
         setIsError(false);
       }, 5000);
-    } else if (Password === '') {
+    } else if (Password === "") {
       setIsError(true);
       passwordRef.current.focus();
-      setPasswordText('비밀번호를 입력하세요');
+      setPasswordText("비밀번호를 입력하세요");
       setTimeout(() => {
-        setPasswordText('');
+        setPasswordText("");
         setIsError(false);
       }, 5000);
     } else {
@@ -112,7 +112,7 @@ function Login() {
           );
 
           //홈 화면으로 이동
-          navigate('/');
+          navigate("/");
         }
       } catch (err) {
         console.log(err);
@@ -120,7 +120,7 @@ function Login() {
         passwordRef.current.focus();
         setPasswordText(err.response.data.message);
         setTimeout(() => {
-          setPasswordText('');
+          setPasswordText("");
           setIsError(false);
         }, 5000);
       }
@@ -128,7 +128,7 @@ function Login() {
   };
 
   //아이디 찾기 모달창 켜기
-  const onIdModal = e => {
+  const onIdModal = (e) => {
     e.preventDefault();
 
     setIsModal(true);
@@ -136,7 +136,7 @@ function Login() {
   };
 
   //비밀번호 찾기 모달창 켜기
-  const onPasswordModal = e => {
+  const onPasswordModal = (e) => {
     e.preventDefault();
 
     setFindId(false);
@@ -144,11 +144,11 @@ function Login() {
     setFindPassword(true);
     setFindId(false);
     setFoundId(false);
-    setEmailForFindId('');
+    setEmailForFindId("");
   };
 
   // 아이디 찾은 후 로그인 화면 이동
-  const onLoginUI = e => {
+  const onLoginUI = (e) => {
     e.preventDefault();
 
     setIsModal(false);
@@ -157,13 +157,13 @@ function Login() {
     setFindId(false);
     setFoundId(false);
     setFoundPassword(false);
-    setEmailForFindId('');
-    setEmailForFindPassword('');
-    setUsernameForFindPassword('');
+    setEmailForFindId("");
+    setEmailForFindPassword("");
+    setUsernameForFindPassword("");
   };
 
   // 아이디 모달창 X버튼
-  const idXButton = e => {
+  const idXButton = (e) => {
     e.preventDefault();
 
     setIsModal(false);
@@ -171,7 +171,7 @@ function Login() {
   };
 
   // 비밀번호 모달창 X버튼
-  const passwordXButton = e => {
+  const passwordXButton = (e) => {
     e.preventDefault();
 
     setIsModal(false);
@@ -179,7 +179,7 @@ function Login() {
   };
 
   // 아이디 찾기 동작 실행 함수
-  const onFindId = async e => {
+  const onFindId = async (e) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -187,20 +187,20 @@ function Login() {
       email: EmailForFindId,
     };
 
-    if (EmailForFindId === '') {
+    if (EmailForFindId === "") {
       setIsError(true);
       emailRef.current.focus();
-      setEmailText('이메일을 입력하세요');
+      setEmailText("이메일을 입력하세요");
       setTimeout(() => {
-        setEmailText('');
+        setEmailText("");
         setIsError(false);
       }, 5000);
     } else if (emailRegex.test(EmailForFindId) === false) {
       setIsError(true);
       emailRef.current.focus();
-      setEmailText('이메일 형식으로 입력해주세요');
+      setEmailText("이메일 형식으로 입력해주세요");
       setTimeout(() => {
-        setEmailText('');
+        setEmailText("");
         setIsError(false);
       }, 5000);
     } else {
@@ -216,7 +216,7 @@ function Login() {
         emailRef.current.focus();
         setEmailText(err.response.data.message);
         setTimeout(() => {
-          setEmailText('');
+          setEmailText("");
           setIsError(false);
         }, 5000);
       }
@@ -224,7 +224,7 @@ function Login() {
   };
 
   // 비밀번호 찾기 동작 실행 함수
-  const onFindPassword = async e => {
+  const onFindPassword = async (e) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -233,28 +233,28 @@ function Login() {
       email: EmailForFindPassword,
     };
 
-    if (UsernameForFindPassword === '') {
+    if (UsernameForFindPassword === "") {
       setIsError(true);
       idRef.current.focus();
-      setIdText('아이디를 입력하세요');
+      setIdText("아이디를 입력하세요");
       setTimeout(() => {
-        setIdText('');
+        setIdText("");
         setIsError(false);
       }, 5000);
-    } else if (EmailForFindPassword === '') {
+    } else if (EmailForFindPassword === "") {
       setIsError(true);
       emailRef.current.focus();
-      setEmailText('이메일을 입력하세요');
+      setEmailText("이메일을 입력하세요");
       setTimeout(() => {
-        setEmailText('');
+        setEmailText("");
         setIsError(false);
       }, 5000);
     } else if (emailRegex.test(EmailForFindPassword) === false) {
       setIsError(true);
       emailRef.current.focus();
-      setEmailText('이메일 형식으로 입력해주세요');
+      setEmailText("이메일 형식으로 입력해주세요");
       setTimeout(() => {
-        setEmailText('');
+        setEmailText("");
         setIsError(false);
       }, 5000);
     } else {
@@ -269,7 +269,7 @@ function Login() {
         console.log(err);
         setEmailText(err.response.data.message);
         setTimeout(() => {
-          setEmailText('');
+          setEmailText("");
           setIsError(false);
         }, 5000);
       }
@@ -277,7 +277,7 @@ function Login() {
   };
 
   //패스워드 표시 여부 토글
-  const eyeToggle = e => {
+  const eyeToggle = (e) => {
     e.preventDefault();
     if (EyeVisible) {
       setEyeVisible(false);
@@ -289,16 +289,16 @@ function Login() {
   //모바일 화면 체크
   useEffect(() => {
     checkIsMobile(); // 초기 로드 시 한 번 실행
-    window.addEventListener('resize', checkIsMobile); // 윈도우 크기 변경 시 실행
+    window.addEventListener("resize", checkIsMobile); // 윈도우 크기 변경 시 실행
 
     return () => {
-      window.removeEventListener('resize', checkIsMobile); // 컴포넌트가 unmount 될 때 이벤트 리스너 제거
+      window.removeEventListener("resize", checkIsMobile); // 컴포넌트가 unmount 될 때 이벤트 리스너 제거
     };
   }, []);
 
   //모바일 화면 체크 함수
   const checkIsMobile = () => {
-    const isMobileDevice = window.matchMedia('(max-width: 760px)').matches;
+    const isMobileDevice = window.matchMedia("(max-width: 760px)").matches;
     setIsMobile(isMobileDevice);
   };
 
@@ -306,7 +306,7 @@ function Login() {
     <>
       {IsMobile && <Header color={color.falseMainColor} />}
       <LoginBackground>
-        <Link to='/'>
+        <Link to="/">
           <Logo />
         </Link>
         <LoginWrap IsModal={IsModal}>
@@ -314,9 +314,9 @@ function Login() {
           <InputWrap>
             <LoginInput
               value={Username}
-              type='id'
-              placeholder='id'
-              onChange={e => setUsername(e.currentTarget.value)}
+              type="id"
+              placeholder="id"
+              onChange={(e) => setUsername(e.currentTarget.value)}
               ref={idRef}
               isError={IsError}
             />
@@ -330,9 +330,9 @@ function Login() {
           <InputWrap>
             <LoginInput
               value={Password}
-              type={EyeVisible ? 'text' : 'password'}
-              placeholder='password'
-              onChange={e => setPassword(e.currentTarget.value)}
+              type={EyeVisible ? "text" : "password"}
+              placeholder="password"
+              onChange={(e) => setPassword(e.currentTarget.value)}
               ref={passwordRef}
               isError={IsError}
             />
@@ -344,33 +344,33 @@ function Login() {
             )}
             {EyeVisible ? (
               <EyeImg
-                onClick={e => eyeToggle(e)}
+                onClick={(e) => eyeToggle(e)}
                 EyeVisible={EyeVisible}
-                src='/image/eye-open.png'
-                alt='eye open'
+                src="/image/eye-open.png"
+                alt="eye open"
               />
             ) : (
               <EyeImg
-                onClick={e => eyeToggle(e)}
+                onClick={(e) => eyeToggle(e)}
                 EyeVisible={EyeVisible}
-                src='/image/eye.png'
-                alt='eye close'
+                src="/image/eye.png"
+                alt="eye close"
               />
             )}
           </InputWrap>
-          <LoginButton onClick={e => onLogin(e)}>로그인</LoginButton>
+          <LoginButton onClick={(e) => onLogin(e)}>로그인</LoginButton>
           <CheckBoxWrap>
             <Checkbox
               value={AutoLogin}
-              type='checkbox'
-              onChange={e => setAutoLogin(e.currentTarget.checked)}
+              type="checkbox"
+              onChange={(e) => setAutoLogin(e.currentTarget.checked)}
               checked={AutoLogin}
             />
             <AutoText>자동 로그인</AutoText>
             <FindTextWrap>
-              <FindText onClick={e => onIdModal(e)}>아이디 찾기</FindText>
+              <FindText onClick={(e) => onIdModal(e)}>아이디 찾기</FindText>
               <FindLine />
-              <FindText onClick={e => onPasswordModal(e)}>
+              <FindText onClick={(e) => onPasswordModal(e)}>
                 비밀번호 찾기
               </FindText>
             </FindTextWrap>
@@ -383,26 +383,26 @@ function Login() {
           <OtherLoginWrap>
             <a href={NaverURL}>
               <OtherLogin>
-                <img src='/image/naver.png' alt='naver-logo' />
+                <img src="/image/naver.png" alt="naver-logo" />
                 <div>네이버로 로그인</div>
               </OtherLogin>
             </a>
             <a href={KakaoURL}>
               <OtherLogin>
-                <img src='/image/kakao.png' alt='kakao-logo' />
+                <img src="/image/kakao.png" alt="kakao-logo" />
                 <div>카카오로 로그인</div>
               </OtherLogin>
             </a>
             <a href={googleURL}>
               <OtherLogin>
-                <img src='/image/google.png' alt='google-logo' />
+                <img src="/image/google.png" alt="google-logo" />
                 <div>구글로 로그인</div>
               </OtherLogin>
             </a>
           </OtherLoginWrap>
           <LoginAskWrap>
             <LoginAskText>아직 COOKEEP 회원이 아니신가요?</LoginAskText>
-            <Link to='/sign'>
+            <Link to="/sign">
               <LoginAskLink>회원가입</LoginAskLink>
             </Link>
           </LoginAskWrap>
@@ -410,27 +410,27 @@ function Login() {
         {/* 아이디 찾기 모달창 */}
         {FindId ? (
           <>
-            <ModalWrap height='327px' founded={FoundId}>
+            <ModalWrap height="327px" founded={FoundId}>
               {FoundId ? (
                 <>
                   <CheckImg />
                   <DoneTitle>아이디 찾기 완료</DoneTitle>
                   <DoneText
-                    marginTop='28px'
-                    width='241px'
+                    marginTop="28px"
+                    width="241px"
                   >{`고객님 아이디는 ${FoundIdText} 입니다.`}</DoneText>
                   <IdButtonWrap>
                     <DoneIdButton
-                      color='#FF4122'
-                      Backcolor='#FFFFFF'
-                      onClick={e => onPasswordModal(e)}
+                      color="#FF4122"
+                      Backcolor="#FFFFFF"
+                      onClick={(e) => onPasswordModal(e)}
                     >
                       비밀번호 찾기
                     </DoneIdButton>
                     <DoneIdButton
-                      color='#FFFFFF'
-                      Backcolor='#FF4122'
-                      onClick={e => {
+                      color="#FFFFFF"
+                      Backcolor="#FF4122"
+                      onClick={(e) => {
                         onLoginUI(e);
                       }}
                     >
@@ -441,14 +441,14 @@ function Login() {
               ) : (
                 <>
                   <ModalTitle>아이디 찾기</ModalTitle>
-                  <XButton onClick={e => idXButton(e)} top='7%' />
+                  <XButton onClick={(e) => idXButton(e)} top="7%" />
                   <ModalText>이메일</ModalText>
                   <InputWrap>
                     <LoginInput
                       value={EmailForFindId}
-                      type='email'
-                      placeholder='email'
-                      onChange={e => setEmailForFindId(e.currentTarget.value)}
+                      type="email"
+                      placeholder="email"
+                      onChange={(e) => setEmailForFindId(e.currentTarget.value)}
                       ref={emailRef}
                       isError={IsError}
                     />
@@ -459,7 +459,7 @@ function Login() {
                       </ErrorMessage>
                     )}
                   </InputWrap>
-                  <LoginButton onClick={e => onFindId(e)}>확 인</LoginButton>
+                  <LoginButton onClick={(e) => onFindId(e)}>확 인</LoginButton>
                 </>
               )}
             </ModalWrap>
@@ -470,21 +470,21 @@ function Login() {
         {/* 비밀번호 찾기 모달창 */}
         {FindPassword ? (
           <>
-            <ModalWrap height='430px' founded={FoundPassword}>
+            <ModalWrap height="430px" founded={FoundPassword}>
               {FoundPassword ? (
                 <>
                   <CheckImg />
                   <DoneTitle>임시 비밀번호 발급</DoneTitle>
                   <DoneText
-                    marginTop='44px'
-                    width='240px'
-                    marginMobileTop='28px'
+                    marginTop="44px"
+                    width="240px"
+                    marginMobileTop="28px"
                   >{`고객님의 임시 비밀번호는 ${FoundPasswordText} 입니다.`}</DoneText>
-                  <DoneText marginTop='16px' width='300px'>
+                  <DoneText marginTop="16px" width="300px">
                     비밀번호는 마이페이지에서 변경 가능합니다.
                   </DoneText>
                   <DonePasswordButton
-                    onClick={e => {
+                    onClick={(e) => {
                       onLoginUI(e);
                     }}
                   >
@@ -494,17 +494,17 @@ function Login() {
               ) : (
                 <>
                   <ModalTitle>비밀번호 찾기</ModalTitle>
-                  <XButton onClick={e => passwordXButton(e)} top='5%' />
+                  <XButton onClick={(e) => passwordXButton(e)} top="5%" />
                   <ModalText>아이디</ModalText>
                   <InputWrap>
                     <LoginInput
                       value={UsernameForFindPassword}
-                      type='id'
-                      placeholder='id'
-                      onChange={e =>
+                      type="id"
+                      placeholder="id"
+                      onChange={(e) =>
                         setUsernameForFindPassword(e.currentTarget.value)
                       }
-                      marginBottom='24px'
+                      marginBottom="24px"
                       ref={idRef}
                       isError={IsError}
                     />
@@ -519,12 +519,12 @@ function Login() {
                   <InputWrap>
                     <LoginInput
                       value={EmailForFindPassword}
-                      type='email'
-                      placeholder='email'
-                      onChange={e =>
+                      type="email"
+                      placeholder="email"
+                      onChange={(e) =>
                         setEmailForFindPassword(e.currentTarget.value)
                       }
-                      marginBottom='48px'
+                      marginBottom="48px"
                       ref={emailRef}
                       isError={IsError}
                     />
@@ -541,7 +541,7 @@ function Login() {
                       {PasswordText}
                     </ErrorMessage>
                   )}
-                  <LoginButton onClick={e => onFindPassword(e)}>
+                  <LoginButton onClick={(e) => onFindPassword(e)}>
                     확 인
                   </LoginButton>
                 </>
@@ -609,7 +609,7 @@ const LoginWrap = styled.div`
   height: 553px;
   background-color: white;
   border-radius: 15px;
-  display: ${props => (props.IsModal ? 'none' : 'flex')};
+  display: ${(props) => (props.IsModal ? "none" : "flex")};
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -657,8 +657,8 @@ const LoginInput = styled.input`
 
   &:focus {
     border: ${({ isError }) =>
-      isError ? '1px solid #FF4122' : '1px solid #FFA590'};
-    background-color: ${({ isError }) => (isError ? '#FFEAE4' : 'white')};
+      isError ? "1px solid #FF4122" : "1px solid #FFA590"};
+    background-color: ${({ isError }) => (isError ? "#FFEAE4" : "white")};
     box-shadow: none;
   }
 `;
@@ -684,7 +684,7 @@ const ErrorMark = styled.div`
 
 const EyeImg = styled.img`
   position: absolute;
-  top: ${props => (props.EyeVisible ? '33%' : '30%')};
+  top: ${(props) => (props.EyeVisible ? "33%" : "30%")};
   left: 88%;
   cursor: pointer;
 `;
@@ -838,7 +838,7 @@ const LoginAskLink = styled.div`
 const ModalWrap = styled.div`
   position: relative;
   width: 470px;
-  height: ${props => props.height};
+  height: ${(props) => props.height};
   background-color: white;
   border-radius: 15px;
   display: flex;
@@ -849,8 +849,8 @@ const ModalWrap = styled.div`
 
   @media screen and (max-width: 760px) {
     box-shadow: none;
-    position: ${props => (props.founded ? 'relative' : 'absolute')};
-    top: ${props => (props.founded ? '0' : '60px')};
+    position: ${(props) => (props.founded ? "relative" : "absolute")};
+    top: ${(props) => (props.founded ? "0" : "60px")};
     width: 100vw;
   }
 `;
@@ -862,7 +862,7 @@ const XButton = styled.div`
   background-size: 17px;
   position: absolute;
   left: 92%;
-  top: ${props => props.top};
+  top: ${(props) => props.top};
   opacity: 0.5;
   cursor: pointer;
   z-index: 10;
@@ -911,16 +911,16 @@ const DoneTitle = styled.div`
 `;
 
 const DoneText = styled.div`
-  width: ${props => props.width};
+  width: ${(props) => props.width};
   font-weight: 400;
   font-size: 16px;
   line-height: 23px;
   text-align: center;
   color: #000000;
-  margin-top: ${props => props.marginTop};
+  margin-top: ${(props) => props.marginTop};
 
   @media screen and (max-width: 760px) {
-    margin-top: ${props => props.marginMobileTop};
+    margin-top: ${(props) => props.marginMobileTop};
   }
 `;
 
@@ -940,9 +940,9 @@ const DoneIdButton = styled.div`
   height: 51px;
   border-radius: 5px;
   margin-top: 28px;
-  background-color: ${props => props.Backcolor};
+  background-color: ${(props) => props.Backcolor};
   cursor: pointer;
-  color: ${props => props.color};
+  color: ${(props) => props.color};
   font-weight: 600;
   font-size: 16px;
   border: 1px solid #ff4122;
