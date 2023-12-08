@@ -6,11 +6,13 @@ class Http {
   }
   static createAxios() {
     return axios.create({
-      baseURL: "http://13.124.82.115:8080",
+      baseURL:
+        "http://ec2-13-124-82-115.ap-northeast-2.compute.amazonaws.com:8080",
       timeout: 30 * 1000,
       withCredentials: true,
       headers: {
-        "Access-Control-Allow-Origin": "http://13.124.82.115:8080",
+        "Access-Control-Allow-Origin":
+          "http://ec2-13-124-82-115.ap-northeast-2.compute.amazonaws.com:8080",
       },
     });
   }
