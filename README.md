@@ -2,7 +2,7 @@
 
 # COOKEEP
 COOKEEP은 사용자들이 각종 요리들의 레시피를 공유하고 추천해 주는 서비스입니다.
- - [COOKEEP 링크](https://www.teamprojectvv.shop)
+ - [COOKEEP 링크](http://ec2-13-124-82-115.ap-northeast-2.compute.amazonaws.com:8080)
 
 <br/>
 
