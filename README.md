@@ -56,7 +56,7 @@ COOKEEP은 사용자들이 각종 요리들의 레시피를 공유하고 추�
 ## API Reference
 <img src="https://img.shields.io/badge/Swagger-6DB33F?style=for-the-badge&logo=SWAGGER&logoColor=white">
 
-[API Reference 페이지](https://www.teamprojectvv.shop/swagger-ui/index.html#/)
+[API Reference 페이지](http://ec2-13-124-82-115.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html)
 
 <br/>
 
